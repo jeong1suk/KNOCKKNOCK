@@ -14,10 +14,10 @@ const Wrapper = styled.div`
 function App() {
   return (
     <>
-      <Wrapper>
+
         <Layout />
         {/* // <h1>Hello, Vite + React + Styled Components!</h1> */}
-      </Wrapper>
+
     </>
   );
 }
