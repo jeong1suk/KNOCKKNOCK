@@ -1,4 +1,4 @@
-import Mainpage from "../pages/mainpage/Mainpage";
+import Mainpage from "../pages/mainpage/MainPage";
 import Ai from "../pages/ai/Ai";
 import LoginForm from "../pages/login/LoginForm";
 import RegisterForm from "../pages/register/RegisterForm";
