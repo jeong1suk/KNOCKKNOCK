@@ -25,18 +25,24 @@ function RegisterForm() {
   const [religion, setReligion] = useState('');
   const [height, setHeight] = useState('');
   const [hobby, setHobby] = useState('');
-  const [personality, setPersonality] = useState('');
+  const [personality, setPersonality] = useState([]);
   const [ideal, setIdeal] = useState('');
   const [introduce, setIntroduce] = useState('');
 
   const [isPersonalityModalOpen, setIsPersonalityModalOpen] = useState(false);
   const [isIdealModalOpen, setIsIdealModalOpen] = useState(false);
 
-  const [traits, setTraits] = useState([
+  const personalityTraits = [
     "예쁘고 잘생긴", "옷 잘입는", "듬직한", "아담한",
     "말이 잘 통하는", "잘 웃어주는", "욕 안하는", "목소리가 좋은",
     "먼저 말걸어주는", "잘 들어주는"
-  ]);
+  ];
+  const idealTraits = [
+    "예쁘고 잘생긴", "옷 잘입는", "듬직한", "아담한",
+    "말이 잘 통하는", "잘 웃어주는", "욕 안하는", "목소리가 좋은",
+    "먼저 말걸어주는", "잘 들어주는", "연상", "연하", "동갑", "취미가 같은"
+  ];
+
 
   const GenderButton = ({ color, label, gender, setGender }) => {
     const isSelected = gender === label;
@@ -52,17 +58,28 @@ function RegisterForm() {
     )
   }
 
-  const handleTraitClick = (trait) => {
-    if (traits.includes(trait)) {
-      setTraits(traits.filter(t => t !== trait));
+  const handlePersonalityClick = (trait) => {
+    if (personality.includes(trait)) {
+      setPersonality(personality.filter(t => t !== trait));
     } else {
-      setTraits([...traits, trait]);
+      setPersonality([...personality, trait]);
     }
   };
 
-  const handleConfirmTraits = () => {
-    setPersonality(traits.join(', '));
+  const handleIdealClick = (trait) => {
+    if (ideal.includes(trait)) {
+      setIdeal(ideal.filter(t => t !== trait));
+    } else {
+      setIdeal([...ideal, trait]);
+    }
+  };
+
+  const handleConfirmPersonality = () => {
     setIsPersonalityModalOpen(false);
+  };
+
+  const handleComfirmIdeal = () => {
+    setIsIdealModalOpen(false);
   };
 
   const validateEmail = email => {
@@ -138,7 +155,7 @@ function RegisterForm() {
         
         <LabelInput>
           <StyledLabel>키</StyledLabel>
-          <StyledInput type="number" value={height} onChange={e => setHeight(e.target.value)} />
+          <StyledInput type="text" value={height} onChange={e => setHeight(e.target.value)} />
         </LabelInput>
         
         <LabelInput>
@@ -156,27 +173,52 @@ function RegisterForm() {
           <h2>내가 생각하는 나는?</h2>
           <p>2개 이상 선택하세요</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
-            {traits.map((trait, index) => (
+            {personalityTraits.map((trait, index) => (
               <button
+              key={index}
+              style={{
+                backgroundColor: personality.includes(trait) ? '#61dafbaa' : 'white',
+                padding: '10px',
+                margin: '5px',
+                borderRadius: '5px',
+                border: '1px solid black',
+                cursor: 'pointer',
+              }}
+              onClick={() => handlePersonalityClick(trait)}
+            >
+              {trait}
+            </button>
+            ))}
+          </div>
+          <button onClick={handleConfirmPersonality}>확인</button>
+          </Modal>
+          )}
+
+          {isIdealModalOpen && (
+          <Modal onClose={() => setIsPersonalityModalOpen(false)}>
+            <h2>내가 좋아하는 상대는?</h2>
+            <p>2개 이상 선택하세요</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+              {idealTraits.map((trait, index) => (
+                <button
                 key={index}
                 style={{
-                  backgroundColor: traits.includes(trait) ? '#4CAF50' : 'white',
-                  color: traits.includes(trait) ? 'white' : 'black',
+                  backgroundColor: ideal.includes(trait) ? '#61dafbaa' : 'white',
                   padding: '10px',
                   margin: '5px',
                   borderRadius: '5px',
-                  border: '1px solid #ccc',
+                  border: '1px solid black',
                   cursor: 'pointer',
                 }}
-                onClick={() => handleTraitClick(trait)}
+                onClick={() => handleIdealClick(trait)}
               >
                 {trait}
               </button>
-            ))}
-          </div>
-          <button onClick={handleConfirmTraits}>확인</button>
-        </Modal>
-)}
+              ))}
+            </div>
+            <button onClick={handleComfirmIdeal}>확인</button>
+            </Modal>
+            )}
         
         {/* <StyledLabel>내가 생각하는 나</StyledLabel>
         <StyledInput type="text" value={personality} onChange={e => setPersonality(e.target.value)} />
@@ -263,4 +305,14 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
 
 const ModalButton = styled.button`
   
+`
+
+const StyledTraitButton = styled.button`
+  padding: 10px 20px;
+  background-color: #FFFFFF;
+  color: black;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
 `
