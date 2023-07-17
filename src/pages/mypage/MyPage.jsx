@@ -14,13 +14,20 @@ const RightSection = styled.div`
   flex: 1;
   background-color: #E3E8FF;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const MessageContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  flex-direction: row;
   margin-bottom: 10px;
+
+  &:nth-child(even) {
+    flex-direction: row-reverse;
+  }
 `;
 
 const ProfileImage = styled.img`
@@ -33,27 +40,34 @@ const Bubble = styled.div`
   background-color: white;
   padding: 10px;
   border-radius: 20px;
-  margin-left: 10px;
+  margin: 0 10px;
 `;
 
-function  MyPage() {
+const UserName = styled.div`
+  font-weight: bold;
+  margin-top: 5px;
+`;
+
+function MyPage() {
   return (
     <Container>
       <LeftSection>
-          <UserProfileLarge />
+        <UserProfileLarge />
       </LeftSection>
       <RightSection>
+        <ProfileImage src="https://4.bp.blogspot.com/-G53f8Dq74s4/Uuepa3BrLrI/AAAAAAAADUU/qHUw26hrKco/s1600/%EB%AA%85%ED%83%90%EC%A0%95_%EC%BD%94%EB%82%9C-1.jpg" alt="Profile Image" />
+        <UserName>허광한</UserName>
         <MessageContainer>
-          <ProfileImage src="profile_image_url" alt="Profile Image" />
+          <ProfileImage src="https://4.bp.blogspot.com/-G53f8Dq74s4/Uuepa3BrLrI/AAAAAAAADUU/qHUw26hrKco/s1600/%EB%AA%85%ED%83%90%EC%A0%95_%EC%BD%94%EB%82%9C-1.jpg" alt="Profile Image" />
           <Bubble>안녕하세요!</Bubble>
         </MessageContainer>
         <MessageContainer>
+          <ProfileImage src="https://mblogthumb-phinf.pstatic.net/MjAxODAxMjhfMTI0/MDAxNTE3MTI2OTg5NTQw.287Oj7sW-4MZCHUUGq-S1F4d1njVzeS43EoolWUBtQEg.x5BaTuQXeAFRO1wPfJooN3xwzsaAAWJEshsGSA3j7-Mg.JPEG.aida4520/image_2078508621517126966809.jpg?type=w800" alt="Profile Image" />
           <Bubble>잘 지내시나요?</Bubble>
-          <ProfileImage src="profile_image_url" alt="Profile Image" />
         </MessageContainer>
       </RightSection>
     </Container>
   );
-};
+}
 
 export default MyPage;

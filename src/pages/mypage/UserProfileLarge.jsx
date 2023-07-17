@@ -5,40 +5,39 @@ const UserProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50rem;
-  height: 21rem;
-  max-width: 20rem;
+  width: 30rem;
+  height: 35rem;
+  max-width: 50rem;
   background-color: aliceblue;
-  border-radius: 0.5rem;
+  margin-top: 3rem;
 `;
 const UserProfileBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50rem;
-  height: 15rem;
-  max-width: 20rem;
+  width: 30rem;
+  height: 35rem;
+  max-width: 50rem;
   background-color: aliceblue;
   border-radius: 0.5rem;
 `;
 const BackgroundImage = styled.div`
   width: 100%;
-  height: 100%;
+  height: 30vh;
   background-image: url('https://cdn.indiepost.co.kr/uploads/images/2018/10/02/S8xjus-700x340.jpeg');
   background-size: cover;
   background-position: center;
-  border-radius: 0.5rem 0.5rem 0 0;
 `;
 
 const ProfilePicture = styled.img`
-  width: 4.5rem;
+  width: 8rem;
   height: 8rem;
   border-color: aliceblue;
   border-width: 2px; 
   border-style: solid; 
   border-radius: 100%;
-  margin-top: -25px;
-  margin-right: 10rem;
+  margin-top: -4rem;
+  margin-right: 14rem;
 `;
 
 const Name = styled.h3`
