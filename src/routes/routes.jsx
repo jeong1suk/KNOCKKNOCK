@@ -1,7 +1,9 @@
-import Mainpage from "../pages/mainpage/Mainpage";
+import Mainpage from "../pages/mainpage/MainPage";
 import Ai from "../pages/ai/Ai";
 import LoginForm from "../pages/login/LoginForm";
 import RegisterForm from "../pages/register/RegisterForm";
+import TodayKnock from "../pages/todayknock/TodayKnock";
+
 export const ROUTE = {
   MAIN: {
     path: "/",
@@ -22,6 +24,11 @@ export const ROUTE = {
     path: "/ai",
     link: "/ai",
     element: Ai,
+  },
+  TodayKnock: {
+    path: "/todayknock",
+    link: "/todayknock",
+    element: TodayKnock,
   },
 };
 
