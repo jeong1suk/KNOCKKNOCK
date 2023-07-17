@@ -165,8 +165,8 @@ function RegisterForm() {
 
 
         <LabelInput style={{justifyContent: "center"}}>
-          <StyledButton onClick={() => setIsPersonalityModalOpen(true)}>내가 생각하는 나</StyledButton>
-          <StyledButton onClick={() => setIsIdealModalOpen(true)}>내가 좋아하는 상대</StyledButton>
+          <ModalButton style={{marginRight : "10px"}} onClick={() => setIsPersonalityModalOpen(true)}>내가 생각하는 나</ModalButton>
+          <ModalButton onClick={() => setIsIdealModalOpen(true)}>내가 좋아하는 상대</ModalButton>
         </LabelInput>
         {isPersonalityModalOpen && (
         <Modal onClose={() => setIsPersonalityModalOpen(false)}>
@@ -195,7 +195,7 @@ function RegisterForm() {
           )}
 
           {isIdealModalOpen && (
-          <Modal onClose={() => setIsPersonalityModalOpen(false)}>
+          <Modal onClose={() => setIsIdealModalOpen(false)}>
             <h2>내가 좋아하는 상대는?</h2>
             <p>2개 이상 선택하세요</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
@@ -220,12 +220,7 @@ function RegisterForm() {
             </Modal>
             )}
         
-        {/* <StyledLabel>내가 생각하는 나</StyledLabel>
-        <StyledInput type="text" value={personality} onChange={e => setPersonality(e.target.value)} />
-    
-        <StyledLabel>내가 좋아하는 상대</StyledLabel>
-        <StyledInput type="text" value={ideal} onChange={e => setIdeal(e.target.value)} /> */}
-    
+        
         <StyledLabel>자기소개</StyledLabel>
         <StyledTextareaAutosize minRows={3} value={introduce} onChange={e => setIntroduce(e.target.value)} />
       </Wrapper>
@@ -304,10 +299,6 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
 `;
 
 const ModalButton = styled.button`
-  
-`
-
-const StyledTraitButton = styled.button`
   padding: 10px 20px;
   background-color: #FFFFFF;
   color: black;
