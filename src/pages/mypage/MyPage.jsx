@@ -13,12 +13,18 @@ const LeftSection = styled.div`
 const RightSection = styled.div`
   flex: 1;
   background-color: #E3E8FF;
-  padding: 20px;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  margin-top: 3rem;
+  height: 34rem;
 `;
-
+const MessageChat = styled.div`
+  display: flex;
+  height: 34rem;
+  justify-content: flex-end;
+  flex-direction: column;
+`;
 const MessageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -29,10 +35,15 @@ const MessageContainer = styled.div`
     flex-direction: row-reverse;
   }
 `;
-
+const ProfileImageBox =styled.div`
+  display: flex;
+  margin-bottom: 3rem;
+  flex-direction: column;
+  align-items: center;
+`
 const ProfileImage = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
 `;
 
@@ -45,7 +56,31 @@ const Bubble = styled.div`
 
 const UserName = styled.div`
   font-weight: bold;
-  margin-top: 5px;
+  margin-top: 1rem;
+  font-size: 1.3rem;
+`;
+
+const ChatInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 2rem 1rem 0rem 1rem;
+`;
+
+const ChatInput = styled.input`
+  flex: 1;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+`;
+
+const SendButton = styled.button`
+  margin-left: 10px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 `;
 
 function MyPage() {
@@ -55,16 +90,28 @@ function MyPage() {
         <UserProfileLarge />
       </LeftSection>
       <RightSection>
-        <ProfileImage src="https://4.bp.blogspot.com/-G53f8Dq74s4/Uuepa3BrLrI/AAAAAAAADUU/qHUw26hrKco/s1600/%EB%AA%85%ED%83%90%EC%A0%95_%EC%BD%94%EB%82%9C-1.jpg" alt="Profile Image" />
-        <UserName>허광한</UserName>
+        <ProfileImageBox>
+          <ProfileImage src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg" alt="Profile Image" />
+          <UserName>토리</UserName>
+        </ProfileImageBox>
+        <MessageChat>
         <MessageContainer>
-          <ProfileImage src="https://4.bp.blogspot.com/-G53f8Dq74s4/Uuepa3BrLrI/AAAAAAAADUU/qHUw26hrKco/s1600/%EB%AA%85%ED%83%90%EC%A0%95_%EC%BD%94%EB%82%9C-1.jpg" alt="Profile Image" />
+          <ProfileImage src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg" alt="Profile Image" />
           <Bubble>안녕하세요!</Bubble>
         </MessageContainer>
         <MessageContainer>
-          <ProfileImage src="https://mblogthumb-phinf.pstatic.net/MjAxODAxMjhfMTI0/MDAxNTE3MTI2OTg5NTQw.287Oj7sW-4MZCHUUGq-S1F4d1njVzeS43EoolWUBtQEg.x5BaTuQXeAFRO1wPfJooN3xwzsaAAWJEshsGSA3j7-Mg.JPEG.aida4520/image_2078508621517126966809.jpg?type=w800" alt="Profile Image" />
+          <ProfileImage src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg" alt="Profile Image" />
           <Bubble>잘 지내시나요?</Bubble>
         </MessageContainer>
+        <MessageContainer>
+          <ProfileImage src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg" alt="Profile Image" />
+          <Bubble>네니오</Bubble>
+        </MessageContainer>
+        <ChatInputContainer>
+          <ChatInput type="text" placeholder="메시지를 입력하세요" />
+          <SendButton>전송</SendButton>
+        </ChatInputContainer>
+        </MessageChat>
       </RightSection>
     </Container>
   );

@@ -88,11 +88,11 @@ const UserProfile = () => {
       <SmallBoxContainer>
         <SmallBox>INFP</SmallBox>
         <SmallBox>168cm</SmallBox>
-        <SmallBox>기독교</SmallBox>
+        <SmallBox>비공개</SmallBox>
         <SmallBox>99년생</SmallBox>
       </SmallBoxContainer>
       </UserProfileBox>
-      <Tagline>안녕하세요 유진이에용가리<br />잘 부탁드려요</Tagline>
+      <Tagline>안녕하세요 유진이에요<br />잘 부탁드려요</Tagline>
     </UserProfileContainer>
   );
 };
