@@ -27,6 +27,9 @@ const Header = ({ children }) => {
           <span>
             <a href="/todayknock">오늘의낙낙</a>
           </span>
+          <span>
+            <a href="/mypage">마이페이지</a>
+          </span>
         </HeaderContents>
       </WhiteBackground>
       <GradientBorder />
