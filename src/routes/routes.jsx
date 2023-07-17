@@ -3,6 +3,7 @@ import Ai from "../pages/ai/Ai";
 import LoginForm from "../pages/login/LoginForm";
 import RegisterForm from "../pages/register/RegisterForm";
 import TodayKnock from "../pages/todayknock/TodayKnock";
+import Play from "../pages/play/Play";
 
 export const ROUTE = {
   MAIN: {
@@ -30,6 +31,12 @@ export const ROUTE = {
     link: "/todayknock",
     element: TodayKnock,
   },
+  Play: {
+    path: "/play",
+    link: "/play",
+    element: Play,
+  },
+
 };
 
 export const ROUTE_ARR = Object.values(ROUTE);
