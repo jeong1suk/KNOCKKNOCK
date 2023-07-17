@@ -3,6 +3,7 @@ import Ai from "../pages/ai/Ai";
 import LoginForm from "../pages/login/LoginForm";
 import RegisterForm from "../pages/register/RegisterForm";
 import TodayKnock from "../pages/todayknock/TodayKnock";
+import MyPage from "../pages/mypage/MyPage";
 
 export const ROUTE = {
   MAIN: {
@@ -29,6 +30,11 @@ export const ROUTE = {
     path: "/todayknock",
     link: "/todayknock",
     element: TodayKnock,
+  },
+  Mypage: {
+    path: "/mypage",
+    link: "/mypage",
+    element: MyPage,
   },
 };
 
