@@ -1,5 +1,5 @@
 import React from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ROUTE } from "../routes/routes";
 const Header = ({ children }) => {
@@ -9,27 +9,14 @@ const Header = ({ children }) => {
         <HeaderContents>
           <Logo>낙낙</Logo>
           <Spacer />
-          {/* <MenuList> */}
-          {/* <Link to={ROUTE.MAIN.link}>메인페이지</Link> */}
-          {/* </MenuList> */}
-          {/* <div>메인</div> */}
-          {/* <div>인공지능</div> */}
-          <span>
-            <a href="/">메인페이지</a>
-          </span>
-          <a href="/ai">인공지능</a>
-          <span>
-            <a href="/login">로그인</a>
-          </span>
-          <span>
-            <a href="/register">회원가입</a>
-          </span>
-          <span>
-            <a href="/todayknock">오늘의낙낙</a>
-          </span>
-          <span>
-            <a href="/mypage">마이페이지</a>
-          </span>
+          <MenuList>
+            <Link to={ROUTE.MAIN.link}>메인페이지</Link>
+            <Link to={ROUTE.AI.link}>인공지능</Link>
+            <Link to={ROUTE.LOGIN.link}>로그인</Link>
+            <Link to={ROUTE.REGISTER.link}>회원가입</Link>
+            <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
+            <Link to={ROUTE.Mypage.link}>마이페이지</Link>
+          </MenuList>
         </HeaderContents>
       </WhiteBackground>
       <GradientBorder />
