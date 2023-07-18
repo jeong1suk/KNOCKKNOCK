@@ -27,6 +27,8 @@ const ModalContent = styled.div`
   background-color: white;
   padding: 20px;
   border-radius: 10px;
+  width: 80%;  // or any value that suits your needs
+  max-width: 500px;  // or any value that suits your needs
 `;
 
 export default Modal;

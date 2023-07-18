@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 
 import TextareaAutosize from 'react-textarea-autosize';
 
 import Modal from '../../components/modal/Modal';
 
-import styled from 'styled-components';
 
 
 
 function RegisterForm() {
   const navigate = useNavigate();
+  const today = new Date().toISOString().split("T")[0];
+
 
   const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
@@ -19,25 +21,38 @@ function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [gender, setGender] = useState('');
   const [birthdate, setBirthdate] = useState('');
+  const [job, setJob] = useState('');
 
   const [image, setImage] = useState('');
   const [mbti, setMbti] = useState('');
   const [religion, setReligion] = useState('');
   const [height, setHeight] = useState('');
-  const [hobby, setHobby] = useState('');
+  const [hobby, setHobby] = useState([]);
   const [personality, setPersonality] = useState([]);
-  const [ideal, setIdeal] = useState('');
+  const [ideal, setIdeal] = useState([]);
   const [introduce, setIntroduce] = useState('');
 
+  const [isHobbyModalOpen, setIsHobbyModalOpen] = useState(false);
   const [isPersonalityModalOpen, setIsPersonalityModalOpen] = useState(false);
   const [isIdealModalOpen, setIsIdealModalOpen] = useState(false);
 
-  const personalityTraits = [
+  console.log(hobby);
+  const hobbyList = [
+    "영화", "코인노래방", "맥주", "카페",
+    "쇼핑", "독서", "맛집탐방", "여행",
+    "등산", "러닝", "산책", "댄스",
+    "골프", "헬스", "필라테스", "홈트레이닝",
+    "클라이밍", "자전거라이딩", "캠핑", "공부",
+    "볼링", "요리", "그림그리기", "음악듣기",
+    "악기연주", "사진찍기", "웹툰", "게임",
+    "전시회관람", "봉사활동", "드라이브"
+  ]
+  const personalityList = [
     "예쁘고 잘생긴", "옷 잘입는", "듬직한", "아담한",
     "말이 잘 통하는", "잘 웃어주는", "욕 안하는", "목소리가 좋은",
     "먼저 말걸어주는", "잘 들어주는"
   ];
-  const idealTraits = [
+  const idealList = [
     "예쁘고 잘생긴", "옷 잘입는", "듬직한", "아담한",
     "말이 잘 통하는", "잘 웃어주는", "욕 안하는", "목소리가 좋은",
     "먼저 말걸어주는", "잘 들어주는", "연상", "연하", "동갑", "취미가 같은"
@@ -58,20 +73,32 @@ function RegisterForm() {
     )
   }
 
-  const handlePersonalityClick = (trait) => {
-    if (personality.includes(trait)) {
-      setPersonality(personality.filter(t => t !== trait));
+  const handleHobbyClick = (element) => {
+    if (hobby.includes(element)) {
+      setHobby(personality.filter(e => e !== element));
     } else {
-      setPersonality([...personality, trait]);
+      setHobby([...hobby, element])
+    }
+  }
+
+  const handlePersonalityClick = (element) => {
+    if (personality.includes(element)) {
+      setPersonality(personality.filter(e => e !== element));
+    } else {
+      setPersonality([...personality, element]);
     }
   };
 
-  const handleIdealClick = (trait) => {
-    if (ideal.includes(trait)) {
-      setIdeal(ideal.filter(t => t !== trait));
+  const handleIdealClick = (element) => {
+    if (ideal.includes(element)) {
+      setIdeal(ideal.filter(e => e !== element));
     } else {
-      setIdeal([...ideal, trait]);
+      setIdeal([...ideal, element]);
     }
+  };
+
+  const handleConfirmHobby = () => {
+    setIsHobbyModalOpen(false);
   };
 
   const handleConfirmPersonality = () => {
@@ -133,7 +160,12 @@ function RegisterForm() {
                 
         <LabelInput>
           <StyledLabel>생년월일</StyledLabel>
-          <StyledInput type="date" value={birthdate} onChange={e => setBirthdate(e.target.value)} required />
+          <StyledInput type="date" value={birthdate} max={today} onChange={e => setBirthdate(e.target.value)} required />
+        </LabelInput>
+
+        <LabelInput>
+          <StyledLabel>직업</StyledLabel>
+          <StyledInput type="text" value={job} onChange={e => setJob(e.target.value)} required />
         </LabelInput>
         
       </Wrapper>
@@ -158,35 +190,58 @@ function RegisterForm() {
           <StyledInput type="text" value={height} onChange={e => setHeight(e.target.value)} />
         </LabelInput>
         
-        <LabelInput>
-          <StyledLabel>취미</StyledLabel>
-          <StyledInput type="text" value={hobby} onChange={e => setHobby(e.target.value)} />
-        </LabelInput>
 
 
         <LabelInput style={{justifyContent: "center"}}>
+          <ModalButton style={{marginRight : "10px"}} onClick={() => setIsHobbyModalOpen(true)}>취미</ModalButton>
           <ModalButton style={{marginRight : "10px"}} onClick={() => setIsPersonalityModalOpen(true)}>내가 생각하는 나</ModalButton>
           <ModalButton onClick={() => setIsIdealModalOpen(true)}>내가 좋아하는 상대</ModalButton>
         </LabelInput>
-        {isPersonalityModalOpen && (
-        <Modal onClose={() => setIsPersonalityModalOpen(false)}>
-          <h2>내가 생각하는 나는?</h2>
+        {isHobbyModalOpen && (
+        <Modal onClose={() => setIsHobbyModalOpen(false)}>
+          <h2>취미는?</h2>
           <p>2개 이상 선택하세요</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
-            {personalityTraits.map((trait, index) => (
+            {hobbyList.map((element, index) => (
               <button
               key={index}
               style={{
-                backgroundColor: personality.includes(trait) ? '#61dafbaa' : 'white',
+                backgroundColor: hobby.includes(element) ? '#61dafbaa' : 'white',
                 padding: '10px',
                 margin: '5px',
                 borderRadius: '5px',
                 border: '1px solid black',
                 cursor: 'pointer',
               }}
-              onClick={() => handlePersonalityClick(trait)}
+              onClick={() => handleHobbyClick(element)}
             >
-              {trait}
+              {element}
+            </button>
+            ))}
+          </div>
+          <button onClick={handleConfirmHobby}>확인</button>
+          </Modal>
+          )}
+
+        {isPersonalityModalOpen && (
+        <Modal onClose={() => setIsPersonalityModalOpen(false)}>
+          <h2>내가 생각하는 나는?</h2>
+          <p>2개 이상 선택하세요</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+            {personalityList.map((element, index) => (
+              <button
+              key={index}
+              style={{
+                backgroundColor: personality.includes(element) ? '#61dafbaa' : 'white',
+                padding: '10px',
+                margin: '5px',
+                borderRadius: '5px',
+                border: '1px solid black',
+                cursor: 'pointer',
+              }}
+              onClick={() => handlePersonalityClick(element)}
+            >
+              {element}
             </button>
             ))}
           </div>
@@ -199,20 +254,20 @@ function RegisterForm() {
             <h2>내가 좋아하는 상대는?</h2>
             <p>2개 이상 선택하세요</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
-              {idealTraits.map((trait, index) => (
+              {idealList.map((element, index) => (
                 <button
                 key={index}
                 style={{
-                  backgroundColor: ideal.includes(trait) ? '#61dafbaa' : 'white',
+                  backgroundColor: ideal.includes(element) ? '#61dafbaa' : 'white',
                   padding: '10px',
                   margin: '5px',
                   borderRadius: '5px',
                   border: '1px solid black',
                   cursor: 'pointer',
                 }}
-                onClick={() => handleIdealClick(trait)}
+                onClick={() => handleIdealClick(element)}
               >
-                {trait}
+                {element}
               </button>
               ))}
             </div>

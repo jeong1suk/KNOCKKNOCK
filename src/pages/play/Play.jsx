@@ -1,12 +1,20 @@
 import styled from 'styled-components';
 
+import { useNavigate } from 'react-router-dom';
+
+import PostCard from '../../components/play/PostCard';
+
+
 function Play()  {
+  const navigate = useNavigate();
+
+
   return(
     <>
       <PostButtonBox>
-        <p>나랑 놀자</p>
+        <p>같이 놀자</p>
         <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
-        <PostButton>게시글 만들기</PostButton>
+        <PostButton onClick={() => navigate(`/playadd`)}>게시글 만들기</PostButton>
       </PostButtonBox>
       <CategoryButtonBox>
         <CategoryButton>술</CategoryButton>
@@ -18,7 +26,10 @@ function Play()  {
         <CategoryButton>공연관람</CategoryButton>
         <CategoryButton>기타</CategoryButton>
       </CategoryButtonBox>
-      <PostBox>asdasd</PostBox>
+      <PostCard />
+      <PostCard />
+      <PostCard />
+      <PostCard />
     </>
   )
 };
@@ -66,3 +77,5 @@ const PostBox = styled.div`
   flex-direction: column;
   margin: 30px 50px 30px 50px;
 `
+
+

@@ -4,6 +4,7 @@ import LoginForm from "../pages/login/LoginForm";
 import RegisterForm from "../pages/register/RegisterForm";
 import TodayKnock from "../pages/todayknock/TodayKnock";
 import Play from "../pages/play/Play";
+import PlayAdd from "../pages/play/PlayAdd";
 
 export const ROUTE = {
   MAIN: {
@@ -36,7 +37,11 @@ export const ROUTE = {
     link: "/play",
     element: Play,
   },
-
+  PlayAdd: {
+    path: "playadd",
+    link: "playadd",
+    element: PlayAdd,
+  },
 };
 
 export const ROUTE_ARR = Object.values(ROUTE);
