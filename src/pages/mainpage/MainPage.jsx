@@ -17,9 +17,6 @@ const MainContainer = styled.div`
 const MainContent01 = styled.div`
   display: flex;
   justify-content: flex-end;
-  @media ${res.mobile} {
-    margin: 6rem 0;
-  }
 `;
 
 export default MainPage;

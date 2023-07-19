@@ -117,7 +117,7 @@ const NavMenu = styled.ul`
 `;
 
 const MenuList = styled.li`
-  padding: 0 1.6rem;
+  padding: 0 1rem;
   height: 100%;
   display: flex;
   align-items: center;
