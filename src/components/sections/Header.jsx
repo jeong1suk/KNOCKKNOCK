@@ -1,33 +1,75 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ROUTE } from "../../routes/routes";
-const Header = ({ children }) => {
+import MobileMenu from "./MobileMenu";
+const Header = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 800);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <HeaderWrap>
       <HeaderContainer>
-        <LogoBox>낙낙</LogoBox>
-
-        <MenuList>
-          <Link to={ROUTE.MAIN.link}>메인페이지</Link>
-          <Link to={ROUTE.AI.link}>인공지능</Link>
-          <Link to={ROUTE.LOGIN.link}>로그인</Link>
-          <Link to={ROUTE.REGISTER.link}>회원가입</Link>
-          <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
-          <Link to={ROUTE.Mypage.link}>마이페이지</Link>
-        </MenuList>
+        <LogoBox>
+          <Link to="/">
+            <LogoImgBox>
+              <img src="src/assets/favicon.png" />
+            </LogoImgBox>
+          </Link>
+        </LogoBox>
+        <NavigationBox>
+          {!isMobile && (
+            <Navigation>
+              <NavMenu>
+                <MenuList>
+                  <Link to={ROUTE.MAIN.link}>메인페이지</Link>
+                </MenuList>
+                <MenuList>
+                  <Link to={ROUTE.AI.link}>인공지능</Link>
+                </MenuList>
+                <MenuList>
+                  <Link to={ROUTE.LOGIN.link}>로그인</Link>
+                </MenuList>
+                <MenuList>
+                  <Link to={ROUTE.REGISTER.link}>회원가입</Link>
+                </MenuList>
+                <MenuList>
+                  <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
+                </MenuList>
+                <MenuList>
+                  <Link to={ROUTE.Mypage.link}>마이페이지</Link>
+                </MenuList>
+              </NavMenu>
+            </Navigation>
+          )}
+          {isMobile && (
+            <MobileMenubox>
+              <MobileMenu />
+            </MobileMenubox>
+          )}
+        </NavigationBox>
       </HeaderContainer>
     </HeaderWrap>
   );
 };
 const HeaderWrap = styled.div`
   width: 100%;
-  height: 7.6rem;
+  height: 6rem;
   background-color: #fff;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 998;
+  /* z-index: 998; */
 `;
 
 const HeaderContainer = styled.div`
@@ -47,8 +89,8 @@ const LogoBox = styled.div`
 `;
 
 const LogoImgBox = styled.div`
-  width: 100px;
-  height: 40px;
+  width: 50px;
+  height: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -75,7 +117,7 @@ const NavMenu = styled.ul`
 `;
 
 const MenuList = styled.li`
-  padding: 0 1.6rem;
+  padding: 0 1rem;
   height: 100%;
   display: flex;
   align-items: center;
@@ -89,75 +131,11 @@ const MenuList = styled.li`
     color: #f1b24a;
   }
   a {
-    font-size: 2.3rem;
+    font-size: 1.3rem;
     font-weight: 500;
     color: #111;
     &:hover {
       color: #f1b24a;
-    }
-  }
-`;
-
-const InfoMenu = styled.div`
-  display: flex;
-  align-items: center;
-  height: 100%;
-  margin-left: 2.4rem;
-`;
-
-const UserName = styled.div`
-  margin-right: 0.8rem;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #252525;
-`;
-
-const CountBox = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 1rem;
-  font-size: 5rem;
-  font-weight: bold;
-  color: #252525;
-  span {
-    font-size: 2rem;
-  }
-`;
-
-const SubMenu = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 2.4rem;
-`;
-
-const SubMenuList = styled.ul`
-  display: flex;
-  align-items: center;
-  height: 100%;
-`;
-
-const SubMenuBtn = styled.button`
-  width: 10rem;
-  height: 4rem;
-  margin-left: 1.2rem;
-  border: ${({ btn }) => (btn === "stroke" ? "1px solid #01881c" : "none")};
-  border-radius: 5px;
-  background-color: ${({ btn }) => (btn === "stroke" ? "none" : "#01881c")};
-  a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: ${({ btn }) => (btn === "stroke" ? "#01881c" : "#fff")};
-  }
-  &:hover {
-    background-color: ${({ btn }) =>
-      btn === "stroke" ? "#01881c" : "#78c186"};
-    a {
-      color: ${({ btn }) => (btn === "stroke" ? "#fff" : "#f3f5f4")};
     }
   }
 `;
