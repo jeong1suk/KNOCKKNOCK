@@ -22,7 +22,9 @@ const Header = () => {
       <HeaderContainer>
         <LogoBox>
           <Link to="/">
-            <LogoImgBox>낙낙</LogoImgBox>
+            <LogoImgBox>
+              <img src="src/assets/favicon.png" />
+            </LogoImgBox>
           </Link>
         </LogoBox>
         <NavigationBox>
@@ -87,8 +89,8 @@ const LogoBox = styled.div`
 `;
 
 const LogoImgBox = styled.div`
-  width: 100px;
-  height: 40px;
+  width: 50px;
+  height: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
