@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 
 import TextareaAutosize from 'react-textarea-autosize';
 
 import Modal from '../../components/modal/Modal';
 
-
+import styled from 'styled-components';
 
 
 function RegisterForm() {
