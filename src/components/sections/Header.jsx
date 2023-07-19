@@ -4,9 +4,9 @@ import styled from "styled-components";
 import { ROUTE } from "../../routes/routes";
 const Header = ({ children }) => {
   return (
-    <Positioner>
-      <HeaderContents>
-        <Logo>낙낙</Logo>
+    <HeaderWrap>
+      <HeaderContainer>
+        <LogoBox>낙낙</LogoBox>
 
         <MenuList>
           <Link to={ROUTE.MAIN.link}>메인페이지</Link>
@@ -16,10 +16,8 @@ const Header = ({ children }) => {
           <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
           <Link to={ROUTE.Mypage.link}>마이페이지</Link>
         </MenuList>
-      </HeaderContents>
-
-      <GradientBorder />
-    </Positioner>
+      </HeaderContainer>
+    </HeaderWrap>
   );
 };
 const HeaderWrap = styled.div`
