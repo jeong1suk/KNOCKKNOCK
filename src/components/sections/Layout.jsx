@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import Header from "./Header";
-import Router from "../routes/Router";
+import Router from "../../routes/Router";
 // import Footer from "./Footer";
 
 const Layout = () => {

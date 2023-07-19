@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { ROUTE } from "../routes/routes";
+import { ROUTE } from "../../routes/routes";
 const Header = ({ children }) => {
   return (
     <Positioner>
@@ -10,7 +10,6 @@ const Header = ({ children }) => {
 
         <MenuList>
           <Link to={ROUTE.MAIN.link}>메인페이지</Link>
-
           <Link to={ROUTE.AI.link}>인공지능</Link>
           <Link to={ROUTE.LOGIN.link}>로그인</Link>
           <Link to={ROUTE.REGISTER.link}>회원가입</Link>
