@@ -5,6 +5,7 @@ import RegisterForm from "../pages/register/RegisterForm";
 import TodayKnock from "../pages/todayknock/TodayKnock";
 import Play from "../pages/play/Play";
 import PlayAdd from "../pages/play/PlayAdd";
+import MyPage from "../pages/mypage/MyPage";
 
 export const ROUTE = {
   MAIN: {
@@ -32,15 +33,25 @@ export const ROUTE = {
     link: "/todayknock",
     element: TodayKnock,
   },
+  TodayKnock: {
+    path: "/todayknock",
+    link: "/todayknock",
+    element: TodayKnock,
+  },
   Play: {
-    path: "/play",
     link: "/play",
+    path: "/play",
     element: Play,
   },
   PlayAdd: {
-    path: "playadd",
-    link: "playadd",
+    path: "/playadd",
+    link: "/playadd",
     element: PlayAdd,
+  },
+  Mypage: {
+    path: "/mypage",
+    link: "/mypage",
+    element: MyPage,
   },
 };
 

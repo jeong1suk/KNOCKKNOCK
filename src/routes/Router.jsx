@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ROUTE_ARR } from "./routes";
 const Router = () => {
   return (
-    <BrowserRouter>
+    <>
       <Routes>
         {ROUTE_ARR.map((route, index) => {
           return (
@@ -15,7 +15,7 @@ const Router = () => {
           );
         })}
       </Routes>
-    </BrowserRouter>
+    </>
   );
 };
 export default Router;
