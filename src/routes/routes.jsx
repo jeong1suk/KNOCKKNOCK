@@ -45,7 +45,7 @@ export const ROUTE = {
     element: PlayAdd,
   },
   PlayDetail: {
-    path: "/playdetail",
+    path: "/playdetail/:id",
     link: "/playdetail",
     element: PlayDetail,
   },

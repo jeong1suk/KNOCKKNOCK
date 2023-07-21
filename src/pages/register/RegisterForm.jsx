@@ -50,7 +50,7 @@ function RegisterForm() {
     '영화','코인노래방','맥주','카페',
     '독서','맛집탐방','여행','등산',
     '러닝','산책','댄스','골프',
-    '헬스','필라테스','홈트레','클라이밍',
+    '헬스','필라테스','홈트레닝','클라이밍',
     '자전거','캠핑','공부','볼링',
     '요리','그림','음악 듣기',
     '악기 연주','사진 찍기','웹툰','게임',
@@ -184,21 +184,17 @@ function RegisterForm() {
             alert('라우팅 경로가 잘못되었습니다.');
         }
     }
-};
+  };
 
 useEffect(() => {
   setHobbyIndex(hobby.map(h => 1 + hobbyList.indexOf(h)));
-
 }, [hobby]);
 
 useEffect(() => {
-
   setPersonalityIndex(personality.map( p => 31 + personalityList.indexOf(p)));
-
 }, [personality]);
 
 useEffect(() => {
-
   setIdealIndex(ideal.map(i => 51 + idealList.indexOf(i)));
 }, [ideal]);
 

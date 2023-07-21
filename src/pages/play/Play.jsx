@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { useNavigate } from 'react-router-dom';
-
+import React, { useState, useEffect } from 'react';
 import * as Api from '../../api';
 
 import PostCard from '../../components/play/PostCard';
@@ -14,13 +14,13 @@ function Play()  {
   const [allPostCount, setAllPostCount] = useState(0);
   const perPage = 5;
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const res = await Api.get(`/posts?page=${currentPage}&perPage=${perPage}`);
-      setPostList(res.data.postList);
-      setAllPostCount(res.data.allPostCount);
-    };
+  const fetchPosts = async () => {
+    const res = await Api.get(`/posts?page=${currentPage}&perPage=${perPage}`);
+    setPostList(res.data.postList);
+    setAllPostCount(res.data.allPostCount);
+  };
 
+  useEffect(() => {
     fetchPosts();
   }, [currentPage]);
 

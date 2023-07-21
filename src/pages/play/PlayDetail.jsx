@@ -1,18 +1,53 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+import * as Api from '../../api';
 
 import styled from 'styled-components';
 
 import Modal from '../../components/modal/Modal';
 
 function PlayDetail() {
+  const location = useLocation();
+  const postId = location.pathname.match(/\/playdetail\/(\d+)/)[1];
+  const userId = Number(localStorage.getItem('userId'));
 
-  const isWriter = true;
+  const isWriter = false;
+
+  
 
   const [title, setTitle] = useState('범계에서 저녁7시에 술 먹어요!');
   const [place, setPlace] = useState('범계 용용선생');
   const [meetingTime, setMeetingTime] = useState('8월1일 19시');
   const [imageUrl, setImageUrl] = useState('http://placekitten.com/200/200');
   const [content, setContent] = useState('재밌게 놀사람 오세요~');
+  const [post, setPost] = useState();
+
+
+  const fetchGetDetail = async () => {
+    try{
+      const res = await Api.get(`/posts/${postId}`);
+      console.log(111);
+      console.log(res.data);
+      console.log(111);
+      const post = res.data;
+      setPost(post);
+    } catch (err) {
+            if (err.response.data.message) {
+                alert(err.response.data.message);
+            } else {
+                alert('라우팅 경로가 잘못되었습니다.');
+            }
+        }
+
+  }
+
+
+
+
+  useEffect(() => {
+    fetchGetDetail()
+  }, []);
 
   return(
 
@@ -28,20 +63,22 @@ function PlayDetail() {
       </TopBox>
       <PostDetailBox>
         <InputBox>
+
           <RecruitAbleBox>모집중</RecruitAbleBox>
+
         </InputBox>
         <InputBox>
-          <p style={{fontSize: "2vw", fontWeight: "bold"}}>{title}</p>
+          <p style={{fontSize: "2vw", fontWeight: "bold"}}>{post.post_title}</p>
         </InputBox>
         <InputBox style={{flexDirection: "column", alignItems: "start"}}>
-          <p style={{margin: "0px 0px"}}>장소: {place}</p>
-          <p style={{margin: "10px 0px"}}>만남시간: {meetingTime}</p>
+          <p style={{margin: "0px 0px"}}>장소: {post.place}</p>
+          <p style={{margin: "10px 0px"}}>만남시간: {post.meeting_time}</p>
         </InputBox>
         <InputBox>
-        <img src={imageUrl} alt="postImage" style={{width: "50%", height: "25vw", marginTop: "10px", marginRight: "10px"}}/>
+        <img src={post.post_image} alt="postImage" style={{width: "50%", height: "25vw", marginTop: "10px", marginRight: "10px"}}/>
         </InputBox>
         <InputBox>
-          <p>{content}</p>
+          <p>{post.post_content}</p>
         </InputBox>
 
         <CommentBox>
