@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { post } from '../../../../../new_vegcom/vegcom_front/api';
 
 
 
 function PostCard()  {
+  const navigate = useNavigate();
 
   const [category, setCategory] = useState('술');
   const [title, setTitle] = useState('범계에서 오늘 저녁 술먹어요');
@@ -19,7 +19,7 @@ function PostCard()  {
   const [nickname, setNickname] = useState('억만추');
 
   return(
-    <PostBox>
+    <PostBox onClick = {() => navigate(`/playdetail`)}>
       <SubDiv>
         <p>카테고리 : {category}</p>
         <p>남은자리 : {people}</p>

@@ -49,8 +49,9 @@ const Header = () => {
                 <MenuList>
                   <Link to={ROUTE.Play.link}>같이 놀자</Link>
                 </MenuList>
-                
-
+                <MenuList>
+                  <Link to={ROUTE.Mypage.link}>마이페이지</Link>
+                </MenuList>
               </NavMenu>
             </Navigation>
           )}
@@ -64,6 +65,7 @@ const Header = () => {
     </HeaderWrap>
   );
 };
+
 const HeaderWrap = styled.div`
   width: 100%;
   height: 6rem;

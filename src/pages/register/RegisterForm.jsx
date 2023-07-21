@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import * as Api from "../../api";
 
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -8,8 +9,10 @@ import Modal from '../../components/modal/Modal';
 import styled from 'styled-components';
 
 
+
 function RegisterForm() {
   const navigate = useNavigate();
+
   const today = new Date().toISOString().split("T")[0];
 
 
@@ -19,8 +22,9 @@ function RegisterForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [gender, setGender] = useState('');
-  const [birthdate, setBirthdate] = useState('');
+  // const [birthdate, setBirthdate] = useState('19970711');
   const [job, setJob] = useState('');
+  const [region, setRegion] = useState('');
 
   const [image, setImage] = useState('');
   const [mbti, setMbti] = useState('');
@@ -31,30 +35,49 @@ function RegisterForm() {
   const [ideal, setIdeal] = useState([]);
   const [introduce, setIntroduce] = useState('');
 
+  const [hobbyIndex, setHobbyIndex] = useState([]);
+  const [personalityIndex, setPersonalityIndex] = useState([]);
+  const [idealIndex, setIdealIndex] = useState([]);
+
   const [isHobbyModalOpen, setIsHobbyModalOpen] = useState(false);
+  const [isMbtiModalOpen, setIsMbtiModalOpen] = useState(false);
   const [isPersonalityModalOpen, setIsPersonalityModalOpen] = useState(false);
   const [isIdealModalOpen, setIsIdealModalOpen] = useState(false);
 
-  console.log(hobby);
+
+
   const hobbyList = [
-    "영화", "코인노래방", "맥주", "카페",
-    "쇼핑", "독서", "맛집탐방", "여행",
-    "등산", "러닝", "산책", "댄스",
-    "골프", "헬스", "필라테스", "홈트레이닝",
-    "클라이밍", "자전거라이딩", "캠핑", "공부",
-    "볼링", "요리", "그림그리기", "음악듣기",
-    "악기연주", "사진찍기", "웹툰", "게임",
-    "전시회관람", "봉사활동", "드라이브"
+    '영화','코인노래방','맥주','카페',
+    '독서','맛집탐방','여행','등산',
+    '러닝','산책','댄스','골프',
+    '헬스','필라테스','홈트레','클라이밍',
+    '자전거','캠핑','공부','볼링',
+    '요리','그림','음악 듣기',
+    '악기 연주','사진 찍기','웹툰','게임',
+    '전시회','봉사활동'
+  ]
+  const mbtiList = [
+    "ISTJ", "ISFJ", "INFJ", "INTJ",
+    "ISTP", "ISFP", "INFP", "INTP",
+    "ESTP", "ESFP", "ENFP", "ENTP",
+    "ESTJ", "ESFJ", "ENFJ", "ENTJ",
   ]
   const personalityList = [
-    "예쁘고 잘생긴", "옷 잘입는", "듬직한", "아담한",
-    "말이 잘 통하는", "잘 웃어주는", "욕 안하는", "목소리가 좋은",
-    "먼저 말걸어주는", "잘 들어주는"
+    '활발한','조용한','애교가','어른스러운',
+    '열정적인','또라이','예의바른','유머러스한',
+    '꼼꼼한','진지한','자신감','허세없는',
+    '엉뚱한','지적인','성실한','감성적인',
+    '논리적인','증흑적인' ,'소심한'
   ];
   const idealList = [
-    "예쁘고 잘생긴", "옷 잘입는", "듬직한", "아담한",
-    "말이 잘 통하는", "잘 웃어주는", "욕 안하는", "목소리가 좋은",
-    "먼저 말걸어주는", "잘 들어주는", "연상", "연하", "동갑", "취미가 같은"
+    '옷 잘 입는','듬직한','아담한','연상',
+    '연하','동갑','취미가 같은','말이 통하는',
+    '잘 웃어주는','잘 들어주는','활발한','조용한',
+    '애교가 넘치는','어른스러운','열정적인','또라이 같은',
+    '예의바른','유머러스한','꼼꼼한','진지한',
+    '자신감','허세없는','엉뚱한','지적인',
+    '성실한','감성적인','논리적인','증흑적인',
+    '소심한','쿨한'
   ];
 
 
@@ -64,7 +87,7 @@ function RegisterForm() {
     return (
       <StyledGenderButton
         color={isSelected ? color : 'white'}
-        selectedColor={color}
+        $selectedcolor={color}
         onClick={() => setGender(label)}
       >
         {label}
@@ -74,10 +97,14 @@ function RegisterForm() {
 
   const handleHobbyClick = (element) => {
     if (hobby.includes(element)) {
-      setHobby(personality.filter(e => e !== element));
+      setHobby(hobby.filter(e => e !== element));
     } else {
       setHobby([...hobby, element])
     }
+  }
+
+  const handleMbtiClick = (element) => {
+    setMbti(element);
   }
 
   const handlePersonalityClick = (element) => {
@@ -100,6 +127,10 @@ function RegisterForm() {
     setIsHobbyModalOpen(false);
   };
 
+  const handleConfirmMbti = () => {
+    setIsMbtiModalOpen(false);
+  }
+
   const handleConfirmPersonality = () => {
     setIsPersonalityModalOpen(false);
   };
@@ -117,12 +148,60 @@ function RegisterForm() {
   };
 
   const isEmailValid = validateEmail(email);
-  const isPasswordValid = password.length >= 10;
+  const isPasswordValid = password.length >= 4;
   const isPasswordSame = password === confirmPassword;
   const isNicknameValid = nickname.length >= 2;
 
   const isFormValid = isEmailValid && isPasswordValid && isPasswordSame && isNicknameValid;
   
+  const handleSubmit = async e => {
+    try {
+        res = await Api.post('users/register', {
+          username: name,
+          email,
+          nickname,
+          user_password: password,
+          gender,
+          birthday: '19970711',
+          job,
+          region,
+          mbti,
+          religion,
+          height,
+          hobby: hobbyIndex,
+          personality: personalityIndex,
+          ideal: idealIndex,
+          introduce
+        });
+        console.log(res);
+        // 로그인 페이지로 이동함.
+
+    } catch (err) {
+      console.log(err);
+        if (err.response.data.message) {
+            alert(err.response.data.message);
+        } else {
+            alert('라우팅 경로가 잘못되었습니다.');
+        }
+    }
+};
+
+useEffect(() => {
+  setHobbyIndex(hobby.map(h => 1 + hobbyList.indexOf(h)));
+
+}, [hobby]);
+
+useEffect(() => {
+
+  setPersonalityIndex(personality.map( p => 31 + personalityList.indexOf(p)));
+
+}, [personality]);
+
+useEffect(() => {
+
+  setIdealIndex(ideal.map(i => 51 + idealList.indexOf(i)));
+}, [ideal]);
+
   return (
     <div>
       <Wrapper>
@@ -153,18 +232,23 @@ function RegisterForm() {
         
         <LabelInput>
           <StyledLabel>성별</StyledLabel>
-          <GenderButton color="blue" label="남자" gender={gender} setGender={setGender} />
-          <GenderButton color="red" label="여자" gender={gender} setGender={setGender} />
+          <GenderButton color="blue" label="남" gender={gender} setGender={setGender} />
+          <GenderButton color="red" label="여" gender={gender} setGender={setGender} />
         </LabelInput>
                 
-        <LabelInput>
+        {/* <LabelInput>
           <StyledLabel>생년월일</StyledLabel>
           <StyledInput type="date" value={birthdate} max={today} onChange={e => setBirthdate(e.target.value)} required />
-        </LabelInput>
+        </LabelInput> */}
 
         <LabelInput>
           <StyledLabel>직업</StyledLabel>
           <StyledInput type="text" value={job} onChange={e => setJob(e.target.value)} required />
+        </LabelInput>
+
+        <LabelInput>
+          <StyledLabel>지역</StyledLabel>
+          <StyledInput type="text" value={region} onChange={e => setRegion(e.target.value)} required />
         </LabelInput>
         
       </Wrapper>
@@ -174,10 +258,6 @@ function RegisterForm() {
           <StyledInput type="file" accept="image/*" onChange={e => setImage(e.target.files[0])} />
         </LabelInput>
         
-        <LabelInput>
-          <StyledLabel>MBTI</StyledLabel>
-          <StyledInput type="text" value={mbti} onChange={e => setMbti(e.target.value)} />
-        </LabelInput>
         
         <LabelInput>
           <StyledLabel>종교</StyledLabel>
@@ -190,9 +270,11 @@ function RegisterForm() {
         </LabelInput>
         
 
-
         <LabelInput style={{justifyContent: "center"}}>
           <ModalButton style={{marginRight : "10px"}} onClick={() => setIsHobbyModalOpen(true)}>취미</ModalButton>
+          <ModalButton onClick={() => setIsMbtiModalOpen(true)}>MBTI</ModalButton>
+        </LabelInput>
+        <LabelInput style={{justifyContent: "center"}}>
           <ModalButton style={{marginRight : "10px"}} onClick={() => setIsPersonalityModalOpen(true)}>내가 생각하는 나</ModalButton>
           <ModalButton onClick={() => setIsIdealModalOpen(true)}>내가 좋아하는 상대</ModalButton>
         </LabelInput>
@@ -200,7 +282,7 @@ function RegisterForm() {
         <Modal onClose={() => setIsHobbyModalOpen(false)}>
           <h2>취미는?</h2>
           <p>2개 이상 선택하세요</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+          <ModalListDiv>
             {hobbyList.map((element, index) => (
               <button
               key={index}
@@ -217,16 +299,40 @@ function RegisterForm() {
               {element}
             </button>
             ))}
-          </div>
+          </ModalListDiv>
           <button onClick={handleConfirmHobby}>확인</button>
           </Modal>
-          )}
+        )}
+
+        {isMbtiModalOpen && (
+          <Modal onClose={() => setIsMbtiModalOpen(false)}>
+            <h2>MBTI는?</h2>
+            <ModalMbtiListDiv>
+              {mbtiList.map((element, index) => (
+                <button
+                  key={index}
+                  style={{
+                    backgroundColor: mbti.includes(element) ? '#61dafbaa' : 'white',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    border: '1px solid black',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => handleMbtiClick(element)}
+                >
+                  {element}
+                </button>
+              ))}
+            </ModalMbtiListDiv>
+            <button onClick={handleConfirmMbti}>확인</button>
+          </Modal>
+        )}
 
         {isPersonalityModalOpen && (
         <Modal onClose={() => setIsPersonalityModalOpen(false)}>
           <h2>내가 생각하는 나는?</h2>
           <p>2개 이상 선택하세요</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+          <ModalListDiv>
             {personalityList.map((element, index) => (
               <button
               key={index}
@@ -243,7 +349,7 @@ function RegisterForm() {
               {element}
             </button>
             ))}
-          </div>
+          </ModalListDiv>
           <button onClick={handleConfirmPersonality}>확인</button>
           </Modal>
           )}
@@ -252,7 +358,7 @@ function RegisterForm() {
           <Modal onClose={() => setIsIdealModalOpen(false)}>
             <h2>내가 좋아하는 상대는?</h2>
             <p>2개 이상 선택하세요</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+            <ModalListDiv>
               {idealList.map((element, index) => (
                 <button
                 key={index}
@@ -269,7 +375,7 @@ function RegisterForm() {
                 {element}
               </button>
               ))}
-            </div>
+            </ModalListDiv>
             <button onClick={handleComfirmIdeal}>확인</button>
             </Modal>
             )}
@@ -282,7 +388,7 @@ function RegisterForm() {
   alignItems: "center"}}>
         <div style={{display: "flex"}}>
           <StyledButton style={{marginRight: "10px"}} onClick={() => navigate('/login')}>로그인</StyledButton>
-          <StyledButton disabled={!isFormValid} onClick={() => navigate('/login')}>회원가입</StyledButton>
+          <StyledButton disabled={!isFormValid} onClick={handleSubmit}>회원가입</StyledButton>
         </div>  
       </div>
     </div>
@@ -324,7 +430,7 @@ const Wrapper = styled.div`
   border: 1px solid black;
   border-radius: 10px;
   width: 50vw;
-  margin: 50px auto 0 auto;
+  margin: 100px auto 0 auto;
 `
 
 const  LabelInput = styled.div`
@@ -338,7 +444,7 @@ const StyledGenderButton = styled.button`
   padding: 10px;
   background-color: ${props => props.color};
   color: ${props => (props.color === 'white' ? 'black' : 'white')};
-  border: 2px solid ${props => props.selectedColor};
+  border: 2px solid ${props => props.selectedcolor};
   border-radius: 5px;
   cursor: pointer;
   margin: 10px;
@@ -353,6 +459,7 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
 `;
 
 const ModalButton = styled.button`
+  width: 30%;
   padding: 10px 20px;
   background-color: #FFFFFF;
   color: black;
@@ -360,4 +467,24 @@ const ModalButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
+`
+
+const ModalListDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+`
+
+const ModalMbtiListDiv = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `

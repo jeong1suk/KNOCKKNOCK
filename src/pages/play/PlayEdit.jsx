@@ -5,7 +5,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 
 import styled from 'styled-components';
 
-function PlayAdd() {
+function PlayEdit() {
   const navigate = useNavigate();
 
   const [postTitle, setPostTitle] = useState('');
@@ -128,7 +128,8 @@ function PlayAdd() {
   )
 }
 
-export default PlayAdd;
+export default PlayEdit;
+
 const TopBox = styled.div`
   display: flex;
   flex-direction: column;

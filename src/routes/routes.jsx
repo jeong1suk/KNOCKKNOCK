@@ -6,6 +6,7 @@ import TodayKnock from "../pages/todayknock/TodayKnock";
 import Play from "../pages/play/Play";
 import PlayAdd from "../pages/play/PlayAdd";
 import MyPage from "../pages/mypage/MyPage";
+import PlayDetail from "../pages/play/PlayDetail";
 
 export const ROUTE = {
   MAIN: {
@@ -33,11 +34,6 @@ export const ROUTE = {
     link: "/todayknock",
     element: TodayKnock,
   },
-  TodayKnock: {
-    path: "/todayknock",
-    link: "/todayknock",
-    element: TodayKnock,
-  },
   Play: {
     link: "/play",
     path: "/play",
@@ -47,6 +43,11 @@ export const ROUTE = {
     path: "/playadd",
     link: "/playadd",
     element: PlayAdd,
+  },
+  PlayDetail: {
+    path: "/playdetail",
+    link: "/playdetail",
+    element: PlayDetail,
   },
   Mypage: {
     path: "/mypage",

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import UserProfile from './UserProfile';
 import TodayGame from './TodayGame';
-import * as API from '../../../api'; 
+import * as API from '../../api'; 
 
 const Container = styled.div`
   background-color: #D2DAFF;
