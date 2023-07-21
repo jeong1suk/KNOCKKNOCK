@@ -5,7 +5,7 @@ const UserProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 15rem;
+  width: 30rem;
   height: 21rem;
   max-width: 20rem;
   background-color: aliceblue;
@@ -15,7 +15,7 @@ const UserProfileBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 15rem;
+  width: 30rem;
   height: 15rem;
   max-width: 20rem;
   background-color: aliceblue;
@@ -38,7 +38,7 @@ const ProfilePicture = styled.img`
   border-style: solid; 
   border-radius: 100%;
   margin-top: -25px;
-  margin-right: 8rem;
+  margin-right: 10rem;
 `;
 
 const Name = styled.h3`
@@ -78,23 +78,38 @@ const Tagline = styled.div`
 `;
 
 
-const UserProfile = () => {
+const UserProfile = ({ user }) => {
+  const {
+    username,
+    profile_image,
+    mbti,
+    height,
+    region,
+    age,
+    gender,
+    introduce,
+  } = user;
+
   return (
     <UserProfileContainer>
       <UserProfileBox>
-      <BackgroundImage />
-      <ProfilePicture src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg" alt="Profile Picture" />
-      <Name>유진이</Name>
-      <SmallBoxContainer>
-        <SmallBox>INFP</SmallBox>
-        <SmallBox>168cm</SmallBox>
-        <SmallBox>비공개</SmallBox>
-        <SmallBox>99년생</SmallBox>
-      </SmallBoxContainer>
+        <BackgroundImage />
+        <ProfilePicture src={profile_image} alt="프로필 사진" />
+        <Name>{username}</Name>
+        <SmallBoxContainer>
+          <SmallBox>{mbti}</SmallBox>
+          <SmallBox>{height || '비공개'}</SmallBox>
+          <SmallBox>{region || '비공개'}</SmallBox>
+          <SmallBox>{age}세</SmallBox>
+          <SmallBox>{gender}</SmallBox>
+        </SmallBoxContainer>
       </UserProfileBox>
-      <Tagline>안녕하세요 유진이에요<br />잘 부탁드려요</Tagline>
+      <Tagline>{introduce || '안녕하세요. 반갑습니다.'}</Tagline>
     </UserProfileContainer>
   );
 };
 
 export default UserProfile;
+
+
+
