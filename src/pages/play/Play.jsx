@@ -2,11 +2,29 @@ import styled from 'styled-components';
 
 import { useNavigate } from 'react-router-dom';
 
-import PostCard from '../../components/play/PostCard';
+import * as Api from '../../api';
 
+import PostCard from '../../components/play/PostCard';
+import Pagination from '../../components/play/Pagenation';
 
 function Play()  {
   const navigate = useNavigate();
+  const [postList, setPostList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [allPostCount, setAllPostCount] = useState(0);
+  const perPage = 5;
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await Api.get(`/posts?page=${currentPage}&perPage=${perPage}`);
+      setPostList(res.data.postList);
+      setAllPostCount(res.data.allPostCount);
+    };
+
+    fetchPosts();
+  }, [currentPage]);
+
+  const lastPage = Math.ceil(allPostCount / perPage);
 
 
   return(
@@ -14,9 +32,14 @@ function Play()  {
       <PostButtonBox>
         <p>같이 놀자</p>
         <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
-        <PostButton onClick={() => navigate(`/playadd`)}>게시글 만들기</PostButton>
+        <TopButtonBox>
+          <PostButton style={{marginRight: "10px"}} onClick={() => navigate(`/playadd`)}>게시글 만들기</PostButton>
+          <PostButton>내가 쓴 게시글 보기</PostButton>
+        </TopButtonBox>
+        
       </PostButtonBox>
       <CategoryButtonBox>
+        <CategoryButton>전체</CategoryButton>
         <CategoryButton>술</CategoryButton>
         <CategoryButton>영화</CategoryButton>
         <CategoryButton>식사</CategoryButton>
@@ -26,10 +49,10 @@ function Play()  {
         <CategoryButton>공연관람</CategoryButton>
         <CategoryButton>기타</CategoryButton>
       </CategoryButtonBox>
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
+      {postList.map(post => (
+        <PostCard key={post.post_id} post={post} />
+      ))}
+      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} lastPage={lastPage} />
     </>
   )
 };
@@ -78,4 +101,8 @@ const PostBox = styled.div`
   margin: 30px 50px 30px 50px;
 `
 
+const TopButtonBox = styled.div`
+  display: flex;
+  
+`
 

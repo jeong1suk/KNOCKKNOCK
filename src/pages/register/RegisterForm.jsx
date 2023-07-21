@@ -188,9 +188,19 @@ function RegisterForm() {
 
 useEffect(() => {
   setHobbyIndex(hobby.map(h => 1 + hobbyList.indexOf(h)));
-  setPersonalityIndex(personality.map( p => 31 + personalityList.indexOf(p)))
-  setIdealIndex(ideal.map(i => 51 + idealList.indexOf(i)))
-}, [hobby, ideal, personality]);
+
+}, [hobby]);
+
+useEffect(() => {
+
+  setPersonalityIndex(personality.map( p => 31 + personalityList.indexOf(p)));
+
+}, [personality]);
+
+useEffect(() => {
+
+  setIdealIndex(ideal.map(i => 51 + idealList.indexOf(i)));
+}, [ideal]);
 
   return (
     <div>
@@ -420,7 +430,7 @@ const Wrapper = styled.div`
   border: 1px solid black;
   border-radius: 10px;
   width: 50vw;
-  margin: 50px auto 0 auto;
+  margin: 100px auto 0 auto;
 `
 
 const  LabelInput = styled.div`
