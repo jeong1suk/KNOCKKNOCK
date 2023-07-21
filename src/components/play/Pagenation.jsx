@@ -3,6 +3,15 @@ import styled from 'styled-components';
 
 function Pagination({ currentPage, setCurrentPage, lastPage }) {
   const pages = [...Array(lastPage).keys()].map((_, index) => index + 1);
+  
+  // 페이지네이션에서 보여줄 최대 페이지 수
+  const maxPageLimit = 10;
+  
+  // 시작 페이지를 계산
+  let startPage = Math.floor((currentPage - 1) / maxPageLimit) * maxPageLimit;
+  
+  // 실제 페이지네이션에서 보여질 페이지들
+  let visiblePages = pages.slice(startPage, startPage + maxPageLimit);
 
   return (
     <PaginationContainer>
@@ -13,7 +22,13 @@ function Pagination({ currentPage, setCurrentPage, lastPage }) {
         {'<'}
       </PageButton>
 
-      {pages.map((page) => (
+      {startPage > 0 && 
+        <PageButton onClick={() => setCurrentPage(startPage)}>
+          {'...'}
+        </PageButton>
+      }
+
+      {visiblePages.map((page) => (
         <PageButton
           key={page}
           active={currentPage === page}
@@ -22,6 +37,12 @@ function Pagination({ currentPage, setCurrentPage, lastPage }) {
           {page}
         </PageButton>
       ))}
+
+      {startPage + maxPageLimit < lastPage && 
+        <PageButton onClick={() => setCurrentPage(startPage + maxPageLimit + 1)}>
+          {'...'}
+        </PageButton>
+      }
 
       <PageButton
         disabled={currentPage === lastPage}
@@ -46,4 +67,6 @@ const PageButton = styled.button`
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  background-color: ${props => props.active ? 'grey' : 'white'};
+  color: ${props => props.active ? 'white' : 'black'};
 `;
