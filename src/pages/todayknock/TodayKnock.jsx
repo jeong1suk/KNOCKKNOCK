@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import UserProfile from './UserProfile';
 import TodayGame from './TodayGame';
+import * as API from '../../../api'; 
 
 const Container = styled.div`
   background-color: #D2DAFF;
@@ -55,7 +56,6 @@ const ModalContent = styled.div`
   border-radius: 5px;
 `;
 
-
 const UserProfilesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -75,6 +75,18 @@ const UserProfileBox = styled.div`
 
 function TodayKnock() {
   const [showModal, setShowModal] = useState(false);
+  const [users, setUsers] = useState([]); 
+
+  useEffect(() => {
+    API.get('/users/network')
+      .then(response => {
+        console.log("넘어오긴 햇음")
+        setUsers(response.data.randomUsers);
+      })
+      .catch(error => {
+        console.error('API 호출 오류:', error);
+      });
+  }, []);
 
   const handleStartClick = () => {
     setShowModal(true);
@@ -99,12 +111,11 @@ function TodayKnock() {
         </ModalOverlay>
       )}
       <UserProfilesContainer>
-        <UserProfileBox><UserProfile /></UserProfileBox>
-        <UserProfileBox><UserProfile /></UserProfileBox>
-        <UserProfileBox><UserProfile /></UserProfileBox>
-        <UserProfileBox><UserProfile /></UserProfileBox>
-        <UserProfileBox><UserProfile /></UserProfileBox>
-        <UserProfileBox><UserProfile /></UserProfileBox>
+        {users.map((user) => (
+          <UserProfileBox key={user.user_id}>
+            <UserProfile user={user} />
+          </UserProfileBox>
+        ))}
       </UserProfilesContainer>
       <div style={{ height: '50vh' }} />
     </Container>
