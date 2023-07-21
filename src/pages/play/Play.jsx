@@ -21,7 +21,7 @@ function Play()  {
         <CategoryButton>영화</CategoryButton>
         <CategoryButton>식사</CategoryButton>
         <CategoryButton>카페</CategoryButton>
-        <CategoryButton>산택</CategoryButton>
+        <CategoryButton>산책</CategoryButton>
         <CategoryButton>드라이브</CategoryButton>
         <CategoryButton>공연관람</CategoryButton>
         <CategoryButton>기타</CategoryButton>

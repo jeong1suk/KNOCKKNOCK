@@ -165,6 +165,7 @@ const StyledLabel = styled.label`
 `
 
 const StyledInput = styled.input`
+  background-color: #AAC4FF;
   padding: 10px;
   margin: 10px 0;
   border-radius: 5px;
@@ -174,6 +175,7 @@ const StyledInput = styled.input`
 
 
 const StyledSelect = styled.select`
+  background-color: #AAC4FF;
   padding: 10px;
   margin: 0 10px 0 0;
   border-radius: 5px;
@@ -190,6 +192,7 @@ const GenderSelectBox = styled.div`
 `
 
 const StyledTextareaAutosize = styled(TextareaAutosize)`
+  background-color: #AAC4FF;
   padding: 10px;
   margin-left: 20px;
   border-radius: 5px;
