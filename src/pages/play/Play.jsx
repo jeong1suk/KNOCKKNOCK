@@ -9,20 +9,24 @@ import Pagination from '../../components/play/Pagenation';
 
 function Play()  {
   const navigate = useNavigate();
+  
   const [postList, setPostList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [allPostCount, setAllPostCount] = useState(0);
+  const [postType, setPostType] = useState('');
+
   const perPage = 5;
 
   const fetchPosts = async () => {
-    const res = await Api.get(`/posts?page=${currentPage}&perPage=${perPage}`);
+    const res = await Api.get(`/posts?page=${currentPage}&perPage=${perPage}&type=${postType}`);
     setPostList(res.data.postList);
     setAllPostCount(res.data.allPostCount);
   };
 
+
   useEffect(() => {
     fetchPosts();
-  }, [currentPage]);
+  }, [currentPage, postType]);
 
   const lastPage = Math.ceil(allPostCount / perPage);
 
@@ -39,15 +43,15 @@ function Play()  {
         
       </PostButtonBox>
       <CategoryButtonBox>
-        <CategoryButton>전체</CategoryButton>
-        <CategoryButton>술</CategoryButton>
-        <CategoryButton>영화</CategoryButton>
-        <CategoryButton>식사</CategoryButton>
-        <CategoryButton>카페</CategoryButton>
-        <CategoryButton>산책</CategoryButton>
-        <CategoryButton>드라이브</CategoryButton>
-        <CategoryButton>공연관람</CategoryButton>
-        <CategoryButton>기타</CategoryButton>
+        <CategoryButton onClick={() => setPostType('')}>전체</CategoryButton>
+        <CategoryButton onClick={() => setPostType('술')}>술</CategoryButton>
+        <CategoryButton onClick={() => setPostType('영화')}>영화</CategoryButton>
+        <CategoryButton onClick={() => setPostType('식사')}>식사</CategoryButton>
+        <CategoryButton onClick={() => setPostType('카페')}>카페</CategoryButton>
+        <CategoryButton onClick={() => setPostType('산책')}>산책</CategoryButton>
+        <CategoryButton onClick={() => setPostType('드라이브')}>드라이브</CategoryButton>
+        <CategoryButton onClick={() => setPostType('공연관람')}>공연관람</CategoryButton>
+        <CategoryButton onClick={() => setPostType('기타')}>기타</CategoryButton>
       </CategoryButtonBox>
       {postList.map(post => (
         <PostCard key={post.post_id} post={post} />

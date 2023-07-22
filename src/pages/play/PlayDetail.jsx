@@ -27,10 +27,7 @@ function PlayDetail() {
   const fetchGetDetail = async () => {
     try{
       const res = await Api.get(`/posts/${postId}`);
-      console.log(111);
-      console.log(res.data);
-      console.log(111);
-      const post = res.data;
+      const post = res.data.post;
       setPost(post);
     } catch (err) {
             if (err.response.data.message) {
@@ -46,7 +43,7 @@ function PlayDetail() {
 
 
   useEffect(() => {
-    fetchGetDetail()
+    fetchGetDetail();
   }, []);
 
   return(

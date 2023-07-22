@@ -22,7 +22,7 @@ function RegisterForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [gender, setGender] = useState('');
-  // const [birthdate, setBirthdate] = useState('19970711');
+  const [birthdate, setBirthdate] = useState('');
   const [job, setJob] = useState('');
   const [region, setRegion] = useState('');
 
@@ -35,9 +35,6 @@ function RegisterForm() {
   const [ideal, setIdeal] = useState([]);
   const [introduce, setIntroduce] = useState('');
 
-  const [hobbyIndex, setHobbyIndex] = useState([]);
-  const [personalityIndex, setPersonalityIndex] = useState([]);
-  const [idealIndex, setIdealIndex] = useState([]);
 
   const [isHobbyModalOpen, setIsHobbyModalOpen] = useState(false);
   const [isMbtiModalOpen, setIsMbtiModalOpen] = useState(false);
@@ -162,15 +159,15 @@ function RegisterForm() {
           nickname,
           user_password: password,
           gender,
-          birthday: '19970711',
+          birthday: birthdate,
           job,
           region,
           mbti,
           religion,
           height,
-          hobby: hobbyIndex,
-          personality: personalityIndex,
-          ideal: idealIndex,
+          hobby: hobby,
+          personality: personality,
+          ideal: ideal,
           introduce
         });
         console.log(res);
@@ -186,17 +183,6 @@ function RegisterForm() {
     }
   };
 
-useEffect(() => {
-  setHobbyIndex(hobby.map(h => 1 + hobbyList.indexOf(h)));
-}, [hobby]);
-
-useEffect(() => {
-  setPersonalityIndex(personality.map( p => 31 + personalityList.indexOf(p)));
-}, [personality]);
-
-useEffect(() => {
-  setIdealIndex(ideal.map(i => 51 + idealList.indexOf(i)));
-}, [ideal]);
 
   return (
     <div>
@@ -232,10 +218,10 @@ useEffect(() => {
           <GenderButton color="red" label="여" gender={gender} setGender={setGender} />
         </LabelInput>
                 
-        {/* <LabelInput>
+        <LabelInput>
           <StyledLabel>생년월일</StyledLabel>
           <StyledInput type="date" value={birthdate} max={today} onChange={e => setBirthdate(e.target.value)} required />
-        </LabelInput> */}
+        </LabelInput>
 
         <LabelInput>
           <StyledLabel>직업</StyledLabel>
