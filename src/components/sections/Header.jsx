@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ROUTE } from "../../routes/routes";
 import MobileMenu from "./MobileMenu";
+import DesktopMenu from "./DesktopMenu";
 const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 800);
+      setIsMobile(window.innerWidth <= 920);
     };
 
     window.addEventListener("resize", handleResize);
@@ -21,40 +22,14 @@ const Header = () => {
     <HeaderWrap>
       <HeaderContainer>
         <LogoBox>
-          <Link to="ROUTE.MAIN.link">
+          <Link to={ROUTE.MAIN.link}>
             <LogoImgBox>
               <img src="src/assets/favicon.png" />
             </LogoImgBox>
           </Link>
         </LogoBox>
         <NavigationBox>
-          {!isMobile && (
-            <Navigation>
-              <NavMenu>
-                <MenuList>
-                  <Link to={ROUTE.MAIN.link}>메인페이지</Link>
-                </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.AI.link}>인공지능</Link>
-                </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.LOGIN.link}>로그인</Link>
-                </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.REGISTER.link}>회원가입</Link>
-                </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
-                </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.Play.link}>같이 놀자</Link>
-                </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.Mypage.link}>마이페이지</Link>
-                </MenuList>
-              </NavMenu>
-            </Navigation>
-          )}
+          {!isMobile && <DesktopMenu />}
           {isMobile && (
             <MobileMenubox>
               <MobileMenu />
