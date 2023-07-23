@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import * as Api from '../../api';
+
 import TextareaAutosize from 'react-textarea-autosize';
 
 import styled from 'styled-components';
@@ -9,7 +11,7 @@ function PlayAdd() {
   const navigate = useNavigate();
 
   const [postTitle, setPostTitle] = useState('');
-  const [postType, setPostType] = useState('');
+  const [postType, setPostType] = useState('술');
   const [customType, setCustomType] = useState('');
   const [meetingDate, setMeetingDate] = useState('');
   const [meetingHour, setMeetingHour] = useState('');
@@ -48,8 +50,29 @@ function PlayAdd() {
   };
 
   const handlePostSubmit = async e => {
-    navigate('/Play');
+    try {
+      await Api.post('posts', {
+        post_title: postTitle,
+        post_content: postContent,
+        post_type: postType,
+        total_m: totalM,
+        total_f: totalF,
+        place: place,
+        meeting_time: meetingTime,
+      });
+      
+      navigate('/play');
+  } catch (err) {
+    console.log(err);
+      if (err.response.data.message) {
+          alert(err.response.data.message);
+      } else {
+          alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
   }
+
+
 
   useEffect(() => {
     if (meetingDate && meetingHour) {
