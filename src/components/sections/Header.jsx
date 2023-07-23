@@ -30,11 +30,7 @@ const Header = () => {
         </LogoBox>
         <NavigationBox>
           {!isMobile && <DesktopMenu />}
-          {isMobile && (
-            <MobileMenubox>
-              <MobileMenu />
-            </MobileMenubox>
-          )}
+          {isMobile && <MobileMenu />}
         </NavigationBox>
       </HeaderContainer>
     </HeaderWrap>
@@ -83,44 +79,6 @@ const NavigationBox = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
-`;
-
-const Navigation = styled.div`
-  display: flex;
-`;
-
-const NavMenu = styled.ul`
-  display: flex;
-  align-items: center;
-  height: 100%;
-`;
-
-const MenuList = styled.li`
-  padding: 0 1rem;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  font-weight: bold;
-  letter-spacing: -0.5px;
-  color: #252525;
-  cursor: pointer;
-  &:hover {
-    color: #f1b24a;
-  }
-  a {
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: #111;
-    &:hover {
-      color: #f1b24a;
-    }
-  }
-`;
-
-const MobileMenubox = styled.div`
-  margin-left: 24px;
 `;
 
 export default Header;
