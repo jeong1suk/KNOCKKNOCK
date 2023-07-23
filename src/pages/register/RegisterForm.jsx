@@ -22,7 +22,7 @@ function RegisterForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [gender, setGender] = useState('');
-  // const [birthdate, setBirthdate] = useState('19970711');
+  const [birthdate, setBirthdate] = useState('');
   const [job, setJob] = useState('');
   const [region, setRegion] = useState('');
 
@@ -35,9 +35,6 @@ function RegisterForm() {
   const [ideal, setIdeal] = useState([]);
   const [introduce, setIntroduce] = useState('');
 
-  const [hobbyIndex, setHobbyIndex] = useState([]);
-  const [personalityIndex, setPersonalityIndex] = useState([]);
-  const [idealIndex, setIdealIndex] = useState([]);
 
   const [isHobbyModalOpen, setIsHobbyModalOpen] = useState(false);
   const [isMbtiModalOpen, setIsMbtiModalOpen] = useState(false);
@@ -50,7 +47,7 @@ function RegisterForm() {
     '영화','코인노래방','맥주','카페',
     '독서','맛집탐방','여행','등산',
     '러닝','산책','댄스','골프',
-    '헬스','필라테스','홈트레','클라이밍',
+    '헬스','필라테스','홈트레닝','클라이밍',
     '자전거','캠핑','공부','볼링',
     '요리','그림','음악 듣기',
     '악기 연주','사진 찍기','웹툰','게임',
@@ -162,15 +159,15 @@ function RegisterForm() {
           nickname,
           user_password: password,
           gender,
-          birthday: '19970711',
+          birthday: birthdate,
           job,
           region,
           mbti,
           religion,
           height,
-          hobby: hobbyIndex,
-          personality: personalityIndex,
-          ideal: idealIndex,
+          hobby: hobby,
+          personality: personality,
+          ideal: ideal,
           introduce
         });
         console.log(res);
@@ -184,23 +181,8 @@ function RegisterForm() {
             alert('라우팅 경로가 잘못되었습니다.');
         }
     }
-};
+  };
 
-useEffect(() => {
-  setHobbyIndex(hobby.map(h => 1 + hobbyList.indexOf(h)));
-
-}, [hobby]);
-
-useEffect(() => {
-
-  setPersonalityIndex(personality.map( p => 31 + personalityList.indexOf(p)));
-
-}, [personality]);
-
-useEffect(() => {
-
-  setIdealIndex(ideal.map(i => 51 + idealList.indexOf(i)));
-}, [ideal]);
 
   return (
     <div>
@@ -236,10 +218,10 @@ useEffect(() => {
           <GenderButton color="red" label="여" gender={gender} setGender={setGender} />
         </LabelInput>
                 
-        {/* <LabelInput>
+        <LabelInput>
           <StyledLabel>생년월일</StyledLabel>
           <StyledInput type="date" value={birthdate} max={today} onChange={e => setBirthdate(e.target.value)} required />
-        </LabelInput> */}
+        </LabelInput>
 
         <LabelInput>
           <StyledLabel>직업</StyledLabel>
