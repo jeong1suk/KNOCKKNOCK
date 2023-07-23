@@ -21,7 +21,7 @@ const Header = () => {
     <HeaderWrap>
       <HeaderContainer>
         <LogoBox>
-          <Link to="/">
+          <Link to="ROUTE.MAIN.link">
             <LogoImgBox>
               <img src="src/assets/favicon.png" />
             </LogoImgBox>
