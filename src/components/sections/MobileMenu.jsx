@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
+import { ROUTE } from "../../routes/routes";
 const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -13,13 +14,36 @@ const MobileMenu = () => {
   };
 
   return (
-    <>
+    <MobileMenubox>
       <HamburgerButton onClick={toggleMenu}>
         <HamburgerIcon className={isOpen ? "open" : ""} />
       </HamburgerButton>
-    </>
+
+      {isOpen && (
+        <DropdownMenu>
+          <MenuItem to={ROUTE.Mypage.link} onClick={closeMenu}>
+            마이페이지
+          </MenuItem>
+          <MenuItem to={ROUTE.MAIN.link} onClick={closeMenu}>
+            메인페이지
+          </MenuItem>
+          <MenuItem to={ROUTE.AI.link} onClick={closeMenu}>
+            인공지능
+          </MenuItem>
+          <MenuItem to={ROUTE.TodayKnock.link} onClick={closeMenu}>
+            오늘의 낙낙
+          </MenuItem>
+          <MenuItem to={ROUTE.Play.link} onClick={closeMenu}>
+            같이 놀자
+          </MenuItem>
+        </DropdownMenu>
+      )}
+    </MobileMenubox>
   );
 };
+const MobileMenubox = styled.div`
+  margin-left: 24px;
+`;
 const HamburgerButton = styled.button`
   background: none;
   border: none;
@@ -68,6 +92,28 @@ const HamburgerIcon = styled.div`
       transform: rotate(90deg);
       bottom: 0;
     }
+  }
+`;
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: 3.5rem;
+  right: 0;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  z-index: 1;
+`;
+
+const MenuItem = styled(Link)`
+  display: block;
+  color: #333;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+
+  &:hover {
+    background-color: #e5e5e5;
   }
 `;
 
