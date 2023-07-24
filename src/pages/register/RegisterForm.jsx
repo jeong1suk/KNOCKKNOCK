@@ -7,6 +7,8 @@ import { mbtiList } from '../../constants/MbtiListConstants';
 import { personalityList } from '../../constants/PersonalityListConstants';
 import { idealList } from '../../constants/idealListConstants';
 
+import { useImageUpload } from '../../components/hooks/UseImageUpload';
+
 import ValidateEmail from '../../util/ValidateEmail';
 
 import TextareaAutosize from 'react-textarea-autosize';
@@ -32,8 +34,8 @@ function RegisterForm() {
   const [birthdate, setBirthdate] = useState('');
   const [job, setJob] = useState('');
   const [region, setRegion] = useState('');
-
-  const [image, setImage] = useState('');
+  
+  const [imageUrl, handleImageUpload] = useImageUpload();
   const [mbti, setMbti] = useState('');
   const [religion, setReligion] = useState('');
   const [height, setHeight] = useState('');
@@ -47,6 +49,9 @@ function RegisterForm() {
   const [isMbtiModalOpen, setIsMbtiModalOpen] = useState(false);
   const [isPersonalityModalOpen, setIsPersonalityModalOpen] = useState(false);
   const [isIdealModalOpen, setIsIdealModalOpen] = useState(false);
+
+
+
 
 
   const GenderButton = ({ color, label, gender, setGender }) => {
@@ -200,7 +205,22 @@ function RegisterForm() {
       <Wrapper>
         <LabelInput>
           <StyledLabel>대표사진</StyledLabel>
-          <StyledInput type="file" accept="image/*" onChange={e => setImage(e.target.files[0])} />
+          <div style={{display: "flex", flexDirection: "column"}}>
+              <input
+                id="imageUpload"
+                type="file"
+                onChange={e => {
+                    handleImageUpload(e);
+                }}
+              />
+            </div>
+        </LabelInput>
+        <LabelInput>
+          {imageUrl && (
+            <div style={{ width: '200px', paddingLeft: "100px" }}>
+                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} id="preview" alt="Preview" />
+            </div>
+          )}
         </LabelInput>
         
         

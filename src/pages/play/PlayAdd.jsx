@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Api from '../../api';
 
 import { categories } from '../../constants/CategoryConstants';
+import { useImageUpload } from '../../components/hooks/UseImageUpload';
 
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -18,7 +19,7 @@ function PlayAdd() {
   const [meetingDate, setMeetingDate] = useState('');
   const [meetingHour, setMeetingHour] = useState('');
   const [meetingTime, setMeetingTime] = useState('');
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageUrl, handleImageUpload] = useImageUpload();
   const [totalM, setTotalM] = useState(0);
   const [totalF, setTotalF] = useState(0);
   const [place, setPlace] = useState('');
@@ -33,22 +34,6 @@ function PlayAdd() {
       setCustomType('');
     }
   }
-
-  const handleImageUpload = e => {
-    const input = e.target;
-    setImageUrl(input.files[0]);
-
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const preview = document.getElementById('preview');
-            if (preview) {
-                preview.src = e.target.result;
-            }
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-  };
 
   const handlePostSubmit = async e => {
     try {
@@ -118,16 +103,15 @@ function PlayAdd() {
                 onChange={e => {
                     handleImageUpload(e);
                 }}
-                className="hidden w-full h-full"
             />
           </div>
         </InputBox>
         <InputBox>
-        {imageUrl && (
-              <div style={{ width: '200px', paddingLeft: "130px" }}>
-                  <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} id="preview" alt="Preview" />
-              </div>
-            )}
+          {imageUrl && (
+            <div style={{ width: '200px', paddingLeft: "130px" }}>
+                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} id="preview" alt="Preview" />
+            </div>
+          )}
         </InputBox>
         <InputBox>
           <StyledLabel>모집인원</StyledLabel>
