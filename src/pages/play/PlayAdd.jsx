@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import * as Api from '../../api';
 
@@ -25,6 +26,7 @@ function PlayAdd() {
   const [place, setPlace] = useState('');
   const [postContent, setPostContent] = useState('');
 
+  //console.log(dayjs(meetingTime).format('YYYY-MM-DD HH:mm'));
 
 
 
@@ -62,7 +64,9 @@ function PlayAdd() {
 
   useEffect(() => {
     if (meetingDate && meetingHour) {
-      setMeetingTime(`${meetingDate} ${meetingHour}`);
+      const dateTime = `${meetingDate}T${meetingHour}`;
+      const timestamp = new Date(dateTime).getTime();
+      setMeetingTime(timestamp);
     }
   }, [meetingDate, meetingHour]);
 
