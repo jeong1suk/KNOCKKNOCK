@@ -4,20 +4,19 @@ function MainPage() {
   return (
     <>
       <MainContainer>
-        <MainContent01>메인페이지</MainContent01>
+        <p>메인페이지</p>
       </MainContainer>
     </>
   );
 }
 const MainContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center
   width: 90%;
   margin: 0 auto;
   position: relative;
   margin-top: 200px;
-`;
-const MainContent01 = styled.div`
-  display: flex;
-  justify-content: flex-end;
 `;
 
 export default MainPage;
