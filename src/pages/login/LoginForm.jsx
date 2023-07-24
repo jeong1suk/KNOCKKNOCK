@@ -24,7 +24,7 @@ function LoginForm() {
   };
 
   const isEmailValid = validateEmail(email);
-  const isPasswordValid = password.length >= 4;
+  const isPasswordValid = password.length >= 8;
   const isFormValid = isEmailValid && isPasswordValid;
 
   const handleSubmit = async (e) => {

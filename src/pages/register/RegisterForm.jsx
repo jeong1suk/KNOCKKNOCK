@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import * as Api from "../../api";
 
+import ValidateEmail from '../../util/ValidateEmail';
+
 import TextareaAutosize from 'react-textarea-autosize';
 
 import Modal from '../../components/modal/Modal';
@@ -136,16 +138,9 @@ function RegisterForm() {
     setIsIdealModalOpen(false);
   };
 
-  const validateEmail = email => {
-    return email
-        .toLowerCase()
-        .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        );
-  };
 
-  const isEmailValid = validateEmail(email);
-  const isPasswordValid = password.length >= 4;
+  const isEmailValid = ValidateEmail(email);
+  const isPasswordValid = password.length >= 8;
   const isPasswordSame = password === confirmPassword;
   const isNicknameValid = nickname.length >= 2;
 
@@ -170,7 +165,6 @@ function RegisterForm() {
           ideal: ideal,
           introduce
         });
-        console.log(res);
         // 로그인 페이지로 이동함.
 
     } catch (err) {
