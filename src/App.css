@@ -1,9 +1,11 @@
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px; */
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
   background-color: #d2daff;
+  min-height: 100vh; /* 추가: 최소 높이를 화면 높이와 같게 설정하여 푸터가 항상 보이도록 함 */
+  position: relative; /* 추가: 푸터가 이 영역을 기준으로 배치되도록 함 */
 }
 
 .logo {
