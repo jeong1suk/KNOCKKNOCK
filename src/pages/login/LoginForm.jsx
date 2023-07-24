@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import * as Api from "../../api";
 import { DispatchContext } from "../../App";
 
-import ValidateEmail from '../../util/ValidateEmail';
+import { ValidateEmail } from '../../util/ValidateEmail';
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -40,9 +40,10 @@ function LoginForm() {
         type: "LOGIN_SUCCESS",
         payload: user,
       });
-
+      
       // 기본 페이지로 이동함.
       navigate("/", { replace: true });
+      window.location.reload();
     } catch (err) {
       console.log("로그인에 실패하였습니다.\n", err);
       alert("로그인에 실패하였습니다.");

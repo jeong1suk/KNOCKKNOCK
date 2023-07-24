@@ -9,7 +9,7 @@ import { idealList } from '../../constants/idealListConstants';
 
 import { useImageUpload } from '../../components/hooks/UseImageUpload';
 
-import ValidateEmail from '../../util/ValidateEmail';
+import { ValidateEmail } from '../../util/ValidateEmail';
 
 import TextareaAutosize from 'react-textarea-autosize';
 

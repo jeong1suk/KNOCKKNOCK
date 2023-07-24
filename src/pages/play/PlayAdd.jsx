@@ -38,27 +38,36 @@ function PlayAdd() {
   }
 
   const handlePostSubmit = async e => {
+    e.preventDefault();
+  
+    const formData = new FormData();
+    formData.append('post_title', postTitle);
+    formData.append('post_content', postContent);
+    formData.append('post_type', postType);
+    formData.append('total_m', totalM);
+    formData.append('total_f', totalF);
+    formData.append('place', place);
+    formData.append('meeting_time', meetingTime);
+  
+    if (imageUrl) {
+      formData.append('image', imageUrl);
+    }
+  
+    console.log(formData);
+
     try {
-      await Api.post('posts', {
-        post_title: postTitle,
-        post_content: postContent,
-        post_type: postType,
-        total_m: totalM,
-        total_f: totalF,
-        place: place,
-        meeting_time: meetingTime,
-      });
-      
+      await Api.post('posts', formData);
       navigate('/play');
-  } catch (err) {
-    console.log(err);
-      if (err.response.data.message) {
+    } catch (err) {
+      console.log(err);
+      if (err.response && err.response.data && err.response.data.message) {
           alert(err.response.data.message);
       } else {
           alert('라우팅 경로가 잘못되었습니다.');
       }
     }
   }
+  
 
 
 

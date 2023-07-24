@@ -1,10 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ROUTE } from "../../routes/routes";
 import MobileMenu from "./MobileMenu";
+
+import { DispatchContext } from '../../App';
+
 const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
+
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
+
+  const dispatch = useContext(DispatchContext);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem('userToken');
+    dispatch({ type: 'LOGOUT' });
+    navigate('/');
+    setUserId(null); // update the state
+  }
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 800);
@@ -12,11 +28,13 @@ const Header = () => {
 
     window.addEventListener("resize", handleResize);
     handleResize();
-
+    setUserId(localStorage.getItem('userId'));
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+
   return (
     <HeaderWrap>
       <HeaderContainer>
@@ -37,12 +55,20 @@ const Header = () => {
                 <MenuList>
                   <Link to={ROUTE.AI.link}>인공지능</Link>
                 </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.LOGIN.link}>로그인</Link>
-                </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.REGISTER.link}>회원가입</Link>
-                </MenuList>
+                {userId ? (
+                  <MenuList onClick={logout}>
+                    로그아웃
+                  </MenuList>
+                ) : (
+                  <>
+                    <MenuList>
+                      <Link to={ROUTE.LOGIN.link}>로그인</Link>
+                    </MenuList>
+                    <MenuList>
+                      <Link to={ROUTE.REGISTER.link}>회원가입</Link>
+                    </MenuList>
+                  </>
+                )}
                 <MenuList>
                   <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
                 </MenuList>
