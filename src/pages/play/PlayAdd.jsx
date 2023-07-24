@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import * as Api from '../../api';
 
+import { categories } from '../../constants/CategoryConstants';
+
 import TextareaAutosize from 'react-textarea-autosize';
 
 import styled from 'styled-components';
@@ -23,7 +25,6 @@ function PlayAdd() {
   const [postContent, setPostContent] = useState('');
 
 
-  const categories = ['술', '영화', '식사', '카페', '산책', '드라이브', '공연관람', '기타'];
 
 
   const handleCategoryChange = (e) => {
@@ -152,6 +153,7 @@ function PlayAdd() {
 }
 
 export default PlayAdd;
+
 const TopBox = styled.div`
   display: flex;
   flex-direction: column;

@@ -16,6 +16,7 @@ function Play()  {
   const [postType, setPostType] = useState('');
 
   const perPage = 5;
+  const lastPage = Math.ceil(allPostCount / perPage);
 
   const fetchPosts = async () => {
     const res = await Api.get(`/posts?page=${currentPage}&perPage=${perPage}&type=${postType}`);
@@ -33,7 +34,7 @@ function Play()  {
     fetchPosts();
   }, [currentPage]);
 
-  const lastPage = Math.ceil(allPostCount / perPage);
+  
 
 
   return(
