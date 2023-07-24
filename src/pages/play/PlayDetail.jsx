@@ -21,14 +21,14 @@ function PlayDetail() {
   const [meetingTime, setMeetingTime] = useState('8월1일 19시');
   const [imageUrl, setImageUrl] = useState('http://placekitten.com/200/200');
   const [content, setContent] = useState('재밌게 놀사람 오세요~');
-  const [post, setPost] = useState();
+  const [post, setPost] = useState([]);
 
-
+  console.log(post);
   const fetchGetDetail = async () => {
     try{
       const res = await Api.get(`/posts/${postId}`);
-      const post = res.data.post;
-      setPost(post);
+      const postData = res.data.post;
+      setPost(postData);
     } catch (err) {
             if (err.response.data.message) {
                 alert(err.response.data.message);

@@ -25,8 +25,13 @@ function Play()  {
 
 
   useEffect(() => {
+    setCurrentPage(1); 
     fetchPosts();
-  }, [currentPage, postType]);
+  }, [postType]);
+  
+  useEffect(() => {
+    fetchPosts();
+  }, [currentPage]);
 
   const lastPage = Math.ceil(allPostCount / perPage);
 
