@@ -26,10 +26,10 @@ const BackgroundImage = styled.div`
 `;
 
 const ProfilePicture = styled.img`
-  width: 12rem;
-  height: 12rem;
+  width: 9rem;
+  height: 9rem;
   border-color: #f2f2f2e2;
-  border-width: 2px;
+  border-width: 3px;
   border-style: solid;
   border-radius: 100%;
   margin-top: -5rem;
@@ -128,65 +128,6 @@ const SendButton = styled.button`
   cursor: pointer;
 `;
 
-const MenuButton = styled.button`
-  position: absolute;
-  top: 2.5rem;
-  right: 0rem;
-  padding: 10px;
-  font-size: 2rem;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-`;
-
-const Overlay = styled.div`
-  top: 5rem;
-  right: 0rem;
-  /* background-color: rgba(0, 0, 0, 0.5); */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-`;
-
-const PageContent = styled.div`
-  background-color: white;
-  padding: 3rem;
-  height: 34rem;
-  margin-top: -2rem;
-
-  animation: ${(props) => (props.isOpen ? slideInAnimation : slideOutAnimation)}
-    0.3s ease-in-out;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: -1.5rem;
-  right: 1rem;
-  padding: 0px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-`;
-
-const slideInAnimation = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-`;
-
-const slideOutAnimation = keyframes`
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(100%);
-  }
-`;
-
 const Section = styled.div`
   display: flex;
   justify-content: center;
@@ -204,12 +145,7 @@ const SectionButton = styled.button`
 `;
 
 function MyPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("chat");
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
 
   const handleSectionChange = (section) => {
     setActiveSection(section);
@@ -242,7 +178,7 @@ function MyPage() {
                 내가쓴글
               </SectionButton>
             </Section>
-            <MenuButton onClick={toggleMenu}>☰</MenuButton>
+
             {activeSection === "chat" && (
               <MessageChat>
                 <ProfileImageBox>
@@ -286,14 +222,6 @@ function MyPage() {
             )}
           </RightSection>
         </RightSectionWrapper>
-        {isMenuOpen && (
-          <Overlay>
-            <PageContent isOpen={isMenuOpen}>
-              <h1>Menu</h1>
-              <CloseButton onClick={toggleMenu}>✕</CloseButton>
-            </PageContent>
-          </Overlay>
-        )}
       </UserProfileBox>
     </Container>
   );

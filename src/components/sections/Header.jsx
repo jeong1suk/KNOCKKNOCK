@@ -23,7 +23,7 @@ const Header = () => {
         <LogoBox>
           <Link to="/">
             <LogoImgBox>
-              <img src="src/assets/favicon.png" />
+              <img src="src/assets/knock.png" />
             </LogoImgBox>
           </Link>
         </LogoBox>
@@ -68,8 +68,8 @@ const Header = () => {
 
 const HeaderWrap = styled.div`
   width: 100%;
-  height: 6rem;
-  background-color: #fff;
+  height: 3rem;
+  background-color: #f7f7f7;
   position: fixed;
   top: 0;
   left: 0;
@@ -79,7 +79,7 @@ const HeaderWrap = styled.div`
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 100%;
   max-width: 100%;
   margin: 0 auto;
@@ -93,13 +93,13 @@ const LogoBox = styled.div`
 `;
 
 const LogoImgBox = styled.div`
-  width: 50px;
-  height: 20px;
+  width: 30px;
+  height: 5px;
   cursor: pointer;
   display: flex;
   align-items: center;
   img {
-    width: 8rem;
+    width: 4rem;
     height: auto;
   }
 `;
@@ -131,13 +131,16 @@ const MenuList = styled.li`
   letter-spacing: -0.5px;
   color: #252525;
   cursor: pointer;
+  text-decoration: none;
   &:hover {
     color: #f1b24a;
   }
   a {
-    font-size: 1.3rem;
+    font-size: 0.7rem;
     font-weight: 500;
     color: #111;
+    text-decoration: none;
+    margin-left: 4rem;
     &:hover {
       color: #f1b24a;
     }
