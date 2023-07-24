@@ -1,6 +1,5 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { ROUTE_ARR } from "./routes";
-import Header from "../components/sections/Header";
 import Footer from "../components/sections/Footer";
 const Router = () => {
   const location = useLocation();
@@ -10,7 +9,6 @@ const Router = () => {
 
   return (
     <>
-      <Header />
       <Routes>
         {ROUTE_ARR.map((route, index) => {
           return (
