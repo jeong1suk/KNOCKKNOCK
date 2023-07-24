@@ -31,7 +31,7 @@ function RegisterForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [gender, setGender] = useState('');
-  const [birthdate, setBirthdate] = useState('');
+  const [birthday, setBirthday] = useState('');
   const [job, setJob] = useState('');
   const [region, setRegion] = useState('');
   
@@ -120,6 +120,9 @@ function RegisterForm() {
 
   const isFormValid = isEmailValid && isPasswordValid && isPasswordSame && isNicknameValid;
   
+  
+  
+
   const handleSubmit = async e => {
     try {
         res = await Api.post('users/register', {
@@ -128,15 +131,15 @@ function RegisterForm() {
           nickname,
           user_password: password,
           gender,
-          birthday: birthdate,
+          birthday,
           job,
           region,
           mbti,
           religion,
           height,
-          hobby: hobby,
-          personality: personality,
-          ideal: ideal,
+          hobby,
+          personality,
+          ideal,
           introduce
         });
         // 로그인 페이지로 이동함.
@@ -151,6 +154,10 @@ function RegisterForm() {
     }
   };
 
+  // useEffect(() => {
+  //   console.log(isFormValid);
+  // }
+  // , [height]);
 
   return (
     <div>
@@ -188,7 +195,7 @@ function RegisterForm() {
                 
         <LabelInput>
           <StyledLabel>생년월일</StyledLabel>
-          <StyledInput type="date" value={birthdate} max={today} onChange={e => setBirthdate(e.target.value)} required />
+          <StyledInput type="date" value={birthday} max={today} onChange={e => setBirthdaye(e.target.value)} required />
         </LabelInput>
 
         <LabelInput>

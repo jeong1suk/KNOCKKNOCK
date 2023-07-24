@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import * as Api from '../../api';
 
 import styled from 'styled-components';
+import { isWriter } from '../../util/isWriter';
 
 import Modal from '../../components/modal/Modal';
 
@@ -12,18 +13,9 @@ function PlayDetail() {
   const postId = location.pathname.match(/\/playdetail\/(\d+)/)[1];
   const userId = Number(localStorage.getItem('userId'));
 
-  const isWriter = false;
-
-  
-
-  const [title, setTitle] = useState('범계에서 저녁7시에 술 먹어요!');
-  const [place, setPlace] = useState('범계 용용선생');
-  const [meetingTime, setMeetingTime] = useState('8월1일 19시');
-  const [imageUrl, setImageUrl] = useState('http://placekitten.com/200/200');
-  const [content, setContent] = useState('재밌게 놀사람 오세요~');
   const [post, setPost] = useState([]);
 
-  console.log(post);
+
   const fetchGetDetail = async () => {
     try{
       const res = await Api.get(`/posts/${postId}`);
@@ -39,6 +31,7 @@ function PlayDetail() {
 
   }
 
+  console.log(isWriter({userId, post}));
 
 
 
@@ -52,7 +45,7 @@ function PlayDetail() {
       <TopBox>
         <p>같이 놀자</p>
         <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
-        {isWriter ?
+        {isWriter({userId, post}) ?
         <TopBoxButton >신청인원 보기</TopBoxButton>
         :
         <TopBoxButton >신청하기</TopBoxButton>

@@ -53,7 +53,9 @@ function PlayAdd() {
       formData.append('image', imageUrl);
     }
   
-    console.log(formData);
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
 
     try {
       await Api.post('posts', formData);
