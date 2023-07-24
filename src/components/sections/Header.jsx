@@ -21,6 +21,12 @@ const Header = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const logout = () => {
+    localStorage.removeItem("userToken");
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
+  };
   return (
     <HeaderWrap>
       <HeaderContainer>
@@ -33,9 +39,19 @@ const Header = () => {
         </LogoBox>
         <NavigationBox>
           {!isMobile && (
-            <DesktopMenu isLogin={user ? true : false} user={user} />
+            <DesktopMenu
+              isLogin={user ? true : false}
+              user={user}
+              logout={logout}
+            />
           )}
-          {isMobile && <MobileMenu isLogin={user ? true : false} user={user} />}
+          {isMobile && (
+            <MobileMenu
+              isLogin={user ? true : false}
+              user={user}
+              logout={logout}
+            />
+          )}
         </NavigationBox>
       </HeaderContainer>
     </HeaderWrap>
@@ -49,7 +65,7 @@ const HeaderWrap = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  /* z-index: 998; */
+  z-index: 998;
 `;
 
 const HeaderContainer = styled.div`

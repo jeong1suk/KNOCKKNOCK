@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { ROUTE } from "../../routes/routes";
-const MobileMenu = ({ isLogin, user }) => {
+const MobileMenu = ({ isLogin, user, logout }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -34,6 +34,9 @@ const MobileMenu = ({ isLogin, user }) => {
           </MenuItem>
           <MenuItem to={ROUTE.Play.link} onClick={closeMenu}>
             같이 놀자
+          </MenuItem>
+          <MenuItem to={ROUTE.MAIN.link} onClick={logout}>
+            로그아웃
           </MenuItem>
         </DropdownMenu>
       ) : isOpen ? (

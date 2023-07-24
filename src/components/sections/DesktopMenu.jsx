@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ROUTE } from "../../routes/routes";
-import { useContext } from "react";
-import { DispatchContext } from "../../App";
-const DesktopMenu = ({ isLogin, user }) => {
+const DesktopMenu = ({ isLogin, user, logout }) => {
   //logout 처리
+
   return (
     <DesktopMenuContainer>
       <DesktopNavMenu>
@@ -24,6 +23,11 @@ const DesktopMenu = ({ isLogin, user }) => {
             </MenuList>
             <MenuList>
               <Link to={ROUTE.Mypage.link}>마이페이지</Link>
+            </MenuList>
+            <MenuList>
+              <Link to={ROUTE.MAIN.link} onClick={logout}>
+                로그아웃
+              </Link>
             </MenuList>
           </>
         ) : (
