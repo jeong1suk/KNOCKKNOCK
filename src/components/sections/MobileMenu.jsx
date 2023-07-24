@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { ROUTE } from "../../routes/routes";
-const MobileMenu = () => {
+const MobileMenu = ({ isLogin, user }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -16,10 +16,9 @@ const MobileMenu = () => {
   return (
     <MobileMenubox>
       <HamburgerButton onClick={toggleMenu}>
-        <HamburgerIcon className={isOpen ? "open" : ""} />
+        <HamburgerIcon className={isOpen ? "open" : "false"} />
       </HamburgerButton>
-
-      {isOpen && (
+      {isLogin ? (
         <DropdownMenu>
           <MenuItem to={ROUTE.Mypage.link} onClick={closeMenu}>
             마이페이지
@@ -37,7 +36,31 @@ const MobileMenu = () => {
             같이 놀자
           </MenuItem>
         </DropdownMenu>
-      )}
+      ) : isOpen ? (
+        <DropdownMenu>
+          <MenuItem to={ROUTE.Mypage.link} onClick={closeMenu}>
+            마이페이지
+          </MenuItem>
+          <MenuItem to={ROUTE.MAIN.link} onClick={closeMenu}>
+            메인페이지
+          </MenuItem>
+          <MenuItem to={ROUTE.AI.link} onClick={closeMenu}>
+            인공지능
+          </MenuItem>
+          <MenuItem to={ROUTE.TodayKnock.link} onClick={closeMenu}>
+            오늘의 낙낙
+          </MenuItem>
+          <MenuItem to={ROUTE.Play.link} onClick={closeMenu}>
+            같이 놀자
+          </MenuItem>
+          <MenuItem to={ROUTE.LOGIN.link} onClick={closeMenu}>
+            로그인
+          </MenuItem>
+          <MenuItem to={ROUTE.REGISTER.link} onClick={closeMenu}>
+            회원가입
+          </MenuItem>
+        </DropdownMenu>
+      ) : null}
     </MobileMenubox>
   );
 };

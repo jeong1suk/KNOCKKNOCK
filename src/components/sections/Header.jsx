@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ROUTE } from "../../routes/routes";
+import { UserStateContext } from "../../App";
 import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";
 const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const { user } = useContext(UserStateContext);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 920);
@@ -29,8 +32,10 @@ const Header = () => {
           </Link>
         </LogoBox>
         <NavigationBox>
-          {!isMobile && <DesktopMenu />}
-          {isMobile && <MobileMenu />}
+          {!isMobile && (
+            <DesktopMenu isLogin={user ? true : false} user={user} />
+          )}
+          {isMobile && <MobileMenu isLogin={user ? true : false} user={user} />}
         </NavigationBox>
       </HeaderContainer>
     </HeaderWrap>
