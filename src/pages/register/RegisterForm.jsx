@@ -9,17 +9,22 @@ import { idealList } from "../../constants/idealListConstants";
 
 import { useImageUpload } from "../../components/hooks/UseImageUpload";
 
-import { ValidateEmail } from "../../util/ValidateEmail";
+import {
+  validateEmail,
+  validatePassword,
+  validateName,
+} from "../../util/common";
 
 import TextareaAutosize from "react-textarea-autosize";
 
 import Modal from "../../components/modal/Modal";
 import Toggle from "../../components/modal/Toggle";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { DispatchContext } from "../../App";
 
 function RegisterForm() {
   const navigate = useNavigate();
-
+  const dispatch = useContext(DispatchContext);
   const today = new Date().toISOString().split("T")[0];
 
   const [name, setName] = useState("");
@@ -29,16 +34,6 @@ function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [gender, setGender] = useState("");
   const [birthdate, setBirthdate] = useState("");
-  const [job, setJob] = useState("");
-  const [region, setRegion] = useState("");
-
-  const [name, setName] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [gender, setGender] = useState("");
-  const [birthday, setBirthday] = useState("");
   const [job, setJob] = useState("");
   const [region, setRegion] = useState("");
 
@@ -114,8 +109,9 @@ function RegisterForm() {
     setIsIdealModalOpen(false);
   };
 
-  const isEmailValid = ValidateEmail(email);
-  const isPasswordValid = password.length >= 8;
+  const isEmailValid = validateEmail(email);
+  const isPasswordValid = validatePassword(password);
+  const isNameValid = validateName(name);
   const isPasswordSame = password === confirmPassword;
   const isNicknameValid = nickname.length >= 2;
 
@@ -124,7 +120,7 @@ function RegisterForm() {
 
   const handleSubmit = async (e) => {
     try {
-      res = await Api.post("users/register", {
+      await Api.post("users/register", {
         username: name,
         email,
         nickname,
@@ -136,19 +132,33 @@ function RegisterForm() {
         mbti,
         religion,
         height,
-        hobby: hobby,
-        personality: personality,
-        ideal: ideal,
+        hobby,
+        personality,
         introduce,
       });
-      console.log(res);
       // 로그인 페이지로 이동함.
+      const res = await Api.post("users/login", {
+        email,
+        password,
+      });
+
+      const user = res.data;
+      const jwtToken = user.token;
+
+      localStorage.setItem("userToken", jwtToken);
+      localStorage.setItem("userId", user.userId);
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: user,
+      });
+
+      navigate("/", { replace: true });
     } catch (err) {
       console.log(err);
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        console.log(err.response.data.message);
       } else {
-        alert("라우팅 경로가 잘못되었습니다.");
+        console.log("라우팅 경로가 잘못되었습니다.");
       }
     }
   };
@@ -157,41 +167,45 @@ function RegisterForm() {
     <div>
       <Wrapper>
         <LabelInput>
-          <StyledLabel>이름</StyledLabel>
+          <StyledLabel>이름 *</StyledLabel>
           <StyledInput
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            isValid={isNameValid}
             required
           />
         </LabelInput>
 
         <LabelInput>
-          <StyledLabel>닉네임</StyledLabel>
+          <StyledLabel>닉네임 *</StyledLabel>
           <StyledInput
             type="text"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
+            isValid={isNicknameValid}
             required
           />
         </LabelInput>
 
-        <LabelInput>
-          <StyledLabel>이메일</StyledLabel>
+        <LabelInput isValid={isEmailValid}>
+          <StyledLabel>이메일 *</StyledLabel>
           <StyledInput
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            isValid={isEmailValid}
             required
           />
         </LabelInput>
 
         <LabelInput>
-          <StyledLabel>비밀번호</StyledLabel>
+          <StyledLabel>비밀번호 *</StyledLabel>
           <StyledInput
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            isValid={isPasswordValid}
             required
           />
         </LabelInput>
@@ -202,6 +216,7 @@ function RegisterForm() {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            isValid={isPasswordSame && isPasswordValid}
             required
           />
         </LabelInput>
@@ -229,6 +244,7 @@ function RegisterForm() {
             value={birthdate}
             max={today}
             onChange={(e) => setBirthdate(e.target.value)}
+            isValid={!!birthdate}
             required
           />
         </LabelInput>
@@ -239,6 +255,7 @@ function RegisterForm() {
             type="text"
             value={job}
             onChange={(e) => setJob(e.target.value)}
+            isValid={!!job}
             required
           />
         </LabelInput>
@@ -249,6 +266,7 @@ function RegisterForm() {
             type="text"
             value={region}
             onChange={(e) => setRegion(e.target.value)}
+            isValid={!!region}
             required
           />
         </LabelInput>
@@ -261,6 +279,7 @@ function RegisterForm() {
               type="file"
               accept="image/*"
               onChange={(e) => setImage(e.target.files[0])}
+              isValid="true"
             />
           </LabelInput>
 
@@ -270,6 +289,7 @@ function RegisterForm() {
               type="text"
               value={religion}
               onChange={(e) => setReligion(e.target.value)}
+              isValid="true"
             />
           </LabelInput>
 
@@ -279,6 +299,7 @@ function RegisterForm() {
               type="text"
               value={height}
               onChange={(e) => setHeight(e.target.value)}
+              isValid="true"
             />
           </LabelInput>
 
@@ -287,10 +308,10 @@ function RegisterForm() {
               style={{ marginRight: "10px" }}
               onClick={() => setIsHobbyModalOpen(true)}
             >
-              취미
+              취미 {hobby !== "" ? hobby : ""}
             </ModalButton>
             <ModalButton onClick={() => setIsMbtiModalOpen(true)}>
-              MBTI
+              MBTI {mbti !== "" ? mbti : ""}
             </ModalButton>
           </LabelInput>
           <LabelInput style={{ justifyContent: "center" }}>
@@ -453,12 +474,22 @@ const StyledInput = styled.input`
   border-radius: 5px;
   border: 1px solid #ccc;
   width: 100%;
+
+  &:focus {
+    outline: none; /* 포커스시 파란색 테두리 제거 */
+  }
+
+  ${({ isValid }) =>
+    !isValid &&
+    css`
+      border: 2px solid red;
+    `}
 `;
 
 const StyledLabel = styled.label`
   font-weight: bold;
   margin-right: 10px;
-  width: 100px;
+  width: 120px;
 `;
 
 const StyledButton = styled.button`
@@ -469,6 +500,12 @@ const StyledButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      background-color: #ccc;
+      cursor: not-allowed;
+    `}
 `;
 
 const Wrapper = styled.div`
