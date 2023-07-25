@@ -195,7 +195,7 @@ function RegisterForm() {
                 
         <LabelInput>
           <StyledLabel>생년월일</StyledLabel>
-          <StyledInput type="date" value={birthday} max={today} onChange={e => setBirthdaye(e.target.value)} required />
+          <StyledInput type="date" value={birthday} max={today} onChange={e => setBirthday(e.target.value)} required />
         </LabelInput>
 
         <LabelInput>
