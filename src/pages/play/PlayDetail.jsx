@@ -15,8 +15,44 @@ function PlayDetail() {
   const userId = Number(localStorage.getItem("userId"));
 
   const [post, setPost] = useState([]);
+  const [participantsList, setParticipantsList] = useState([]);
+  const [participationFlag, setParticipationFlag] = useState();
 
   const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
+
+  useEffect(() => {
+    if(isParticipantModalOpen){
+      fetchParticipantsList();
+    }
+  }, [isParticipantModalOpen]);
+
+  const fetchParticipantsList = async () => {
+    try {
+      const res = await Api.get(`/participants/${postId}/userlist`);
+      console.log(res);
+      setParticipantsList(res.data.participantsList.filter(participant => participant.status === "pending"));
+    } catch (err) {
+      alert('참여자 정보를 불러오는 데 실패했습니다.');
+    }
+  }
+
+  const handleAccept = async (participantId) => {
+    try {
+      const res = await Api.put(`/participants/${participantId}/allow`);
+      fetchParticipantsList(); 
+    } catch (err) {
+      alert('수락 처리에 실패했습니다.');
+    }
+  }
+
+  const handleReject = async (participantId) => {
+    try {
+      await Api.put(`/participants/${participantId}/deny`);
+      fetchParticipantsList();  
+    } catch (err) {
+      alert('거절 처리에 실패했습니다.');
+    }
+  }
 
   const fetchGetDetail = async () => {
     try {
@@ -34,7 +70,7 @@ function PlayDetail() {
 
   const fetchApply = async () => {
     try {
-      await Api.post(`/participants/${postId}/participants`);
+      const res = await Api.post(`/participants/${postId}`);
     } catch (err) {
       if (err.response.data.message) {
           alert(err.response.data.message);
@@ -63,9 +99,23 @@ function PlayDetail() {
         {isParticipantModalOpen && (
           <Modal onClose={() => setIstParticipantModalOpen(false)}>
             <ParticipantModalDiv>
-              <p>asdfasdf</p>
+              {participantsList.map((participant, index) => (
+                <div key={index} style={{display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: "10px", border: "1px solid #ccc", borderRadius: "5px", padding: "10px"}}>
+                  <img src={participant.profile_image} alt="profile" style={{width: "30%", height: "100px", borderRadius: "50%"}}/>
+                  <div style={{width: "30%", textAlign: "left"}}>
+                    <p>Nickname: {participant.nickname}</p>
+                    <p>Gender: {participant.gender}</p>
+                    <p>Age: {participant.age}</p>
+                    <p>Job: {participant.job}</p>
+                  </div>
+                  <div style={{width: "30%", display: "flex", flexDirection: "column", justifyContent: "center"}}>
+                    <button style={{marginBottom: "10px"}} onClick={() => handleAccept(participant.participationId)}>수락</button>
+                    <button onClick={() => handleReject(participant.participationId)}>거절</button>
+                  </div>
+                </div>
+              ))}
+
             </ParticipantModalDiv>
-            
           </Modal>
         )}
       </TopBox>

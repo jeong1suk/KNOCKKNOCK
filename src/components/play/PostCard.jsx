@@ -74,7 +74,7 @@ function PostCard({post})  {
 export default PostCard;
 
 const PostBox = styled.div`
-  background-color: #FFFFFF;
+  background-color: #d2daff;
   display: flex;
   justify-content: space-between;
   margin: 30px 50px 30px 50px;

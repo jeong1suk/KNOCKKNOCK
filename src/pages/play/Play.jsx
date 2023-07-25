@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { useNavigate } from 'react-router-dom';
+import { useAsyncValue, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import * as Api from '../../api';
 
@@ -23,6 +23,7 @@ function Play()  {
     setPostList(res.data.postList);
     setAllPostCount(res.data.allPostCount);
   };
+
 
 
   useEffect(() => {
@@ -102,6 +103,11 @@ const CategoryButton = styled.div`
   font-size: 2.25rem;
   margin: 10px 30px 10px 30px;
   cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    transform: scale(1.3);
+  }
 `
 
 const PostBox = styled.div`
