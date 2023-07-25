@@ -1,26 +1,25 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import * as Api from "../../api";
 import { DispatchContext } from "../../App";
-
-import { ValidateEmail } from '../../util/ValidateEmail';
+import { validateEmail, validatePassword } from "../../util/common";
 
 function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const isEmailValid = ValidateEmail(email);
-  const isPasswordValid = password.length >= 8;
+  const isEmailValid = validateEmail(email);
+  const isPasswordValid = validatePassword(password);
   const isFormValid = isEmailValid && isPasswordValid;
 
-  const login = async({ email, password }) => {
+  const login = async ({ email, password }) => {
     const result = await Api.post("users/login", {
-        email,
-        password,
+      email,
+      password,
     });
     return result.data;
   };
@@ -34,13 +33,13 @@ function LoginForm() {
       const jwtToken = user.token;
       // sessionStorage에 "userToken"이라는 키로 JWT 토큰을 저장함.
       localStorage.setItem("userToken", jwtToken);
-      localStorage.setItem('userId', user.userId);
+      localStorage.setItem("userId", user.userId);
       // dispatch 함수를 이용해 로그인 성공 상태로 만듦.
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: user,
       });
-      
+
       // 기본 페이지로 이동함.
       navigate("/", { replace: true });
       window.location.reload();
@@ -50,24 +49,27 @@ function LoginForm() {
     }
   };
 
-  return(
-    <Form>
-      <Input 
-        type='email'
-        placeholder='이메일'
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-      <Input 
-        type='password'
-        placeholder='비밀번호'
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <Button disabled={!isFormValid} onClick={handleSubmit}>
-        로그인
-      </Button>
-    </Form>
+  return (
+    <>
+      <Form>
+        <Input
+          type="email"
+          placeholder="이메일"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="비밀번호"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button disabled={!isFormValid} onClick={handleSubmit}>
+          로그인
+        </Button>
+        <Linkto to="/register">회원가입하러가기</Linkto>
+      </Form>
+    </>
   );
 }
 
@@ -80,7 +82,7 @@ const Form = styled.form`
   padding: 20px;
   border: 1px solid black;
   border-radius: 10px;
-  width: 300px;
+  width: 500px;
   margin: 200px auto;
 `;
 
@@ -99,4 +101,13 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+`;
+
+const Linkto = styled(Link)`
+  display: inline-block;
+  margin-top: 2px;
+  margin-right: 2px;
+  color: #00bcd4;
+  cursor: pointer;
+  margin-left: auto;
 `;
