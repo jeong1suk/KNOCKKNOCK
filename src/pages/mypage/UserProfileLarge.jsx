@@ -1,41 +1,65 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import * as Api from "../../api";
+// import { DndProvider, useDrag, useDrop } from "react-dnd";
+// import { HTML5Backend } from "react-dnd-html5-backend";
 
-const UserProfileContainer = styled.div``;
-
+const UserProfileContainer = styled.div`
+  width: 22rem;
+  margin-top: -3rem;
+`;
+const UserProfileBox = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 3rem;
+  margin-right: 3rem;
+`;
 const Nickname = styled.h2`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   color: #4b4a4a;
 `;
 
 const Email = styled.h4`
+  margin-top: -0.8rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   color: #cacaca;
 `;
 
 const Tagline = styled.div`
   border: 0.1rem #bcbcbc;
-  padding: 0.5rem;
   height: auto;
   border-radius: 0.5rem;
-  margin: 1rem;
+  margin-bottom: 1rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   color: #676565;
-  font-size: 1rem;
+  font-size: 0.9rem;
 `;
 
 const UserInformation = styled.div`
-  border: 1px solid #c0c0c0;
-  margin: 2rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
 `;
 const UserLineContainer = styled.div`
   display: flex;
   justify-content: space-around;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
 `;
 const UserLine = styled.h3`
-  margin: 0.5rem;
+  margin: 0.3rem;
   color: #8f8f8f;
+  font-size: 1rem;
 `;
 
 const HobbyBox = styled.div`
@@ -48,7 +72,8 @@ const HobbyBox = styled.div`
   justify-content: center;
   align-items: center;
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 const IdealBox = styled.div`
   width: 3.8rem;
@@ -60,7 +85,8 @@ const IdealBox = styled.div`
   justify-content: center;
   align-items: center;
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const PersonBox = styled.div`
@@ -73,7 +99,8 @@ const PersonBox = styled.div`
   justify-content: center;
   align-items: center;
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 const HobbyBoxContainer = styled.div`
   display: flex;
@@ -107,25 +134,31 @@ function UserProfile() {
   const shuffledPersonality = shuffleArray(user.personality || []);
   return (
     <UserProfileContainer>
-      <>
+      <UserProfileBox>
         <Nickname>{user.nickname}</Nickname>
         <Email>{user.email}</Email>
         <Tagline>{user.introduce}</Tagline>
         <UserInformation>
           <UserLineContainer>
             <UserLine>Name: {user.username}</UserLine>
+          </UserLineContainer>
+          <UserLineContainer>
             <UserLine>MBTI: {user.mbti}</UserLine>
           </UserLineContainer>
           <UserLineContainer>
             <UserLine>Height: {user.height || "비공개"}</UserLine>
+          </UserLineContainer>
+          <UserLineContainer>
             <UserLine>Job: {user.job}</UserLine>
           </UserLineContainer>
           <UserLineContainer>
             <UserLine>Region: {user.region || "비공개"}</UserLine>
+          </UserLineContainer>
+          <UserLineContainer>
             <UserLine>Religion: {user.religion}</UserLine>
           </UserLineContainer>
         </UserInformation>
-      </>
+      </UserProfileBox>
       <HobbyBoxContainer>
         {shuffledHobby.map((hobby, index) => (
           <HobbyBox key={index} style={{ order: index }}>

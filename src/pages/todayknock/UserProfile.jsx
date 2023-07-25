@@ -20,7 +20,7 @@ const UserProfileContainer = styled.div`
 const BackgroundImage = styled.div`
   width: 100%;
   height: 100%;
-  background-image: url("https://previews.123rf.com/images/sudakasi/sudakasi1405/sudakasi140500174/28673467-%EC%95%84%EB%A6%84%EB%8B%A4%EC%9A%B4-%EC%9E%90%EC%97%B0-%EB%B0%B0%EA%B2%BD.jpg");
+  background-image: url("https://item.kakaocdn.net/do/cc187d26dc66195eaea58cecb8a4acde7154249a3890514a43687a85e6b6cc82");
   background-size: cover;
   background-position: center;
 `;
@@ -87,7 +87,7 @@ const UserProfile = ({ user }) => {
       >
         <BackgroundImage />
         <ProfilePicture
-          src="https://www.futurekorea.co.kr/news/photo/201907/119520_120439_3313.jpg"
+          src="https://cdn.mmnews.co.kr/news/photo/202202/6259_5414_549.jpg"
           alt="프로필 사진"
         />
 
