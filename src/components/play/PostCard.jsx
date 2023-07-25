@@ -1,14 +1,38 @@
 import styled from 'styled-components';
+import dayjs from 'dayjs';
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import * as Api from '../../api';
+
 import { timeAgo } from '../../util/TimeAgo';
+import { isWriter } from '../../util/isWriter';
 
 function PostCard({post})  {
   const navigate = useNavigate();
 
+  const userId = Number(localStorage.getItem("userId"));
 
+
+  const handlePostDelete = async (e) => {
+    e.stopPropagation();
+  
+    // Confirm dialog
+    if (window.confirm("정말로 삭제하시겠습니까?")) {
+      try {
+        await Api.del(`/posts/${post.post_id}`);
+        window.location.replace('/play');
+      } catch (err) {
+        if (err.response && err.response.data && err.response.data.message) {
+            alert(err.response.data.message);
+        } else {
+            alert('라우팅 경로가 잘못되었습니다.');
+        }
+      }
+    }
+  }
+  
   // const [category, setCategory] = useState('술');
   // const [title, setTitle] = useState('범계에서 오늘 저녁 술먹어요');
   // const [people, setPeople] = useState(8);
@@ -25,7 +49,7 @@ function PostCard({post})  {
         <p>카테고리 : {post.post_type}</p>
         <p>남은남자 자리 : {post.recruited_m}</p>
         <p>남은여자 자리 : {post.recruited_f}</p>
-        <p>{timeAgo(post.meeting_time)}</p>
+        <p>{timeAgo(dayjs(post.createdAt).format('YYYY-MM-DD HH:mm'))}</p>
       </SubDiv>
       <SubDiv style={{alignItems: "flex-start"}}>
         <p>제목 : {post.post_title}</p>
@@ -39,6 +63,9 @@ function PostCard({post})  {
       <SubDiv style={{justifyContent: 'center'}}>
         <img src={post.post_image} alt="postImage" style={{width: "150px", height: "150px", marginTop: "10px", marginRight: "10px"}}/>
       </SubDiv>
+      {isWriter({userId, post}) && 
+      <DeleteButton onClick={handlePostDelete}>삭제</DeleteButton>
+      }
     </PostBox>
   );
 };
@@ -65,3 +92,9 @@ const ProfileDiv = styled.div`
   align-items: center;
 `
 
+const DeleteButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30%;
+`

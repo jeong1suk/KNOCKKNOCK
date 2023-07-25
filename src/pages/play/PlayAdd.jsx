@@ -40,25 +40,35 @@ function PlayAdd() {
   const handlePostSubmit = async e => {
     e.preventDefault();
   
-    const formData = new FormData();
-    formData.append('post_title', postTitle);
-    formData.append('post_content', postContent);
-    formData.append('post_type', postType);
-    formData.append('total_m', totalM);
-    formData.append('total_f', totalF);
-    formData.append('place', place);
-    formData.append('meeting_time', meetingTime);
+    // const formData = new FormData();
+    // formData.append('post_title', postTitle);
+    // formData.append('post_content', postContent);
+    // formData.append('post_type', postType);
+    // formData.append('total_m', totalM);
+    // formData.append('total_f', totalF);
+    // formData.append('place', place);
+    // formData.append('meeting_time', meetingTime);
   
-    if (imageUrl) {
-      formData.append('image', imageUrl);
-    }
+    // if (imageUrl) {
+    //   formData.append('image', imageUrl);
+    // }
   
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
+
 
     try {
-      await Api.post('posts', formData);
+      // await Api.post('posts', formData);
+      await Api.post('posts', {
+        post_title: postTitle,
+        post_content: postContent,
+        post_type: postType,
+        total_m: totalM,
+        total_f: totalF,
+        place,
+        meeting_time: meetingTime
+      })
       navigate('/play');
     } catch (err) {
       console.log(err);
