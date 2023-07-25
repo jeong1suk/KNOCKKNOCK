@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
+import { timeAgo } from '../../util/TimeAgo';
 
 function PostCard({post})  {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ function PostCard({post})  {
         <p>카테고리 : {post.post_type}</p>
         <p>남은남자 자리 : {post.recruited_m}</p>
         <p>남은여자 자리 : {post.recruited_f}</p>
-        <p>{post.meeting_time}</p>
+        <p>{timeAgo(post.meeting_time)}</p>
       </SubDiv>
       <SubDiv style={{alignItems: "flex-start"}}>
         <p>제목 : {post.post_title}</p>

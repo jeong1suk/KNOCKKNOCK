@@ -2,6 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as Api from "../../api";
 
+import { hobbyList } from "../../constants/HobbyListConstant";
+import { mbtiList } from "../../constants/MbtiListConstants";
+import { personalityList } from "../../constants/PersonalityListConstants";
+import { idealList } from "../../constants/idealListConstants";
+
+import { useImageUpload } from "../../components/hooks/UseImageUpload";
+
+import { ValidateEmail } from "../../util/ValidateEmail";
+
 import TextareaAutosize from "react-textarea-autosize";
 
 import Modal from "../../components/modal/Modal";
@@ -23,7 +32,17 @@ function RegisterForm() {
   const [job, setJob] = useState("");
   const [region, setRegion] = useState("");
 
-  const [image, setImage] = useState("");
+  const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [gender, setGender] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [job, setJob] = useState("");
+  const [region, setRegion] = useState("");
+
+  const [imageUrl, handleImageUpload] = useImageUpload();
   const [mbti, setMbti] = useState("");
   const [religion, setReligion] = useState("");
   const [height, setHeight] = useState("");
@@ -36,109 +55,6 @@ function RegisterForm() {
   const [isMbtiModalOpen, setIsMbtiModalOpen] = useState(false);
   const [isPersonalityModalOpen, setIsPersonalityModalOpen] = useState(false);
   const [isIdealModalOpen, setIsIdealModalOpen] = useState(false);
-
-  const hobbyList = [
-    "영화",
-    "코인노래방",
-    "맥주",
-    "카페",
-    "독서",
-    "맛집탐방",
-    "여행",
-    "등산",
-    "러닝",
-    "산책",
-    "댄스",
-    "골프",
-    "헬스",
-    "필라테스",
-    "홈트레닝",
-    "클라이밍",
-    "자전거",
-    "캠핑",
-    "공부",
-    "볼링",
-    "요리",
-    "그림",
-    "음악 듣기",
-    "악기 연주",
-    "사진 찍기",
-    "웹툰",
-    "게임",
-    "전시회",
-    "봉사활동",
-  ];
-  const mbtiList = [
-    "ISTJ",
-    "ISFJ",
-    "INFJ",
-    "INTJ",
-    "ISTP",
-    "ISFP",
-    "INFP",
-    "INTP",
-    "ESTP",
-    "ESFP",
-    "ENFP",
-    "ENTP",
-    "ESTJ",
-    "ESFJ",
-    "ENFJ",
-    "ENTJ",
-  ];
-  const personalityList = [
-    "활발한",
-    "조용한",
-    "애교가",
-    "어른스러운",
-    "열정적인",
-    "또라이",
-    "예의바른",
-    "유머러스한",
-    "꼼꼼한",
-    "진지한",
-    "자신감",
-    "허세없는",
-    "엉뚱한",
-    "지적인",
-    "성실한",
-    "감성적인",
-    "논리적인",
-    "증흑적인",
-    "소심한",
-  ];
-  const idealList = [
-    "옷 잘 입는",
-    "듬직한",
-    "아담한",
-    "연상",
-    "연하",
-    "동갑",
-    "취미가 같은",
-    "말이 통하는",
-    "잘 웃어주는",
-    "잘 들어주는",
-    "활발한",
-    "조용한",
-    "애교가 넘치는",
-    "어른스러운",
-    "열정적인",
-    "또라이 같은",
-    "예의바른",
-    "유머러스한",
-    "꼼꼼한",
-    "진지한",
-    "자신감",
-    "허세없는",
-    "엉뚱한",
-    "지적인",
-    "성실한",
-    "감성적인",
-    "논리적인",
-    "증흑적인",
-    "소심한",
-    "쿨한",
-  ];
 
   const GenderButton = ({ color, label, gender, setGender }) => {
     const isSelected = gender === label;
@@ -198,16 +114,8 @@ function RegisterForm() {
     setIsIdealModalOpen(false);
   };
 
-  const validateEmail = (email) => {
-    return email
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-  };
-
-  const isEmailValid = validateEmail(email);
-  const isPasswordValid = password.length >= 4;
+  const isEmailValid = ValidateEmail(email);
+  const isPasswordValid = password.length >= 8;
   const isPasswordSame = password === confirmPassword;
   const isNicknameValid = nickname.length >= 2;
 

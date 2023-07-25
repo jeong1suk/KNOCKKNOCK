@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // 기본 URL 지정
-axios.defaults.baseURL = "http://localhost:5001/";
+axios.defaults.baseURL = import.meta.env.VITE_APP_API_BASE_URL;
 
 // 기본 header지정(post와 put만 적어도 돼서 두 개만 작성)
 axios.defaults.headers.post["Content-Type"] = "application/json";

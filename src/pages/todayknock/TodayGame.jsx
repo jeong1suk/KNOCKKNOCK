@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import UserProfile from './UserProfile';
+import React, { useState } from "react";
+import styled from "styled-components";
+import UserProfile from "./UserProfile";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -18,7 +18,7 @@ const ModalOverlay = styled.div`
 const ModalContent = styled.div`
   width: 25%;
   height: 25%;
-  background-color: #FFF;
+  background-color: #fff;
   padding: 20px;
   border-radius: 5px;
 `;
@@ -38,7 +38,7 @@ const ExitButton = styled.button`
   margin-top: 1rem;
   height: 2rem;
   background-color: #9ea7d6;
-  color: #FFF;
+  color: #fff;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -53,11 +53,11 @@ const ExitButton = styled.button`
 `;
 
 const RankUser = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+`;
 
 const TodayGame = ({ onExit }) => {
   const [showModal, setShowModal] = useState(false);
@@ -66,14 +66,13 @@ const TodayGame = ({ onExit }) => {
 
   const handleButtonClick = (side) => {
     if (leftButtonClickCount + rightButtonClickCount < 5) {
-      if (side === 'left') {
+      if (side === "left") {
         setLeftButtonClickCount(leftButtonClickCount + 1);
-      } else if (side === 'right') {
+      } else if (side === "right") {
         setRightButtonClickCount(rightButtonClickCount + 1);
       }
     }
   };
-
 
   const handleExitModal = () => {
     setShowModal(false);
@@ -87,13 +86,17 @@ const TodayGame = ({ onExit }) => {
         <>
           {leftButtonClickCount + rightButtonClickCount < 5 ? (
             <ButtonGroup>
-              <button onClick={() => handleButtonClick('left')}>Left</button>
-              <button onClick={() => handleButtonClick('right')}>Right</button>
+              <button onClick={() => handleButtonClick("left")}>Left</button>
+              <button onClick={() => handleButtonClick("right")}>Right</button>
             </ButtonGroup>
           ) : (
             <>
-            <p style={{fontSize:30}}>Top3</p>
-            <RankUser><UserProfile /><UserProfile /><UserProfile /></RankUser>
+              <p style={{ fontSize: 30 }}>Top3</p>
+              <RankUser>
+                <UserProfile />
+                <UserProfile />
+                <UserProfile />
+              </RankUser>
             </>
           )}
         </>
@@ -107,7 +110,7 @@ const TodayGame = ({ onExit }) => {
       )}
       {leftButtonClickCount + rightButtonClickCount >= 5 && (
         <ExitBox>
-        <ExitButton onClick={onExit}>Exit</ExitButton>
+          <ExitButton onClick={onExit}>Exit</ExitButton>
         </ExitBox>
       )}
     </>

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import * as Api from '../../api';
+
+import { categories } from '../../constants/CategoryConstants';
+import { useImageUpload } from '../../components/hooks/UseImageUpload';
 
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -16,14 +20,14 @@ function PlayAdd() {
   const [meetingDate, setMeetingDate] = useState('');
   const [meetingHour, setMeetingHour] = useState('');
   const [meetingTime, setMeetingTime] = useState('');
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageUrl, handleImageUpload] = useImageUpload();
   const [totalM, setTotalM] = useState(0);
   const [totalF, setTotalF] = useState(0);
   const [place, setPlace] = useState('');
   const [postContent, setPostContent] = useState('');
 
+  //console.log(dayjs(meetingTime).format('YYYY-MM-DD HH:mm'));
 
-  const categories = ['술', '영화', '식사', '카페', '산책', '드라이브', '공연관람', '기타'];
 
 
   const handleCategoryChange = (e) => {
@@ -33,50 +37,47 @@ function PlayAdd() {
     }
   }
 
-  const handleImageUpload = e => {
-    const input = e.target;
-    setImageUrl(input.files[0]);
-
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const preview = document.getElementById('preview');
-            if (preview) {
-                preview.src = e.target.result;
-            }
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-  };
-
   const handlePostSubmit = async e => {
+    e.preventDefault();
+  
+    const formData = new FormData();
+    formData.append('post_title', postTitle);
+    formData.append('post_content', postContent);
+    formData.append('post_type', postType);
+    formData.append('total_m', totalM);
+    formData.append('total_f', totalF);
+    formData.append('place', place);
+    formData.append('meeting_time', meetingTime);
+  
+    if (imageUrl) {
+      formData.append('image', imageUrl);
+    }
+  
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
     try {
-      await Api.post('posts', {
-        post_title: postTitle,
-        post_content: postContent,
-        post_type: postType,
-        total_m: totalM,
-        total_f: totalF,
-        place: place,
-        meeting_time: meetingTime,
-      });
-      
+      await Api.post('posts', formData);
       navigate('/play');
-  } catch (err) {
-    console.log(err);
-      if (err.response.data.message) {
+    } catch (err) {
+      console.log(err);
+      if (err.response && err.response.data && err.response.data.message) {
           alert(err.response.data.message);
       } else {
           alert('라우팅 경로가 잘못되었습니다.');
       }
     }
   }
+  
 
 
 
   useEffect(() => {
     if (meetingDate && meetingHour) {
-      setMeetingTime(`${meetingDate} ${meetingHour}`);
+      const dateTime = `${meetingDate}T${meetingHour}`;
+      const timestamp = new Date(dateTime).getTime();
+      setMeetingTime(timestamp);
     }
   }, [meetingDate, meetingHour]);
 
@@ -117,16 +118,15 @@ function PlayAdd() {
                 onChange={e => {
                     handleImageUpload(e);
                 }}
-                className="hidden w-full h-full"
             />
           </div>
         </InputBox>
         <InputBox>
-        {imageUrl && (
-              <div style={{ width: '200px', paddingLeft: "130px" }}>
-                  <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} id="preview" alt="Preview" />
-              </div>
-            )}
+          {imageUrl && (
+            <div style={{ width: '200px', paddingLeft: "130px" }}>
+                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} id="preview" alt="Preview" />
+            </div>
+          )}
         </InputBox>
         <InputBox>
           <StyledLabel>모집인원</StyledLabel>
@@ -152,6 +152,7 @@ function PlayAdd() {
 }
 
 export default PlayAdd;
+
 const TopBox = styled.div`
   display: flex;
   flex-direction: column;

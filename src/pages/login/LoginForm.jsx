@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import * as Api from "../../api";
 import { DispatchContext } from "../../App";
 
+import { ValidateEmail } from '../../util/ValidateEmail';
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -12,32 +13,23 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const validateEmail = email => {
-    if (email === '') {
-        return false;
-    }
-    return email
-        .toLowerCase()
-        .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        );
-  };
-
-  const isEmailValid = validateEmail(email);
-  const isPasswordValid = password.length >= 4;
+  const isEmailValid = ValidateEmail(email);
+  const isPasswordValid = password.length >= 8;
   const isFormValid = isEmailValid && isPasswordValid;
+
+  const login = async({ email, password }) => {
+    const result = await Api.post("users/login", {
+        email,
+        password,
+    });
+    return result.data;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // "user/login" 엔드포인트로 post요청함.
-      const res = await Api.post("users/login", {
-        email,
-        password,
-      });
-      // 유저 정보는 response의 data임.
-      const user = res.data;
+      const user = await login({ email, password });
       // JWT 토큰은 유저 정보의 token임.
       const jwtToken = user.token;
       // sessionStorage에 "userToken"이라는 키로 JWT 토큰을 저장함.
@@ -48,9 +40,10 @@ function LoginForm() {
         type: "LOGIN_SUCCESS",
         payload: user,
       });
-
+      
       // 기본 페이지로 이동함.
       navigate("/", { replace: true });
+      window.location.reload();
     } catch (err) {
       console.log("로그인에 실패하였습니다.\n", err);
       alert("로그인에 실패하였습니다.");

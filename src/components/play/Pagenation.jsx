@@ -31,7 +31,7 @@ function Pagination({ currentPage, setCurrentPage, lastPage }) {
       {visiblePages.map((page) => (
         <PageButton
           key={page}
-          active={currentPage === page}
+          isActive={currentPage === page}
           onClick={() => setCurrentPage(page)}
         >
           {page}
@@ -61,12 +61,13 @@ const PaginationContainer = styled.div`
   justify-content: center;
   margin: 20px 0;
 `;
-
-const PageButton = styled.button`
+const PageButton = styled(({ isActive, ...props }) => <button {...props} />)`
   margin: 0 5px;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
-  background-color: ${props => props.active ? 'grey' : 'white'};
-  color: ${props => props.active ? 'white' : 'black'};
+  background-color: ${props => props.isActive ? 'grey' : 'white'};
+  color: ${props => props.isActive ? 'white' : 'black'};
 `;
+
+

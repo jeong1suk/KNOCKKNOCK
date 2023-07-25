@@ -7,7 +7,18 @@ import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";
 const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const { user } = useContext(UserStateContext);
+
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
+
+  const dispatch = useContext(DispatchContext);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem('userToken');
+    dispatch({ type: 'LOGOUT' });
+    navigate('/');
+    setUserId(null); // update the state
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -16,24 +27,20 @@ const Header = () => {
 
     window.addEventListener("resize", handleResize);
     handleResize();
-
+    setUserId(localStorage.getItem('userId'));
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem("userToken");
-    dispatch({ type: "LOGOUT" });
-    navigate("/");
-  };
+
   return (
     <HeaderWrap>
       <HeaderContainer>
         <LogoBox>
           <Link to={ROUTE.MAIN.link}>
             <LogoImgBox>
-              <img src="src/assets/favicon.png" />
+              <img src="src/assets/knock.png" />
             </LogoImgBox>
           </Link>
         </LogoBox>
@@ -60,8 +67,8 @@ const Header = () => {
 
 const HeaderWrap = styled.div`
   width: 100%;
-  height: 6rem;
-  background-color: #fff;
+  height: 3rem;
+  background-color: #f7f7f7;
   position: fixed;
   top: 0;
   left: 0;
@@ -71,7 +78,7 @@ const HeaderWrap = styled.div`
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 100%;
   max-width: 100%;
   margin: 0 auto;
@@ -85,13 +92,13 @@ const LogoBox = styled.div`
 `;
 
 const LogoImgBox = styled.div`
-  width: 50px;
-  height: 20px;
+  width: 30px;
+  height: 5px;
   cursor: pointer;
   display: flex;
   align-items: center;
   img {
-    width: 8rem;
+    width: 4rem;
     height: auto;
   }
 `;
@@ -102,4 +109,48 @@ const NavigationBox = styled.div`
   height: 100%;
 `;
 
+<<<<<<< HEAD
+=======
+const Navigation = styled.div`
+  display: flex;
+`;
+
+const NavMenu = styled.ul`
+  display: flex;
+  align-items: center;
+  height: 100%;
+`;
+
+const MenuList = styled.li`
+  padding: 0 1rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  letter-spacing: -0.5px;
+  color: #252525;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover {
+    color: #f1b24a;
+  }
+  a {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #111;
+    text-decoration: none;
+    margin-left: 4rem;
+    &:hover {
+      color: #f1b24a;
+    }
+  }
+`;
+
+const MobileMenubox = styled.div`
+  margin-left: 24px;
+`;
+
+>>>>>>> 62bf4dccf0277804cb3d6d6dfd22cb4b9f00ad79
 export default Header;

@@ -1,4 +1,3 @@
-import "./App.css";
 import Layout from "./components/sections/Layout";
 import React, { useState, useEffect, useReducer, createContext } from "react";
 
@@ -9,7 +8,7 @@ export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
 
 function App() {
-  const isLogin = localStorage.getItem('userToken');
+  const isLogin = localStorage.getItem("userToken");
 
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
@@ -50,9 +49,9 @@ function App() {
 
   return (
     <DispatchContext.Provider value={dispatch}>
-        <UserStateContext.Provider value={userState}>
-          <Layout />
-        </UserStateContext.Provider>      
+      <UserStateContext.Provider value={userState}>
+        <Layout />
+      </UserStateContext.Provider>
     </DispatchContext.Provider>
   );
 }
