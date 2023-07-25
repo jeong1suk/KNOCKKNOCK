@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import dayjs from 'dayjs';
 
 import * as Api from "../../api";
 
@@ -69,7 +70,7 @@ function PlayDetail() {
         </InputBox>
         <InputBox style={{ flexDirection: "column", alignItems: "start" }}>
           <p style={{ margin: "0px 0px" }}>장소: {post.place}</p>
-          <p style={{ margin: "10px 0px" }}>만남시간: {post.meeting_time}</p>
+          <p style={{ margin: "10px 0px" }}>만남시간: {dayjs(post.meeting_time).format('YYYY-MM-DD HH:mm')}</p>
         </InputBox>
         <InputBox>
           <img
