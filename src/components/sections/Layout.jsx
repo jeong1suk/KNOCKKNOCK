@@ -1,14 +1,12 @@
 import { BrowserRouter } from "react-router-dom";
-import Header from "./Header";
 import Router from "../../routes/Router";
-// import Footer from "./Footer";
+import Header from "./Header";
 
 const Layout = () => {
   return (
     <BrowserRouter>
       <Header />
       <Router />
-      {/* <Footer /> */}
     </BrowserRouter>
   );
 };
