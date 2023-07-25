@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
 const Wrapper = styled.div`
   ${(props) =>
     props.isHidden &&
@@ -11,9 +17,9 @@ const Wrapper = styled.div`
 
 const ToggleContainer = styled.div`
   display: inline-block;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   border-radius: 20px;
-  padding: 4px;
+  /* padding: 4px; */
 `;
 
 const ToggleButton = styled.button`
@@ -42,14 +48,14 @@ const Toggle = ({ children }) => {
   };
 
   return (
-    <div>
+    <CenteredDiv>
       <ToggleContainer>
         <ToggleButton active={isToggled} onClick={handleToggle}>
           {isToggled ? "닫기" : "선택입력 열기"}
         </ToggleButton>
       </ToggleContainer>
       <Wrapper isHidden={!isToggled}>{children}</Wrapper>
-    </div>
+    </CenteredDiv>
   );
 };
 
