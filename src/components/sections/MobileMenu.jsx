@@ -14,31 +14,33 @@ const MobileMenu = ({ isLogin, user, logout }) => {
   };
 
   return (
-    <MobileMenubox>
+    <>
       <HamburgerButton onClick={toggleMenu}>
         <HamburgerIcon className={isOpen ? "open" : "false"} />
       </HamburgerButton>
       {isLogin ? (
-        <DropdownMenu>
-          <MenuItem to={ROUTE.Mypage.link} onClick={closeMenu}>
-            마이페이지
-          </MenuItem>
-          <MenuItem to={ROUTE.MAIN.link} onClick={closeMenu}>
-            메인페이지
-          </MenuItem>
-          <MenuItem to={ROUTE.AI.link} onClick={closeMenu}>
-            인공지능
-          </MenuItem>
-          <MenuItem to={ROUTE.TodayKnock.link} onClick={closeMenu}>
-            오늘의 낙낙
-          </MenuItem>
-          <MenuItem to={ROUTE.Play.link} onClick={closeMenu}>
-            같이 놀자
-          </MenuItem>
-          <MenuItem to={ROUTE.MAIN.link} onClick={logout}>
-            로그아웃
-          </MenuItem>
-        </DropdownMenu>
+        isOpen ? (
+          <DropdownMenu>
+            <MenuItem to={ROUTE.Mypage.link} onClick={closeMenu}>
+              마이페이지
+            </MenuItem>
+            <MenuItem to={ROUTE.MAIN.link} onClick={closeMenu}>
+              메인페이지
+            </MenuItem>
+            <MenuItem to={ROUTE.AI.link} onClick={closeMenu}>
+              인공지능
+            </MenuItem>
+            <MenuItem to={ROUTE.TodayKnock.link} onClick={closeMenu}>
+              오늘의 낙낙
+            </MenuItem>
+            <MenuItem to={ROUTE.Play.link} onClick={closeMenu}>
+              같이 놀자
+            </MenuItem>
+            <MenuItem to={ROUTE.MAIN.link} onClick={logout}>
+              로그아웃
+            </MenuItem>
+          </DropdownMenu>
+        ) : null
       ) : isOpen ? (
         <DropdownMenu>
           <MenuItem to={ROUTE.Mypage.link} onClick={closeMenu}>
@@ -64,17 +66,16 @@ const MobileMenu = ({ isLogin, user, logout }) => {
           </MenuItem>
         </DropdownMenu>
       ) : null}
-    </MobileMenubox>
+    </>
   );
 };
-const MobileMenubox = styled.div`
-  margin-left: 24px;
-`;
 const HamburgerButton = styled.button`
+  flex: 0 0 auto;
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
+  padding: 0.5rem;
   align-items: center;
   justify-content: center;
   width: 3rem;
@@ -123,7 +124,7 @@ const HamburgerIcon = styled.div`
 const DropdownMenu = styled.div`
   position: absolute;
   top: 3.5rem;
-  right: 0;
+  /* right: 0; */
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   border-radius: 4px;

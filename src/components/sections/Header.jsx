@@ -1,24 +1,24 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ROUTE } from "../../routes/routes";
-import { UserStateContext } from "../../App";
+import { UserStateContext, DispatchContext } from "../../App";
 import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";
 const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
-
-  const [userId, setUserId] = useState(localStorage.getItem('userId'));
+  const { user } = useContext(UserStateContext);
+  const [userId, setUserId] = useState(localStorage.getItem("userId"));
 
   const dispatch = useContext(DispatchContext);
   const navigate = useNavigate();
 
   const logout = () => {
-    localStorage.removeItem('userToken');
-    dispatch({ type: 'LOGOUT' });
-    navigate('/');
+    localStorage.removeItem("userToken");
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
     setUserId(null); // update the state
-  }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -27,12 +27,11 @@ const Header = () => {
 
     window.addEventListener("resize", handleResize);
     handleResize();
-    setUserId(localStorage.getItem('userId'));
+    setUserId(localStorage.getItem("userId"));
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
 
   return (
     <HeaderWrap>
@@ -82,7 +81,6 @@ const HeaderContainer = styled.div`
   height: 100%;
   max-width: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
 `;
 
 const LogoBox = styled.div`
@@ -106,51 +104,8 @@ const LogoImgBox = styled.div`
 const NavigationBox = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
   height: 100%;
 `;
-
-<<<<<<< HEAD
-=======
-const Navigation = styled.div`
-  display: flex;
-`;
-
-const NavMenu = styled.ul`
-  display: flex;
-  align-items: center;
-  height: 100%;
-`;
-
-const MenuList = styled.li`
-  padding: 0 1rem;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  font-weight: bold;
-  letter-spacing: -0.5px;
-  color: #252525;
-  cursor: pointer;
-  text-decoration: none;
-  &:hover {
-    color: #f1b24a;
-  }
-  a {
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: #111;
-    text-decoration: none;
-    margin-left: 4rem;
-    &:hover {
-      color: #f1b24a;
-    }
-  }
-`;
-
-const MobileMenubox = styled.div`
-  margin-left: 24px;
-`;
-
->>>>>>> 62bf4dccf0277804cb3d6d6dfd22cb4b9f00ad79
 export default Header;
