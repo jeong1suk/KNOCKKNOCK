@@ -1,6 +1,6 @@
 import styled from "styled-components";
+import PlayCarousel from "./PlayCarousel";
 function MainPage() {
-
   return (
     <>
       <MainContainer>
@@ -17,6 +17,10 @@ const MainContainer = styled.div`
   margin: 0 auto;
   position: relative;
   margin-top: 200px;
+  @media (max-width: 768px) {
+    /* 화면 너비가 768px 이하일 때의 스타일 */
+    max-width: 90%;
+  }
 `;
 
 export default MainPage;
