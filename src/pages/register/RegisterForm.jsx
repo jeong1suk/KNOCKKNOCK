@@ -9,6 +9,7 @@ import { idealList } from "../../constants/idealListConstants";
 
 import { useImageUpload } from "../../components/hooks/UseImageUpload";
 
+
 import {
   validateEmail,
   validatePassword,
@@ -21,6 +22,7 @@ import Modal from "../../components/modal/Modal";
 import Toggle from "../../components/modal/Toggle";
 import styled, { css } from "styled-components";
 import { DispatchContext } from "../../App";
+
 
 function RegisterForm() {
   const navigate = useNavigate();
@@ -326,32 +328,26 @@ function RegisterForm() {
             </ModalButton>
           </LabelInput>
           {isHobbyModalOpen && (
-            <Modal onClose={() => setIsHobbyModalOpen(false)}>
-              <h2>취미는?</h2>
-              <p>2개 이상 선택하세요</p>
-              <ModalListDiv>
-                {hobbyList.map((element, index) => (
-                  <button
-                    key={index}
-                    style={{
-                      backgroundColor: hobby.includes(element)
-                        ? "#61dafbaa"
-                        : "white",
-                      padding: "10px",
-                      margin: "5px",
-                      borderRadius: "5px",
-                      border: "1px solid black",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleHobbyClick(element)}
-                  >
-                    {element}
-                  </button>
-                ))}
-              </ModalListDiv>
-              <button onClick={handleConfirmHobby}>확인</button>
-            </Modal>
-          )}
+  <Modal onClose={() => setIsHobbyModalOpen(false)}>
+    <h2>취미는?</h2>
+    <p>2개 이상 선택하세요</p>
+    <ModalListDiv>
+      {hobbyList.map((element, index) => (
+        <StyledElementButton
+          key={index}
+          selected={hobby.includes(element)}
+          onClick={() => handleHobbyClick(element)}
+        >
+          {element}
+        </StyledElementButton>
+      ))}
+    </ModalListDiv>
+    <div style={{display: "flex", justifyContent: "center", marginRight: "5px"}}>
+      <ConfirmButton onClick={handleConfirmHobby}>확인</ConfirmButton>
+      <ConfirmButton onClick={() => setIsHobbyModalOpen(false)}>닫기</ConfirmButton>
+    </div>
+  </Modal>
+)}
 
           {isMbtiModalOpen && (
             <Modal onClose={() => setIsMbtiModalOpen(false)}>
@@ -375,7 +371,10 @@ function RegisterForm() {
                   </button>
                 ))}
               </ModalMbtiListDiv>
-              <button onClick={handleConfirmMbti}>확인</button>
+              <div style={{display: "flex", justifyContent: "center", marginRight: "5px"}}>
+                <button onClick={handleConfirmMbti}>확인</button>
+                <button onClick={() => setIsMbtiModalOpen(false)}>닫기</button>
+              </div>
             </Modal>
           )}
 
@@ -403,7 +402,11 @@ function RegisterForm() {
                   </button>
                 ))}
               </ModalListDiv>
-              <button onClick={handleConfirmPersonality}>확인</button>
+              <div style={{display: "flex", justifyContent: "center", marginRight: "5px"}}>
+                <button onClick={handleConfirmPersonality}>확인</button>
+                <button onClick={() => setIsPersonalityModalOpen(false)}>닫기</button>
+              </div>
+              
             </Modal>
           )}
 
@@ -431,7 +434,10 @@ function RegisterForm() {
                   </button>
                 ))}
               </ModalListDiv>
-              <button onClick={handleComfirmIdeal}>확인</button>
+              <div style={{display: "flex", justifyContent: "center", marginRight: "5px"}}>
+                <button onClick={handleComfirmIdeal}>확인</button>
+                <button onClick={() => setIsIdealModalOpen(false)}>닫기</button>
+              </div>
             </Modal>
           )}
 
@@ -572,5 +578,34 @@ const ModalMbtiListDiv = styled.div`
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
+  }
+`;
+
+const StyledElementButton = styled.button`
+  background-color: ${({ selected }) => (selected ? "#61dafbaa" : "white")};
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid black;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  
+  &:hover {
+    background-color: ${({ selected }) => (selected ? "#61dafbaa" : "#f0f0f0")};
+  }
+`;
+
+const ConfirmButton = styled.button`
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #61dafb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  
+  &:hover {
+    background-color: #4ecdc4;
   }
 `;

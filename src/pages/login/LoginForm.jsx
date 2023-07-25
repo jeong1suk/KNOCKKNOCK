@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import * as Api from "../../api";
 import { DispatchContext } from "../../App";
 
-import { ValidateEmail } from '../../util/ValidateEmail';
+import { validateEmail, validatePassword } from '../../util/common';
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -13,8 +13,8 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const isEmailValid = ValidateEmail(email);
-  const isPasswordValid = password.length >= 8;
+  const isEmailValid = validateEmail(email);
+  const isPasswordValid = validatePassword(password); 
   const isFormValid = isEmailValid && isPasswordValid;
 
   const login = async({ email, password }) => {

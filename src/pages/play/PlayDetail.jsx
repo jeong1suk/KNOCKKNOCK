@@ -16,6 +16,8 @@ function PlayDetail() {
 
   const [post, setPost] = useState([]);
 
+  const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
+
   const fetchGetDetail = async () => {
     try {
       const res = await Api.get(`/posts/${postId}`);
@@ -54,10 +56,18 @@ function PlayDetail() {
         <p>같이 놀자</p>
         <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
         {isWriter({userId, post}) ?
-        <TopBoxButton >신청인원 보기</TopBoxButton>
+        <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>신청인원 보기</TopBoxButton>
         :
         <TopBoxButton onClick={fetchApply}>신청하기</TopBoxButton>
         }
+        {isParticipantModalOpen && (
+          <Modal onClose={() => setIstParticipantModalOpen(false)}>
+            <ParticipantModalDiv>
+              <p>asdfasdf</p>
+            </ParticipantModalDiv>
+            
+          </Modal>
+        )}
       </TopBox>
       <PostDetailBox>
         <InputBox>
@@ -181,3 +191,10 @@ const CommentContentBox = styled.div`
   flex-direction: column;
   align-items: flex-start;
 `;
+
+const ParticipantModalDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
