@@ -1,18 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { DispatchContext, UserStateContext } from "../../App";
 import { ROUTE } from "../../routes/routes";
-import { UserStateContext, DispatchContext } from "../../App";
 import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";
 const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
   const { user } = useContext(UserStateContext);
   const [userId, setUserId] = useState(localStorage.getItem("userId"));
-
   const dispatch = useContext(DispatchContext);
   const navigate = useNavigate();
-
   const logout = () => {
     localStorage.removeItem("userToken");
     dispatch({ type: "LOGOUT" });
@@ -81,6 +79,7 @@ const HeaderContainer = styled.div`
   height: 100%;
   max-width: 100%;
   margin: 0 auto;
+  padding: 0 2rem;
 `;
 
 const LogoBox = styled.div`
