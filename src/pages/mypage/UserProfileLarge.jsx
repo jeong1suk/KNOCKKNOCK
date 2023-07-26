@@ -50,6 +50,8 @@ const UserInformation = styled.div`
 `;
 const UserLineContainer = styled.div`
   display: flex;
+  width: 10rem;
+  margin-bottom: 0.3rem;
   justify-content: space-around;
   border: 1px solid #e0e0e0;
   border-radius: 5px;
