@@ -12,7 +12,7 @@ function MainPage() {
 const MainContainer = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
   width: 90%;
   margin: 0 auto;
   position: relative;
