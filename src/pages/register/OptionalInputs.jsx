@@ -3,9 +3,9 @@ import * as S from "./style";
 import {
   mbtiList,
   idealList,
-  hobbyList,
   personalityList,
 } from "../../constants/registerConstants";
+import { ModalHobby } from "./ModalHobby";
 const OptionalInputs = ({ formData, setFormData }) => {
   const { mbti, religion, height, hobby, personality, ideal, introduce } =
     formData;
@@ -37,16 +37,9 @@ const OptionalInputs = ({ formData, setFormData }) => {
   const handleIdealClick = (element) => {
     onArrayChange(ideal, element, "ideal");
   };
-  const [isHobbyModalOpen, setIsHobbyModalOpen] = useState(false);
+
   const [isPersonalityModalOpen, setIsPersonalityModalOpen] = useState(false);
   const [isIdealModalOpen, setIsIdealModalOpen] = useState(false);
-  const openHobbyModal = () => {
-    setIsHobbyModalOpen(true);
-  };
-
-  const closeHobbyModal = () => {
-    setIsHobbyModalOpen(false);
-  };
 
   const openPersonalityModal = () => {
     setIsPersonalityModalOpen(true);
@@ -106,42 +99,7 @@ const OptionalInputs = ({ formData, setFormData }) => {
           ))}
         </S.Select>
       </S.Box>
-      <S.RightAlignedBox>
-        <S.Heading onClick={openHobbyModal}>취미</S.Heading>
-        {isHobbyModalOpen && (
-          <S.Modal>
-            {hobbyList.map((elements, index) => (
-              <button
-                key={index}
-                style={{
-                  backgroundColor: hobby.includes(elements)
-                    ? "#61dafbaa"
-                    : "white",
-                  padding: "10px",
-                  margin: "5px",
-                  borderRadius: "5px",
-                  border: "1px solid black",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleHobbyClick(elements)}
-              >
-                {elements}
-              </button>
-            ))}
-            <button onClick={closeHobbyModal}>Close</button>
-          </S.Modal>
-        )}
-        {hobby.length > 0 && (
-          <div>
-            {hobby.map((item, index) => (
-              <span key={index} style={{ marginLeft: "20px" }}>
-                {item}
-              </span>
-            ))}
-          </div>
-        )}
-      </S.RightAlignedBox>
-
+      <ModalHobby formData={formData} handleHobbyClick={handleHobbyClick} />
       <S.RightAlignedBox>
         <S.Heading onClick={openPersonalityModal}>내가 생각하는 나</S.Heading>
         {isPersonalityModalOpen && (
