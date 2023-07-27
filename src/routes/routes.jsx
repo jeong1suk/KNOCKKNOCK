@@ -1,7 +1,7 @@
 import Mainpage from "../pages/mainpage/MainPage";
 import Ai from "../pages/ai/Ai";
 import LoginForm from "../pages/login/LoginForm";
-import RegisterForm from "../pages/register/RegisterForm";
+import RegisterPage from "../pages/register/RegisterPage";
 import TodayKnock from "../pages/todayknock/TodayKnock";
 import Play from "../pages/play/Play";
 import PlayAdd from "../pages/play/PlayAdd";
@@ -22,7 +22,7 @@ export const ROUTE = {
   REGISTER: {
     path: "/register",
     link: "/register",
-    element: RegisterForm,
+    element: RegisterPage,
   },
   AI: {
     path: "/ai",
