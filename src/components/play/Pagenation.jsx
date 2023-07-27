@@ -24,7 +24,7 @@ function Pagination({ currentPage, setCurrentPage, lastPage }) {
 
       {startPage > 0 && 
         <PageButton onClick={() => setCurrentPage(startPage)}>
-          {'...'}
+          <Ellipsis>...</Ellipsis>
         </PageButton>
       }
 
@@ -40,7 +40,7 @@ function Pagination({ currentPage, setCurrentPage, lastPage }) {
 
       {startPage + maxPageLimit < lastPage && 
         <PageButton onClick={() => setCurrentPage(startPage + maxPageLimit + 1)}>
-          {'...'}
+          <Ellipsis>...</Ellipsis>
         </PageButton>
       }
 
@@ -60,14 +60,31 @@ const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   margin: 20px 0;
+  align-items: center;
+  gap: 1rem;
 `;
-const PageButton = styled(({ isActive, ...props }) => <button {...props} />)`
-  margin: 0 5px;
-  padding: 5px 10px;
-  border-radius: 5px;
+
+const PageButton = styled.button`
+  border: none;
+  color: ${props => props.isActive ? '#0070c9' : '#1d1d1f'};
+  background-color: transparent;
+  padding: 10px;
   cursor: pointer;
-  background-color: ${props => props.isActive ? 'grey' : 'white'};
-  color: ${props => props.isActive ? 'white' : 'black'};
+  font-size: 1rem;
+  transition: 0.3s;
+  
+  &:disabled {
+    color: #c7c7cc;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    color: #005ec3;
+  }
+`;
+
+const Ellipsis = styled.span`
+  color: #c7c7cc;
 `;
 
 

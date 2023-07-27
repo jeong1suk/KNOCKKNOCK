@@ -8,7 +8,6 @@ const Container = styled.div`
 `;
 
 const UserProfileBox = styled.div`
-  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,20 +19,22 @@ const UserProfileBox = styled.div`
 const BackgroundImage = styled.div`
   width: 100%;
   height: 30vh;
-  background-color: #ddc892;
+  background: linear-gradient(to left, #f0987f, #f8d6cc);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   background-size: cover;
   background-position: center;
 `;
 
 const ProfilePicture = styled.img`
-  width: 9rem;
-  height: 9rem;
+  width: 8rem;
+  height: 8rem;
   border-color: #f2f2f2e2;
-  border-width: 3px;
+  border-width: 4px;
   border-style: solid;
   border-radius: 100%;
-  margin-top: -5rem;
-  margin-right: 60rem;
+  margin-top: -5.5rem;
+  margin-right: 50rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const LeftSection = styled.div`
@@ -43,6 +44,7 @@ const LeftSection = styled.div`
 const RightSectionWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top: 4.4rem;
 `;
 
 const RightSection = styled.div`
@@ -59,8 +61,9 @@ const MessageChat = styled.div`
   height: 80vh;
   justify-content: space-between;
   flex-direction: column;
-  background-color: #e3e8ff;
+  background-color: #f5f5f7;
   padding: 2rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const MessageBox = styled.div``;
@@ -84,9 +87,10 @@ const ProfileImageBox = styled.div`
 `;
 
 const ProfileImage = styled.img`
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const Bubble = styled.div`
@@ -94,12 +98,14 @@ const Bubble = styled.div`
   padding: 10px;
   border-radius: 20px;
   margin: 0 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 0.8rem;
 `;
 
 const UserName = styled.div`
   font-weight: bold;
   margin-top: 1rem;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
 `;
 
 const ChatInputContainer = styled.div`
@@ -114,18 +120,24 @@ const ChatInput = styled.input`
   height: 1.8rem;
   padding: 10px;
   border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const SendButton = styled.button`
   margin-left: 10px;
-  width: 5rem;
+  width: 6rem;
   height: 3rem;
   padding: 10px 20px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
+  background-color: #ffffff;
+  color: #b5b5b5;
+  border: 1px solid #e8e8e8;
   border-radius: 5px;
   cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
 `;
 
 const Section = styled.div`
@@ -142,6 +154,7 @@ const SectionButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 function MyPage() {
@@ -217,9 +230,7 @@ function MyPage() {
                 </MessageBox>
               </MessageChat>
             )}
-            {activeSection === "myPosts" && (
-              <div>{/* Your "내가쓴글" (my posts) content goes here */}</div>
-            )}
+            {activeSection === "myPosts" && <div>안녕</div>}
           </RightSection>
         </RightSectionWrapper>
       </UserProfileBox>
