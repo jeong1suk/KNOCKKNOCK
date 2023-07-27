@@ -9,6 +9,8 @@ import { isWriter } from '../../util/isWriter';
 
 import Modal from "../../components/modal/Modal";
 
+const limit = 5;
+
 function PlayDetail() {
   const location = useLocation();
   const postId = location.pathname.match(/\/playdetail\/(\d+)/)[1];
@@ -17,9 +19,19 @@ function PlayDetail() {
   const [post, setPost] = useState([]);
   const [participantsList, setParticipantsList] = useState([]);
   const [participationFlag, setParticipationFlag] = useState();
+  const [comment, setComment] = useState("");
 
   const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
 
+  const [comments, setComments] = useState([]);
+  const [nextCursor, setNextCursor] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isReached, setIsReached] = useState(false);
+
+  const [isEditing, setIsEditing] = useState(null);
+  const [editedContent, setEditedContent] = useState("");
+
+  console.log(nextCursor);
   useEffect(() => {
     if(isParticipantModalOpen){
       fetchParticipantsList();
@@ -28,8 +40,8 @@ function PlayDetail() {
 
   const fetchParticipantsList = async () => {
     try {
-      const res = await Api.get(`/participants/${postId}/userlist`);
-      console.log(res);
+      const res = await Api.get(`/participants/${postId}/userlist?limit=${limit}`);
+
       setParticipantsList(res.data.participantsList.filter(participant => participant.status === "pending"));
     } catch (err) {
       alert('참여자 정보를 불러오는 데 실패했습니다.');
@@ -71,6 +83,7 @@ function PlayDetail() {
   const fetchApply = async () => {
     try {
       const res = await Api.post(`/participants/${postId}`);
+
     } catch (err) {
       if (err.response.data.message) {
           alert(err.response.data.message);
@@ -80,10 +93,138 @@ function PlayDetail() {
     }
   }
 
+  useEffect(() => {
+    const fetchGetComment = async () => {
+      try {
+        if (nextCursor === -1) {
+          setIsLoading(false);
+          return;
+        }
+        setIsLoading(true);
+  
+        const res = await Api.get(`/comments/?postId=${postId}&cursor=${nextCursor}`);
+  
+        const commentData = res.data;
+  
+        if (commentData.commentList?.length < 10) {
+          setNextCursor(-1);
+        } else {
+          setNextCursor(commentData.commentList[commentData.commentList.length - 1].comment_id);
+        }
+  
+        if (nextCursor === 0) {
+          setComments(commentData.commentList);
+        } else if (nextCursor > 0 && commentData.commentList.length > 0) {
+          setComments(oldComments => [...oldComments, ...commentData.commentList]);
+        }
+  
+        setIsReached(false);
+      } catch (err) {
+        if (err.response.data.message) {
+          alert(err.response.data.message);
+        } else {
+          alert('라우팅 경로가 잘못되었습니다.');
+        } 
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight;
+      const scrollTop = document.documentElement.scrollTop;
+      const clientHeight = document.documentElement.clientHeight;
+  
+      if (scrollTop + clientHeight >= scrollHeight) {
+          setIsReached(true);
+      }
+    };
+  
+    if (isReached && !isLoading) {
+      fetchGetComment();
+      setIsReached(false);
+    }
+  
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isReached, isLoading, nextCursor, postId]);
+  
+
+  const postComment = async () => {
+    try {
+      const body = {
+        content: comment,
+      };
+      
+      const res = await Api.post(`/comments/${postId}`, body);
+        setComment("");  
+        window.location.reload();
+
+    } catch (err) {
+      if (err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
 
 
+
+
+  const editComment = (commentId, commentContent) => {
+    setIsEditing(commentId);
+    setEditedContent(commentContent);
+  }
+  
+  const saveComment = (commentId) => {
+    editCommentRequest(commentId, editedContent);
+    setIsEditing(null);
+  }
+  
+  const deleteComment = (commentId) => {
+    const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+    if (confirmDelete) {
+      deleteCommentRequest(commentId);
+    }
+  }
+
+
+  const editCommentRequest = async (commentId, commentContent) => {
+    try {
+      const body = {
+        content: commentContent,
+      };
+      
+      const res = await Api.put(`/comments/${postId}/${commentId}`, body);
+      window.location.reload();
+    } catch (err) {
+      if (err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
+  
+  const deleteCommentRequest = async (commentId) => {
+    try {
+      const res = await Api.del(`/comments/${commentId}`);
+      window.location.reload();
+    } catch (err) {
+      if (err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
+
+
+  
   useEffect(() => {
     fetchGetDetail();
+
   }, []);
 
   return (
@@ -150,23 +291,51 @@ function PlayDetail() {
 
         <CommentBox>
           <p>댓글</p>
-          <CommentDetailBox>
-            <img
-              src={"http://placekitten.com/200/200"}
-              alt="유저 프로필"
-              style={{
-                height: "2.5rem",
-                width: "2.5rem",
-                borderRadius: "50%",
-                backgroundColor: "#F9FAFB",
-                marginRight: "20px",
-              }}
+          <CommentInputArea>
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="댓글을 작성해주세요."
             />
-            <CommentContentBox>
-              <p style={{ margin: "0px 0px" }}>억만추</p>
-              <p>수락되신 분들은 오픈채팅방으로 들어와주세요</p>
-            </CommentContentBox>
-          </CommentDetailBox>
+            <button onClick={postComment}>댓글 등록</button>
+          </CommentInputArea>
+          {comments.map((comment, index) => (
+            <CommentDetailBox key={index}>
+              <img
+                src={"http://placekitten.com/200/200"}
+                alt="유저 프로필"
+                style={{
+                  height: "2.5rem",
+                  width: "2.5rem",
+                  borderRadius: "50%",
+                  backgroundColor: "#F9FAFB",
+                  marginRight: "20px",
+                }}
+              />
+              <CommentContentBox>
+                <p style={{ margin: "0px 0px" }}>{comment.nickname}</p>
+                {comment.comment_id === isEditing ? (
+                  <input
+                    type="text"
+                    value={editedContent}
+                    onChange={(e) => setEditedContent(e.target.value)}
+                  />
+                ) : (
+                  <p>{comment.comment_content}</p>
+                )}
+                {comment.user_id === userId && (
+                  <>
+                    {comment.comment_id === isEditing ? (
+                      <button onClick={() => saveComment(comment.comment_id)}>저장</button>
+                    ) : (
+                      <button onClick={() => editComment(comment.comment_id, comment.comment_content)}>수정</button>
+                    )}
+                    <button onClick={() => deleteComment(comment.comment_id)}>삭제</button>
+                  </>
+                )}
+              </CommentContentBox>
+            </CommentDetailBox>
+          ))}
         </CommentBox>
       </PostDetailBox>
     </>
@@ -248,3 +417,31 @@ const ParticipantModalDiv = styled.div`
   justify-content: center;
   align-items: center;
 `
+
+const CommentInputArea = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  textarea {
+    width: 90%;
+    padding: 10px;
+    margin-right: 10px;
+    resize: none; /* 사용자가 textarea 크기를 변경하지 못하게 함 */
+  }
+
+  button {
+    width: 10%;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+`;
