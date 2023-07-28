@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import * as S from "./style";
-import { validateEmail, validatePassword } from "../../util/common";
+import {
+  validateEmail,
+  validatePassword,
+  validateDate,
+} from "../../util/common";
 import { BiHide, BiShow } from "react-icons/bi";
 
 const ValidationFields = ({ formData, setFormData, onChange }) => {
-  const { email, password, confirmPwd } = formData;
+  const { email, password, confirmPwd, birthdate } = formData;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const isEmailValid = validateEmail(email);
   const isPasswordValid = validatePassword(password);
   const isPasswordSame = password === confirmPwd;
+  const isBirthdateValid = validateDate(birthdate);
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
@@ -17,6 +22,7 @@ const ValidationFields = ({ formData, setFormData, onChange }) => {
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword((prevState) => !prevState);
   };
+
   return (
     <>
       <S.Heading>이메일</S.Heading>
@@ -54,7 +60,7 @@ const ValidationFields = ({ formData, setFormData, onChange }) => {
           value={confirmPwd}
           onChange={onChange}
         />
-        {showPassword ? (
+        {showConfirmPassword ? (
           <BiHide
             className="pswdIcon"
             onClick={toggleConfirmPasswordVisibility}
@@ -68,6 +74,14 @@ const ValidationFields = ({ formData, setFormData, onChange }) => {
       </S.Box>
       {!isPasswordSame && isPasswordValid && (
         <S.ErrorBox>비밀번호가 다릅니다.</S.ErrorBox>
+      )}
+
+      <S.Heading>생년월일</S.Heading>
+      <S.Box>
+        <S.Input name="birthdate" value={birthdate} onChange={onChange} />
+      </S.Box>
+      {!isBirthdateValid && birthdate.length > 0 && (
+        <S.ErrorBox>YYYY-MM-DD형태로 입력해주세요.</S.ErrorBox>
       )}
     </>
   );
