@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import * as S from "./style";
-import {
-  mbtiList,
-  idealList,
-  personalityList,
-} from "../../constants/registerConstants";
+import { mbtiList, idealList } from "../../constants/registerConstants";
 import { ModalHobby } from "./ModalHobby";
+import { ModalPersonality } from "./ModalPersonality";
+import { ModalIdeal } from "./ModalIdeal";
 const OptionalInputs = ({ formData, setFormData }) => {
   const { mbti, religion, height, hobby, personality, ideal, introduce } =
     formData;
@@ -38,24 +36,6 @@ const OptionalInputs = ({ formData, setFormData }) => {
     onArrayChange(ideal, element, "ideal");
   };
 
-  const [isPersonalityModalOpen, setIsPersonalityModalOpen] = useState(false);
-  const [isIdealModalOpen, setIsIdealModalOpen] = useState(false);
-
-  const openPersonalityModal = () => {
-    setIsPersonalityModalOpen(true);
-  };
-
-  const closePersonalityModal = () => {
-    setIsPersonalityModalOpen(false);
-  };
-
-  const openIdealModal = () => {
-    setIsIdealModalOpen(true);
-  };
-
-  const closeIdealModal = () => {
-    setIsIdealModalOpen(false);
-  };
   return (
     <>
       <S.RightAlignedBox style={{ marginTop: "20px" }}>
@@ -100,76 +80,11 @@ const OptionalInputs = ({ formData, setFormData }) => {
         </S.Select>
       </S.Box>
       <ModalHobby formData={formData} handleHobbyClick={handleHobbyClick} />
-      <S.RightAlignedBox>
-        <S.Heading onClick={openPersonalityModal}>내가 생각하는 나</S.Heading>
-        {isPersonalityModalOpen && (
-          <S.Modal>
-            {personalityList.map((elements, index) => (
-              <button
-                key={index}
-                style={{
-                  backgroundColor: personality.includes(elements)
-                    ? "#61dafbaa"
-                    : "white",
-                  padding: "10px",
-                  margin: "5px",
-                  borderRadius: "5px",
-                  border: "1px solid black",
-                  cursor: "pointer",
-                }}
-                onClick={() => handlePersonalityClick(elements)}
-              >
-                {elements}
-              </button>
-            ))}
-            <button onClick={closePersonalityModal}>Close</button>
-          </S.Modal>
-        )}
-        {personality.length > 0 && (
-          <div>
-            {personality.map((item, index) => (
-              <span key={index} style={{ marginLeft: "20px" }}>
-                {item}
-              </span>
-            ))}
-          </div>
-        )}
-      </S.RightAlignedBox>
-      <S.RightAlignedBox>
-        <S.Heading onClick={openIdealModal}>나의 이상형은?</S.Heading>
-        {isIdealModalOpen && (
-          <S.Modal>
-            {idealList.map((elements, index) => (
-              <button
-                key={index}
-                style={{
-                  backgroundColor: ideal.includes(elements)
-                    ? "#61dafbaa"
-                    : "white",
-                  padding: "10px",
-                  margin: "5px",
-                  borderRadius: "5px",
-                  border: "1px solid black",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleIdealClick(elements)}
-              >
-                {elements}
-              </button>
-            ))}
-            <button onClick={closeIdealModal}>Close</button>
-          </S.Modal>
-        )}
-        {ideal.length > 0 && (
-          <div>
-            {ideal.map((item, index) => (
-              <span key={index} style={{ marginLeft: "20px" }}>
-                {item}
-              </span>
-            ))}
-          </div>
-        )}
-      </S.RightAlignedBox>
+      <ModalPersonality
+        formData={formData}
+        handlePersonalityClick={handlePersonalityClick}
+      />
+      <ModalIdeal formData={formData} handleIdealClick={handleIdealClick} />
 
       <S.Heading>한줄 자기소개</S.Heading>
       <S.Box>
