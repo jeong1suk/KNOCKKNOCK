@@ -9,39 +9,45 @@ import * as Api from '../../api';
 import { timeAgo } from '../../util/TimeAgo';
 import { isWriter } from '../../util/isWriter';
 
-function PostCard()  {
+const MAX_CONTENT_LENGTH = 200;
+
+function PostCard({post})  {
   const navigate = useNavigate();
 
-//   const userId = Number(localStorage.getItem("userId"));
+  // const userId = Number(localStorage.getItem("userId"));
 
 
-//   const handlePostDelete = async (e) => {
-//     e.stopPropagation();
+  // const handlePostDelete = async (e) => {
+  //   e.stopPropagation();
   
-//     // Confirm dialog
-//     if (window.confirm("정말로 삭제하시겠습니까?")) {
-//       try {
-//         await Api.del(`/posts/${post.post_id}`);
-//         window.location.replace('/play');
-//       } catch (err) {
-//         if (err.response && err.response.data && err.response.data.message) {
-//             alert(err.response.data.message);
-//         } else {
-//             alert('라우팅 경로가 잘못되었습니다.');
-//         }
-//       }
-//     }
-//   }
+  //   // Confirm dialog
+  //   if (window.confirm("정말로 삭제하시겠습니까?")) {
+  //     try {
+  //       await Api.del(`/posts/${post.post_id}`);
+  //       window.location.replace('/play');
+  //     } catch (err) {
+  //       if (err.response && err.response.data && err.response.data.message) {
+  //           alert(err.response.data.message);
+  //       } else {
+  //           alert('라우팅 경로가 잘못되었습니다.');
+  //       }
+  //     }
+  //   }
+  // }
   
-//   // const [category, setCategory] = useState('술');
-//   // const [title, setTitle] = useState('범계에서 오늘 저녁 술먹어요');
-//   // const [people, setPeople] = useState(8);
-//   // const [place, setPlace] = useState('범계 용용선생');
-//   // const [meetingTime, setMeetingTime] = useState('2시간');
-//   // const [postImage, setPostImage] = useState('http://placekitten.com/200/200');
-//   // const [userImage, setUserImage] = useState('http://placekitten.com/200/200');
-//   // const [content, setContent] = useState('재밌게 놀사람 오세요~');
-//   // const [nickname, setNickname] = useState('억만추');
+  // const [category, setCategory] = useState('술');
+  // const [title, setTitle] = useState('범계에서 오늘 저녁 술먹어요');
+  // const [people, setPeople] = useState(8);
+  // const [male, setMale] = useState('4');
+  // const [female, setFmale] = useState('4');
+  // const [totalM, setTotalM] = useState('8');
+  // const [totalF, setTotalF] = useState('8');
+  // const [place, setPlace] = useState('범계 용용선생');
+  // const [meetingTime, setMeetingTime] = useState('2시간');
+  // const [postImage, setPostImage] = useState('http://placekitten.com/200/200');
+  // const [userImage, setUserImage] = useState('http://placekitten.com/200/200');
+  // const [content, setContent] = useState('재밌게 놀사람 오세요~ ');
+  // const [nickname, setNickname] = useState('억만추');
 
 //   return(
 //     <PostBox onClick = {() => navigate(`/playdetail/${post.post_id}`)}>
@@ -69,21 +75,8 @@ function PostCard()  {
 //     </PostBox>
 //   );
 // };
-  const MAX_CONTENT_LENGTH = 200;
 
-  const [category, setCategory] = useState('술');
-  const [title, setTitle] = useState('범계에서 오늘 저녁 술먹어요');
-  const [people, setPeople] = useState(8);
-  const [male, setMale] = useState('4');
-  const [female, setFmale] = useState('4');
-  const [totalM, setTotalM] = useState('8');
-  const [totalF, setTotalF] = useState('8');
-  const [place, setPlace] = useState('범계 용용선생');
-  const [meetingTime, setMeetingTime] = useState('2시간');
-  const [postImage, setPostImage] = useState('http://placekitten.com/200/200');
-  const [userImage, setUserImage] = useState('http://placekitten.com/200/200');
-  const [content, setContent] = useState('재밌게 놀사람 오세요~ ');
-  const [nickname, setNickname] = useState('억만추');
+
 
   const GenderInfo = ({ total, filled, color }) => {
     let people = [];
@@ -97,28 +90,28 @@ function PostCard()  {
   
 
   return (
-    <Card>
+    <Card onClick = {() => navigate(`/playdetail/${post.postId}`)}>
       <ImageBox>
-        <Image src={postImage} alt="postImage" />
+        <Image src={post.ProfileImage} alt="postImage" />
       </ImageBox>
       <ContentBox>
-        <Category>{category}</Category>
-        <Title>{title}</Title>
+        <Category>{post.type}</Category>
+        <Title>{post.title}</Title>
         <DetailBox>
           <DetailItem>남자</DetailItem>
-          <GenderInfo total={totalM} filled={male} color='blue' />
+          <GenderInfo total={post.totalM} filled={post.recruitedM} color='blue' />
           <DetailItem>여자</DetailItem>
-          <GenderInfo total={totalF} filled={female} color='red' />
-          <DetailItem>장소: {place}</DetailItem>
-          <DetailItem>{meetingTime} 전</DetailItem>
+          <GenderInfo total={post.totalF} filled={post.recruitedF} color='red' />
+          <DetailItem>장소: {post.place}</DetailItem>
+          <DetailItem>{timeAgo(dayjs(post.createdAt).format('YYYY-MM-DD HH:mm'))}</DetailItem>
         </DetailBox>
         <ProfileBox>
-          <ProfileImage src={userImage} alt="유저 프로필" />
-          <Nickname>{nickname}</Nickname>
+          <ProfileImage src={post.User.UserFiles.File} alt="유저 프로필" />
+          <Nickname>{post.User.nickname}</Nickname>
         </ProfileBox>
       </ContentBox>
       <PostContent>
-          {content.length > MAX_CONTENT_LENGTH ? `${content.substring(0, MAX_CONTENT_LENGTH)}...` : content}
+          {post.content.length > MAX_CONTENT_LENGTH ? `${content.substring(0, MAX_CONTENT_LENGTH)}...` : post.content}
       </PostContent>
     </Card>
   );
@@ -134,7 +127,7 @@ const Card = styled.div`
   padding: 20px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s ease-in-out;
-
+  width: 90vw;
   &:hover {
     transform: scale(1.02);
     cursor: pointer;

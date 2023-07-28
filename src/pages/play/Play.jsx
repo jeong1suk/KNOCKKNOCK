@@ -60,14 +60,12 @@ function Play()  {
         <CategoryButton onClick={() => setPostType('공연관람')}>공연관람</CategoryButton>
         <CategoryButton onClick={() => setPostType('기타')}>기타</CategoryButton>
       </CategoryButtonBox>
-      {/* {postList.map(post => (
-        <PostCard key={post.post_id} post={post} />
-      ))} */}
-      <PostCard></PostCard>
-      <PostCard></PostCard>
-      <PostCard></PostCard>
-      <PostCard></PostCard>
-      <PostCard></PostCard>
+      <PostCardBox>
+        {postList.map(post => (
+          <PostCard key={post.post_id} post={post} />
+        ))}
+      </PostCardBox>
+
       <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} lastPage={lastPage} />
     </>
   )
@@ -172,3 +170,8 @@ const TopButtonBox = styled.div`
   width: 30%;
 `
 
+const PostCardBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
