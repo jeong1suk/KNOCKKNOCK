@@ -49,6 +49,17 @@ export const JoinButton = styled.button`
   font-weight: 400;
   margin-top: 30px;
   margin-left: 30px;
+
+  /* background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%); */
+  &:hover {
+    background: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);
+    background-color: #80b5ea;
+  }
+
+  &:active {
+    position: relative;
+    top: 1px;
+  }
 `;
 export const Heading = styled.h3`
   margin: 19px 0 8px;
@@ -96,12 +107,44 @@ export const RightAlignedBox = styled(Box)`
 `;
 export const Modal = styled.div`
   position: absolute;
-  width: 50%;
+  width: 80%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #ffffff;
+  background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 10;
+`;
+export const ToggleButton = styled.a`
+  box-shadow: inset 0px 1px 0px 0px #dcecfb;
+  background: linear-gradient(to bottom, #bddbfa 5%, #80b5ea 100%);
+  background-color: #bddbfa;
+  border-radius: 6px;
+  border: 1px solid #84bbf3;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #528ecc;
+
+  &:hover {
+    background: linear-gradient(to bottom, #80b5ea 5%, #bddbfa 100%);
+    background-color: #80b5ea;
+  }
+
+  &:active {
+    position: relative;
+    top: 1px;
+  }
+`;
+export const HobbyBoxContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 1rem;
 `;
