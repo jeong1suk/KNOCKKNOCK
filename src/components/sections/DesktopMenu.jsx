@@ -8,7 +8,7 @@ const DesktopMenu = ({ isLogin, user, logout }) => {
     <DesktopMenuContainer>
       <DesktopNavMenu>
         {isLogin ? (
-          <>
+          <NavMenu>
             <MenuList>
               <Link to={ROUTE.MAIN.link}>메인페이지</Link>
             </MenuList>
@@ -29,9 +29,9 @@ const DesktopMenu = ({ isLogin, user, logout }) => {
                 로그아웃
               </Link>
             </MenuList>
-          </>
+          </NavMenu>
         ) : (
-          <>
+          <NavMenu>
             <MenuList>
               <Link to={ROUTE.MAIN.link}>메인페이지</Link>
             </MenuList>
@@ -50,7 +50,7 @@ const DesktopMenu = ({ isLogin, user, logout }) => {
             <MenuList>
               <Link to={ROUTE.Play.link}>같이 놀자</Link>
             </MenuList>
-          </>
+          </NavMenu>
         )}
       </DesktopNavMenu>
     </DesktopMenuContainer>
@@ -59,8 +59,13 @@ const DesktopMenu = ({ isLogin, user, logout }) => {
 
 const DesktopMenuContainer = styled.div`
   display: flex;
+  align-items: center;
+  height: 100%;
 `;
 const DesktopNavMenu = styled.ul`
+  display: flex;
+`;
+const NavMenu = styled.ul`
   display: flex;
   align-items: center;
   height: 100%;
@@ -76,13 +81,16 @@ const MenuList = styled.li`
   letter-spacing: -0.5px;
   color: #252525;
   cursor: pointer;
+  text-decoration: none;
   &:hover {
     color: #f1b24a;
   }
   a {
-    font-size: 1.3rem;
+    font-size: 0.7rem;
     font-weight: 500;
     color: #111;
+    text-decoration: none;
+    margin-left: 4rem;
     &:hover {
       color: #f1b24a;
     }
