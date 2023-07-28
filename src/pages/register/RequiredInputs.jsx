@@ -9,7 +9,18 @@ const allRegions = [
   "인천광역시",
   // ... (전체 지역 목록에 대한 나머지 항목들)
 ];
-const RequiredInputs = ({ formData, setFormData }) => {
+const RequiredInputs = ({ onRegistration }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    nickname: "",
+    email: "",
+    password: "",
+    confirmPwd: "",
+    gender: "",
+    birthdate: "",
+    job: "",
+    region: "",
+  });
   const {
     name,
     nickname,
@@ -30,6 +41,10 @@ const RequiredInputs = ({ formData, setFormData }) => {
     }));
   };
 
+  RequiredInputs.getFormData = () => {
+    return formData;
+  };
+
   return (
     <>
       <S.Heading>이름</S.Heading>
@@ -46,15 +61,6 @@ const RequiredInputs = ({ formData, setFormData }) => {
         onChange={onChange}
       />
       {/* <BirthDateForm birthdate={formData.birthdate} onChange={onChange} /> */}
-      <S.Heading>생년월일</S.Heading>
-      <S.Box>
-        <S.Input
-          max={today}
-          name="birthdate"
-          value={birthdate}
-          onChange={onChange}
-        />
-      </S.Box>
       <S.RightAlignedBox style={{ marginTop: "20px" }}>
         <S.Heading>성별</S.Heading>
         <S.Select
@@ -64,8 +70,8 @@ const RequiredInputs = ({ formData, setFormData }) => {
           style={{ flex: 1, textAlign: "right" }}
         >
           <option>성별</option>
-          <option value="M">남자</option>
-          <option value="F">여자</option>
+          <option value="남">남자</option>
+          <option value="여">여자</option>
         </S.Select>
       </S.RightAlignedBox>
 

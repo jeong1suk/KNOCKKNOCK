@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import * as S from "./style";
-import { mbtiList, idealList } from "../../constants/registerConstants";
+import { mbtiList } from "../../constants/registerConstants";
 import { ModalHobby } from "./ModalHobby";
 import { ModalPersonality } from "./ModalPersonality";
 import { ModalIdeal } from "./ModalIdeal";
-const OptionalInputs = ({ formData, setFormData }) => {
-  const { mbti, height, hobby, personality, ideal, introduce } = formData;
+const OptionalInputs = () => {
+  const [formData, setFormData] = useState({
+    height: "",
+    mbti: "",
+    hobby: [],
+    personality: [],
+    ideal: [],
+    introduce: "반갑습니다!", //아무값도 있지 않으면 OptionalInputs.getFormData이게 return을 못받아서 오류가 뜸.
+  });
+  const { height, mbti, hobby, personality, ideal, introduce } = formData;
 
   const onChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -33,6 +41,9 @@ const OptionalInputs = ({ formData, setFormData }) => {
 
   const handleIdealClick = (element) => {
     onArrayChange(ideal, element, "ideal");
+  };
+  OptionalInputs.getFormData = () => {
+    return formData;
   };
 
   return (
