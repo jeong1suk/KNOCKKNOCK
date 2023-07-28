@@ -15,7 +15,6 @@ const RegisterPage = () => {
     job: "",
     region: "",
     mbti: "",
-    religion: "",
     height: "",
     hobby: [],
     personality: [],
@@ -33,6 +32,48 @@ const RegisterPage = () => {
 
   const handleRegistration = () => {
     console.log(formData);
+    /**try {
+      await Api.post("users/register", {
+        name,
+        email,
+        nickname,
+        user_password: password,
+        gender,
+        birthday: birthdate,
+        job,
+        region,
+        mbti,
+        height,
+        hobby,
+        personality,
+        introduce,
+      });
+      // 로그인 페이지로 이동함.
+      const res = await Api.post("users/login", {
+        email,
+        password,
+      });
+
+      const user = res.data;
+      const jwtToken = user.token;
+
+      localStorage.setItem("userToken", jwtToken);
+      localStorage.setItem("userId", user.userId);
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: user,
+      });
+
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.log(err);
+      if (err.response.data.message) {
+        console.log(err.response.data.message);
+      } else {
+        console.log("라우팅 경로가 잘못되었습니다.");
+      }
+    }
+ */
   };
 
   return (

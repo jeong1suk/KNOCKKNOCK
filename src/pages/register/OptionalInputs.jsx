@@ -5,8 +5,7 @@ import { ModalHobby } from "./ModalHobby";
 import { ModalPersonality } from "./ModalPersonality";
 import { ModalIdeal } from "./ModalIdeal";
 const OptionalInputs = ({ formData, setFormData }) => {
-  const { mbti, religion, height, hobby, personality, ideal, introduce } =
-    formData;
+  const { mbti, height, hobby, personality, ideal, introduce } = formData;
 
   const onChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -38,22 +37,6 @@ const OptionalInputs = ({ formData, setFormData }) => {
 
   return (
     <>
-      <S.RightAlignedBox style={{ marginTop: "20px" }}>
-        <S.Heading>종교</S.Heading>
-        <S.Select
-          name="religion"
-          value={religion}
-          onChange={onChange}
-          style={{ flex: 1, textAlign: "right" }}
-        >
-          <option>종교</option>
-          <option key="기독교">기독교</option>
-          <option key="천주교">천주교</option>
-          <option key="불교">불교</option>
-          <option key="없음">없음</option>
-        </S.Select>
-      </S.RightAlignedBox>
-
       <S.Box>
         <S.Heading>키</S.Heading>
         <S.Input
