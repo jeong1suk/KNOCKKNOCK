@@ -33,6 +33,7 @@ export const ModalIdeal = ({ formData, handleIdealClick }) => {
                 margin: "5px",
                 border: "1px solid black",
                 cursor: "pointer",
+                fontSize: "0.7rem",
               }}
               onClick={() => handleIdealClick(elements)}
             >

@@ -32,6 +32,7 @@ export const ModalHobby = ({ formData, handleHobbyClick }) => {
                 margin: "5px",
                 border: "1px solid black",
                 cursor: "pointer",
+                fontSize: "0.7rem",
               }}
               onClick={() => handleHobbyClick(elements)}
             >
