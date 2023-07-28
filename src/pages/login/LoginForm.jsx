@@ -4,7 +4,7 @@ import * as S from "./style";
 import * as Api from "../../api";
 import { DispatchContext } from "../../App";
 import { validateEmail, validatePassword } from "../../util/common";
-
+import { login } from "../../api/login";
 function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
@@ -16,14 +16,6 @@ function LoginForm() {
   const isPasswordValid = validatePassword(password);
   const isFormValid = isEmailValid && isPasswordValid;
 
-  const login = async ({ email, password }) => {
-    const result = await Api.post("users/login", {
-      email,
-      password,
-    });
-    return result.data;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -33,7 +25,6 @@ function LoginForm() {
       const jwtToken = user.token;
       // sessionStorage에 "userToken"이라는 키로 JWT 토큰을 저장함.
       localStorage.setItem("userToken", jwtToken);
-      localStorage.setItem("userId", user.userId);
       // dispatch 함수를 이용해 로그인 성공 상태로 만듦.
       dispatch({
         type: "LOGIN_SUCCESS",
