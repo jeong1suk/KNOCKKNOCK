@@ -2,22 +2,17 @@ import React, { useState } from "react";
 import * as S from "./style";
 import styled from "styled-components";
 import { hobbyList } from "../../constants/registerConstants";
+import { useToggle } from "../../components/hooks/useToggle";
 export const ModalHobby = ({ formData, handleHobbyClick }) => {
   const { hobby } = formData;
-  const [isHobbyModalOpen, setIsHobbyModalOpen] = useState(false);
-  const openHobbyModal = () => {
-    setIsHobbyModalOpen(true);
-  };
+  const { opened, onOpen, onClose } = useToggle();
 
-  const closeHobbyModal = () => {
-    setIsHobbyModalOpen(false);
-  };
   return (
     <S.RightAlignedBox>
-      <S.ToggleButton style={{ textAlign: "center" }} onClick={openHobbyModal}>
+      <S.ToggleButton style={{ textAlign: "center" }} onClick={onOpen}>
         취미 선택하기
       </S.ToggleButton>
-      {isHobbyModalOpen && (
+      {opened && (
         <S.Modal>
           <h3 style={{ textAlign: "center" }}>취미</h3>
           {hobbyList.map((elements, index) => (
@@ -39,7 +34,7 @@ export const ModalHobby = ({ formData, handleHobbyClick }) => {
               {elements}
             </button>
           ))}
-          <button onClick={closeHobbyModal}>Close</button>
+          <button onClick={onClose}>Close</button>
         </S.Modal>
       )}
       {hobby.length > 0 && (

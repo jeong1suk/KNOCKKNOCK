@@ -2,21 +2,15 @@ import React, { useState } from "react";
 import * as S from "./style";
 import styled from "styled-components";
 import { idealList } from "../../constants/registerConstants";
+import { useToggle } from "../../components/hooks/useToggle";
 export const ModalIdeal = ({ formData, handleIdealClick }) => {
   const { ideal } = formData;
-  const [isIdealModalOpen, setIsIdealModalOpen] = useState(false);
+  const { opened, onOpen, onClose } = useToggle();
 
-  const openIdealModal = () => {
-    setIsIdealModalOpen(true);
-  };
-
-  const closeIdealModal = () => {
-    setIsIdealModalOpen(false);
-  };
   return (
     <S.RightAlignedBox>
-      <S.ToggleButton onClick={openIdealModal}>나의 이상형은?</S.ToggleButton>
-      {isIdealModalOpen && (
+      <S.ToggleButton onClick={onOpen}>나의 이상형은?</S.ToggleButton>
+      {opened && (
         <S.Modal>
           <h3 style={{ textAlign: "center" }}>이상형</h3>
           {idealList.map((elements, index) => (
@@ -40,7 +34,7 @@ export const ModalIdeal = ({ formData, handleIdealClick }) => {
               {elements}
             </button>
           ))}
-          <button onClick={closeIdealModal}>Close</button>
+          <button onClick={onClose}>Close</button>
         </S.Modal>
       )}
       {ideal.length > 0 && (

@@ -2,23 +2,15 @@ import React, { useState } from "react";
 import * as S from "./style";
 import styled from "styled-components";
 import { personalityList } from "../../constants/registerConstants";
+import { useToggle } from "../../components/hooks/useToggle";
 export const ModalPersonality = ({ formData, handlePersonalityClick }) => {
   const { personality } = formData;
+  const { opened, onOpen, onClose } = useToggle();
 
-  const [isPersonalityModalOpen, setIsPersonalityModalOpen] = useState(false);
-  const openPersonalityModal = () => {
-    setIsPersonalityModalOpen(true);
-  };
-
-  const closePersonalityModal = () => {
-    setIsPersonalityModalOpen(false);
-  };
   return (
     <S.RightAlignedBox>
-      <S.ToggleButton onClick={openPersonalityModal}>
-        내가 생각하는 나
-      </S.ToggleButton>
-      {isPersonalityModalOpen && (
+      <S.ToggleButton onClick={onOpen}>내가 생각하는 나</S.ToggleButton>
+      {opened && (
         <S.Modal>
           <h3 style={{ textAlign: "center" }}>내 성격</h3>
           {personalityList.map((elements, index) => (
@@ -42,7 +34,7 @@ export const ModalPersonality = ({ formData, handlePersonalityClick }) => {
               {elements}
             </button>
           ))}
-          <button onClick={closePersonalityModal}>Close</button>
+          <button onClick={onClose}>Close</button>
         </S.Modal>
       )}
       {personality.length > 0 && (
