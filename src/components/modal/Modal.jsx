@@ -1,11 +1,16 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-function Modal({ onClose, children })  {
+function Modal({ onClose, children }) {
   return(
   <ModalBackground onClick={onClose}>
-      <ModalContent onClick={e => e.stopPropagation()}>
+      <ModalContent 
+        onClick={e => e.stopPropagation()} 
+        initial={{ opacity: 0, y: -100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         {children}
-        <button onClick={onClose}>닫기</button>
       </ModalContent>
     </ModalBackground>
   );
@@ -23,12 +28,17 @@ const ModalBackground = styled.div`
   align-items: center;
 `;
 
-const ModalContent = styled.div`
+const ModalContent = styled(motion.div)`
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  width: 80%;  // or any value that suits your needs
-  max-width: 500px;  // or any value that suits your needs
+  width: 80%; 
+  max-width: 500px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
 `;
 
 export default Modal;

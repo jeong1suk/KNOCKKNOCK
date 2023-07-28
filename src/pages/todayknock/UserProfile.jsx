@@ -15,28 +15,22 @@ const UserProfileContainer = styled.div`
   border: 7px solid #f0f0f0;
   border-radius: 5px;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-`;
-
-const BackgroundImage = styled.div`
-  width: 100%;
-  height: 100%;
-  background-image: url("https://previews.123rf.com/images/sudakasi/sudakasi1405/sudakasi140500174/28673467-%EC%95%84%EB%A6%84%EB%8B%A4%EC%9A%B4-%EC%9E%90%EC%97%B0-%EB%B0%B0%EA%B2%BD.jpg");
-  background-size: cover;
-  background-position: center;
+  background-color: #edecec;
 `;
 
 const ProfilePicture = styled.img`
-  width: 8.5rem;
-  height: 8.5rem;
+  width: 15rem;
+  height: 15rem;
   border: 3px solid #e9e9e9;
-  border-radius: 100%;
-  margin-top: -13rem;
+  margin-top: 1rem;
   position: relative;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10%;
 `;
 
 const Name = styled.h3`
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  color: #666666;
 `;
 
 const UserInfo = styled.div`
@@ -85,9 +79,8 @@ const UserProfile = ({ user }) => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <BackgroundImage />
         <ProfilePicture
-          src="https://www.futurekorea.co.kr/news/photo/201907/119520_120439_3313.jpg"
+          src="https://cdn.mmnews.co.kr/news/photo/202202/6259_5414_549.jpg"
           alt="프로필 사진"
         />
 
@@ -99,8 +92,8 @@ const UserProfile = ({ user }) => {
           <UserInfoText>{gender}</UserInfoText>
           <UserInfoText>{introduce || "안녕하세요. 반갑습니다."}</UserInfoText>
         </UserInfo>
+        <Name>{username}</Name>
       </UserProfileContainer>
-      <Name>{username}</Name>
     </>
   );
 };
