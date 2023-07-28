@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import * as S from "./style";
 import { validateEmail, validatePassword } from "../../util/common";
 import { BiHide, BiShow } from "react-icons/bi";
-const isEmailValid = validateEmail(email);
-const isPasswordValid = validatePassword(password);
-const isPasswordSame = password === confirmPwd;
+
 const ValidationFields = ({ formData, setFormData, onChange }) => {
   const { email, password, confirmPwd } = formData;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const isEmailValid = validateEmail(email);
+  const isPasswordValid = validatePassword(password);
+  const isPasswordSame = password === confirmPwd;
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
