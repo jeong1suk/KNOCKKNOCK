@@ -2,38 +2,31 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { ROUTE } from "../../routes/routes";
+import { useToggle } from "../hooks/useToggle";
 const MobileMenu = ({ isLogin, user, logout }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
+  const { opened, onOpen, onClose } = useToggle();
 
   return (
     <>
-      <HamburgerButton onClick={toggleMenu}>
-        <HamburgerIcon className={isOpen ? "open" : "false"} />
+      <HamburgerButton onClick={onOpen}>
+        <HamburgerIcon className={opened ? "open" : "false"} />
       </HamburgerButton>
       {isLogin ? (
-        isOpen ? (
+        opened ? (
           <DropdownMenu>
-            <MenuItem to={ROUTE.Mypage.link} onClick={closeMenu}>
+            <MenuItem to={ROUTE.Mypage.link} onClick={onClose}>
               마이페이지
             </MenuItem>
-            <MenuItem to={ROUTE.MAIN.link} onClick={closeMenu}>
+            <MenuItem to={ROUTE.MAIN.link} onClick={onClose}>
               메인페이지
             </MenuItem>
-            <MenuItem to={ROUTE.AI.link} onClick={closeMenu}>
+            <MenuItem to={ROUTE.AI.link} onClick={onClose}>
               인공지능
             </MenuItem>
-            <MenuItem to={ROUTE.TodayKnock.link} onClick={closeMenu}>
+            <MenuItem to={ROUTE.TodayKnock.link} onClick={onClose}>
               오늘의 낙낙
             </MenuItem>
-            <MenuItem to={ROUTE.Play.link} onClick={closeMenu}>
+            <MenuItem to={ROUTE.Play.link} onClick={onClose}>
               같이 놀자
             </MenuItem>
             <MenuItem to={ROUTE.MAIN.link} onClick={logout}>
@@ -41,27 +34,27 @@ const MobileMenu = ({ isLogin, user, logout }) => {
             </MenuItem>
           </DropdownMenu>
         ) : null
-      ) : isOpen ? (
+      ) : opened ? (
         <DropdownMenu>
-          <MenuItem to={ROUTE.Mypage.link} onClick={closeMenu}>
+          <MenuItem to={ROUTE.Mypage.link} onClick={onClose}>
             마이페이지
           </MenuItem>
-          <MenuItem to={ROUTE.MAIN.link} onClick={closeMenu}>
+          <MenuItem to={ROUTE.MAIN.link} onClick={onClose}>
             메인페이지
           </MenuItem>
-          <MenuItem to={ROUTE.AI.link} onClick={closeMenu}>
+          <MenuItem to={ROUTE.AI.link} onClick={onClose}>
             인공지능
           </MenuItem>
-          <MenuItem to={ROUTE.TodayKnock.link} onClick={closeMenu}>
+          <MenuItem to={ROUTE.TodayKnock.link} onClick={onClose}>
             오늘의 낙낙
           </MenuItem>
-          <MenuItem to={ROUTE.Play.link} onClick={closeMenu}>
+          <MenuItem to={ROUTE.Play.link} onClick={onClose}>
             같이 놀자
           </MenuItem>
-          <MenuItem to={ROUTE.LOGIN.link} onClick={closeMenu}>
+          <MenuItem to={ROUTE.LOGIN.link} onClick={onClose}>
             로그인
           </MenuItem>
-          <MenuItem to={ROUTE.REGISTER.link} onClick={closeMenu}>
+          <MenuItem to={ROUTE.REGISTER.link} onClick={onClose}>
             회원가입
           </MenuItem>
         </DropdownMenu>
