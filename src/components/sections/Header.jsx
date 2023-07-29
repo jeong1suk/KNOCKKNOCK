@@ -8,6 +8,7 @@ import DesktopMenu from "./DesktopMenu";
 const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
   const { user } = useContext(UserStateContext);
+  const [userId, setUserId] = useState(localStorage.getItem("userId"));
   const dispatch = useContext(DispatchContext);
   const navigate = useNavigate();
   const logout = () => {
