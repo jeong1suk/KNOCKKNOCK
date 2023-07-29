@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import PlayCarousel from "./PlayCarousel";
+
 function MainPage() {
   return (
     <>

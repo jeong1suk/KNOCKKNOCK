@@ -1,10 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { DispatchContext, UserStateContext } from "../../App";
 import { ROUTE } from "../../routes/routes";
 import MobileMenu from "./MobileMenu";
+import DesktopMenu from "./DesktopMenu";
 const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const { user } = useContext(UserStateContext);
+  const dispatch = useContext(DispatchContext);
+  const navigate = useNavigate();
+  const logout = () => {
+    localStorage.removeItem("userToken");
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
+  };
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 800);
@@ -12,16 +23,17 @@ const Header = () => {
 
     window.addEventListener("resize", handleResize);
     handleResize();
-
+    setUserId(localStorage.getItem("userId"));
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   return (
     <HeaderWrap>
       <HeaderContainer>
         <LogoBox>
-          <Link to="/">
+          <Link to={ROUTE.MAIN.link}>
             <LogoImgBox>
               <img src="src/assets/knock.png" />
             </LogoImgBox>
@@ -55,10 +67,13 @@ const Header = () => {
               </NavMenu>
             </Navigation>
           )}
+
           {isMobile && (
-            <MobileMenubox>
-              <MobileMenu />
-            </MobileMenubox>
+            <MobileMenu
+              isLogin={user ? true : false}
+              user={user}
+              logout={logout}
+            />
           )}
         </NavigationBox>
       </HeaderContainer>

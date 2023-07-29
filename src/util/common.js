@@ -18,3 +18,7 @@ export const validatePassword = (password) => {
 export const validateName = (name) => {
   return name.match(/^[a-zA-Z가-힣\s]{2,20}$/);
 };
+
+export const validateDate = (date) => {
+  return date.match(/^\d{4}-\d{2}-\d{2}$/);
+};
