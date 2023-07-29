@@ -60,6 +60,7 @@ const ModalContentUser = styled.div`
   padding: 1rem;
   padding-top: 2rem;
   border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 `;
 
 const ModalContent = styled.div`
