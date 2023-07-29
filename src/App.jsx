@@ -1,6 +1,5 @@
 import Layout from "./components/sections/Layout";
 import React, { useState, useEffect, useReducer, createContext } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import * as Api from "./api";
 import { loginReducer } from "./reducer";
 
