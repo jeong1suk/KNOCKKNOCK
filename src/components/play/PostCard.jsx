@@ -9,6 +9,8 @@ import * as Api from '../../api';
 import { timeAgo } from '../../util/TimeAgo';
 import { isWriter } from '../../util/isWriter';
 
+import GenderInfo from './GenderInfo';
+
 const MAX_CONTENT_LENGTH = 200;
 
 function PostCard({post})  {
@@ -28,16 +30,6 @@ function PostCard({post})  {
   // const [content, setContent] = useState('재밌게 놀사람 오세요~ ');
   // const [nickname, setNickname] = useState('억만추');
 
-
-  const GenderInfo = ({ total, filled, color }) => {
-    let people = [];
-  
-    for (let i = 0; i < total; i++) {
-      people.push(<Person key={i} filled={i < filled} color={color} />);
-    }
-  
-    return <TotalPeople>{people}</TotalPeople>;
-  };
   
 
   return (
@@ -149,17 +141,5 @@ const Nickname = styled.span`
   font-weight: bold;
 `;
 
-const TotalPeople = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-`;
 
-const Person = styled.div`
-  height: 10px;
-  width: 10px;
-  border-radius: 50%;
-  background-color: ${props => props.filled ? props.color : '#ccc'};
-  margin-right: 2px;
-`;
 

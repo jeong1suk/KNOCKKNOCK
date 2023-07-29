@@ -92,7 +92,7 @@ function PlayAdd() {
 
 
   return (
-    <>
+    <Wrapper>
       <TopBox>
         <p>같이 놀자!</p>
         <p>여러분이 원하는 만남을 만들어보세요</p>
@@ -156,7 +156,7 @@ function PlayAdd() {
         </InputBox>
         <PostButton onClick={handlePostSubmit}>등록하기</PostButton>
       </PostAddBox>
-    </>
+    </Wrapper>
   )
 }
 
@@ -235,6 +235,12 @@ export default PlayAdd;
 
 // export default PlayAdd;
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
 const TopBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -244,6 +250,7 @@ const TopBox = styled.div`
   margin: 50px 0px 0px 0px;
   padding: 30px 0 0 50px;
   text-align: left;
+  width: 80%;
   
   p {
     font-size: 2rem; 
@@ -272,6 +279,7 @@ const TopBox = styled.div`
     }
   }
 `
+
 
 const PostAddBox = styled.div`
   display: flex;

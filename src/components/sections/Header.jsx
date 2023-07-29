@@ -23,7 +23,7 @@ const Header = () => {
 
     window.addEventListener("resize", handleResize);
     handleResize();
-    setUserId(localStorage.getItem("userId"));
+    // setUserId(localStorage.getItem("userId"));
     return () => {
       window.removeEventListener("resize", handleResize);
     };

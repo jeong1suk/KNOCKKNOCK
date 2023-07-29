@@ -7,7 +7,10 @@ import * as Api from "../../api";
 import styled from 'styled-components';
 import { isWriter } from '../../util/isWriter';
 
+import DropdownMenu from "../../components/modal/DropdownMenu";
 import Modal from "../../components/modal/Modal";
+import GenderInfo from "../../components/play/GenderInfo";
+import ParticipantList from "../../components/play/ParticipantList";
 
 const limit = 5;
 
@@ -21,6 +24,7 @@ function PlayDetail() {
   const [participationFlag, setParticipationFlag] = useState();
   const [comment, setComment] = useState("");
 
+  const [dropdownSelection, setDropdownSelection] = useState("신청인원");
   const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
 
   const [comments, setComments] = useState([]);
@@ -31,24 +35,24 @@ function PlayDetail() {
   const [isEditing, setIsEditing] = useState(null);
   const [editedContent, setEditedContent] = useState("");
 
-  console.log(nextCursor);
   useEffect(() => {
     if(isParticipantModalOpen){
       fetchParticipantsList();
     }
-  }, [isParticipantModalOpen]);
+  }, [isParticipantModalOpen, dropdownSelection]);
 
-  const fetchParticipantsList = async () => {
-    try {
-      const res = await Api.get(`/participants/${postId}/userlist?limit=${limit}`);
-
-      setParticipantsList(res.data.participantsList.filter(participant => participant.status === "pending"));
-    } catch (err) {
-      alert('참여자 정보를 불러오는 데 실패했습니다.');
-    }
+const fetchParticipantsList = async () => {
+  try {
+    const res = await Api.get(`/participants/${postId}/userlist?limit=${limit}`);
+    const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
+    setParticipantsList(res.data.participantsList.filter(participant => participant.status === status));
+  } catch (err) {
+    alert('참여자 정보를 불러오는 데 실패했습니다.');
   }
+}
 
   const handleAccept = async (participantId) => {
+    console.log(participantId);
     try {
       const res = await Api.put(`/participants/${participantId}/allow`);
       fetchParticipantsList(); 
@@ -93,6 +97,21 @@ function PlayDetail() {
     }
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
     const fetchGetComment = async () => {
       try {
@@ -109,7 +128,7 @@ function PlayDetail() {
         if (commentData.commentList?.length < 10) {
           setNextCursor(-1);
         } else {
-          setNextCursor(commentData.commentList[commentData.commentList.length - 1].comment_id);
+          setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
         }
   
         if (nextCursor === 0) {
@@ -230,65 +249,72 @@ function PlayDetail() {
   return (
     <>
       <TopBox>
-        <p>같이 놀자</p>
-        <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
-        {isWriter({userId, post}) ?
-        <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>신청인원 보기</TopBoxButton>
-        :
-        <TopBoxButton onClick={fetchApply}>신청하기</TopBoxButton>
-        }
-        {isParticipantModalOpen && (
-          <Modal onClose={() => setIstParticipantModalOpen(false)}>
-            <ParticipantModalDiv>
-              {participantsList.map((participant, index) => (
-                <div key={index} style={{display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: "10px", border: "1px solid #ccc", borderRadius: "5px", padding: "10px"}}>
-                  <img src={participant.profile_image} alt="profile" style={{width: "30%", height: "100px", borderRadius: "50%"}}/>
-                  <div style={{width: "30%", textAlign: "left"}}>
-                    <p>Nickname: {participant.nickname}</p>
-                    <p>Gender: {participant.gender}</p>
-                    <p>Age: {participant.age}</p>
-                    <p>Job: {participant.job}</p>
-                  </div>
-                  <div style={{width: "30%", display: "flex", flexDirection: "column", justifyContent: "center"}}>
-                    <button style={{marginBottom: "10px"}} onClick={() => handleAccept(participant.participationId)}>수락</button>
-                    <button onClick={() => handleReject(participant.participationId)}>거절</button>
-                  </div>
-                </div>
-              ))}
-
-            </ParticipantModalDiv>
-          </Modal>
-        )}
+        <TopInnerBox>
+          <p>같이 놀자</p>
+          <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+          {isWriter({userId, post}) ?
+          <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>신청인원 보기</TopBoxButton>
+          :
+          <TopBoxButton onClick={fetchApply}>신청하기</TopBoxButton>
+          }
+          {isParticipantModalOpen && (
+            <Modal onClose={() => setIstParticipantModalOpen(false)}>
+              <DropdownMenu 
+                options={[
+                  { label: "신청인원", value: "신청인원" },
+                  { label: "모집된 인원", value: "모집된 인원" },
+                ]}
+                selectedOption={dropdownSelection}
+                handleOptionChange={(e) => setDropdownSelection(e.target.value)}
+              />
+              <ParticipantList
+                participantsList={participantsList}
+                handleAccept={handleAccept}
+                handleReject={handleReject}
+              />
+            </Modal>
+          )}
+        </TopInnerBox>
       </TopBox>
       <PostDetailBox>
-        <InputBox>
-          <RecruitAbleBox>모집중</RecruitAbleBox>
-        </InputBox>
-        <InputBox>
-          <p style={{ fontSize: "2vw", fontWeight: "bold" }}>
-            {post.post_title}
-          </p>
-        </InputBox>
-        <InputBox style={{ flexDirection: "column", alignItems: "start" }}>
-          <p style={{ margin: "0px 0px" }}>장소: {post.place}</p>
-          <p style={{ margin: "10px 0px" }}>만남시간: {dayjs(post.meeting_time).format('YYYY-MM-DD HH:mm')}</p>
-        </InputBox>
-        <InputBox>
-          <img
-            src={post.post_image}
-            alt="postImage"
-            style={{
-              width: "50%",
-              height: "25vw",
-              marginTop: "10px",
-              marginRight: "10px",
-            }}
-          />
-        </InputBox>
-        <InputBox>
-          <p>{post.post_content}</p>
-        </InputBox>
-
+        <PostDetailFirstBox>
+          <InputBox>
+          {post.IsCompleted ? 
+            <RecruitAbleBox>모집완료</RecruitAbleBox>
+            :
+            <RecruitAbleBox>모집중</RecruitAbleBox>
+          }
+          <GenderInfoBox>
+            <GenderInfo total={post.totalM} filled={post.recruitedM} color='blue' />
+            <GenderInfo total={post.totalF} filled={post.recruitedF} color='red' />
+          </GenderInfoBox>
+          
+          </InputBox>
+          <InputBox>
+            <p style={{ fontSize: "2vw", fontWeight: "bold" }}>
+              {post.title}
+            </p>
+          </InputBox>
+          <InputBox style={{ flexDirection: "column", alignItems: "start" }}>
+            <p style={{ margin: "0px 0px" }}>장소: {post.place}</p>
+            <p style={{ margin: "10px 0px" }}>만남시간: {dayjs(post.meetingTime).format('YYYY-MM-DD HH:mm')}</p>
+          </InputBox>
+          <InputBox>
+            <img
+              src={post.postImage}
+              alt="postImage"
+              style={{
+                width: "50%",
+                height: "25vw",
+                marginTop: "10px",
+                marginRight: "10px",
+              }}
+            />
+          </InputBox>
+          <InputBox>
+            <p>{post.content}</p>
+          </InputBox>
+        </PostDetailFirstBox>
         <CommentBox>
           <p>댓글</p>
           <CommentInputArea>
@@ -314,23 +340,23 @@ function PlayDetail() {
               />
               <CommentContentBox>
                 <p style={{ margin: "0px 0px" }}>{comment.nickname}</p>
-                {comment.comment_id === isEditing ? (
+                {comment.commentId === isEditing ? (
                   <input
                     type="text"
                     value={editedContent}
                     onChange={(e) => setEditedContent(e.target.value)}
                   />
                 ) : (
-                  <p>{comment.comment_content}</p>
+                  <p>{comment.commentContent}</p>
                 )}
-                {comment.user_id === userId && (
+                {comment.userId === userId && (
                   <>
-                    {comment.comment_id === isEditing ? (
-                      <button onClick={() => saveComment(comment.comment_id)}>저장</button>
+                    {comment.commentId === isEditing ? (
+                      <button onClick={() => saveComment(comment.commenId)}>저장</button>
                     ) : (
-                      <button onClick={() => editComment(comment.comment_id, comment.comment_content)}>수정</button>
+                      <button onClick={() => editComment(comment.commentId, comment.commentContent)}>수정</button>
                     )}
-                    <button onClick={() => deleteComment(comment.comment_id)}>삭제</button>
+                    <button onClick={() => deleteComment(comment.commentId)}>삭제</button>
                   </>
                 )}
               </CommentContentBox>
@@ -347,28 +373,37 @@ export default PlayDetail;
 const TopBox = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  background-color: #ffffff;
+  align-items: center;
+  background-color: #F8F8F8;
   height: 200px;
-  margin: 50px -35px 0px -35px;
-  padding-left: 50px;
+  margin: 100px 0px 0px 0px;
 `;
 
+const TopInnerBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 75%;
+  
+`
+
+
 const TopBoxButton = styled.button`
-  background-color: #d2daff;
-  color: black;
-  border: 1px solid black;
+  background-color: #007BFF;
+  color: white;
+  border: none;
   border-radius: 5px;
   cursor: pointer;
   padding: 10px 20px;
   margin-top: 20px;
+  width: 15%;
 `;
 
 const PostDetailBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #ffffff;
+  background-color: #F8F8F8; 
   height: 100%;
   margin: 50px 0 0 0;
   padding: 20px 50px 20px 50px;
@@ -380,15 +415,17 @@ const InputBox = styled.div`
   align-items: center;
   padding: 10px;
   width: 80%;
+  font-family: 'San Francisco', Arial, sans-serif; 
 `;
 
 const RecruitAbleBox = styled.div`
-  background-color: #aac4ff;
+  background-color: #007BFF; // Same as the button above
   display: flex;
   justify-content: center;
   align-items: center;
   width: 15%;
   padding: 20px 0px 20px 0px;
+  color: white; // To contrast with the background
 `;
 
 const CommentBox = styled.div`
@@ -402,7 +439,7 @@ const CommentDetailBox = styled.div`
   display: flex;
   align-items: flex-start;
   width: 100%;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #cccccc; // Light gray border
 `;
 
 const CommentContentBox = styled.div`
@@ -416,7 +453,7 @@ const ParticipantModalDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const CommentInputArea = styled.div`
   display: flex;
@@ -428,12 +465,13 @@ const CommentInputArea = styled.div`
     width: 90%;
     padding: 10px;
     margin-right: 10px;
-    resize: none; /* 사용자가 textarea 크기를 변경하지 못하게 함 */
+    resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
+    border: 1px solid #cccccc; // Light gray border
   }
 
   button {
     width: 10%;
-    background-color: #007BFF;
+    background-color: #007BFF; // Same as the button above
     color: white;
     padding: 10px;
     border: none;
@@ -445,3 +483,20 @@ const CommentInputArea = styled.div`
     }
   }
 `;
+
+const GenderInfoBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 10px;
+  gap: 10px;
+`
+
+const PostDetailFirstBox = styled.div`
+  background: #ffffff;
+  border-radius: 10px; 
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  margin-bottom: 20px; 
+  width: 80%; 
+`
