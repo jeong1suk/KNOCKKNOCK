@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+import * as Api from '../../api';
+
+import { categories } from '../../constants/CategoryConstants';
+import { useImageUpload } from '../../components/hooks/UseImageUpload';
 
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -7,21 +12,43 @@ import styled from 'styled-components';
 
 function PlayEdit() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const postId = location.pathname.match(/\/playedit\/(\d+)/)[1];
 
   const [postTitle, setPostTitle] = useState('');
-  const [postType, setPostType] = useState('');
+  const [postType, setPostType] = useState('술');
   const [customType, setCustomType] = useState('');
   const [meetingDate, setMeetingDate] = useState('');
   const [meetingHour, setMeetingHour] = useState('');
   const [meetingTime, setMeetingTime] = useState('');
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageUrl, handleImageUpload] = useImageUpload();
   const [totalM, setTotalM] = useState(0);
   const [totalF, setTotalF] = useState(0);
   const [place, setPlace] = useState('');
   const [postContent, setPostContent] = useState('');
 
 
-  const categories = ['술', '영화', '식사', '카페', '산책', '드라이브', '공연관람', '기타'];
+  const getPostRequest = async (postId) => {
+    try {
+      const res = await Api.get(`/posts/${postId}`);
+      const postData = res.data.post;
+      setPostTitle(postData.title);
+      setPostType(postData.type);
+      setCustomType(postData.type);
+      setMeetingTime(postData.meetingTime);
+      handleImageUpload(UserUserFiles.File);
+      setTotalM(postData.totalM);
+      setTotalM(postData.totalF);
+      setPlace(postData.place);
+      setPostContent(postData.content);
+    } catch (err) {
+      if (err.response.data.message) {
+          alert(err.response.data.message);
+      } else {
+          alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
 
 
   const handleCategoryChange = (e) => {
@@ -31,24 +58,30 @@ function PlayEdit() {
     }
   }
 
-  const handleImageUpload = e => {
-    const input = e.target;
-    setImageUrl(input.files[0]);
-
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const preview = document.getElementById('preview');
-            if (preview) {
-                preview.src = e.target.result;
-            }
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-  };
 
   const handlePostSubmit = async e => {
-    navigate('/Play');
+    e.preventDefault();
+
+    try {
+      // await Api.post('posts', formData);
+      await Api.post('posts', {
+        title: postTitle,
+        content: postContent,
+        type: postType,
+        totalM: totalM,
+        totalF: totalF,
+        place,
+        meetingTime: meetingTime
+      })
+      navigate('/play');
+    } catch (err) {
+      console.log(err);
+      if (err.response && err.response.data && err.response.data.message) {
+          alert(err.response.data.message);
+      } else {
+          alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
   }
 
   useEffect(() => {
@@ -57,6 +90,9 @@ function PlayEdit() {
     }
   }, [meetingDate, meetingHour]);
 
+  useEffect(() => {
+    getPostRequest(postId);
+}, [getPostRequest]);
 
   return (
     <>

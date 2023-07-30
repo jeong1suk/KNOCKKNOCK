@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from 'dayjs';
 
 import * as Api from "../../api";
@@ -15,6 +15,7 @@ import ParticipantList from "../../components/play/ParticipantList";
 const limit = 5;
 
 function PlayDetail() {
+  const navigate = useNavigate();
   const location = useLocation();
   const postId = location.pathname.match(/\/playdetail\/(\d+)/)[1];
   const userId = Number(localStorage.getItem("userId"));
@@ -43,8 +44,10 @@ function PlayDetail() {
 
 const fetchParticipantsList = async () => {
   try {
-    const res = await Api.get(`/participants/${postId}/userlist?limit=${limit}`);
     const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
+    if(status == "pending") {
+      const res = await Api.get(`/participants/${postId}/userlist?limit=${limit}`);
+    }
     setParticipantsList(res.data.participantsList.filter(participant => participant.status === status));
   } catch (err) {
     alert('참여자 정보를 불러오는 데 실패했습니다.');
@@ -69,6 +72,8 @@ const fetchParticipantsList = async () => {
       alert('거절 처리에 실패했습니다.');
     }
   }
+
+  
 
   const fetchGetDetail = async () => {
     try {
@@ -99,17 +104,26 @@ const fetchParticipantsList = async () => {
 
 
 
+  const handlePostDelet = async (postId) => {
+    const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+    if (confirmDelete) {
+      deletePostRequest(postId);
+    }
+  }
 
 
-
-
-
-
-
-
-
-
-
+  const deletePostRequest = async (postId) => {
+    try {
+      await Api.del(`/posts/${postId}`);
+      navigate(`/play`);
+    } catch (err) {
+      if (err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
 
 
   useEffect(() => {
@@ -271,6 +285,7 @@ const fetchParticipantsList = async () => {
                 participantsList={participantsList}
                 handleAccept={handleAccept}
                 handleReject={handleReject}
+                selectedOption ={dropdownSelection}
               />
             </Modal>
           )}
@@ -278,22 +293,31 @@ const fetchParticipantsList = async () => {
       </TopBox>
       <PostDetailBox>
         <PostDetailFirstBox>
-          <InputBox>
-          {post.IsCompleted ? 
-            <RecruitAbleBox>모집완료</RecruitAbleBox>
-            :
-            <RecruitAbleBox>모집중</RecruitAbleBox>
+          <EditDeleteButtonBox>
+          {isWriter({userId, post}) &&
+            <>
+              <TopBoxButton onClick={() => navigate(`/playedit/${postId}`)}>수정하기</TopBoxButton>
+              <TopBoxButton onClick={handlePostDelet}>삭제하기</TopBoxButton>
+            </>
           }
-          <GenderInfoBox>
-            <GenderInfo total={post.totalM} filled={post.recruitedM} color='blue' />
-            <GenderInfo total={post.totalF} filled={post.recruitedF} color='red' />
-          </GenderInfoBox>
-          
+          </EditDeleteButtonBox>   
+          <InputBox>
+            {post.IsCompleted ? 
+              <RecruitAbleBox>모집완료</RecruitAbleBox>
+              :
+              <RecruitAbleBox>모집중</RecruitAbleBox>
+            }
+            <GenderInfoBox>
+              <GenderInfo total={post.totalM} filled={post.recruitedM} color='blue' />
+              <GenderInfo total={post.totalF} filled={post.recruitedF} color='red' />
+            </GenderInfoBox>
+
           </InputBox>
           <InputBox>
             <p style={{ fontSize: "2vw", fontWeight: "bold" }}>
               {post.title}
             </p>
+            
           </InputBox>
           <InputBox style={{ flexDirection: "column", alignItems: "start" }}>
             <p style={{ margin: "0px 0px" }}>장소: {post.place}</p>
@@ -499,4 +523,13 @@ const PostDetailFirstBox = styled.div`
   padding: 20px;
   margin-bottom: 20px; 
   width: 80%; 
+`
+
+const EditDeleteButtonBox = styled.div`
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  font-family: 'San Francisco', Arial, sans-serif; 
 `
