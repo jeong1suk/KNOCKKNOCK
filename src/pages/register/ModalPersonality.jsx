@@ -13,30 +13,21 @@ export const ModalPersonality = ({ formData, handlePersonalityClick }) => {
       {opened && (
         <S.Modal>
           <h3 style={{ textAlign: "center" }}>내 성격</h3>
-          {personalityList.map((elements, index) => (
-            <button
-              key={index}
-              style={{
-                backgroundColor: personality.includes(elements)
-                  ? "#87d5fc"
-                  : "white",
-                width: "6rem",
-                height: "2rem",
-                borderRadius: "2rem",
-                padding: "10px",
-                margin: "5px",
-                border: "1px solid black",
-                cursor: "pointer",
-                fontSize: "0.7rem",
-              }}
-              onClick={() => handlePersonalityClick(elements)}
-            >
-              {elements}
-            </button>
-          ))}
+          <ButtonContainer>
+            {personalityList.map((elements, index) => (
+              <ModalButton
+                key={index}
+                active={personality.includes(elements)}
+                onClick={() => handlePersonalityClick(elements)}
+              >
+                <div style={{ textAlign: "center" }}>{elements}</div>
+              </ModalButton>
+            ))}
+          </ButtonContainer>
           <button onClick={onClose}>Close</button>
         </S.Modal>
       )}
+
       {personality.length > 0 && (
         <S.HobbyBoxContainer>
           {personality.map((item, index) => (
@@ -61,4 +52,21 @@ const PersonBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+`;
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  flex: 1;
+`;
+const ModalButton = styled.div`
+  background-color: ${({ active }) => (active ? "#fa9393" : "white")};
+  width: 3.5rem;
+  /* height: 2rem; */
+  border-radius: 1rem;
+  padding: 10px;
+  border: 1px solid black;
+  cursor: pointer;
+  font-size: 0.7rem;
 `;

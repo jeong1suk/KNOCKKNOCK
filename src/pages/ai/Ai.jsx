@@ -1,26 +1,69 @@
+import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
 
 const Ai = () => {
-  const [uploadedImage, setUploadedImage] = useState("phto.png");
+  const [result, setResult] = useState("");
+  // const [uploadedImage, setUploadedImage] = useState("phto.png");
+  const [selectedFile, setSelectedFile] = useState("phto.png");
+  const [previewURL, setPreviewURL] = useState("phto.png");
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+
+    setSelectedFile(file);
+    // Create a FileReader to read the file and generate the preview URL
     const reader = new FileReader();
-
     reader.onloadend = () => {
-      setUploadedImage(reader.result);
+      // reader.result contains the Base64 encoded image data
+      setPreviewURL(reader.result);
     };
-
-    if (file) {
-      reader.readAsDataURL(file);
-      console.log(file);
-    }
+    reader.readAsDataURL(file);
   };
 
-  const handleDiagnosisClick = () => {
+  const handleFileUpload = async () => {
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    console.log(formData);
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5001/analyze",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(response.data);
+      // 서버에서 받은 결과(response.data)를 사용하여 처리
+      setResult(response.data.result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  // const handleFileChange = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const imageUrl = URL.createObjectURL(file);
+  //     setUploadedImage(imageUrl);
+  //     handleDiagnosisClick(imageUrl);
+  //   }
+  // };
+
+  const handleDiagnosisClick = async (imageUrl) => {
     // 퍼스널 컬러 진단 버튼이 클릭되었을 때 처리할 로직을 추가할 수 있습니다.
-    console.log("퍼스널 컬러 진단하기 버튼이 클릭되었습니다.");
+    try {
+      const response = await axios.post("http://192.168.10.105:5001/analyze", {
+        image_url: imageUrl,
+      });
+
+      console.log(response.data);
+      // setResult(response.data.result);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleMakeupClick = () => {
@@ -30,24 +73,22 @@ const Ai = () => {
 
   return (
     <div style={{ padding: "200px" }}>
-      <ImageUploadInput
-        type="file"
-        onChange={handleFileChange}
-        id="image-upload"
-      />
       <UploadImageButton htmlFor="image-upload">
-        이미지 업로드
+        <input type="file" onChange={handleFileChange} />
       </UploadImageButton>
-      {uploadedImage && (
+
+      {selectedFile && (
         <UploadedImageContainer>
           <div>업로드된 사진:</div>
-          <UploadedImage src={uploadedImage} alt="Uploaded" />
+          <UploadedImage src={previewURL} alt="Uploaded" />
         </UploadedImageContainer>
       )}
       <br />
-      <PersonalColorButton onClick={handleDiagnosisClick}>
+
+      <PersonalColorButton onClick={handleFileUpload}>
         퍼스널컬러진단하기
       </PersonalColorButton>
+      <div>{result ? <p>분석 결과: {result}</p> : null}</div>
       <br />
       <MakeupButton onClick={handleMakeupClick}>메이크업 받기</MakeupButton>
     </div>

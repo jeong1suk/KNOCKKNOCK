@@ -7,51 +7,42 @@ const DesktopMenu = ({ isLogin, user, logout }) => {
   return (
     <DesktopMenuContainer>
       <DesktopNavMenu>
-        {isLogin ? (
-          <NavMenu>
-            <MenuList>
-              <Link to={ROUTE.MAIN.link}>메인페이지</Link>
-            </MenuList>
-            <MenuList>
-              <Link to={ROUTE.AI.link}>인공지능</Link>
-            </MenuList>
-            <MenuList>
-              <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
-            </MenuList>
-            <MenuList>
-              <Link to={ROUTE.Play.link}>같이 놀자</Link>
-            </MenuList>
-            <MenuList>
-              <Link to={ROUTE.Mypage.link}>마이페이지</Link>
-            </MenuList>
-            <MenuList>
-              <Link to={ROUTE.MAIN.link} onClick={logout}>
-                로그아웃
-              </Link>
-            </MenuList>
-          </NavMenu>
-        ) : (
-          <NavMenu>
-            <MenuList>
-              <Link to={ROUTE.MAIN.link}>메인페이지</Link>
-            </MenuList>
-            <MenuList>
-              <Link to={ROUTE.AI.link}>인공지능</Link>
-            </MenuList>
-            <MenuList>
-              <Link to={ROUTE.LOGIN.link}>로그인</Link>
-            </MenuList>
-            <MenuList>
-              <Link to={ROUTE.REGISTER.link}>회원가입</Link>
-            </MenuList>
-            <MenuList>
-              <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
-            </MenuList>
-            <MenuList>
-              <Link to={ROUTE.Play.link}>같이 놀자</Link>
-            </MenuList>
-          </NavMenu>
-        )}
+        <NavMenu>
+          <MenuList>
+            <Link to={ROUTE.MAIN.link}>메인페이지</Link>
+          </MenuList>
+          <MenuList>
+            <Link to={ROUTE.AI.link}>인공지능</Link>
+          </MenuList>
+          <MenuList>
+            <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
+          </MenuList>
+          <MenuList>
+            <Link to={ROUTE.Play.link}>같이 놀자</Link>
+          </MenuList>
+
+          {isLogin ? (
+            <>
+              <MenuList>
+                <Link to={ROUTE.Mypage.link}>마이페이지</Link>
+              </MenuList>
+              <MenuList>
+                <Link to={ROUTE.MAIN.link} onClick={logout}>
+                  로그아웃
+                </Link>
+              </MenuList>
+            </>
+          ) : (
+            <>
+              <MenuList>
+                <Link to={ROUTE.LOGIN.link}>로그인</Link>
+              </MenuList>
+              <MenuList>
+                <Link to={ROUTE.REGISTER.link}>회원가입</Link>
+              </MenuList>
+            </>
+          )}
+        </NavMenu>
       </DesktopNavMenu>
     </DesktopMenuContainer>
   );
