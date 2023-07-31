@@ -5,10 +5,10 @@ import { DispatchContext, UserStateContext } from "../../App";
 import { ROUTE } from "../../routes/routes";
 import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";
+import useIsMobile from "../hooks/useIsMobile";
 const Header = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
   const { user } = useContext(UserStateContext);
-  const [userId, setUserId] = useState(localStorage.getItem("userId"));
   const dispatch = useContext(DispatchContext);
   const navigate = useNavigate();
   const logout = () => {
@@ -16,19 +16,6 @@ const Header = () => {
     dispatch({ type: "LOGOUT" });
     navigate("/");
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 800);
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    setUserId(localStorage.getItem("userId"));
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <HeaderWrap>
