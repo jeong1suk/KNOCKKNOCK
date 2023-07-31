@@ -255,13 +255,15 @@ function PlayDetail() {
   }, [isReached, isLoading, nextCursor, postId]);
   
 
-  const postComment = async () => {
+  const postComment = async (postId) => {
     try {
       const body = {
+        postId: postId,
         content: comment,
       };
       
-      const res = await Api.post(`/comments/${postId}`, body);
+      const res = await Api.post(`/comments`, body);
+        console.log(res);
         setComment("");  
         window.location.reload();
 
@@ -425,7 +427,7 @@ function PlayDetail() {
               onChange={(e) => setComment(e.target.value)}
               placeholder="댓글을 작성해주세요."
             />
-            <button onClick={postComment}>댓글 등록</button>
+            <button onClick={() => postComment(postId)}>댓글 등록</button>
           </CommentInputArea>
           {comments.map((comment, index) => (
             <CommentDetailBox key={index}>
