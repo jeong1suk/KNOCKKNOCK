@@ -7,7 +7,13 @@ import {
 } from "../../util/common";
 import { BiHide, BiShow } from "react-icons/bi";
 
-const ValidationFields = ({ formData, setFormData, onChange }) => {
+const ValidationFields = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPwd: "",
+    birthdate: "",
+  });
   const { email, password, confirmPwd, birthdate } = formData;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -21,6 +27,17 @@ const ValidationFields = ({ formData, setFormData, onChange }) => {
 
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword((prevState) => !prevState);
+  };
+
+  const onChange = (e) => {
+    const { name, value } = e.currentTarget;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  ValidationFields.getFormData = () => {
+    return formData;
   };
 
   return (

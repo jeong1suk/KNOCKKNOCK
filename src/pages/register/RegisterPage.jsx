@@ -5,6 +5,7 @@ import * as S from "./style";
 import * as Api from "../../api";
 import { DispatchContext } from "../../App";
 import { useNavigate } from "react-router-dom";
+import ValidationFields from "./ValidationFields";
 const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
@@ -71,6 +72,7 @@ const RegisterPage = () => {
           e.preventDefault();
           handleRegistration({
             ...RequiredInputs.getFormData(),
+            ...ValidationFields.getFormData(),
             ...OptionalInputs.getFormData(), //아무값도 return을 받지 않으면 안됨. 왜지?
           });
         }}
@@ -83,10 +85,10 @@ const RegisterPage = () => {
         {step === 1 && <RequiredInputs />}
         {step === 2 && <OptionalInputs />}
         {step === 1 && (
-          <S.JoinButton onClick={() => handleNextStep()}>Next</S.JoinButton>
+          <S.JoinButton onClick={handleNextStep}>Next</S.JoinButton>
         )}
         {step === 2 && (
-          <S.JoinButton onClick={() => handlePrevStep()}>Prev</S.JoinButton>
+          <S.JoinButton onClick={handlePrevStep}>Prev</S.JoinButton>
         )}
         <S.JoinButton type="submit">Register</S.JoinButton>
       </form>

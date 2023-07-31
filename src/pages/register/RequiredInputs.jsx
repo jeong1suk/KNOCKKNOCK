@@ -13,25 +13,11 @@ const RequiredInputs = ({ onRegistration }) => {
   const [formData, setFormData] = useState({
     name: "",
     nickname: "",
-    email: "",
-    password: "",
-    confirmPwd: "",
     gender: "",
-    birthdate: "",
     job: "",
     region: "",
   });
-  const {
-    name,
-    nickname,
-    email,
-    password,
-    confirmPwd,
-    gender,
-    birthdate,
-    job,
-    region,
-  } = formData;
+  const { name, nickname, gender, job, region } = formData;
 
   const onChange = (e) => {
     const { name, value } = e.currentTarget;
