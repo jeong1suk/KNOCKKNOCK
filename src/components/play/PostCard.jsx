@@ -9,6 +9,12 @@ import * as Api from '../../api';
 import { timeAgo } from '../../util/TimeAgo';
 import { isWriter } from '../../util/isWriter';
 
+import { getImageSrc } from '../../util/imageCheck';
+
+import GenderInfo from './GenderInfo';
+
+
+
 const MAX_CONTENT_LENGTH = 200;
 
 function PostCard({post})  {
@@ -29,21 +35,11 @@ function PostCard({post})  {
   // const [nickname, setNickname] = useState('억만추');
 
 
-  const GenderInfo = ({ total, filled, color }) => {
-    let people = [];
-  
-    for (let i = 0; i < total; i++) {
-      people.push(<Person key={i} filled={i < filled} color={color} />);
-    }
-  
-    return <TotalPeople>{people}</TotalPeople>;
-  };
-  
 
   return (
     <Card onClick = {() => navigate(`/playdetail/${post.postId}`)}>
       <ImageBox>
-        <Image src={post.ProfileImage} alt="postImage" />
+        <Image src={getImageSrc(post.PostFiles?.[0]?.File?.url)} alt="postImage" />
       </ImageBox>
       <ContentBox>
         <Category>{post.type}</Category>
@@ -57,7 +53,7 @@ function PostCard({post})  {
           <DetailItem>{timeAgo(dayjs(post.createdAt).format('YYYY-MM-DD HH:mm'))}</DetailItem>
         </DetailBox>
         <ProfileBox>
-          <ProfileImage src={post.User.UserFiles.File} alt="유저 프로필" />
+          <ProfileImage src={getImageSrc(post.User.UserFiles?.[0]?.File?.url)} alt="유저 프로필" />
           <Nickname>{post.User.nickname}</Nickname>
         </ProfileBox>
       </ContentBox>
@@ -149,17 +145,5 @@ const Nickname = styled.span`
   font-weight: bold;
 `;
 
-const TotalPeople = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-`;
 
-const Person = styled.div`
-  height: 10px;
-  width: 10px;
-  border-radius: 50%;
-  background-color: ${props => props.filled ? props.color : '#ccc'};
-  margin-right: 2px;
-`;
 
