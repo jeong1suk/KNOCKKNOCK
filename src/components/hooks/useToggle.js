@@ -12,7 +12,7 @@ export const useToggle = (initialValue) => {
   };
 
   const handleToggle = (value) => {
-    setValue(value);
+    setValue(initialValue);
   };
 
   useEffect(() => {

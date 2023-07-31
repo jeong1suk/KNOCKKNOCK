@@ -15,25 +15,18 @@ export const ModalHobby = ({ formData, handleHobbyClick }) => {
       {opened && (
         <S.Modal>
           <h3 style={{ textAlign: "center" }}>취미</h3>
-          {hobbyList.map((elements, index) => (
-            <button
-              key={index}
-              style={{
-                backgroundColor: hobby.includes(elements) ? "#fa9393" : "white",
-                width: "5rem",
-                height: "2rem",
-                borderRadius: "2rem",
-                padding: "10px",
-                margin: "5px",
-                border: "1px solid black",
-                cursor: "pointer",
-                fontSize: "0.7rem",
-              }}
-              onClick={() => handleHobbyClick(elements)}
-            >
-              {elements}
-            </button>
-          ))}
+          <ButtonContainer>
+            {hobbyList.map((elements, index) => (
+              <ModalButton
+                key={index}
+                active={hobby.includes(elements)}
+                onClick={() => handleHobbyClick(elements)}
+              >
+                <div style={{ textAlign: "center" }}>{elements}</div>
+              </ModalButton>
+            ))}
+          </ButtonContainer>
+          {/* <ModalButton onClick={onClose}>Close</ModalButton> */}
           <button onClick={onClose}>Close</button>
         </S.Modal>
       )}
@@ -72,4 +65,21 @@ const HobbyBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+`;
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  flex: 1;
+`;
+const ModalButton = styled.div`
+  background-color: ${({ active }) => (active ? "#fa9393" : "white")};
+  width: 3.5rem;
+  /* height: 2rem; */
+  border-radius: 1rem;
+  padding: 10px;
+  border: 1px solid black;
+  cursor: pointer;
+  font-size: 0.7rem;
 `;
