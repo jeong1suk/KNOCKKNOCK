@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import RequiredInputs from "./RequiredInputs";
 import OptionalInputs from "./OptionalInputs";
 import * as S from "./style";
@@ -6,22 +6,33 @@ import * as Api from "../../api";
 import { DispatchContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import ValidationFields from "./ValidationFields";
+import axios from "axios";
 const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
-  const [step, setStep] = useState(1);
-
-  const handleNextStep = () => {
-    setStep(2);
+  const [previewURL, setPreviewURL] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+    // setErrorMessage("");
+    setPreviewURL(URL.createObjectURL(file));
   };
 
-  const handlePrevStep = () => {
-    setStep(1);
-  };
-
+  useEffect(() => {
+    console.log(previewURL);
+  }, [previewURL]);
   const handleRegistration = async (formData) => {
     try {
-      const introduceValue = formData.introduce || "반가워요!";
+      let response;
+      if (selectedFile) {
+        const formImgData = new FormData();
+        formImgData.append("image", selectedFile);
+        //vm환경에서 주소변경
+        response = await Api.post("files", formImgData);
+        console.log(response);
+      }
+
       // console.log(formData);
       await Api.post("users/register", {
         name: formData.name,
@@ -36,7 +47,8 @@ const RegisterPage = () => {
         height: formData.height,
         hobby: formData.hobby,
         personality: formData.personality,
-        introduce: introduceValue,
+        introduce: formData.introduce || "반가워요!",
+        profileImage: ["profile", response.data],
       });
       // 로그인 페이지로 이동함.
       const res = await Api.post("users/login", {
@@ -82,6 +94,21 @@ const RegisterPage = () => {
 
         <S.Header>필수 입력</S.Header>
         <RequiredInputs />
+        <S.Heading>사진</S.Heading>
+        <S.Box>
+          <S.Input type="file" onChange={handleFileChange} />
+        </S.Box>
+        {selectedFile && (
+          <div>
+            <h6>미리보기</h6>
+            <img
+              src={previewURL}
+              alt="Selected Image"
+              style={{ width: "50%" }}
+              thumbnail
+            />
+          </div>
+        )}
         <S.Header>선택 입력</S.Header>
         <OptionalInputs />
 
