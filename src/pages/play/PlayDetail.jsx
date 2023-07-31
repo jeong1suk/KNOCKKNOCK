@@ -198,50 +198,127 @@ function PlayDetail() {
 
 
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    const fetchGetComment = async () => {
-      try {
-        if (nextCursor === -1) {
-          setIsLoading(false);
-          return;
-        }
-        setIsLoading(true);
+  //   const fetchGetComment = async () => {
+  //     try {
+  //       if (nextCursor === -1) {
+  //         setIsLoading(false);
+  //         return;
+  //       }
+  //       setIsLoading(true);
         
-        const res = await Api.get(`/comments/${postId}?cursor=${nextCursor}&limit=${limit}`);
-        const commentData = res.data;
+  //       const res = await Api.get(`/comments/${postId}?cursor=${nextCursor}&limit=${limit}`);
+  //       const commentData = res.data;
   
-        if (commentData.commentList?.length < 10) {
-          setNextCursor(-1);
-        } else {
-          setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
-        }
+  //       if (commentData.commentList?.length < 10) {
+  //         setNextCursor(-1);
+  //       } else {
+  //         setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
+  //       }
   
-        if (nextCursor === 0) {
-          setComments(commentData.commentList);
-        } else if (nextCursor > 0 && commentData.commentList.length > 0) {
-          setComments(oldComments => [...oldComments, ...commentData.commentList]);
-        }
+  //       if (nextCursor === 0) {
+  //         setComments(commentData.commentList);
+  //       } else if (nextCursor > 0 && commentData.commentList.length > 0) {
+  //         setComments(oldComments => [...oldComments, ...commentData.commentList]);
+  //       }
   
-        setIsReached(false);
-      } catch (err) {
-        if (err.response.data.message) {
-          alert(err.response.data.message);
-        } else {
-          alert('라우팅 경로가 잘못되었습니다.');
-        } 
-      } finally {
+  //       setIsReached(false);
+  //     } catch (err) {
+  //       if (err.response.data.message) {
+  //         alert(err.response.data.message);
+  //       } else {
+  //         alert('라우팅 경로가 잘못되었습니다.');
+  //       } 
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  
+  //   const handleScroll = () => {
+  //     const scrollHeight = document.documentElement.scrollHeight;
+  //     const scrollTop = document.documentElement.scrollTop;
+  //     const clientHeight = document.documentElement.clientHeight;
+  
+  //     if (scrollTop + clientHeight >= scrollHeight) {
+  //         setIsReached(true);
+  //     }
+  //   };
+  
+  //   if (isReached && !isLoading) {
+  //     fetchGetComment();
+  //     setIsReached(false);
+  //   }
+  
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, [isReached, isLoading, nextCursor, postId]);
+  
+
+  // const postComment = async (postId) => {
+  //   try {
+  //     const body = {
+  //       postId: postId,
+  //       content: comment,
+  //     };
+      
+  //     const res = await Api.post(`/comments`, body);
+  //       console.log(res);
+  //       setComment("");  
+  //       window.location.reload();
+
+  //   } catch (err) {
+  //     if (err.response.data.message) {
+  //       alert(err.response.data.message);
+  //     } else {
+  //       alert('라우팅 경로가 잘못되었습니다.');
+  //     }
+  //   }
+  // }
+  
+  const fetchGetComment = async () => {
+    try {
+      if (nextCursor === -1) {
         setIsLoading(false);
+        return;
       }
-    };
+      setIsLoading(true);
+      
+      const res = await Api.get(`/comments/${postId}?cursor=${nextCursor}&limit=${limit}`);
+      const commentData = res.data;
   
+      if (commentData.commentList?.length < 10) {
+        setNextCursor(-1);
+      } else {
+        setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
+      }
+  
+      if (nextCursor === 0) {
+        setComments(commentData.commentList);
+      } else if (nextCursor > 0 && commentData.commentList.length > 0) {
+        setComments(oldComments => [...oldComments, ...commentData.commentList]);
+      }
+  
+      setIsReached(false);
+    } catch (err) {
+      if (err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      } 
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
     const handleScroll = () => {
       const scrollHeight = document.documentElement.scrollHeight;
       const scrollTop = document.documentElement.scrollTop;
       const clientHeight = document.documentElement.clientHeight;
   
       if (scrollTop + clientHeight >= scrollHeight) {
-          setIsReached(true);
+        setIsReached(true);
       }
     };
   
@@ -254,28 +331,6 @@ function PlayDetail() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isReached, isLoading, nextCursor, postId]);
   
-
-  const postComment = async (postId) => {
-    try {
-      const body = {
-        postId: postId,
-        content: comment,
-      };
-      
-      const res = await Api.post(`/comments`, body);
-        console.log(res);
-        setComment("");  
-        window.location.reload();
-
-    } catch (err) {
-      if (err.response.data.message) {
-        alert(err.response.data.message);
-      } else {
-        alert('라우팅 경로가 잘못되었습니다.');
-      }
-    }
-  }
-
 
 
 
