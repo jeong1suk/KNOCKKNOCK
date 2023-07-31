@@ -11,7 +11,7 @@ const OptionalInputs = () => {
     hobby: [],
     personality: [],
     ideal: [],
-    introduce: "반갑습니다!", //아무값도 있지 않으면 OptionalInputs.getFormData이게 return을 못받아서 오류가 뜸.
+    introduce: "", //아무값도 있지 않으면 OptionalInputs.getFormData이게 return을 못받아서 오류가 뜸.
   });
   const { height, mbti, hobby, personality, ideal, introduce } = formData;
 
