@@ -9,7 +9,11 @@ import * as Api from '../../api';
 import { timeAgo } from '../../util/TimeAgo';
 import { isWriter } from '../../util/isWriter';
 
+import { getImageSrc } from '../../util/imageCheck';
+
 import GenderInfo from './GenderInfo';
+
+
 
 const MAX_CONTENT_LENGTH = 200;
 
@@ -30,12 +34,12 @@ function PostCard({post})  {
   // const [content, setContent] = useState('재밌게 놀사람 오세요~ ');
   // const [nickname, setNickname] = useState('억만추');
 
-  
+
 
   return (
     <Card onClick = {() => navigate(`/playdetail/${post.postId}`)}>
       <ImageBox>
-        <Image src={post.ProfileImage} alt="postImage" />
+        <Image src={getImageSrc(post.PostFiles?.[0]?.File?.url)} alt="postImage" />
       </ImageBox>
       <ContentBox>
         <Category>{post.type}</Category>
@@ -49,7 +53,7 @@ function PostCard({post})  {
           <DetailItem>{timeAgo(dayjs(post.createdAt).format('YYYY-MM-DD HH:mm'))}</DetailItem>
         </DetailBox>
         <ProfileBox>
-          <ProfileImage src={post.User.UserFiles.File} alt="유저 프로필" />
+          <ProfileImage src={getImageSrc(post.User.UserFiles?.[0]?.File?.url)} alt="유저 프로필" />
           <Nickname>{post.User.nickname}</Nickname>
         </ProfileBox>
       </ContentBox>

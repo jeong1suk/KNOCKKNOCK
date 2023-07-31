@@ -6,11 +6,14 @@ import * as Api from "../../api";
 
 import styled from 'styled-components';
 import { isWriter } from '../../util/isWriter';
+import { getImageSrc } from "../../util/imageCheck";
 
 import DropdownMenu from "../../components/modal/DropdownMenu";
 import Modal from "../../components/modal/Modal";
 import GenderInfo from "../../components/play/GenderInfo";
 import ParticipantList from "../../components/play/ParticipantList";
+
+
 
 const limit = 5;
 
@@ -23,12 +26,15 @@ function PlayDetail() {
   const [post, setPost] = useState([]);
   const [participantsList, setParticipantsList] = useState([]);
   const [participationFlag, setParticipationFlag] = useState();
-  const [comment, setComment] = useState("");
+  
+  const [canceled, setCanceled] = useState();
 
   const [dropdownSelection, setDropdownSelection] = useState("신청인원");
   const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
 
   const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
+
   const [nextCursor, setNextCursor] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isReached, setIsReached] = useState(false);
@@ -36,26 +42,29 @@ function PlayDetail() {
   const [isEditing, setIsEditing] = useState(null);
   const [editedContent, setEditedContent] = useState("");
 
+  
+
   useEffect(() => {
     if(isParticipantModalOpen){
       fetchParticipantsList();
     }
   }, [isParticipantModalOpen, dropdownSelection]);
 
-const fetchParticipantsList = async () => {
-  try {
-    const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
-    if(status == "pending") {
-      const res = await Api.get(`/participants/${postId}/userlist?limit=${limit}`);
+
+
+  const fetchParticipantsList = async () => {
+    try {
+      const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
+      if(status == "pending") {
+        const res = await Api.get(`/participants/${postId}/userlist?limit=${limit}`);
+      }
+      setParticipantsList(res.data.participantsList.filter(participant => participant.status === status));
+    } catch (err) {
+      alert('참여자 정보를 불러오는 데 실패했습니다.');
     }
-    setParticipantsList(res.data.participantsList.filter(participant => participant.status === status));
-  } catch (err) {
-    alert('참여자 정보를 불러오는 데 실패했습니다.');
   }
-}
 
   const handleAccept = async (participantId) => {
-    console.log(participantId);
     try {
       const res = await Api.put(`/participants/${participantId}/allow`);
       fetchParticipantsList(); 
@@ -89,10 +98,29 @@ const fetchParticipantsList = async () => {
     }
   }
 
-  const fetchApply = async () => {
+
+
+  const handleApplyPost = async (postId) => {
+    const confirmApplyPost = window.confirm("모임에 참가신청하시겠습니까?");
+    if (confirmApplyPost) {
+      applyPostRequest(postId);
+      alert("신청되었습니다");
+    }
+  }
+
+  const handleApplyPut = async (postId) => {
+    const confirmApplyPut = window.confirm("정말로 참가신청을 취소하시겠습니까?");
+    if (confirmApplyPut) {
+      applyPutRequest(postId);
+      alert("취소되었습니다");
+    }
+  }
+
+
+  const applyPostRequest = async (postId) => {
     try {
       const res = await Api.post(`/participants/${postId}`);
-
+      applyGetRequest();
     } catch (err) {
       if (err.response.data.message) {
           alert(err.response.data.message);
@@ -102,18 +130,51 @@ const fetchParticipantsList = async () => {
     }
   }
 
+  const applyPutRequest = async (postId) => {
+    try {
+      const res = await Api.put(`/participants/${postId}`);
+      applyGetRequest();
+    } catch (err) {
+      if (err.response.data.message) {
+          alert(err.response.data.message);
+      } else {
+          alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
+  
+  const applyGetRequest = async () => {
+    try {
+      const res = await Api.get(`/participants/${postId}`);
+      const data = res.data;
+      setCanceled(data.canceled);
+    } catch (err) {
+      if (err.response.data.message) {
+          alert(err.response.data.message);
+          setCanceled(true);
+      } else {
+          alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
 
 
-  const handlePostDelet = async (postId) => {
+
+
+
+  const handlePostDelete = async (postId) => {
     const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmDelete) {
+
       deletePostRequest(postId);
     }
   }
 
 
   const deletePostRequest = async (postId) => {
+    
     try {
+  
       await Api.del(`/posts/${postId}`);
       navigate(`/play`);
     } catch (err) {
@@ -126,7 +187,19 @@ const fetchParticipantsList = async () => {
   }
 
 
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
+    
     const fetchGetComment = async () => {
       try {
         if (nextCursor === -1) {
@@ -134,9 +207,8 @@ const fetchParticipantsList = async () => {
           return;
         }
         setIsLoading(true);
-  
-        const res = await Api.get(`/comments/?postId=${postId}&cursor=${nextCursor}`);
-  
+        
+        const res = await Api.get(`/comments/${postId}?cursor=${nextCursor}&limit=${limit}`);
         const commentData = res.data;
   
         if (commentData.commentList?.length < 10) {
@@ -257,8 +329,9 @@ const fetchParticipantsList = async () => {
   
   useEffect(() => {
     fetchGetDetail();
-
+    applyGetRequest();
   }, []);
+
 
   return (
     <>
@@ -267,10 +340,15 @@ const fetchParticipantsList = async () => {
           <p>같이 놀자</p>
           <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
           {isWriter({userId, post}) ?
-          <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>신청인원 보기</TopBoxButton>
-          :
-          <TopBoxButton onClick={fetchApply}>신청하기</TopBoxButton>
+            <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>신청인원 보기</TopBoxButton>
+            :
+            (canceled ?
+                <TopBoxButton onClick={() => handleApplyPost(postId)}>신청하기</TopBoxButton>
+                :
+                <TopBoxButton onClick={() => handleApplyPut(postId)}>취소하기</TopBoxButton>
+            )
           }
+
           {isParticipantModalOpen && (
             <Modal onClose={() => setIstParticipantModalOpen(false)}>
               <DropdownMenu 
@@ -297,7 +375,7 @@ const fetchParticipantsList = async () => {
           {isWriter({userId, post}) &&
             <>
               <TopBoxButton onClick={() => navigate(`/playedit/${postId}`)}>수정하기</TopBoxButton>
-              <TopBoxButton onClick={handlePostDelet}>삭제하기</TopBoxButton>
+              <TopBoxButton onClick={() => handlePostDelete(postId)}>삭제하기</TopBoxButton>
             </>
           }
           </EditDeleteButtonBox>   
@@ -325,7 +403,7 @@ const fetchParticipantsList = async () => {
           </InputBox>
           <InputBox>
             <img
-              src={post.postImage}
+              src={getImageSrc(post.PostFiles?.[0]?.File?.url)}
               alt="postImage"
               style={{
                 width: "50%",
@@ -371,7 +449,7 @@ const fetchParticipantsList = async () => {
                     onChange={(e) => setEditedContent(e.target.value)}
                   />
                 ) : (
-                  <p>{comment.commentContent}</p>
+                  <p>{comment.content}</p>
                 )}
                 {comment.userId === userId && (
                   <>
