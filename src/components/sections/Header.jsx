@@ -19,19 +19,6 @@ const Header = () => {
     navigate("/");
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 800);
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    // setUserId(localStorage.getItem("userId"));
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
     <HeaderWrap>
       <HeaderContainer>
