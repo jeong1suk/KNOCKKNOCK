@@ -6,6 +6,7 @@ import { ROUTE } from "../../routes/routes";
 import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";
 import useIsMobile from "../hooks/useIsMobile";
+import { showSuccess } from "../../assets/alert";
 const Header = () => {
   const isMobile = useIsMobile();
   const { user } = useContext(UserStateContext);
@@ -14,6 +15,7 @@ const Header = () => {
   const logout = () => {
     localStorage.removeItem("userToken");
     dispatch({ type: "LOGOUT" });
+    showSuccess("로그아웃되었습니다.");
     navigate("/");
   };
 
@@ -69,7 +71,7 @@ const HeaderWrap = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  /* z-index: 998; */
+  z-index: 998;
 `;
 
 const HeaderContainer = styled.div`

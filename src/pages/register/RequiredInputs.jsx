@@ -2,13 +2,8 @@ import React, { useState } from "react";
 import * as S from "./style";
 
 import ValidationFields from "./ValidationFields";
+import { regions } from "../../constants/registerConstants";
 const today = new Date().toISOString().split("T")[0];
-const allRegions = [
-  "서울특별시",
-  "경기도",
-  "인천광역시",
-  // ... (전체 지역 목록에 대한 나머지 항목들)
-];
 const RequiredInputs = ({ onRegistration }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -74,7 +69,7 @@ const RequiredInputs = ({ onRegistration }) => {
           style={{ flex: 1, textAlign: "right" }}
         >
           <option>지역</option>
-          {allRegions.map((region) => (
+          {regions.map((region) => (
             <option key={region} value={region}>
               {region}
             </option>

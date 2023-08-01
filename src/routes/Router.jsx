@@ -4,8 +4,8 @@ import Footer from "../components/sections/Footer";
 const Router = () => {
   const location = useLocation();
 
-  // const isRegisterPage = location.pathname === "/register";
-  // const shouldShowFooter = !isRegisterPage;
+  const isRegisterPage = location.pathname === "/register";
+  const shouldShowFooter = !isRegisterPage;
 
   return (
     <>
@@ -16,7 +16,7 @@ const Router = () => {
           );
         })}
       </Routes>
-      {/* {shouldShowFooter && <Footer />} */}
+      {shouldShowFooter && <Footer />}
     </>
   );
 };

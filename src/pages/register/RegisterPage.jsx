@@ -6,12 +6,12 @@ import * as Api from "../../api";
 import { DispatchContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import ValidationFields from "./ValidationFields";
-import axios from "axios";
+import { showAlert } from "../../assets/alert";
 const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
   const [previewURL, setPreviewURL] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState("phto.png");
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
@@ -19,18 +19,15 @@ const RegisterPage = () => {
     setPreviewURL(URL.createObjectURL(file));
   };
 
-  useEffect(() => {
-    console.log(previewURL);
-  }, [previewURL]);
   const handleRegistration = async (formData) => {
     try {
       let response;
       if (selectedFile) {
         const formImgData = new FormData();
         formImgData.append("image", selectedFile);
-        //vm환경에서 주소변경
+
         response = await Api.post("files", formImgData);
-        console.log(response);
+        // console.log(response);
       }
 
       // console.log(formData);
@@ -70,8 +67,8 @@ const RegisterPage = () => {
     } catch (err) {
       console.log(err);
       if (err.response.data.message) {
-        alert(err.response.data.message);
-        console.log(err.response.data.message);
+        showAlert(err.response.data.message);
+        // console.log(err.response.data.message);
       } else {
         console.log("라우팅 경로가 잘못되었습니다.");
       }

@@ -3,9 +3,11 @@ import * as S from "./style";
 import styled from "styled-components";
 import { idealList } from "../../constants/registerConstants";
 import { useToggle } from "../../components/hooks/useToggle";
+import { isMaxArrayReached } from "../../util/arrayUtils";
 export const ModalIdeal = ({ formData, handleIdealClick }) => {
   const { ideal } = formData;
   const { opened, onOpen, onClose } = useToggle();
+  const isMaxIdealReached = isMaxArrayReached(ideal, 5);
 
   return (
     <S.RightAlignedBox>
@@ -13,6 +15,9 @@ export const ModalIdeal = ({ formData, handleIdealClick }) => {
       {opened && (
         <S.Modal>
           <h3 style={{ textAlign: "center" }}>이상형</h3>
+          {isMaxIdealReached && (
+            <p style={{ color: "red" }}>You can only select up to 5 Ideals.</p>
+          )}
           <ButtonContainer>
             {idealList.map((elements, index) => (
               <ModalButton
