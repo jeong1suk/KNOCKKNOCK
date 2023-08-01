@@ -84,8 +84,6 @@ function PlayEdit() {
         })
       }
       else if (fetchedImageUrl) {
-
-
         await Api.put(`posts/${postId}`, {
           title: postTitle,
           content: postContent,

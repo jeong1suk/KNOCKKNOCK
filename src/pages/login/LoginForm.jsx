@@ -5,7 +5,8 @@ import * as Api from "../../api";
 import { DispatchContext } from "../../App";
 import { validateEmail, validatePassword } from "../../util/common";
 import { login } from "../../api/login";
-function LoginForm() {
+import { showAlert } from "../../assets/alert";
+const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
 
@@ -15,6 +16,14 @@ function LoginForm() {
   const isEmailValid = validateEmail(email);
   const isPasswordValid = validatePassword(password);
   const isFormValid = isEmailValid && isPasswordValid;
+
+  // 로그인 조건 충족시 버튼 색 변함
+  const getButtonColor = () => {
+    if (!isFormValid) {
+      return "gray";
+    }
+    return "#B1B2FF";
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,8 +44,9 @@ function LoginForm() {
       navigate("/", { replace: true });
       window.location.reload();
     } catch (err) {
-      console.log("로그인에 실패하였습니다.\n", err);
-      alert("로그인에 실패하였습니다.");
+      // console.log("로그인에 실패하였습니다.\n", err);
+      // alert("로그인에 실패하였습니다.");
+      showAlert(err.response.data.message);
     }
   };
 
@@ -62,6 +72,11 @@ function LoginForm() {
               }}
             />
             <label htmlFor="username">이메일</label>
+            {!isEmailValid && email.length > 0 && (
+              <S.WarningMessage>
+                유효한 이메일 형식이 아닙니다.
+              </S.WarningMessage>
+            )}
           </S.InputBox>
           <br />
           <S.InputBox>
@@ -81,6 +96,12 @@ function LoginForm() {
               }}
             />
             <label htmlFor="password">비밀번호</label>
+            {!isPasswordValid && password.length > 0 && (
+              <S.WarningMessage>
+                비밀번호는 문자, 숫자, 특수문자를 포함한 8글자 이상이어야
+                합니다.
+              </S.WarningMessage>
+            )}
           </S.InputBox>
           <br />
           <S.Forgot>회원가입</S.Forgot>
@@ -88,11 +109,12 @@ function LoginForm() {
             type="submit"
             value="로그인"
             disabled={!isFormValid}
+            style={{ backgroundColor: getButtonColor() }} // 로그인 조건 충족시 로그인 버튼 색 변함
           />
         </S.Form>
       </S.Container>
     </S.GradientBackground>
   );
-}
+};
 
 export default LoginForm;

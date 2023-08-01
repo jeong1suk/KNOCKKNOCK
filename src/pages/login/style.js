@@ -116,11 +116,21 @@ export const SubmitButton = styled.input`
   height: 35px;
   font-size: 14pt;
   margin-top: 20px;
-`;
+  cursor: pointer;
+  &:disabled {
+    cursor: not-allowed;
+`; // 로그인 버튼 활성화 시 커서 모양 변하는 것 추가
 
 export const Forgot = styled.div`
   text-align: right;
   font-size: 12pt;
   color: #179972;
   margin: 10px 0px;
+`;
+
+export const WarningMessage = styled.p`
+  color: red;
+  font-size: 0.7rem;
+  margin: 0;
+  padding: 0;
 `;
