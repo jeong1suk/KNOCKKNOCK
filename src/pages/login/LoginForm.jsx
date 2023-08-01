@@ -5,7 +5,8 @@ import * as Api from "../../api";
 import { DispatchContext } from "../../App";
 import { validateEmail, validatePassword } from "../../util/common";
 import { login } from "../../api/login";
-function LoginForm() {
+import { showAlert } from "../../assets/alert";
+const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
 
@@ -35,8 +36,9 @@ function LoginForm() {
       navigate("/", { replace: true });
       window.location.reload();
     } catch (err) {
-      console.log("로그인에 실패하였습니다.\n", err);
-      alert("로그인에 실패하였습니다.");
+      // console.log("로그인에 실패하였습니다.\n", err);
+      // alert("로그인에 실패하였습니다.");
+      showAlert(err.response.data.message);
     }
   };
 
@@ -93,6 +95,6 @@ function LoginForm() {
       </S.Container>
     </S.GradientBackground>
   );
-}
+};
 
 export default LoginForm;
