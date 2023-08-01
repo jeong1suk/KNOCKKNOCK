@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from 'dayjs';
 
@@ -188,71 +188,6 @@ function PlayDetail() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-  // useEffect(() => {
-    
-  //   const fetchGetComment = async () => {
-  //     try {
-  //       if (nextCursor === -1) {
-  //         setIsLoading(false);
-  //         return;
-  //       }
-  //       setIsLoading(true);
-        
-  //       const res = await Api.get(`/comments/${postId}?cursor=${nextCursor}&limit=${limit}`);
-  //       const commentData = res.data;
-  
-  //       if (commentData.commentList?.length < 10) {
-  //         setNextCursor(-1);
-  //       } else {
-  //         setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
-  //       }
-  
-  //       if (nextCursor === 0) {
-  //         setComments(commentData.commentList);
-  //       } else if (nextCursor > 0 && commentData.commentList.length > 0) {
-  //         setComments(oldComments => [...oldComments, ...commentData.commentList]);
-  //       }
-  
-  //       setIsReached(false);
-  //     } catch (err) {
-  //       if (err.response.data.message) {
-  //         alert(err.response.data.message);
-  //       } else {
-  //         alert('라우팅 경로가 잘못되었습니다.');
-  //       } 
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  
-  //   const handleScroll = () => {
-  //     const scrollHeight = document.documentElement.scrollHeight;
-  //     const scrollTop = document.documentElement.scrollTop;
-  //     const clientHeight = document.documentElement.clientHeight;
-  
-  //     if (scrollTop + clientHeight >= scrollHeight) {
-  //         setIsReached(true);
-  //     }
-  //   };
-  
-  //   if (isReached && !isLoading) {
-  //     fetchGetComment();
-  //     setIsReached(false);
-  //   }
-  
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => window.removeEventListener('scroll', handleScroll);
-  // }, [isReached, isLoading, nextCursor, postId]);
   
 
   const postComment = async (postId) => {
@@ -263,8 +198,9 @@ function PlayDetail() {
       
       const res = await Api.post(`/comments/${postId}`, body);
         console.log(res);
+        // 새로 작성된 댓글 정보를 기존 댓글 목록에 추가
+        setComments(prevComments => [...prevComments, res.data]);
         setComment("");  
-        window.location.reload();
 
     } catch (err) {
       if (err.response.data.message) {
@@ -274,31 +210,49 @@ function PlayDetail() {
       }
     }
   }
+
+
+
+
   
-  const fetchGetComment = async () => {
+const fetchGetComment = useCallback(
+  async cursor => {
     try {
-      if (nextCursor === -1) {
+      if (cursor === -1) {
         setIsLoading(false);
         return;
       }
       setIsLoading(true);
-      
-      const res = await Api.get(`/comments/${postId}?cursor=${nextCursor}&limit=${limit}`);
+
+      const res = await Api.get(`/comments/${postId}?cursor=${cursor}&limit=${limit}`);
       const commentData = res.data;
-  
-      if (commentData.commentList?.length < 10) {
+
+
+
+    
+
+      if (commentData.commentList?.length < limit) {
         setNextCursor(-1);
+        
       } else {
+        // console.log(commentData.commentList[commentData.commentList.length - 1].commentId);
         setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
       }
-  
-      if (nextCursor === 0) {
-        setComments(commentData.commentList);
-      } else if (nextCursor > 0 && commentData.commentList.length > 0) {
-        setComments(oldComments => [...oldComments, ...commentData.commentList]);
+
+      let newComments;
+
+
+      if (cursor === 0) {
+        newComments = commentData.commentList;
+      } else if (cursor > 0 && commentData.commentList.length > 0) {
+        newComments = [...comments, ...commentData.commentList];
+      } else if (commentData.commentList.length === 0) {
+        newComments = [...comments];
       }
-  
+
+      setComments(newComments);
       setIsReached(false);
+
     } catch (err) {
       if (err.response.data.message) {
         // alert(err.response.data.message);
@@ -306,36 +260,46 @@ function PlayDetail() {
         alert('라우팅 경로가 잘못되었습니다.');
       } 
     } finally {
+
       setIsLoading(false);
     }
-  };
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = document.documentElement.scrollTop;
-      const clientHeight = document.documentElement.clientHeight;
-  
-      if (scrollTop + clientHeight >= scrollHeight) {
+}, [isReached]);
+
+
+
+
+
+  const handleScroll = useCallback(() => {
+    const scrollHeight = document.documentElement.scrollHeight;
+    const scrollTop = document.documentElement.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+
+    if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
         setIsReached(true);
-      }
-    };
-  
-    if (isReached && !isLoading) {
-      fetchGetComment();
-      setIsReached(false);
     }
-  
+  }, []);
+
+
+  useEffect(() => {
+    // 페이지 초기 렌더링 시에 List를 불러오기 위해 호출
+    fetchGetComment(nextCursor);
+    // 스크롤 이벤트 핸들러 등록 및 해제
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isReached, isLoading, nextCursor, postId]);
-  
+    return () => {
+        window.removeEventListener('scroll', handleScroll);
+    };
+}, [fetchGetComment]);
 
 
 
-  const editComment = (commentId, commentContent) => {
+
+
+
+
+
+  const editComment = (commentId, content) => {
     setIsEditing(commentId);
-    setEditedContent(commentContent);
+    setEditedContent(content);
   }
   
   const saveComment = (commentId) => {
@@ -351,10 +315,10 @@ function PlayDetail() {
   }
 
 
-  const editCommentRequest = async (commentId, commentContent) => {
+  const editCommentRequest = async (commentId, editedContent) => {
     try {
       const body = {
-        content: commentContent,
+        content: editedContent,
       };
       
       const res = await Api.put(`/comments/${postId}/${commentId}`, body);
@@ -370,7 +334,7 @@ function PlayDetail() {
   
   const deleteCommentRequest = async (commentId) => {
     try {
-      const res = await Api.del(`/comments/${commentId}`);
+      const res = await Api.del(`/comments/${postId}/${commentId}`);
       window.location.reload();
     } catch (err) {
       if (err.response.data.message) {
@@ -386,6 +350,7 @@ function PlayDetail() {
   useEffect(() => {
     fetchGetDetail();
     applyGetRequest();
+
   }, []);
 
 
@@ -510,9 +475,9 @@ function PlayDetail() {
                 {comment.userId === userId && (
                   <>
                     {comment.commentId === isEditing ? (
-                      <button onClick={() => saveComment(comment.commenId)}>저장</button>
+                      <button onClick={() => saveComment(comment.commentId)}>저장</button>
                     ) : (
-                      <button onClick={() => editComment(comment.commentId, comment.commentContent)}>수정</button>
+                      <button onClick={() => editComment(comment.commentId, comment.content)}>수정</button>
                     )}
                     <button onClick={() => deleteComment(comment.commentId)}>삭제</button>
                   </>

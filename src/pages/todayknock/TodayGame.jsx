@@ -59,7 +59,30 @@ const RankUser = styled.div`
   justify-content: space-around;
   align-items: center;
 `;
+const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const ImageContainer = styled.div`
+  width: 155px;
+  height: 245px;
+  background-color: aliceblue;
+  text-align: center;
+  line-height: 100px;
+  transition: width 1s, height 1s;
+`;
 
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: width 1s, height 1s;
+
+  ${ImageContainer}:hover & {
+    width: 200px;
+    height: 300px;
+  }
+`;
 const TodayGame = ({ onExit }) => {
   const [showModal, setShowModal] = useState(false);
   const [leftButtonClickCount, setLeftButtonClickCount] = useState(0);
@@ -86,10 +109,79 @@ const TodayGame = ({ onExit }) => {
       {!showModal ? (
         <>
           {leftButtonClickCount + rightButtonClickCount < 5 ? (
-            <ButtonGroup>
-              <button onClick={() => handleButtonClick("left")}>Left</button>
-              <button onClick={() => handleButtonClick("right")}>Right</button>
-            </ButtonGroup>
+            <>
+              <ButtonGroup>
+                <button onClick={() => handleButtonClick("left")}>Left</button>
+                <button onClick={() => handleButtonClick("right")}>
+                  Right
+                </button>
+              </ButtonGroup>
+              <Container>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+              </Container>
+              <br />
+              <Container>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+              </Container>
+            </>
           ) : (
             <>
               <p style={{ fontSize: 30 }}>Top3</p>
