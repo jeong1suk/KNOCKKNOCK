@@ -28,9 +28,12 @@ function PlayDetail() {
   const [participationFlag, setParticipationFlag] = useState();
   
   const [canceled, setCanceled] = useState();
+  const [status, setStatus] = useState();
 
   const [dropdownSelection, setDropdownSelection] = useState("신청인원");
   const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
+  const [modalCursor, setModalCursor] = useState(0);
+
 
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
@@ -54,12 +57,22 @@ function PlayDetail() {
 
   const fetchParticipantsList = async () => {
     try {
+      
       const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
+      let res;
       if(status == "pending") {
-        const res = await Api.get(`/participants/${postId}/userlist?limit=${limit}`);
+        res = await Api.get(`/participants/${postId}/userlist?cursor=${modalCursor}&limit=${limit}`);
+        setParticipantsList(res.data.participantsList);
       }
-      setParticipantsList(res.data.participantsList.filter(participant => participant.status === status));
+      else if(status == "accepted") {
+        res = await Api.get(`/participants/${postId}/acceptedlist`);
+        setParticipantsList(res.data.acceptedUsers);
+      }
+      
+      
+      
     } catch (err) {
+      
       alert('참여자 정보를 불러오는 데 실패했습니다.');
     }
   }
@@ -148,6 +161,7 @@ function PlayDetail() {
       const res = await Api.get(`/participants/${postId}`);
       const data = res.data;
       setCanceled(data.canceled);
+      setStatus(data.status);
     } catch (err) {
       if (err.response.data.message) {
           // alert(err.response.data.message);
@@ -186,20 +200,23 @@ function PlayDetail() {
     }
   }
 
-
-
   
 
+  
   const postComment = async (postId) => {
     try {
       const body = {
         content: comment,
       };
       
-      const res = await Api.post(`/comments/${postId}`, body);
-        console.log(res);
-        // 새로 작성된 댓글 정보를 기존 댓글 목록에 추가
-        setComments(prevComments => [...prevComments, res.data]);
+      await Api.post(`/comments/${postId}`, body);
+        // 새로 작성된 댓글 정보를 직접 만들어서 기존 댓글 목록에 추가
+        const newComment = {
+          content: comment,
+          userId: userId, // 로그인한 사용자의 id
+          // 필요한 다른 정보를 추가하세요
+        };
+        setComments(prevComments => [newComment, ...prevComments]);
         setComment("");  
 
     } catch (err) {
@@ -210,6 +227,8 @@ function PlayDetail() {
       }
     }
   }
+
+
 
 
 
@@ -227,7 +246,7 @@ const fetchGetComment = useCallback(
       const res = await Api.get(`/comments/${postId}?cursor=${cursor}&limit=${limit}`);
       const commentData = res.data;
 
-
+      console.log(commentData)
 
     
 
@@ -293,7 +312,7 @@ const fetchGetComment = useCallback(
 
 
 
-
+  
 
 
 
@@ -360,14 +379,19 @@ const fetchGetComment = useCallback(
         <TopInnerBox>
           <p>같이 놀자</p>
           <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
-          {isWriter({userId, post}) ?
-            <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>신청인원 보기</TopBoxButton>
+          {
+            isWriter({userId, post}) ?
+              <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>신청인원 보기</TopBoxButton>
             :
-            (canceled ?
-                <TopBoxButton onClick={() => handleApplyPost(postId)}>신청하기</TopBoxButton>
-                :
-                <TopBoxButton onClick={() => handleApplyPut(postId)}>취소하기</TopBoxButton>
-            )
+              (
+                status === "rejected" ? 
+                  <TopBoxButton onClick={() => alert("거절당한 참가자는 신청할 수 없습니다.")}>신청하기</TopBoxButton>
+                : 
+                  canceled ? 
+                    <TopBoxButton onClick={() => handleApplyPost(postId)}>신청하기</TopBoxButton>
+                  : 
+                    <TopBoxButton onClick={() => handleApplyPut(postId)}>취소하기</TopBoxButton>
+              )
           }
 
           {isParticipantModalOpen && (
