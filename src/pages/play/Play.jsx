@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import * as Api from '../../api';
 
 import PostCard from '../../components/play/PostCard';
-import Pagination from '../../components/play/Pagenation';
+import Pagination from '../../components/commons/Pagenation';
 
 function Play()  {
   const navigate = useNavigate();

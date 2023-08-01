@@ -36,29 +36,22 @@ function PlayAdd() {
     }
   }
 
+
   const handlePostSubmit = async e => {
     e.preventDefault();
   
-    // const formData = new FormData();
-    // formData.append('post_title', postTitle);
-    // formData.append('post_content', postContent);
-    // formData.append('post_type', postType);
-    // formData.append('total_m', totalM);
-    // formData.append('total_f', totalF);
-    // formData.append('place', place);
-    // formData.append('meeting_time', meetingTime);
-  
-    // if (imageUrl) {
-    //   formData.append('image', imageUrl);
-    // }
-  
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(key, value);
-    // }
 
 
     try {
-      // await Api.post('posts', formData);
+
+      let res;
+      if (imageUrl) {
+        const formData = new FormData();
+        formData.append('image', imageUrl);
+        res = await Api.post("files", formData);
+        console.log(res);
+      }
+      
       await Api.post('posts', {
         title: postTitle,
         content: postContent,
@@ -66,7 +59,8 @@ function PlayAdd() {
         totalM: totalM,
         totalF: totalF,
         place,
-        meetingTime: meetingTime
+        meetingTime: meetingTime,
+        postImage: ["post", res.data],
       })
       navigate('/play');
     } catch (err) {
@@ -92,7 +86,7 @@ function PlayAdd() {
 
 
   return (
-    <>
+    <Wrapper>
       <TopBox>
         <p>같이 놀자!</p>
         <p>여러분이 원하는 만남을 만들어보세요</p>
@@ -156,7 +150,7 @@ function PlayAdd() {
         </InputBox>
         <PostButton onClick={handlePostSubmit}>등록하기</PostButton>
       </PostAddBox>
-    </>
+    </Wrapper>
   )
 }
 
@@ -235,6 +229,12 @@ export default PlayAdd;
 
 // export default PlayAdd;
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
 const TopBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -244,6 +244,7 @@ const TopBox = styled.div`
   margin: 50px 0px 0px 0px;
   padding: 30px 0 0 50px;
   text-align: left;
+  width: 80%;
   
   p {
     font-size: 2rem; 
@@ -272,6 +273,7 @@ const TopBox = styled.div`
     }
   }
 `
+
 
 const PostAddBox = styled.div`
   display: flex;
