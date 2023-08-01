@@ -56,7 +56,7 @@ const HeaderWrap = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  /* z-index: 998; */
+  z-index: 998;
 `;
 
 const HeaderContainer = styled.div`
