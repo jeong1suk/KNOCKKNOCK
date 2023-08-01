@@ -255,26 +255,25 @@ function PlayDetail() {
   // }, [isReached, isLoading, nextCursor, postId]);
   
 
-  // const postComment = async (postId) => {
-  //   try {
-  //     const body = {
-  //       postId: postId,
-  //       content: comment,
-  //     };
+  const postComment = async (postId) => {
+    try {
+      const body = {
+        content: comment,
+      };
       
-  //     const res = await Api.post(`/comments`, body);
-  //       console.log(res);
-  //       setComment("");  
-  //       window.location.reload();
+      const res = await Api.post(`/comments/${postId}`, body);
+        console.log(res);
+        setComment("");  
+        window.location.reload();
 
-  //   } catch (err) {
-  //     if (err.response.data.message) {
-  //       alert(err.response.data.message);
-  //     } else {
-  //       alert('라우팅 경로가 잘못되었습니다.');
-  //     }
-  //   }
-  // }
+    } catch (err) {
+      if (err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
   
   const fetchGetComment = async () => {
     try {

@@ -67,31 +67,38 @@ function PlayEdit() {
     
     try {
       let res;
-
+      const formData = new FormData();
       if (imageUrl) {
-        const formData = new FormData();
         formData.append('image', imageUrl);
-        res = await Api.put("files", formData);
+        res = await Api.post("files", formData);
+
+        await Api.put(`posts/${postId}`, {
+          title: postTitle,
+          content: postContent,
+          type: postType,
+          totalM: totalM,
+          totalF: totalF,
+          place,
+          meetingTime: meetingTime,
+          postImage: ["post", res.data], 
+        })
       }
       else if (fetchedImageUrl) {
-        console.log("putSubmit");
-        const formData = new FormData();
-        formData.append('image', fetchedImageUrl);
-        res = await Api.put("files", fetchedImageUrl);
-        console.log(res);
-      }
-      
 
-      await Api.put('posts', {
-        title: postTitle,
-        content: postContent,
-        type: postType,
-        totalM: totalM,
-        totalF: totalF,
-        place,
-        meetingTime: meetingTime,
-        postImage: ["post", res.data],
-      })
+
+        await Api.put(`posts/${postId}`, {
+          title: postTitle,
+          content: postContent,
+          type: postType,
+          totalM: totalM,
+          totalF: totalF,
+          place,
+          meetingTime: meetingTime,
+        })
+      }
+
+
+      
       navigate('/play');
     } catch (err) {
       console.log(err);
