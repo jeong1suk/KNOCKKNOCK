@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-import { useNavigate } from 'react-router-dom';
+import { useAsyncValue, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import * as Api from '../../api';
 
 import PostCard from '../../components/play/PostCard';
-import Pagination from '../../components/play/Pagenation';
+import Pagination from '../../components/commons/Pagenation';
 
 function Play()  {
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ function Play()  {
     setPostList(res.data.postList);
     setAllPostCount(res.data.allPostCount);
   };
+
 
 
   useEffect(() => {
@@ -59,9 +60,12 @@ function Play()  {
         <CategoryButton onClick={() => setPostType('공연관람')}>공연관람</CategoryButton>
         <CategoryButton onClick={() => setPostType('기타')}>기타</CategoryButton>
       </CategoryButtonBox>
-      {postList.map(post => (
-        <PostCard key={post.post_id} post={post} />
-      ))}
+      <PostCardBox>
+        {postList.map(post => (
+          <PostCard key={post.post_id} post={post} />
+        ))}
+      </PostCardBox>
+
       <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} lastPage={lastPage} />
     </>
   )
@@ -74,34 +78,84 @@ const PostButtonBox = styled.div`
   flex-direction: column;
   align-items: flex-start;
   background-color: #FFFFFF;
-  height: 200px;
-  margin: 50px -35px 0px -35px;
+  height: 10%;
+  margin: 50px 0px 50px 0px;
   padding-left: 50px;
+  
+  p {
+    font-size: 2rem; 
+    color: #1d1d1f; 
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  p:last-child {
+    font-size: 1.5rem; 
+    color: #1d1d1f; 
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  @media (min-width: 1024px) {
+    padding: 50px 0 0 80px;
+
+    p {
+      font-size: 3rem; 
+    }
+
+    p:last-child {
+      font-size: 2rem; 
+    }
+  }
 `
 
 const PostButton = styled.button`
-  background-color: #d2daff;
-  color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-  cursor: pointer;
+  font-size: 100%;
   padding: 10px 20px;
-  margin-top: 20px;
+  background-color: #AAC4FF;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 20px 0 20px 0; // Changed margin from the reference PostButton style
+  width: 80%;
+  height: 100px;
+  transition: 0.3s;
 
+  &:hover {
+    background-color: #809FFF; 
+    color: white;
+    transform: scale(1.02);
+  }
 `
-
 const CategoryButtonBox = styled.div`
-  background-color: #FFFFFF;
   display: flex;
-  justify-content: center;
-  margin: 0px -35px 0px -35px;
-
+  justify-content: space-around;
+  margin: 0px -35px 50px -35px;
+  background-color: #FFFFFF;
+  padding: 20px 0;
+  border-top: 1px solid #d2d2d2;
+  border-bottom: 1px solid #d2d2d2;
+  @media (min-width: 1024px) {
+    justify-content: space-evenly;
+  }
 `
 
 const CategoryButton = styled.div`
-  font-size: 2.25rem;
-  margin: 10px 30px 10px 30px;
+  font-size: 1.2rem;
+  color: #1d1d1f;
+  padding: 10px 20px;
+  border-radius: 25px;
   cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+  
+  &:hover {
+    transform: scale(1.3);
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 1.5rem;
+  }
 `
 
 const PostBox = styled.div`
@@ -113,6 +167,11 @@ const PostBox = styled.div`
 
 const TopButtonBox = styled.div`
   display: flex;
-  
+  width: 30%;
 `
 
+const PostCardBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`

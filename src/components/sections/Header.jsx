@@ -1,25 +1,21 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { DispatchContext, UserStateContext } from "../../App";
 import { ROUTE } from "../../routes/routes";
 import MobileMenu from "./MobileMenu";
-
-import { DispatchContext } from '../../App';
-
+import DesktopMenu from "./DesktopMenu";
+import useIsMobile from "../hooks/useIsMobile";
 const Header = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  const [userId, setUserId] = useState(localStorage.getItem('userId'));
-
+  const isMobile = useIsMobile();
+  const { user } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
   const navigate = useNavigate();
-
   const logout = () => {
-    localStorage.removeItem('userToken');
-    dispatch({ type: 'LOGOUT' });
-    navigate('/');
-    setUserId(null); // update the state
-  }
+    localStorage.removeItem("userToken");
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -28,18 +24,17 @@ const Header = () => {
 
     window.addEventListener("resize", handleResize);
     handleResize();
-    setUserId(localStorage.getItem('userId'));
+    // setUserId(localStorage.getItem("userId"));
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-
   return (
     <HeaderWrap>
       <HeaderContainer>
         <LogoBox>
-          <Link to="/">
+          <Link to={ROUTE.MAIN.link}>
             <LogoImgBox>
               <img src="src/assets/knock.png" />
             </LogoImgBox>
@@ -47,44 +42,19 @@ const Header = () => {
         </LogoBox>
         <NavigationBox>
           {!isMobile && (
-            <Navigation>
-              <NavMenu>
-                <MenuList>
-                  <Link to={ROUTE.MAIN.link}>메인페이지</Link>
-                </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.AI.link}>인공지능</Link>
-                </MenuList>
-                {userId ? (
-                  <MenuList onClick={logout}>
-                    로그아웃
-                  </MenuList>
-                ) : (
-                  <>
-                    <MenuList>
-                      <Link to={ROUTE.LOGIN.link}>로그인</Link>
-                    </MenuList>
-                    <MenuList>
-                      <Link to={ROUTE.REGISTER.link}>회원가입</Link>
-                    </MenuList>
-                  </>
-                )}
-                <MenuList>
-                  <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
-                </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.Play.link}>같이 놀자</Link>
-                </MenuList>
-                <MenuList>
-                  <Link to={ROUTE.Mypage.link}>마이페이지</Link>
-                </MenuList>
-              </NavMenu>
-            </Navigation>
+            <DesktopMenu
+              isLogin={user ? true : false}
+              user={user}
+              logout={logout}
+            />
           )}
+
           {isMobile && (
-            <MobileMenubox>
-              <MobileMenu />
-            </MobileMenubox>
+            <MobileMenu
+              isLogin={user ? true : false}
+              user={user}
+              logout={logout}
+            />
           )}
         </NavigationBox>
       </HeaderContainer>

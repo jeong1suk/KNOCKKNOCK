@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import dayjs from 'dayjs';
+import * as Api from '../../api';
+
+import { categories } from '../../constants/CategoryConstants';
+import { useImageUpload } from '../../components/hooks/UseImageUpload';
 
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -7,21 +12,46 @@ import styled from 'styled-components';
 
 function PlayEdit() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const postId = location.pathname.match(/\/playedit\/(\d+)/)[1];
 
   const [postTitle, setPostTitle] = useState('');
-  const [postType, setPostType] = useState('');
+  const [postType, setPostType] = useState('술');
   const [customType, setCustomType] = useState('');
   const [meetingDate, setMeetingDate] = useState('');
   const [meetingHour, setMeetingHour] = useState('');
   const [meetingTime, setMeetingTime] = useState('');
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageUrl, handleImageUpload] = useImageUpload();
+  const [fetchedImageUrl, setFetchedImageUrl] = useState(null);
   const [totalM, setTotalM] = useState(0);
   const [totalF, setTotalF] = useState(0);
   const [place, setPlace] = useState('');
   const [postContent, setPostContent] = useState('');
+  
 
 
-  const categories = ['술', '영화', '식사', '카페', '산책', '드라이브', '공연관람', '기타'];
+  const getPostRequest = async (postId) => {
+    try {
+      const res = await Api.get(`/posts/${postId}`);
+      const postData = res.data.post;
+
+      setPostTitle(postData.title);
+      setPostType(postData.type);
+      setCustomType(postData.type);
+      setMeetingTime(postData.meetingTime);
+      setFetchedImageUrl(postData.PostFiles?.[0]?.File?.url);
+      setTotalM(postData.totalM);;
+      setTotalM(postData.totalF);
+      setPlace(postData.place);
+      setPostContent(postData.content);
+    } catch (err) {
+      if (err.response.data.message) {
+          alert(err.response.data.message);
+      } else {
+          alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
 
 
   const handleCategoryChange = (e) => {
@@ -31,24 +61,46 @@ function PlayEdit() {
     }
   }
 
-  const handleImageUpload = e => {
-    const input = e.target;
-    setImageUrl(input.files[0]);
 
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const preview = document.getElementById('preview');
-            if (preview) {
-                preview.src = e.target.result;
-            }
-        };
-        reader.readAsDataURL(input.files[0]);
+  const handlePutSubmit = async e => {
+    e.preventDefault();
+    
+    try {
+      let res;
+
+      if (imageUrl) {
+        const formData = new FormData();
+        formData.append('image', imageUrl);
+        res = await Api.put("files", formData);
+      }
+      else if (fetchedImageUrl) {
+        console.log("putSubmit");
+        const formData = new FormData();
+        formData.append('image', fetchedImageUrl);
+        res = await Api.put("files", fetchedImageUrl);
+        console.log(res);
+      }
+      
+
+      await Api.put('posts', {
+        title: postTitle,
+        content: postContent,
+        type: postType,
+        totalM: totalM,
+        totalF: totalF,
+        place,
+        meetingTime: meetingTime,
+        postImage: ["post", res.data],
+      })
+      navigate('/play');
+    } catch (err) {
+      console.log(err);
+      if (err.response && err.response.data && err.response.data.message) {
+          alert(err.response.data.message);
+      } else {
+          alert('라우팅 경로가 잘못되었습니다.');
+      }
     }
-  };
-
-  const handlePostSubmit = async e => {
-    navigate('/Play');
   }
 
   useEffect(() => {
@@ -57,9 +109,12 @@ function PlayEdit() {
     }
   }, [meetingDate, meetingHour]);
 
+  useEffect(() => {
+    getPostRequest(postId);
+}, []);
 
   return (
-    <>
+    <Wrapper>
       <TopBox>
         <p>같이 놀자!</p>
         <p>여러분이 원하는 만남을 만들어보세요</p>
@@ -94,16 +149,15 @@ function PlayEdit() {
                 onChange={e => {
                     handleImageUpload(e);
                 }}
-                className="hidden w-full h-full"
             />
           </div>
         </InputBox>
         <InputBox>
-        {imageUrl && (
-              <div style={{ width: '200px', paddingLeft: "130px" }}>
-                  <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} id="preview" alt="Preview" />
-              </div>
-            )}
+        { (fetchedImageUrl || imageUrl) && (
+  <div style={{ width: '40%', paddingLeft: "130px" }}>
+    <img src={fetchedImageUrl || imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} id="preview" alt="Preview" />
+  </div>
+)}
         </InputBox>
         <InputBox>
           <StyledLabel>모집인원</StyledLabel>
@@ -122,13 +176,19 @@ function PlayEdit() {
           <StyledLabel>게시글 내용</StyledLabel>
           <StyledTextareaAutosize minRows={3} value={postContent} onChange={e => setPostContent(e.target.value)} />
         </InputBox>
-        <PostButton onClick={handlePostSubmit}>등록하기</PostButton>
+        <PostButton onClick={handlePutSubmit}>등록하기</PostButton>
       </PostAddBox>
-    </>
+    </Wrapper>
   )
 }
 
 export default PlayEdit;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const TopBox = styled.div`
   display: flex;
@@ -136,42 +196,120 @@ const TopBox = styled.div`
   align-items: flex-start;
   background-color: #FFFFFF;
   height: 200px;
-  margin: 50px -35px 0px -35px;
+  margin: 50px 0px 0px 0px;
   padding: 30px 0 0 50px;
+  text-align: left;
+  width: 80%;
+  
+  p {
+    font-size: 2rem; 
+    color: #1d1d1f; 
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  p:last-child {
+    font-size: 1.5rem; 
+    color: #1d1d1f; 
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  
+  @media (min-width: 1024px) {
+    height: 250px;
+    padding: 50px 0 0 80px;
+
+    p {
+      font-size: 3rem; 
+    }
+
+    p:last-child {
+      font-size: 2rem; 
+    }
+  }
 `
+
 
 const PostAddBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #FFFFFF;
+  background-color: #e6e9f0;
+  width: 80vw;
   height: 100%;
   margin: 50px 0 0 0;
   padding: 20px 50px 20px 50px;
+  border-radius: 15px;
+  
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `
 
 
+
 const InputBox = styled.div`
+  position: relative;
+  margin: 10px 10px;
   display: flex;
-  justify-content: start;
   align-items: center;
-  padding: 10px;
   width: 80%;
 `
 
 const StyledLabel = styled.label`
+  display: flex;
   font-weight: bold;
   margin-right: 10px;
   width: 13%;
 `
 
 const StyledInput = styled.input`
-  background-color: #AAC4FF;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  background: transparent;
+  border: none;
+  border-bottom: solid 1px #ccc;
+  padding: 20px 0px 5px 0px;
+  font-size: 14pt;
   width: 50%;
+
+  &:placeholder-shown + ${StyledLabel} {
+    color: #aaa;
+    font-size: 14pt;
+    top: 15px;
+  }
+
+  &:focus + ${StyledLabel} {
+    color: #8aa1a1;
+    font-size: 10pt;
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+
+  &:not(:placeholder-shown) + ${StyledLabel} {
+    color: #8aa1a1;
+    font-size: 10pt;
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+
+  &:focus,
+  &:not(:placeholder-shown) {
+    border-bottom: solid 1px #8aa1a1;
+    outline: none;
+  }
 `;
 
 
@@ -212,4 +350,11 @@ const PostButton = styled.button`
   margin: 50px 0 50px 0;
   width: 20%;
   height: 100px;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: #809FFF; 
+    color: white;
+    transform: scale(1.02);
+  }
 `

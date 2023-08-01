@@ -3,8 +3,10 @@ import styled from "styled-components";
 import UserProfile from "./UserProfile";
 import TodayGame from "./TodayGame";
 import * as API from "../../api";
-
-const Container = styled.div``;
+import UserModal from "./UserModal";
+const Container = styled.div`
+  margin-bottom: 20rem;
+`;
 
 const Banner = styled.div`
   height: 40vh;
@@ -51,6 +53,16 @@ const ModalOverlay = styled.div`
   z-index: 9999;
 `;
 
+const ModalContentUser = styled.div`
+  width: 40%;
+  height: 80%;
+  background-color: #fff;
+  padding: 1rem;
+  padding-top: 2rem;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+`;
+
 const ModalContent = styled.div`
   width: 70%;
   height: 70%;
@@ -73,6 +85,7 @@ const UserProfileBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 `;
 
 const ArrowButton = styled.button`
@@ -109,8 +122,22 @@ const ArrowButtonRight = styled(ArrowButton)`
 `;
 
 function TodayKnock() {
-  const [showModal, setShowModal] = useState(false);
+  const [showStartModal, setShowStartModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
   const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const handleUserProfileClick = (userId) => {
+    API.get(`/users/${userId}`)
+      .then((response) => {
+        console.log("유저 정보 가져오기 성공:", response.data);
+        setSelectedUser(response.data);
+        setShowUserModal(true);
+      })
+      .catch((error) => {
+        console.error("API 호출 오류:", error);
+      });
+  };
 
   useEffect(() => {
     API.get("/users/network")
@@ -124,11 +151,15 @@ function TodayKnock() {
   }, []);
 
   const handleStartClick = () => {
-    setShowModal(true);
+    setShowStartModal(true);
   };
 
-  const handleExitModal = () => {
-    setShowModal(false);
+  const handleStartModalExit = () => {
+    setShowStartModal(false);
+  };
+
+  const handleUserModalExit = () => {
+    setShowUserModal(false);
   };
 
   const bannerImages = [
@@ -158,21 +189,33 @@ function TodayKnock() {
         <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight>
       </Banner>
       <div style={{ height: "10vh" }} />
-      {showModal && (
+      {showStartModal && (
         <ModalOverlay>
           <ModalContent>
-            <TodayGame onExit={handleExitModal} />
+            <TodayGame onExit={handleStartModalExit} />
           </ModalContent>
+        </ModalOverlay>
+      )}
+      {showUserModal && selectedUser && (
+        <ModalOverlay onClick={handleUserModalExit}>
+          <ModalContentUser onClick={(e) => e.stopPropagation()}>
+            <UserModal
+              user={selectedUser}
+              // onClose={handleUserModalExit}
+            />
+          </ModalContentUser>
         </ModalOverlay>
       )}
       <UserProfilesContainer>
         {users.map((user) => (
-          <UserProfileBox key={user.user_id}>
+          <UserProfileBox
+            key={user.user_id}
+            onClick={() => handleUserProfileClick(user.user_id)}
+          >
             <UserProfile user={user} />
           </UserProfileBox>
         ))}
       </UserProfilesContainer>
-      <div style={{ height: "50vh" }} />
     </Container>
   );
 }
