@@ -128,7 +128,7 @@ function TodayKnock() {
   const [selectedUser, setSelectedUser] = useState(null);
 
   const handleUserProfileClick = (userId) => {
-    API.get(`/users/${userId}`)
+    API.get(`/users/yourpage/${userId}`)
       .then((response) => {
         console.log("유저 정보 가져오기 성공:", response.data);
         setSelectedUser(response.data);
@@ -209,8 +209,8 @@ function TodayKnock() {
       <UserProfilesContainer>
         {users.map((user) => (
           <UserProfileBox
-            key={user.user_id}
-            onClick={() => handleUserProfileClick(user.user_id)}
+            key={user.userId}
+            onClick={() => handleUserProfileClick(user.userId)}
           >
             <UserProfile user={user} />
           </UserProfileBox>
