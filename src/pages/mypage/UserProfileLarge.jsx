@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import * as Api from "../../api";
-// import UserProfileEdit from "./UserProfileEdit";
+import UserProfileEdit from "./UserProfileEdit";
 // import { DndProvider, useDrag, useDrop } from "react-dnd";
 // import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -120,7 +120,7 @@ function shuffleArray(array) {
   }
   return shuffledArray;
 }
-function UserProfile() {
+const UserProfileLarge = () => {
   const [user, setUser] = useState([]);
   useEffect(() => {
     Api.get("/users/mypage")
@@ -137,7 +137,7 @@ function UserProfile() {
   const shuffledPersonality = shuffleArray(user.personality || []);
   return (
     <UserProfileContainer>
-      {/* <UserProfileEdit user={user} /> */}
+      <UserProfileEdit user={user} />
       <UserProfileBox>
         <Nickname>{user.nickname}</Nickname>
         <Email>{user.email}</Email>
@@ -183,6 +183,6 @@ function UserProfile() {
       </HobbyBoxContainer>
     </UserProfileContainer>
   );
-}
+};
 
-export default UserProfile;
+export default UserProfileLarge;
