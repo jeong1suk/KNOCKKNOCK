@@ -22,25 +22,32 @@ const OptionalInputs = () => {
       [name]: value,
     }));
   };
-  const onArrayChange = (array, element, arrayPropertyName) => {
-    setFormData((prev) => ({
-      ...prev,
-      [arrayPropertyName]: array.includes(element)
+  const onArrayChange = (array, element, arrayPropertyName, maxLimit) => {
+    setFormData((prev) => {
+      const newArray = array.includes(element)
         ? array.filter((e) => e !== element)
-        : [...array, element],
-    }));
+        : [...array, element];
+
+      if (newArray.length > maxLimit) {
+        newArray.splice(maxLimit);
+      }
+      return {
+        ...prev,
+        [arrayPropertyName]: newArray,
+      };
+    });
   };
 
   const handleHobbyClick = (element) => {
-    onArrayChange(hobby, element, "hobby");
+    onArrayChange(hobby, element, "hobby", 5);
   };
 
   const handlePersonalityClick = (element) => {
-    onArrayChange(personality, element, "personality");
+    onArrayChange(personality, element, "personality", 5);
   };
 
   const handleIdealClick = (element) => {
-    onArrayChange(ideal, element, "ideal");
+    onArrayChange(ideal, element, "ideal", 5);
   };
   OptionalInputs.getFormData = () => {
     return formData;
