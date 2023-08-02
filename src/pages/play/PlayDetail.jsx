@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from 'dayjs';
 
@@ -28,9 +28,12 @@ function PlayDetail() {
   const [participationFlag, setParticipationFlag] = useState();
   
   const [canceled, setCanceled] = useState();
+  const [status, setStatus] = useState();
 
   const [dropdownSelection, setDropdownSelection] = useState("신청인원");
   const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
+  const [modalCursor, setModalCursor] = useState(0);
+
 
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
@@ -54,12 +57,22 @@ function PlayDetail() {
 
   const fetchParticipantsList = async () => {
     try {
+      
       const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
+      let res;
       if(status == "pending") {
-        const res = await Api.get(`/participants/${postId}/userlist?limit=${limit}`);
+        res = await Api.get(`/participants/${postId}/userlist?cursor=${modalCursor}&limit=${limit}`);
+        setParticipantsList(res.data.participantsList);
       }
-      setParticipantsList(res.data.participantsList.filter(participant => participant.status === status));
+      else if(status == "accepted") {
+        res = await Api.get(`/participants/${postId}/acceptedlist`);
+        setParticipantsList(res.data.acceptedUsers);
+      }
+      
+      
+      
     } catch (err) {
+      
       alert('참여자 정보를 불러오는 데 실패했습니다.');
     }
   }
@@ -148,9 +161,10 @@ function PlayDetail() {
       const res = await Api.get(`/participants/${postId}`);
       const data = res.data;
       setCanceled(data.canceled);
+      setStatus(data.status);
     } catch (err) {
       if (err.response.data.message) {
-          alert(err.response.data.message);
+          // alert(err.response.data.message);
           setCanceled(true);
       } else {
           alert('라우팅 경로가 잘못되었습니다.');
@@ -186,157 +200,125 @@ function PlayDetail() {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-  // useEffect(() => {
-    
-  //   const fetchGetComment = async () => {
-  //     try {
-  //       if (nextCursor === -1) {
-  //         setIsLoading(false);
-  //         return;
-  //       }
-  //       setIsLoading(true);
-        
-  //       const res = await Api.get(`/comments/${postId}?cursor=${nextCursor}&limit=${limit}`);
-  //       const commentData = res.data;
-  
-  //       if (commentData.commentList?.length < 10) {
-  //         setNextCursor(-1);
-  //       } else {
-  //         setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
-  //       }
-  
-  //       if (nextCursor === 0) {
-  //         setComments(commentData.commentList);
-  //       } else if (nextCursor > 0 && commentData.commentList.length > 0) {
-  //         setComments(oldComments => [...oldComments, ...commentData.commentList]);
-  //       }
-  
-  //       setIsReached(false);
-  //     } catch (err) {
-  //       if (err.response.data.message) {
-  //         alert(err.response.data.message);
-  //       } else {
-  //         alert('라우팅 경로가 잘못되었습니다.');
-  //       } 
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  
-  //   const handleScroll = () => {
-  //     const scrollHeight = document.documentElement.scrollHeight;
-  //     const scrollTop = document.documentElement.scrollTop;
-  //     const clientHeight = document.documentElement.clientHeight;
-  
-  //     if (scrollTop + clientHeight >= scrollHeight) {
-  //         setIsReached(true);
-  //     }
-  //   };
-  
-  //   if (isReached && !isLoading) {
-  //     fetchGetComment();
-  //     setIsReached(false);
-  //   }
-  
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => window.removeEventListener('scroll', handleScroll);
-  // }, [isReached, isLoading, nextCursor, postId]);
   
 
-  // const postComment = async (postId) => {
-  //   try {
-  //     const body = {
-  //       postId: postId,
-  //       content: comment,
-  //     };
-      
-  //     const res = await Api.post(`/comments`, body);
-  //       console.log(res);
-  //       setComment("");  
-  //       window.location.reload();
-
-  //   } catch (err) {
-  //     if (err.response.data.message) {
-  //       alert(err.response.data.message);
-  //     } else {
-  //       alert('라우팅 경로가 잘못되었습니다.');
-  //     }
-  //   }
-  // }
   
-  const fetchGetComment = async () => {
+  const postComment = async (postId) => {
     try {
-      if (nextCursor === -1) {
-        setIsLoading(false);
-        return;
-      }
-      setIsLoading(true);
+      const body = {
+        content: comment,
+      };
       
-      const res = await Api.get(`/comments/${postId}?cursor=${nextCursor}&limit=${limit}`);
-      const commentData = res.data;
-  
-      if (commentData.commentList?.length < 10) {
-        setNextCursor(-1);
-      } else {
-        setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
-      }
-  
-      if (nextCursor === 0) {
-        setComments(commentData.commentList);
-      } else if (nextCursor > 0 && commentData.commentList.length > 0) {
-        setComments(oldComments => [...oldComments, ...commentData.commentList]);
-      }
-  
-      setIsReached(false);
+      await Api.post(`/comments/${postId}`, body);
+        // 새로 작성된 댓글 정보를 직접 만들어서 기존 댓글 목록에 추가
+        const newComment = {
+          content: comment,
+          userId: userId, // 로그인한 사용자의 id
+          // 필요한 다른 정보를 추가하세요
+        };
+        setComments(prevComments => [newComment, ...prevComments]);
+        setComment("");  
+
     } catch (err) {
       if (err.response.data.message) {
         alert(err.response.data.message);
       } else {
         alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
+
+
+
+
+
+
+  
+const fetchGetComment = useCallback(
+  async cursor => {
+    try {
+      if (cursor === -1) {
+        setIsLoading(false);
+        return;
+      }
+      setIsLoading(true);
+
+      const res = await Api.get(`/comments/${postId}?cursor=${cursor}&limit=${limit}`);
+      const commentData = res.data;
+
+      console.log(commentData)
+
+    
+
+      if (commentData.commentList?.length < limit) {
+        setNextCursor(-1);
+        
+      } else {
+        // console.log(commentData.commentList[commentData.commentList.length - 1].commentId);
+        setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
+      }
+
+      let newComments;
+
+
+      if (cursor === 0) {
+        newComments = commentData.commentList;
+      } else if (cursor > 0 && commentData.commentList.length > 0) {
+        newComments = [...comments, ...commentData.commentList];
+      } else if (commentData.commentList.length === 0) {
+        newComments = [...comments];
+      }
+
+      setComments(newComments);
+      setIsReached(false);
+
+    } catch (err) {
+      if (err.response.data.message) {
+        // alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
       } 
     } finally {
+
       setIsLoading(false);
     }
-  };
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = document.documentElement.scrollTop;
-      const clientHeight = document.documentElement.clientHeight;
-  
-      if (scrollTop + clientHeight >= scrollHeight) {
+}, [isReached]);
+
+
+
+
+
+  const handleScroll = useCallback(() => {
+    const scrollHeight = document.documentElement.scrollHeight;
+    const scrollTop = document.documentElement.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+
+    if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
         setIsReached(true);
-      }
-    };
-  
-    if (isReached && !isLoading) {
-      fetchGetComment();
-      setIsReached(false);
     }
-  
+  }, []);
+
+
+  useEffect(() => {
+    // 페이지 초기 렌더링 시에 List를 불러오기 위해 호출
+    fetchGetComment(nextCursor);
+    // 스크롤 이벤트 핸들러 등록 및 해제
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isReached, isLoading, nextCursor, postId]);
+    return () => {
+        window.removeEventListener('scroll', handleScroll);
+    };
+}, [fetchGetComment]);
+
+
+
+
   
 
 
 
-  const editComment = (commentId, commentContent) => {
+  const editComment = (commentId, content) => {
     setIsEditing(commentId);
-    setEditedContent(commentContent);
+    setEditedContent(content);
   }
   
   const saveComment = (commentId) => {
@@ -352,10 +334,10 @@ function PlayDetail() {
   }
 
 
-  const editCommentRequest = async (commentId, commentContent) => {
+  const editCommentRequest = async (commentId, editedContent) => {
     try {
       const body = {
-        content: commentContent,
+        content: editedContent,
       };
       
       const res = await Api.put(`/comments/${postId}/${commentId}`, body);
@@ -371,7 +353,7 @@ function PlayDetail() {
   
   const deleteCommentRequest = async (commentId) => {
     try {
-      const res = await Api.del(`/comments/${commentId}`);
+      const res = await Api.del(`/comments/${postId}/${commentId}`);
       window.location.reload();
     } catch (err) {
       if (err.response.data.message) {
@@ -387,6 +369,7 @@ function PlayDetail() {
   useEffect(() => {
     fetchGetDetail();
     applyGetRequest();
+
   }, []);
 
 
@@ -396,14 +379,19 @@ function PlayDetail() {
         <TopInnerBox>
           <p>같이 놀자</p>
           <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
-          {isWriter({userId, post}) ?
-            <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>신청인원 보기</TopBoxButton>
+          {
+            isWriter({userId, post}) ?
+              <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>신청인원 보기</TopBoxButton>
             :
-            (canceled ?
-                <TopBoxButton onClick={() => handleApplyPost(postId)}>신청하기</TopBoxButton>
-                :
-                <TopBoxButton onClick={() => handleApplyPut(postId)}>취소하기</TopBoxButton>
-            )
+              (
+                status === "rejected" ? 
+                  <TopBoxButton onClick={() => alert("거절당한 참가자는 신청할 수 없습니다.")}>신청하기</TopBoxButton>
+                : 
+                  canceled ? 
+                    <TopBoxButton onClick={() => handleApplyPost(postId)}>신청하기</TopBoxButton>
+                  : 
+                    <TopBoxButton onClick={() => handleApplyPut(postId)}>취소하기</TopBoxButton>
+              )
           }
 
           {isParticipantModalOpen && (
@@ -511,9 +499,9 @@ function PlayDetail() {
                 {comment.userId === userId && (
                   <>
                     {comment.commentId === isEditing ? (
-                      <button onClick={() => saveComment(comment.commenId)}>저장</button>
+                      <button onClick={() => saveComment(comment.commentId)}>저장</button>
                     ) : (
-                      <button onClick={() => editComment(comment.commentId, comment.commentContent)}>수정</button>
+                      <button onClick={() => editComment(comment.commentId, comment.content)}>수정</button>
                     )}
                     <button onClick={() => deleteComment(comment.commentId)}>삭제</button>
                   </>
