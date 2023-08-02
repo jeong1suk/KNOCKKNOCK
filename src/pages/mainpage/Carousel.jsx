@@ -1,66 +1,86 @@
 import React from "react";
 import styled from "styled-components";
 import Slider from "react-slick";
+import { Link } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 
-function MainCarousel() {
-  const slider = [
-    { id: 0, bg: "001.png" },
-    { id: 1, bg: "002.png" },
-    { id: 2, bg: "005.png" },
-    { id: 3, bg: "001.png" },
-    { id: 4, bg: "002.png" },
-    { id: 5, bg: "005.png" },
-  ];
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    rtl: false, // Enable right-to-left mode
-  };
-
+function Carousel() {
+    const settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 2,
+      slidesToScroll: 1,
+      centerMode: true,
+      autoplay:true,
+      autoplaySpeed: 2000,
+      rtl: false,
+      arrows: false,
+    };
+  
+  
   return (
-    <SliderContainer>
-      <Slider {...settings}>
-        {slider.map((val) => (
-          <ImageContainer key={val.id}>
-            <img src={val.bg} alt={val.bg} />
+      <div>
+        <StyledSlider {...settings}>
+          <ImageContainer>
+            <Link to="/play">
+            <Image src="001.png"/>
+            </Link>
           </ImageContainer>
-        ))}
-      </Slider>
-    </SliderContainer>
-  );
-}
+          <ImageContainer>
+            <Link to="/play">
+            <Image src="002.png" />
+            </Link>
+          </ImageContainer>
+          <ImageContainer>
+          <Link to="/play">
+            <Image src="011.png" />
+            </Link>
+          </ImageContainer>
+          <ImageContainer>
+          <Link to="/play">
+            <Image src="005.png" />
+            </Link>
+          </ImageContainer>
+        </StyledSlider>
+      </div>
+    );
+  }
 
-const SliderContainer = styled.div`
-  width: 100%;
-  max-width: 800px;
-  margin: auto;
-`;
-
-const ImageContainer = styled.div`
-  position: relative;
-  margin: auto;
-  margin-right: 30px;
-  border: 1px solid #000;
-  border-radius: 25px;
-  width: 100%;
+const StyledSlider = styled(Slider)`
+  left: 6rem;
   height: 100%;
-  background-color: black;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 25px;
+  width: 85%;  
+  margin: 30px 0 80px 0;
+  position: relative;
+  
+  .slick-dots li button::before {
+    left: 3rem;
+    color: #F48FB1
+  }
+  .slick-slide {
+    margin: 30px 0 30px 0;
+  }
+  .slick-prev::before, .slick-next::before {
+    font-size: 20px;
+    color: #dfdfdf
   }
 `;
 
-export default MainCarousel;
+const ImageContainer = styled.div`
+  margin: auto;
+`;
+
+const Image = styled.img`
+  border-radius: 20px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+  width: 18rem;
+  height: 25rem;
+  max-width: 100%;
+  max-height: 100%;
+  background-color: #F7F6F0; 
+`;
+
+export default Carousel;
