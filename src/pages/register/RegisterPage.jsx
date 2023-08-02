@@ -102,7 +102,6 @@ const RegisterPage = () => {
               src={previewURL}
               alt="Selected Image"
               style={{ width: "50%" }}
-              thumbnail
             />
           </div>
         )}

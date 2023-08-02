@@ -21,19 +21,6 @@ const UserProfileEdit = ({ user }) => {
     setPreviewURL(URL.createObjectURL(file));
   };
   // const [imageUrl, handleImageUpload] = useState("");
-  useEffect(() => {
-    // Destructure the hobby, personality, and ideal properties from user
-    const { hobby, personality, ideal } = user;
-
-    // Create a new formData object by spreading the existing formData and
-    // overwriting the hobby, personality, and ideal properties
-    setFormData((prev) => ({
-      ...prev,
-      hobby: hobby || [],
-      personality: personality || [],
-      ideal: ideal || [],
-    }));
-  }, [user]);
 
   const [formData, setFormData] = useState({
     name: user.name || "",
@@ -60,10 +47,23 @@ const UserProfileEdit = ({ user }) => {
     region,
     height,
     mbti,
+    hobby,
+    personality,
+    ideal,
     introduce,
   } = formData;
+  useEffect(() => {
+    // Destructure the hobby, personality, and ideal properties from user
+    // Create a new formData object by spreading the existing formData and
+    // overwriting the hobby, personality, and ideal properties
+    setFormData((prev) => ({
+      ...prev,
+      hobby: user.hobby || [],
+      personality: user.personality || [],
+      ideal: user.ideal || [],
+    }));
+  }, []); //이거 정보가 늦게 받아와짐.
   // console.log(formData); //onChange 할때마다 렌더링 새로되는듯
-
   const onChange = (e) => {
     const { name, value } = e.currentTarget;
     setFormData((prev) => ({
@@ -88,15 +88,15 @@ const UserProfileEdit = ({ user }) => {
   };
 
   const handleHobbyClick = (element) => {
-    onArrayChange(formData.hobby, element, "hobby", 5);
+    onArrayChange(hobby, element, "hobby", 5);
   };
 
   const handlePersonalityClick = (element) => {
-    onArrayChange(formData.personality, element, "personality", 5);
+    onArrayChange(personality, element, "personality", 5);
   };
 
   const handleIdealClick = (element) => {
-    onArrayChange(formData.ideal, element, "ideal", 5);
+    onArrayChange(ideal, element, "ideal", 5);
   };
   const updatedHobby =
     formData.hobby && formData.hobby.length > 0
@@ -124,6 +124,7 @@ const UserProfileEdit = ({ user }) => {
         const formImgData = new FormData();
         formImgData.append("image", selectedFile);
         response = await Api.post("files", formImgData);
+        console.log(response);
       }
       const requestData = await Api.put("users/mypage", {
         nickname: formData.nickname === "" ? user.nickname : formData.nickname,
@@ -137,15 +138,15 @@ const UserProfileEdit = ({ user }) => {
         introduce:
           formData.introduce === "" ? user.introduce : formData.introduce,
         profileImage: ["profile", response.data],
+        backgroundImage: ["background", ""],
       });
       if (requestData.status === 200) {
         showSuccess("변경된 정보가 저장되었습니다.");
         const userData = await Api.get("users/mypage");
-        const user = userData.data;
 
         dispatch({
           type: "UPDATE_USER",
-          payload: user,
+          payload: userData,
         });
         onClose();
         // window.location.replace("/mypage");
@@ -216,7 +217,6 @@ const UserProfileEdit = ({ user }) => {
                 src={previewURL}
                 alt="Selected Image"
                 style={{ width: "50%" }}
-                thumbnail
               />
             </div>
           )}

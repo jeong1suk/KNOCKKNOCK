@@ -3,23 +3,6 @@ import styled from "styled-components";
 import MainCarousel from "./Carousel";
 
 function MainPage() {
-  const carouselItems = [
-    { src: "001.png", alt: "Image 1" },
-    { src: "002.png", alt: "Image 2" },
-    { src: "005.png", alt: "Image 3" },
-  ];
-  const [activeIndex, setActiveIndex] = React.useState(0);
-  const handlePrevSlide = () => {
-    setActiveIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : carouselItems.length - 1
-    );
-  };
-
-  const handleNextSlide = () => {
-    setActiveIndex((prevIndex) =>
-      prevIndex < carouselItems.length - 1 ? prevIndex + 1 : 0
-    );
-  };
   return (
     <>
       <ImgBox>

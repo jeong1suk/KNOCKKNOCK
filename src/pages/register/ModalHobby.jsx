@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./style";
 import styled from "styled-components";
 import { hobbyList } from "../../constants/registerConstants";
@@ -6,6 +6,7 @@ import { useToggle } from "../../components/hooks/useToggle";
 import { isMaxArrayReached } from "../../util/arrayUtils";
 export const ModalHobby = ({ formData, handleHobbyClick }) => {
   const { hobby } = formData;
+
   const { opened, onOpen, onClose } = useToggle();
   const isMaxHobbyReached = isMaxArrayReached(hobby, 5);
 

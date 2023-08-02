@@ -49,6 +49,7 @@ const OptionalInputs = () => {
   const handleIdealClick = (element) => {
     onArrayChange(ideal, element, "ideal", 5);
   };
+
   OptionalInputs.getFormData = () => {
     return formData;
   };
