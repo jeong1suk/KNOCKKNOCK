@@ -42,6 +42,7 @@ function PlayDetail() {
   const [comments, setComments] = useState([]);
   const [commentProfileImage, setCommentProfileImage] = useState();
   const [comment, setComment] = useState("");
+  const [isAccepter, setIsAccepter] = useState(false);
 
   const [nextCursor, setNextCursor] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -228,7 +229,7 @@ const fetchGetComment = useCallback(
 
       const res = await Api.get(`/comments/${postId}?cursor=${cursor}&limit=${limit}`);
       const commentData = res.data;
-
+      setIsAccepter(true);
 
       if (commentData.commentList?.length < limit) {
         setNextCursor(-1);
@@ -254,6 +255,7 @@ const fetchGetComment = useCallback(
     } catch (err) {
       if (err.response.data.message) {
         // alert(err.response.data.message);
+        setIsAccepter(false);
       } else {
         alert('라우팅 경로가 잘못되었습니다.');
       } 
@@ -497,15 +499,22 @@ const postComment = async (postId) => {
           </InputBox>
         </PostDetailFirstBox>
         <CommentBox>
-          <p>댓글</p>
-          <CommentInputArea>
-            <textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="댓글을 작성해주세요."
-            />
-            <button onClick={() => postComment(postId)}>댓글 등록</button>
-          </CommentInputArea>
+          {isAccepter ? 
+          <>
+            <p>댓글</p>
+            <CommentInputArea>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="댓글을 작성해주세요."
+              />
+              <button onClick={() => postComment(postId)}>댓글 등록</button>
+            </CommentInputArea>
+          </>
+          :
+          <p>수락된 참가자만 댓글확인 및 작성 할 수 있습니다.</p>
+          }
+          
           {comments.map((comment, index) => (
             <CommentDetailBox key={index}>
               <img
