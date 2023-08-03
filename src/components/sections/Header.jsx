@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { DispatchContext, UserStateContext } from "../../App";
+import {
+  DispatchContext,
+  UserStateContext,
+} from "../../context/user/UserProvider";
 import { ROUTE } from "../../routes/routes";
 import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";

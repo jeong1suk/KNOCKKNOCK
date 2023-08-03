@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as S from "./style";
 import * as Api from "../../api";
-import { DispatchContext } from "../../App";
+import { DispatchContext } from "../../context/user/UserProvider";
 import { validateEmail, validatePassword } from "../../util/common";
 import { login } from "../../api/login";
 import { showAlert } from "../../assets/alert";

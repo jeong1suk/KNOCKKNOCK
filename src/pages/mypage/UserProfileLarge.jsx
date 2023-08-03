@@ -4,7 +4,7 @@ import * as Api from "../../api";
 // import { UserStateContext } from "../../App";
 import UserProfileEdit from "./UserProfileEdit";
 import { getImageSrc } from "../../util/imageCheck";
-import { UserStateContext } from "../../App";
+import { UserStateContext } from "../../context/user/UserProvider";
 // import { DndProvider, useDrag, useDrop } from "react-dnd";
 // import { HTML5Backend } from "react-dnd-html5-backend";
 
