@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { getImageSrc } from "../../util/imageCheck";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -154,12 +155,13 @@ function UserProfile({ user }) {
   const shuffledHobby = shuffleArray(user.hobby || []);
   const shuffledIdeal = shuffleArray(user.ideal || []);
   const shuffledPersonality = shuffleArray(user.personality || []);
+
   return (
     <Container>
       <UserProfileBox>
         <BackgroundImage />
         <ProfilePicture
-          src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg"
+          src={getImageSrc(user.profileImage)}
           alt="Profile Picture"
         />
         <UserProfileContainer>
