@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect,useContext, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from 'dayjs';
 
@@ -7,19 +7,23 @@ import * as Api from "../../api";
 import styled from 'styled-components';
 import { isWriter } from '../../util/isWriter';
 import { getImageSrc } from "../../util/imageCheck";
+import { formatDate } from "../../util/formatDate";
 
 import DropdownMenu from "../../components/modal/DropdownMenu";
 import Modal from "../../components/modal/Modal";
 import GenderInfo from "../../components/play/GenderInfo";
 import ParticipantList from "../../components/play/ParticipantList";
 
-
+import { UserStateContext } from "../../App";
 
 const limit = 5;
 
 function PlayDetail() {
   const navigate = useNavigate();
   const location = useLocation();
+  const userState = useContext(UserStateContext);
+
+
   const postId = location.pathname.match(/\/playdetail\/(\d+)/)[1];
   const userId = Number(localStorage.getItem("userId"));
 
@@ -36,6 +40,7 @@ function PlayDetail() {
 
 
   const [comments, setComments] = useState([]);
+  const [commentProfileImage, setCommentProfileImage] = useState();
   const [comment, setComment] = useState("");
 
   const [nextCursor, setNextCursor] = useState(0);
@@ -45,7 +50,10 @@ function PlayDetail() {
   const [isEditing, setIsEditing] = useState(null);
   const [editedContent, setEditedContent] = useState("");
 
-  
+
+
+
+
 
   useEffect(() => {
     if(isParticipantModalOpen){
@@ -102,6 +110,7 @@ function PlayDetail() {
       const res = await Api.get(`/posts/${postId}`);
       const postData = res.data.post;
       setPost(postData);
+
     } catch (err) {
       if (err.response.data.message) {
           alert(err.response.data.message);
@@ -200,33 +209,7 @@ function PlayDetail() {
     }
   }
 
-  
 
-  
-  const postComment = async (postId) => {
-    try {
-      const body = {
-        content: comment,
-      };
-      
-      await Api.post(`/comments/${postId}`, body);
-        // 새로 작성된 댓글 정보를 직접 만들어서 기존 댓글 목록에 추가
-        const newComment = {
-          content: comment,
-          userId: userId, // 로그인한 사용자의 id
-          // 필요한 다른 정보를 추가하세요
-        };
-        setComments(prevComments => [newComment, ...prevComments]);
-        setComment("");  
-
-    } catch (err) {
-      if (err.response.data.message) {
-        alert(err.response.data.message);
-      } else {
-        alert('라우팅 경로가 잘못되었습니다.');
-      }
-    }
-  }
 
 
 
@@ -246,15 +229,11 @@ const fetchGetComment = useCallback(
       const res = await Api.get(`/comments/${postId}?cursor=${cursor}&limit=${limit}`);
       const commentData = res.data;
 
-      console.log(commentData)
-
-    
 
       if (commentData.commentList?.length < limit) {
         setNextCursor(-1);
         
       } else {
-        // console.log(commentData.commentList[commentData.commentList.length - 1].commentId);
         setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
       }
 
@@ -312,7 +291,39 @@ const fetchGetComment = useCallback(
 
 
 
-  
+const postComment = async (postId) => {
+  try {
+    const body = {
+      content: comment,
+    };
+    
+    const res = await Api.post(`/comments/${postId}`, body);
+      // 새로 작성된 댓글 정보를 직접 만들어서 기존 댓글 목록에 추가
+      const newComment = {
+        content: comment,
+        userId: userId,
+        commentId: res.data.commentId,
+        User: {
+          UserFiles: [{
+            File: {
+              url: userState.user?.url
+            }
+          }],
+          nickname: userState.user.nickname
+        }
+      };
+
+      setComments(prevComments => [newComment, ...prevComments]);
+      setComment("");  
+
+  } catch (err) {
+    if (err.response.data.message) {
+      alert(err.response.data.message);
+    } else {
+      alert('라우팅 경로가 잘못되었습니다.');
+    }
+  }
+}
 
 
 
@@ -332,16 +343,33 @@ const fetchGetComment = useCallback(
       deleteCommentRequest(commentId);
     }
   }
-
+  
 
   const editCommentRequest = async (commentId, editedContent) => {
     try {
       const body = {
         content: editedContent,
       };
-      
+
       const res = await Api.put(`/comments/${postId}/${commentId}`, body);
-      window.location.reload();
+
+      const newComment = {
+        content: editedContent,
+        userId: userId,
+        commentId: commentId,
+        User: {
+          UserFiles: [{
+            File: {
+              url: userState.user?.url
+            }
+          }],
+          nickname: userState.user.nickname
+        }
+      };
+
+      setComments(prevComments => [newComment, ...prevComments.slice(1)]);
+
+
     } catch (err) {
       if (err.response.data.message) {
         alert(err.response.data.message);
@@ -354,7 +382,8 @@ const fetchGetComment = useCallback(
   const deleteCommentRequest = async (commentId) => {
     try {
       const res = await Api.del(`/comments/${postId}/${commentId}`);
-      window.location.reload();
+      setComments(prevComments => [...prevComments.slice(1)]);
+
     } catch (err) {
       if (err.response.data.message) {
         alert(err.response.data.message);
@@ -373,6 +402,8 @@ const fetchGetComment = useCallback(
   }, []);
 
 
+  console.log(post);
+
   return (
     <>
       <TopBox>
@@ -387,6 +418,9 @@ const fetchGetComment = useCallback(
                 status === "rejected" ? 
                   <TopBoxButton onClick={() => alert("거절당한 참가자는 신청할 수 없습니다.")}>신청하기</TopBoxButton>
                 : 
+                post.isCompleted == true ?
+                <TopBoxButton onClick={() => alert("이미 모집 완료된 게시글 입니다.")}>신청하기</TopBoxButton>
+                :
                   canceled ? 
                     <TopBoxButton onClick={() => handleApplyPost(postId)}>신청하기</TopBoxButton>
                   : 
@@ -425,7 +459,7 @@ const fetchGetComment = useCallback(
           }
           </EditDeleteButtonBox>   
           <InputBox>
-            {post.IsCompleted ? 
+            {post.isCompleted ? 
               <RecruitAbleBox>모집완료</RecruitAbleBox>
               :
               <RecruitAbleBox>모집중</RecruitAbleBox>
@@ -444,7 +478,7 @@ const fetchGetComment = useCallback(
           </InputBox>
           <InputBox style={{ flexDirection: "column", alignItems: "start" }}>
             <p style={{ margin: "0px 0px" }}>장소: {post.place}</p>
-            <p style={{ margin: "10px 0px" }}>만남시간: {dayjs(post.meetingTime).format('YYYY-MM-DD HH:mm')}</p>
+            <p style={{ margin: "10px 0px" }}>만남시간: {formatDate(post.meetingTime)}</p>
           </InputBox>
           <InputBox>
             <img
@@ -475,7 +509,7 @@ const fetchGetComment = useCallback(
           {comments.map((comment, index) => (
             <CommentDetailBox key={index}>
               <img
-                src={"http://placekitten.com/200/200"}
+                src={getImageSrc(comment.User?.UserFiles?.[0]?.File?.url)}
                 alt="유저 프로필"
                 style={{
                   height: "2.5rem",
@@ -486,7 +520,7 @@ const fetchGetComment = useCallback(
                 }}
               />
               <CommentContentBox>
-                <p style={{ margin: "0px 0px" }}>{comment.nickname}</p>
+                <p style={{ margin: "0px 0px" }}>{comment.User.nickname}</p>
                 {comment.commentId === isEditing ? (
                   <input
                     type="text"
@@ -514,6 +548,7 @@ const fetchGetComment = useCallback(
     </>
   );
 }
+
 
 export default PlayDetail;
 

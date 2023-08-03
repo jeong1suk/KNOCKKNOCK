@@ -8,6 +8,8 @@ import { useImageUpload } from '../../components/hooks/UseImageUpload';
 
 import TextareaAutosize from 'react-textarea-autosize';
 
+import { handleTotalChange } from '../../util/handleTotalChange';
+
 import styled from 'styled-components';
 
 function PlayEdit() {
@@ -17,7 +19,6 @@ function PlayEdit() {
 
   const [postTitle, setPostTitle] = useState('');
   const [postType, setPostType] = useState('술');
-  const [customType, setCustomType] = useState('');
   const [meetingDate, setMeetingDate] = useState('');
   const [meetingHour, setMeetingHour] = useState('');
   const [meetingTime, setMeetingTime] = useState('');
@@ -37,11 +38,10 @@ function PlayEdit() {
 
       setPostTitle(postData.title);
       setPostType(postData.type);
-      setCustomType(postData.type);
       setMeetingTime(postData.meetingTime);
       setFetchedImageUrl(postData.PostFiles?.[0]?.File?.url);
       setTotalM(postData.totalM);;
-      setTotalM(postData.totalF);
+      setTotalF(postData.totalF);
       setPlace(postData.place);
       setPostContent(postData.content);
     } catch (err) {
@@ -56,9 +56,6 @@ function PlayEdit() {
 
   const handleCategoryChange = (e) => {
     setPostType(e.target.value);
-    if(e.target.value !== '기타') {
-      setCustomType('');
-    }
   }
 
 
@@ -110,7 +107,9 @@ function PlayEdit() {
 
   useEffect(() => {
     if (meetingDate && meetingHour) {
-      setMeetingTime(`${meetingDate} ${meetingHour}`);
+      const dateTime = `${meetingDate}T${meetingHour}`;
+      const timestamp = new Date(dateTime).getTime();
+      setMeetingTime(dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'));
     }
   }, [meetingDate, meetingHour]);
 
@@ -136,9 +135,6 @@ function PlayEdit() {
               <option key={index} value={category}>{category}</option>
             )}
           </StyledSelect>
-          {postType === '기타' && 
-            <StyledInput type="text" value={customType} onChange={e => setCustomType(e.target.value)} placeholder="직접 입력" required />
-          }
         </InputBox>
         <InputBox>
           <StyledLabel style={{paddingLeft : "10px"}}>날짜/시간</StyledLabel>
@@ -168,9 +164,9 @@ function PlayEdit() {
           <StyledLabel>모집인원</StyledLabel>
           <GenderSelectBox>
             <span style={{marginRight: "10px"}}>남자</span>
-            <StyledInput style={{width: "10%", marginRight: "10px"}} type="text" value={totalM} onChange={e => setTotalM(e.target.value)} required />
+            <StyledInput style={{width: "10%", marginRight: "10px"}} type="text" value={totalM} onChange={handleTotalChange(setTotalM)} required />
             <span style={{marginRight: "10px"}}>여자</span>
-            <StyledInput style={{width: "10%"}} type="text" value={totalF} onChange={e => setTotalF(e.target.value)} required />
+            <StyledInput style={{width: "10%"}} type="text" value={totalF} onChange={handleTotalChange(setTotalF)} required />
           </GenderSelectBox>
         </InputBox>
         <InputBox>

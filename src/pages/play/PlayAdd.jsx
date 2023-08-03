@@ -1,27 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import * as Api from '../../api';
+
+import { currentDate, currentTime } from '../../constants/currentDateTime';
 
 import { categories } from '../../constants/CategoryConstants';
 import { useImageUpload } from '../../components/hooks/UseImageUpload';
 
 import TextareaAutosize from 'react-textarea-autosize';
 
+import { handleTotalChange } from '../../util/handleTotalChange';
+import { handleTimeChange } from '../../util/handleTimeChange';
+
 import styled from 'styled-components';
+
+
 
 function PlayAdd() {
   const navigate = useNavigate();
 
   const [postTitle, setPostTitle] = useState('');
   const [postType, setPostType] = useState('술');
-  const [customType, setCustomType] = useState('');
   const [meetingDate, setMeetingDate] = useState('');
   const [meetingHour, setMeetingHour] = useState('');
   const [meetingTime, setMeetingTime] = useState('');
   const [imageUrl, handleImageUpload] = useImageUpload();
-  const [totalM, setTotalM] = useState(0);
-  const [totalF, setTotalF] = useState(0);
+  const [totalM, setTotalM] = useState(1);
+  const [totalF, setTotalF] = useState(1);
   const [place, setPlace] = useState('');
   const [postContent, setPostContent] = useState('');
 
@@ -31,9 +38,6 @@ function PlayAdd() {
 
   const handleCategoryChange = (e) => {
     setPostType(e.target.value);
-    if(e.target.value !== '기타') {
-      setCustomType('');
-    }
   }
 
 
@@ -45,23 +49,35 @@ function PlayAdd() {
     try {
 
       let res;
+      const formData = new FormData();
       if (imageUrl) {
-        const formData = new FormData();
         formData.append('image', imageUrl);
         res = await Api.post("files", formData);
-        console.log(res);
+
+        await Api.post('posts', {
+          title: postTitle,
+          content: postContent,
+          type: postType,
+          totalM: totalM,
+          totalF: totalF,
+          place,
+          meetingTime: meetingTime,
+          postImage: ["post", res.data],
+        })
       }
+      else {
+        await Api.post('posts', {
+          title: postTitle,
+          content: postContent,
+          type: postType,
+          totalM: totalM,
+          totalF: totalF,
+          place,
+          meetingTime: meetingTime,
+        })
+      }
+
       
-      await Api.post('posts', {
-        title: postTitle,
-        content: postContent,
-        type: postType,
-        totalM: totalM,
-        totalF: totalF,
-        place,
-        meetingTime: meetingTime,
-        postImage: ["post", res.data],
-      })
       navigate('/play');
     } catch (err) {
       console.log(err);
@@ -80,7 +96,7 @@ function PlayAdd() {
     if (meetingDate && meetingHour) {
       const dateTime = `${meetingDate}T${meetingHour}`;
       const timestamp = new Date(dateTime).getTime();
-      setMeetingTime(timestamp);
+      setMeetingTime(dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'));
     }
   }, [meetingDate, meetingHour]);
 
@@ -103,14 +119,22 @@ function PlayAdd() {
               <option key={index} value={category}>{category}</option>
             )}
           </StyledSelect>
-          {postType === '기타' && 
-            <StyledInput type="text" value={customType} onChange={e => setCustomType(e.target.value)} placeholder="직접 입력" required />
-          }
         </InputBox>
         <InputBox>
           <StyledLabel style={{paddingLeft : "10px"}}>날짜/시간</StyledLabel>
-          <StyledInput style={{margin: "0 10px 0 10px"}} type="date" onChange={e => setMeetingDate(e.target.value)} required />
-          <StyledInput type="time" onChange={e => setMeetingHour(e.target.value)} required />
+          <StyledInput
+            style={{margin: "0 10px 0 10px"}}
+            type="date"
+            onChange={e => setMeetingDate(e.target.value)}
+            min={currentDate} 
+            required
+          />
+          <StyledInput
+            type="time"
+            value={meetingHour}
+            onChange={handleTimeChange(meetingDate, currentDate, currentTime, setMeetingHour)}
+            required
+          />
         </InputBox>
         <InputBox>
           <StyledLabel>대표사진</StyledLabel>
@@ -135,9 +159,9 @@ function PlayAdd() {
           <StyledLabel>모집인원</StyledLabel>
           <GenderSelectBox>
             <span style={{marginRight: "10px"}}>남자</span>
-            <StyledInput style={{width: "10%", marginRight: "10px"}} type="text" value={totalM} onChange={e => setTotalM(e.target.value)} required />
+            <StyledInput style={{width: "10%", marginRight: "10px"}} type="text" value={totalM} onChange={handleTotalChange(setTotalM)} required />
             <span style={{marginRight: "10px"}}>여자</span>
-            <StyledInput style={{width: "10%"}} type="text" value={totalF} onChange={e => setTotalF(e.target.value)} required />
+            <StyledInput style={{width: "10%"}} type="text" value={totalF} onChange={handleTotalChange(setTotalF)} required />
           </GenderSelectBox>
         </InputBox>
         <InputBox>
@@ -158,76 +182,7 @@ export default PlayAdd;
 
 
 
-//   return (
-//     <div style={{padding: "5%"}}>
-//       <TopBox>
-//         <p>같이 놀자!</p>
-//         <p>여러분이 원하는 만남을 만들어보세요</p>
-//       </TopBox>
-//       <PostAddBox>
-//         <InputBox>
-//           <StyledLabel>제목</StyledLabel>
-//           <StyledInput style={{width: "81%"}} type="text" value={postTitle}  required />
-//         </InputBox>
-//         <InputBox>
-//           <StyledLabel>카테고리</StyledLabel>
-//           <StyledSelect value={postType}  required>
-//             {categories.map((category, index) => 
-//               <option key={index} value={category}>{category}</option>
-//             )}
-//           </StyledSelect>
-//           {postType === '기타' && 
-//             <StyledInput type="text" value={customType}  placeholder="직접 입력" required />
-//           }
-//         </InputBox>
-//         <InputBox>
-//           <StyledLabel >날짜/시간</StyledLabel>
-//           <StyledInput style={{margin: "0 10px 0 10px"}} type="date"  required />
-//           <StyledInput type="time"  required />
-//         </InputBox>
-//         <InputBox>
-//           <StyledLabel>대표사진</StyledLabel>
-//           <div style={{display: "flex", flexDirection: "column"}}>
-//             <input
-//                 id="imageUpload"
-//                 type="file"
-//                 onChange={e => {
-//                     handleImageUpload(e);
-//                 }}
-//             />
-//           </div>
-//         </InputBox>
-//         <InputBox>
-//           {imageUrl && (
-//             <div style={{ width: '200px', paddingLeft: "130px" }}>
-//                 <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} id="preview" alt="Preview" />
-//             </div>
-//           )}
-//         </InputBox>
-//         <InputBox>
-//           <StyledLabel>모집인원</StyledLabel>
-//           <GenderSelectBox>
-//             <span style={{marginRight: "10px"}}>남자</span>
-//             <StyledInput style={{width: "10%", marginRight: "10px"}} type="text" value={totalM} required />
-//             <span style={{marginRight: "10px"}}>여자</span>
-//             <StyledInput style={{width: "10%"}} type="text" value={totalF} required />
-//           </GenderSelectBox>
-//         </InputBox>
-//         <InputBox>
-//         <StyledLabel>장소</StyledLabel>
-//           <StyledInput style={{width: "30%"}} type="text" value={place}  required />
-//         </InputBox>
-//         <InputBox style={{alignItems: "flex-start"}}>
-//           <StyledLabel>게시글 내용</StyledLabel>
-//           <StyledTextareaAutosize minRows={3} value={postContent}  />
-//         </InputBox>
-//         <PostButton >등록하기</PostButton>
-//       </PostAddBox>
-//     </div>
-//   )
-// }
 
-// export default PlayAdd;
 
 const Wrapper = styled.div`
   display: flex;

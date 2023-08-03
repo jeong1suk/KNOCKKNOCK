@@ -40,7 +40,10 @@ const ParticipantModalDiv = styled.div`
   align-items: center;
   width: 100%;
   padding: 20px;
+  height: 300px;
+  overflow-y: auto; 
 `;
+
 
 const Card = styled.div`
   display: flex;

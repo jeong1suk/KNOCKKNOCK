@@ -62,7 +62,7 @@ function Play()  {
       </CategoryButtonBox>
       <PostCardBox>
         {postList.map(post => (
-          <PostCard key={post.post_id} post={post} />
+          <PostCard key={post.posId} post={post} />
         ))}
       </PostCardBox>
 
