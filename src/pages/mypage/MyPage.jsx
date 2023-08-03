@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { getImageSrc } from "../../util/imageCheck";
+import UserPostAndParticipants from "./UserPostAndParticipants";
 import UserProfileLarge from "./UserProfileLarge";
-
-function MyPage() {
+import * as Api from "../../api";
+const MyPage = () => {
   const [activeSection, setActiveSection] = useState("chat");
+  // const res = await Api.get("/users/mypage/posts");
+  // console.log(res.data.posts);
+  // console.log(res.data.participants);
   const [isHovered, setIsHovered] = useState(false);
   const handleSectionChange = (section) => {
     setActiveSection(section);
@@ -20,19 +24,8 @@ function MyPage() {
 
   return (
     <Container>
+      <BackgroundImage />
       <UserProfileBox>
-        <BackgroundImage
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          {isHovered && (
-            <ChangeBackgroundButton
-              onClick={() => alert("Change the background!")}
-            >
-              Change Background
-            </ChangeBackgroundButton>
-          )}
-        </BackgroundImage>
         {/* <ProfilePicture
           src={getImageSrc(user.UserFiles?.[-1]?.File?.url)}
           alt="Profile Picture"
@@ -95,13 +88,13 @@ function MyPage() {
                 </MessageBox>
               </MessageChat>
             )}
-            {activeSection === "myPosts" && <div>안녕</div>}
+            {activeSection === "myPosts" && <UserPostAndParticipants />}
           </RightSection>
         </RightSectionWrapper>
       </UserProfileBox>
     </Container>
   );
-}
+};
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -262,7 +255,7 @@ const SendButton = styled.button`
 const Section = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 4.5rem;
   margin-bottom: 2rem;
 `;
 
