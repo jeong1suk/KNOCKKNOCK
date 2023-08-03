@@ -4,6 +4,7 @@ import UserProfile from "./UserProfile";
 import TodayGame from "./TodayGame";
 import * as API from "../../api";
 import UserModal from "./UserModal";
+import { fetchNetworkRandomUsers, getUInfo } from "../../api/todayknock";
 const Container = styled.div`
   margin-bottom: 20rem;
 `;
@@ -121,35 +122,35 @@ const ArrowButtonRight = styled(ArrowButton)`
   right: 20px;
 `;
 
-function TodayKnock() {
+const TodayKnock = () => {
   const [showStartModal, setShowStartModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const handleUserProfileClick = (userId) => {
-    API.get(`/users/yourpage/${userId}`)
-      .then((response) => {
-        console.log("유저 정보 가져오기 성공:", response.data);
-        setSelectedUser(response.data);
-        setShowUserModal(true);
-      })
-      .catch((error) => {
-        console.error("API 호출 오류:", error);
-      });
+  const handleUserProfileClick = async (userId) => {
+    try {
+      const response = await getUInfo({ userId });
+      console.log("유저 정보 가져오기 성공:", response.data);
+      setSelectedUser(response.data);
+      setShowUserModal(true);
+    } catch (error) {
+      console.error("API 호출 오류:", error);
+    }
   };
 
+  const fetchData = async () => {
+    try {
+      const response = await fetchNetworkRandomUsers();
+      console.log(response);
+      setUsers(response.data.randomUsers);
+    } catch (error) {
+      console.error("API 호출 오류:", error);
+    }
+  };
   useEffect(() => {
-    API.get("/users/network")
-      .then((response) => {
-        console.log("넘어오긴 햇음");
-        setUsers(response.data.randomUsers);
-      })
-      .catch((error) => {
-        console.error("API 호출 오류:", error);
-      });
+    fetchData();
   }, []);
-
   const handleStartClick = () => {
     setShowStartModal(true);
   };
@@ -218,6 +219,6 @@ function TodayKnock() {
       </UserProfilesContainer>
     </Container>
   );
-}
+};
 
 export default TodayKnock;
