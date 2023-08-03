@@ -54,23 +54,15 @@ const UserInfoText = styled.p`
 `;
 
 const UserProfile = ({ user }) => {
-  const {
-    username,
-    profile_image,
-    mbti,
-    height,
-    region,
-    age,
-    gender,
-    introduce,
-  } = user;
+  const { name, profileImage, mbti, height, region, age, gender, introduce } =
+    user;
 
   const handleMouseEnter = () => {
-    document.getElementById(`userInfo-${user.user_id}`).style.opacity = 1;
+    document.getElementById(`userInfo-${user.userId}`).style.opacity = 1;
   };
 
   const handleMouseLeave = () => {
-    document.getElementById(`userInfo-${user.user_id}`).style.opacity = 0;
+    document.getElementById(`userInfo-${user.userId}`).style.opacity = 0;
   };
 
   return (
@@ -84,7 +76,7 @@ const UserProfile = ({ user }) => {
           alt="프로필 사진"
         />
 
-        <UserInfo id={`userInfo-${user.user_id}`}>
+        <UserInfo id={`userInfo-${user.userId}`}>
           <UserInfoText>{mbti}</UserInfoText>
           <UserInfoText>{height || "비공개"}</UserInfoText>
           <UserInfoText>{region || "비공개"}</UserInfoText>
@@ -92,7 +84,7 @@ const UserProfile = ({ user }) => {
           <UserInfoText>{gender}</UserInfoText>
           <UserInfoText>{introduce || "안녕하세요. 반갑습니다."}</UserInfoText>
         </UserInfo>
-        <Name>{username}</Name>
+        <Name>{name}</Name>
       </UserProfileContainer>
     </>
   );
