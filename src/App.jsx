@@ -43,6 +43,7 @@ function App() {
     fetchCurrentUser();
   }, []);
 
+
   if (!isFetchCompleted) {
     return "loading...";
   }

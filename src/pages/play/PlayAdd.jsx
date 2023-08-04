@@ -113,7 +113,7 @@ function PlayAdd() {
           <StyledInput style={{width: "81%"}} type="text" value={postTitle} onChange={e => setPostTitle(e.target.value)} required />
         </InputBox>
         <InputBox>
-          <StyledLabel>카테고리</StyledLabel>
+          <StyledLabel>이렇게 놀까?</StyledLabel>
           <StyledSelect value={postType} onChange={handleCategoryChange} required>
             {categories.map((category, index) => 
               <option key={index} value={category}>{category}</option>
@@ -121,7 +121,7 @@ function PlayAdd() {
           </StyledSelect>
         </InputBox>
         <InputBox>
-          <StyledLabel style={{paddingLeft : "10px"}}>날짜/시간</StyledLabel>
+          <StyledLabel>언제놀까?</StyledLabel>
           <StyledInput
             style={{margin: "0 10px 0 10px"}}
             type="date"
@@ -156,7 +156,7 @@ function PlayAdd() {
           )}
         </InputBox>
         <InputBox>
-          <StyledLabel>모집인원</StyledLabel>
+          <StyledLabel>누구랑 놀까?</StyledLabel>
           <GenderSelectBox>
             <span style={{marginRight: "10px"}}>남자</span>
             <StyledInput style={{width: "10%", marginRight: "10px"}} type="text" value={totalM} onChange={handleTotalChange(setTotalM)} required />
@@ -165,11 +165,11 @@ function PlayAdd() {
           </GenderSelectBox>
         </InputBox>
         <InputBox>
-        <StyledLabel>장소</StyledLabel>
+        <StyledLabel>어디서 만날까?</StyledLabel>
           <StyledInput style={{width: "30%"}} type="text" value={place} onChange={e => setPlace(e.target.value)} required />
         </InputBox>
         <InputBox style={{alignItems: "flex-start"}}>
-          <StyledLabel>게시글 내용</StyledLabel>
+          <StyledLabel>뭐하고 싶어?</StyledLabel>
           <StyledTextareaAutosize minRows={3} value={postContent} onChange={e => setPostContent(e.target.value)} />
         </InputBox>
         <PostButton onClick={handlePostSubmit}>등록하기</PostButton>
@@ -200,6 +200,7 @@ const TopBox = styled.div`
   padding: 30px 0 0 50px;
   text-align: left;
   width: 80%;
+
   
   p {
     font-size: 2rem; 
@@ -234,31 +235,32 @@ const PostAddBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #e6e9f0;
+  background-color: #FFFFFF;
   width: 80vw;
   height: 100%;
-  margin: 50px 0 0 0;
-  padding: 20px 50px 20px 50px;
+  margin: 50px 0 50px 0;
+  padding: 50px 50px 50px 50px;
   border-radius: 15px;
+  font-size: 1.2rem; 
   
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 `
 
 
 
 const InputBox = styled.div`
   position: relative;
-  margin: 10px 10px;
+  margin: 10px 0px 25px 0px;
   display: flex;
   align-items: center;
-  width: 80%;
+  width: 90%;
 `
 
 const StyledLabel = styled.label`
   display: flex;
   font-weight: bold;
   margin-right: 10px;
-  width: 13%;
+  width: 15%;
 `
 
 const StyledInput = styled.input`
@@ -314,7 +316,7 @@ const StyledInput = styled.input`
 
 
 const StyledSelect = styled.select`
-  background-color: #AAC4FF;
+  background-color: #FFFFFF;
   padding: 10px;
   margin: 0 10px 0 0;
   border-radius: 5px;
@@ -331,7 +333,7 @@ const GenderSelectBox = styled.div`
 `
 
 const StyledTextareaAutosize = styled(TextareaAutosize)`
-  background-color: #AAC4FF;
+  background-color: #FFFFFF;
   padding: 10px;
   margin-left: 20px;
   border-radius: 5px;
@@ -342,10 +344,10 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
 const PostButton = styled.button`
   font-size: 2.00rem;
   padding: 10px 20px;
-  background-color: #AAC4FF;
+  background-color: #F7CBD0;
   color: black;
   border: none;
-  border-radius: 10px;
+  border-radius: 50px;
   cursor: pointer;
   margin: 50px 0 50px 0;
   width: 20%;
@@ -353,7 +355,7 @@ const PostButton = styled.button`
   transition: 0.3s;
 
   &:hover {
-    background-color: #809FFF; 
+    background-color: #FECDE4; 
     color: white;
     transform: scale(1.02);
   }

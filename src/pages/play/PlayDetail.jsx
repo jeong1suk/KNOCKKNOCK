@@ -71,8 +71,9 @@ function PlayDetail() {
       const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
       let res;
       if(status == "pending") {
-        res = await Api.get(`/participants/${postId}/userlist?cursor=${modalCursor}&limit=${limit}`);
+        res = await Api.get(`/participants/${postId}/userlist`);
         setParticipantsList(res.data.participantsList);
+        console.log(res);
       }
       else if(status == "accepted") {
         res = await Api.get(`/participants/${postId}/acceptedlist`);
@@ -271,7 +272,7 @@ const fetchGetComment = useCallback(
     const scrollTop = document.documentElement.scrollTop;
     const clientHeight = document.documentElement.clientHeight;
 
-    if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
+    if (scrollTop + clientHeight >= scrollHeight - 1) {
         setIsReached(true);
     }
   }, []);
@@ -401,7 +402,7 @@ const postComment = async (postId) => {
   }, []);
 
 
-  console.log(post);
+
 
   return (
     <>

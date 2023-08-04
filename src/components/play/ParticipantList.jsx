@@ -36,12 +36,12 @@ export default ParticipantList;
 const ParticipantModalDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   width: 100%;
   padding: 20px;
-  height: 300px;
-  overflow-y: auto; 
+  height: 500px;
+  overflow-y: auto;
 `;
 
 

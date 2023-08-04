@@ -122,10 +122,10 @@ const TopBox = styled.div`
 const PostButton = styled.button`
   font-size: 100%;
   padding: 10px 20px;
-  background-color: #AAC4FF;
+  background-color: #F7CBD0;
   color: black;
   border: none;
-  border-radius: 10px;
+  border-radius: 50px;
   cursor: pointer;
   margin: 20px 0 20px 20px; 
   width: 80%;
@@ -134,7 +134,7 @@ const PostButton = styled.button`
   text-overflow: ellipsis;
 
   &:hover {
-    background-color: #809FFF; 
+    background-color: #FECDE4; 
     color: white;
     transform: scale(1.02);
   }
