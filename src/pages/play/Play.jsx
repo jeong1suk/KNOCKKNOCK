@@ -73,14 +73,13 @@ function Play()  {
 
 export default Play;
 
+
 const PostButtonBox = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  background-color: #FFFFFF;
+  align-items: center;
   height: 10%;
   margin: 50px 0px 50px 0px;
-  padding-left: 50px;
   
   p {
     font-size: 2rem; 
@@ -89,14 +88,14 @@ const PostButtonBox = styled.div`
     line-height: 1.2;
   }
 
-  p:last-child {
-    font-size: 1.5rem; 
+  p:last-of-type {
+    font-size: 1rem; 
     color: #1d1d1f; 
     font-weight: 500;
     line-height: 1.2;
   }
   @media (min-width: 1024px) {
-    padding: 50px 0 0 80px;
+    padding: 50px 0 0 0;
 
     p {
       font-size: 3rem; 
@@ -106,6 +105,16 @@ const PostButtonBox = styled.div`
       font-size: 2rem; 
     }
   }
+
+  @media (min-width: 390px) {    
+    p {
+      font-size: 2rem;
+      margin-bottom: -0.3px;
+    }
+
+    p:last-of-type {
+      font-size: 0.8rem;
+    }
 `
 
 const PostButton = styled.button`
@@ -116,15 +125,29 @@ const PostButton = styled.button`
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  margin: 20px 0 20px 0; // Changed margin from the reference PostButton style
+  margin: 20px 0 20px 20px; 
   width: 80%;
   height: 100px;
   transition: 0.3s;
+  text-overflow: ellipsis;
 
   &:hover {
     background-color: #809FFF; 
     color: white;
     transform: scale(1.02);
+  }
+  @media (max-width: 1200px) {
+    width: 100%;
+    white-space: normal; /* Allow the text to wrap */
+    max-width: 1000px;
+    font-size:0.5rem;
+  }
+  @media (max-width: 390px) {
+    width: 90%; 
+    font-size: 0.4rem; /* Adjust the font size for smaller screens */
+    height: 80px; /* Reduce the height for smaller screens */
+    padding: 10px 15px; /* Adjust the padding for smaller screens */
+    margin: 20px 0 20px 0; /* Adjust the margin for smaller screens */
   }
 `
 const CategoryButtonBox = styled.div`
@@ -138,23 +161,32 @@ const CategoryButtonBox = styled.div`
   @media (min-width: 1024px) {
     justify-content: space-evenly;
   }
+  @media (min-width: 390px) {
+    margin: 0px;
+  }
 `
 
 const CategoryButton = styled.div`
   font-size: 1.2rem;
   color: #1d1d1f;
-  padding: 10px 20px;
-  border-radius: 25px;
+  // padding: 10px 20px;
+  // border-radius: 25px;
   cursor: pointer;
   transition: 0.3s;
   text-align: center;
   
   &:hover {
-    transform: scale(1.3);
+    transform: scale(1.2);
+    color: #809FFF;
   }
 
   @media (min-width: 1024px) {
     font-size: 1.5rem;
+  }
+  @media (max-width: 516px) {
+    font-size: 0.8rem;
+    max-width: 100px; /* Set the maximum width for the button */
+    white-space: normal; /* Allow the text to wrap */
   }
 `
 
@@ -167,9 +199,8 @@ const PostBox = styled.div`
 
 const TopButtonBox = styled.div`
   display: flex;
-  width: 30%;
+  width: 20%;
 `
-
 const PostCardBox = styled.div`
   display: flex;
   flex-direction: column;
