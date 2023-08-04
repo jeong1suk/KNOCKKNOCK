@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 const Ai = () => {
   const [result, setResult] = useState("");
@@ -27,7 +27,7 @@ const Ai = () => {
     console.log(formData);
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5001/analyze",
+        "http://127.0.0.1:5002/analyze",
         formData,
         {
           headers: {
@@ -59,7 +59,7 @@ const Ai = () => {
     // 메이크업 버튼이 클릭되었을 때 처리할 로직을 추가할 수 있습니다.
     // console.log("메이크업 받기 버튼이 클릭되었습니다.");
     try {
-      const res = await axios.post("http://127.0.0.1:5001/makeup", formData, {
+      const res = await axios.post("http://127.0.0.1:5002/makeup", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -71,6 +71,9 @@ const Ai = () => {
       console.log(err);
     }
   };
+  useEffect(() => {
+    setBase64("");
+  }, [selectedFile]);
 
   return (
     <Container>

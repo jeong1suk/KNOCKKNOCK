@@ -4,7 +4,7 @@ import * as S from "./style";
 import ValidationFields from "./ValidationFields";
 import { regions } from "../../constants/registerConstants";
 const today = new Date().toISOString().split("T")[0];
-const RequiredInputs = ({ onRegistration }) => {
+const RequiredInputs = () => {
   const [formData, setFormData] = useState({
     name: "",
     nickname: "",
@@ -25,7 +25,7 @@ const RequiredInputs = ({ onRegistration }) => {
   RequiredInputs.getFormData = () => {
     return formData;
   };
-
+  // console.log("필수");
   return (
     <>
       <S.Heading>이름</S.Heading>

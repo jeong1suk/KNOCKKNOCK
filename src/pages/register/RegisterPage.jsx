@@ -6,6 +6,7 @@ import * as Api from "../../api";
 import { DispatchContext } from "../../context/user/UserProvider";
 import { useNavigate } from "react-router-dom";
 import { showAlert } from "../../assets/alert";
+import ValidationFields from "./ValidationFields";
 const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
@@ -17,36 +18,53 @@ const RegisterPage = () => {
     // setErrorMessage("");
     setPreviewURL(URL.createObjectURL(file));
   };
-  console.log("부모");
+  // console.log("부모");
   const handleRegistration = async (formData) => {
     try {
-      console.log("등록버튼함수안: ", formData);
+      // console.log("등록버튼함수안: ", formData);
       let response;
       if (selectedFile) {
         const formImgData = new FormData();
         formImgData.append("image", selectedFile);
 
         response = await Api.post("files", formImgData);
-        // console.log(response);
+        console.log(response);
+        await Api.post("users/register", {
+          name: formData.name,
+          email: formData.email,
+          nickname: formData.nickname,
+          password: formData.password,
+          gender: formData.gender,
+          birthday: formData.birthdate,
+          job: formData.job,
+          region: formData.region,
+          mbti: formData.mbti,
+          height: formData.height,
+          hobby: formData.hobby,
+          personality: formData.personality,
+          introduce: formData.introduce || "반가워요!",
+          profileImage: ["profile", response.data],
+        });
+      } else {
+        await Api.post("users/register", {
+          name: formData.name,
+          email: formData.email,
+          nickname: formData.nickname,
+          password: formData.password,
+          gender: formData.gender,
+          birthday: formData.birthdate,
+          job: formData.job,
+          region: formData.region,
+          mbti: formData.mbti,
+          height: formData.height,
+          hobby: formData.hobby,
+          personality: formData.personality,
+          introduce: formData.introduce || "반가워요!",
+          profileImage: ["profile", "http://placekitten.com/200/200"],
+        });
       }
-
       // console.log(formData);
-      await Api.post("users/register", {
-        name: formData.name,
-        email: formData.email,
-        nickname: formData.nickname,
-        password: formData.password,
-        gender: formData.gender,
-        birthday: formData.birthdate,
-        job: formData.job,
-        region: formData.region,
-        mbti: formData.mbti,
-        height: formData.height,
-        hobby: formData.hobby,
-        personality: formData.personality,
-        introduce: formData.introduce || "반가워요!",
-        profileImage: ["profile", response.data],
-      });
+
       // 로그인 페이지로 이동함.
       const res = await Api.post("users/login", {
         email: formData.email,
@@ -80,6 +98,7 @@ const RegisterPage = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          /*
           const formData = {
             name: e.target.name.value,
             nickname: e.target.nickname.value,
@@ -89,17 +108,17 @@ const RegisterPage = () => {
             birthdate: e.target.birthdate.value,
             job: e.target.job.value,
             region: e.target.region.value,
-            // mbti: e.target.mbti.value,
-            // height: e.target.height.value,
-            // hobby: e.target.hobby.value,
-            // personality: e.personality,
-            // ideal: e.ideal,
-            // introduce: e.introduce,
+            mbti: e.target.mbti.value,
+            height: e.target.height.value,
+            hobby: e.target.hobby.value,
+            personality: e.personality,
+            ideal: e.ideal,
+            introduce: e.introduce,
           };
+          */
           handleRegistration({
-            formData,
-            // ...RequiredInputs.getFormData(),
-            // ...ValidationFields.getFormData(),
+            ...RequiredInputs.getFormData(),
+            ...ValidationFields.getFormData(),
             ...OptionalInputs.getFormData(), //아무값도 return을 받지 않으면 안됨. 왜지?
           });
         }}
