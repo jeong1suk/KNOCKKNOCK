@@ -55,7 +55,9 @@ const UserInfoText = styled.p`
 `;
 
 const UserProfile = ({ user }) => {
-  const { name, mbti, height, region, age, gender, introduce } = user;
+  const { nickname, gender, birthday, age, job, region, mbti, height, introduce } =
+    user;
+
   const handleMouseEnter = () => {
     document.getElementById(`userInfo-${user.userId}`).style.opacity = 1;
   };
@@ -77,13 +79,15 @@ const UserProfile = ({ user }) => {
 
         <UserInfo id={`userInfo-${user.userId}`}>
           <UserInfoText>{mbti}</UserInfoText>
+          <UserInfoText>{birthday}</UserInfoText>
+          <UserInfoText>{job}</UserInfoText>
           <UserInfoText>{height || "비공개"}</UserInfoText>
           <UserInfoText>{region || "비공개"}</UserInfoText>
           <UserInfoText>{age}세</UserInfoText>
           <UserInfoText>{gender}</UserInfoText>
           <UserInfoText>{introduce || "안녕하세요. 반갑습니다."}</UserInfoText>
         </UserInfo>
-        <Name>{name}</Name>
+        <Name>{nickname}</Name>
       </UserProfileContainer>
     </>
   );

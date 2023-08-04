@@ -40,6 +40,7 @@ function PlayDetail() {
   const [comments, setComments] = useState([]);
   const [commentProfileImage, setCommentProfileImage] = useState();
   const [comment, setComment] = useState("");
+  const [isAccepter, setIsAccepter] = useState(false);
 
   const [nextCursor, setNextCursor] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -227,10 +228,51 @@ function PlayDetail() {
         }
       } finally {
         setIsLoading(false);
+        return;
       }
-    },
-    [isReached]
-  );
+      setIsLoading(true);
+
+      const res = await Api.get(`/comments/${postId}?cursor=${cursor}&limit=${limit}`);
+      const commentData = res.data;
+      setIsAccepter(true);
+
+      if (commentData.commentList?.length < limit) {
+        setNextCursor(-1);
+        
+      } else {
+        setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
+      }
+
+      let newComments;
+
+
+      if (cursor === 0) {
+        newComments = commentData.commentList;
+      } else if (cursor > 0 && commentData.commentList.length > 0) {
+        newComments = [...comments, ...commentData.commentList];
+      } else if (commentData.commentList.length === 0) {
+        newComments = [...comments];
+      }
+
+      setComments(newComments);
+      setIsReached(false);
+
+    } catch (err) {
+      if (err.response.data.message) {
+        // alert(err.response.data.message);
+        setIsAccepter(false);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      } 
+    } finally {
+
+      setIsLoading(false);
+    }
+}, [isReached]);
+
+
+
+
 
   const handleScroll = useCallback(() => {
     const scrollHeight = document.documentElement.scrollHeight;
@@ -469,15 +511,22 @@ function PlayDetail() {
           </InputBox>
         </PostDetailFirstBox>
         <CommentBox>
-          <p>댓글</p>
-          <CommentInputArea>
-            <textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="댓글을 작성해주세요."
-            />
-            <button onClick={() => postComment(postId)}>댓글 등록</button>
-          </CommentInputArea>
+          {isAccepter ? 
+          <>
+            <p>댓글</p>
+            <CommentInputArea>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="댓글을 작성해주세요."
+              />
+              <button onClick={() => postComment(postId)}>댓글 등록</button>
+            </CommentInputArea>
+          </>
+          :
+          <p>수락된 참가자만 댓글확인 및 작성 할 수 있습니다.</p>
+          }
+          
           {comments.map((comment, index) => (
             <CommentDetailBox key={index}>
               <img

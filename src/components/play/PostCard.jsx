@@ -70,14 +70,20 @@ const Card = styled.div`
   display: flex;
   border: 1px solid #d3d3d3;
   border-radius: 15px;
-  margin-bottom: 20px;
+  margin: 20px 0 20px 0;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s ease-in-out;
-  width: 90vw;
+  width: 80vw;
   &:hover {
     transform: scale(1.02);
     cursor: pointer;
+  }
+  @media (max-width: 768px) {
+    display: block;
+    width: 70%; /* Set width to 50% for two cards in one row on larger screens */
   }
 `;
 
@@ -88,16 +94,20 @@ const ImageBox = styled.div`
   align-items: center;
   padding-right: 20px;
   border-right: 1px solid #d3d3d3;
+  @media (max-width: 768px) {
+    border-right: 0px
+  }
 `;
 
 const Image = styled.img`
-  width: 80%;
+  width: 60%;
   height: auto;
   object-fit: cover;
 `;
 
 const ContentBox = styled.div`
   flex: 1;
+  // background-color: red;
   padding-left: 20px;
 `;
 
@@ -109,7 +119,8 @@ const PostContent = styled.p`
 `;
 
 const Category = styled.h2`
-  color: #0070f3;
+  color: #0070d3;
+  font-size: 1.1rem;
   margin-bottom: 10px;
 `;
 
@@ -134,8 +145,8 @@ const ProfileBox = styled.div`
 `;
 
 const ProfileImage = styled.img`
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
   margin-right: 10px;
 `;
@@ -143,6 +154,7 @@ const ProfileImage = styled.img`
 const Nickname = styled.span`
   color: #333;
   font-weight: bold;
+  font-size: 0.9em;
 `;
 
 
