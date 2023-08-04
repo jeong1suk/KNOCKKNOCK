@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { isWriter } from "../../util/isWriter";
 import { getImageSrc } from "../../util/imageCheck";
 import { formatDate } from "../../util/formatDate";
+import { timeAgo } from "../../util/TimeAgo";
 
 import DropdownMenu from "../../components/modal/DropdownMenu";
 import Modal from "../../components/modal/Modal";
@@ -59,12 +60,12 @@ function PlayDetail() {
     try {
       const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
       let res;
-      if (status == "pending") {
-        res = await Api.get(
-          `/participants/${postId}/userlist?cursor=${modalCursor}&limit=${limit}`
-        );
+      if(status == "pending") {
+        res = await Api.get(`/participants/${postId}/userlist`);
         setParticipantsList(res.data.participantsList);
-      } else if (status == "accepted") {
+        console.log(res);
+      }
+      else if(status == "accepted") {
         res = await Api.get(`/participants/${postId}/acceptedlist`);
         setParticipantsList(res.data.acceptedUsers);
       }
@@ -163,7 +164,10 @@ function PlayDetail() {
         alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  };
+  }
+
+
+
 
   const handlePostDelete = async (postId) => {
     const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
@@ -183,16 +187,21 @@ function PlayDetail() {
         alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  };
+  }
 
-  const fetchGetComment = useCallback(
-    async (cursor) => {
-      try {
-        if (cursor === -1) {
-          setIsLoading(false);
-          return;
-        }
-        setIsLoading(true);
+
+
+
+
+  
+const fetchGetComment = useCallback(
+  async cursor => {
+    try {
+      if (cursor === -1) {
+        setIsLoading(false);
+        return;
+      }
+      setIsLoading(true);
 
         const res = await Api.get(
           `/comments/${postId}?cursor=${cursor}&limit=${limit}`
@@ -240,8 +249,8 @@ function PlayDetail() {
     const scrollTop = document.documentElement.scrollTop;
     const clientHeight = document.documentElement.clientHeight;
 
-    if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
-      setIsReached(true);
+    if (scrollTop + clientHeight >= scrollHeight - 1) {
+        setIsReached(true);
     }
   }, []);
 
@@ -359,6 +368,7 @@ function PlayDetail() {
     applyGetRequest();
   }, []);
 
+
   console.log(post);
 
   return (
@@ -472,37 +482,43 @@ function PlayDetail() {
           </InputBox>
         </PostDetailFirstBox>
         <CommentBox>
-          {isAccepter ? (
-            <>
-              <p>댓글</p>
-              <CommentInputArea>
-                <textarea
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder="댓글을 작성해주세요."
-                />
-                <button onClick={() => postComment(postId)}>댓글 등록</button>
-              </CommentInputArea>
-            </>
-          ) : (
-            <p>수락된 참가자만 댓글확인 및 작성 할 수 있습니다.</p>
-          )}
-
-          {comments.map((comment, index) => (
-            <CommentDetailBox key={index}>
-              <img
-                src={getImageSrc(comment.User?.UserFiles?.[0]?.File?.url)}
-                alt="유저 프로필"
-                style={{
-                  height: "2.5rem",
-                  width: "2.5rem",
-                  borderRadius: "50%",
-                  backgroundColor: "#F9FAFB",
-                  marginRight: "20px",
-                }}
+          {isAccepter ? 
+          <>
+            <p>댓글</p>
+            <CommentInputArea>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="댓글을 작성해주세요."
               />
+              <button onClick={() => postComment(postId)}>댓글 등록</button>
+            </CommentInputArea>
+          </>
+          :
+          <p>수락된 참가자만 댓글확인 및 작성 할 수 있습니다.</p>
+          }
+          
+          {comments.map((comment, commentId) => (
+            <CommentDetailBox key={commentId}>
+              <CommentImageBox>
+                <img
+                  src={getImageSrc(comment.User?.UserFiles?.[0]?.File?.url)}
+                  alt="유저 프로필"
+                  style={{
+                    height: "2.5rem",
+                    width: "2.5rem",
+                    borderRadius: "50%",
+                    backgroundColor: "#F9FAFB",
+                    marginRight: "20px",
+                  }}
+                />
+              </CommentImageBox>
               <CommentContentBox>
-                <p style={{ margin: "0px 0px" }}>{comment.User.nickname}</p>
+                <CommentNicknameBox>
+                  <p style={{fontWeight: "bold"}}>{comment.User.nickname}</p>
+                  <p style={{color: "#555"}}>{timeAgo(dayjs(comment.createdAt).format('YYYY-MM-DD HH:mm'))}</p>
+                </CommentNicknameBox>
+                
                 {comment.commentId === isEditing ? (
                   <input
                     type="text"
@@ -599,6 +615,9 @@ const RecruitAbleBox = styled.div`
   color: white; // To contrast with the background
 `;
 
+
+
+
 const CommentBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -612,6 +631,22 @@ const CommentDetailBox = styled.div`
   width: 100%;
   border-bottom: 1px solid #cccccc; // Light gray border
 `;
+
+const CommentImageBox = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: start;
+`
+
+const CommentNicknameBox = styled.div`
+  display: flex;
+  justify-content: start;
+  margin-right: 10px;
+
+  p {
+    margin: 5px 10px 0px 0px;
+  }
+`
 
 const CommentContentBox = styled.div`
   display: flex;

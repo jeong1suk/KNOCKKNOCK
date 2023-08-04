@@ -10,14 +10,32 @@ const limit = 3;
 function TodayKnock() {
   const [showStartModal, setShowStartModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
-  const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [randomLovers, setRandomLovers] = useState([]);
+  const [randomUsers, setRandomUsers] = useState([]);
 
+  const [selectedCard, setSelectedCard] = useState();
+
+  const usersGetRequest = async () => {
+    try {
+      const res = await Api.get(`users/network`);
+      setRandomUsers(res.data.randomUsers);
+    } catch (err) {
+      if (err.response.data.message) {
+        alert(err.response.data.message)
+      }
+      else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
+  
   const cardsGetRequest = async () => {
     try {
       const res = await Api.get(`/cards?limit=${limit}`);
+      console.log(res.data.randomLovers);
       setRandomLovers(res.data.randomLovers);
+      setSelectedCard(res.data.card);
     } catch (err) {
       if (err.response.data.message) {
         // alert(err.response.data.message);
@@ -41,9 +59,7 @@ function TodayKnock() {
     }
   };
 
-  useEffect(() => {
-    cardsGetRequest();
-  }, []);
+
 
   const handleStartClick = () => {
     setShowStartModal(true);
@@ -76,6 +92,13 @@ function TodayKnock() {
     );
   };
 
+  useEffect(() => {
+    usersGetRequest();
+    cardsGetRequest();
+  }, []);
+
+
+
   return (
     <Container>
       <div style={{ height: "10vh" }} />
@@ -88,7 +111,9 @@ function TodayKnock() {
       {showStartModal && (
         <ModalOverlay>
           <ModalContent>
-            <TodayGame onExit={handleStartModalExit} />
+            <TodayGame onExit={handleStartModalExit}
+                        selectedCard={selectedCard}
+                        onCardSelect={setSelectedCard} />
           </ModalContent>
         </ModalOverlay>
       )}
@@ -103,6 +128,7 @@ function TodayKnock() {
         </ModalOverlay>
       )}
       <UserProfilesContainer>
+
         {randomLovers.map((user) => (
           <UserProfileBox
             key={user.id}
@@ -112,6 +138,22 @@ function TodayKnock() {
           </UserProfileBox>
         ))}
       </UserProfilesContainer>
+      <UserProfilesContainer>
+        {selectedCard && 
+          <>
+            {randomUsers.map((user) => (
+              <UserProfileBox
+                key={user.userId}
+                onClick={() => handleUserProfileClick(user.userId)}
+              >
+                <UserProfile user={user} />
+              </UserProfileBox>
+            ))}
+          </> 
+        }
+      </UserProfilesContainer>
+      
+      
     </Container>
   );
 }

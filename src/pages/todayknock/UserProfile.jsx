@@ -82,7 +82,8 @@ const UserProfile = ({ user }) => {
         onMouseLeave={handleMouseLeave}
       >
         <ProfilePicture
-          src={getImageSrc(user.UserFiles[0].File.url)}
+          // src={getImageSrc(user.UserFiles[0]?.File?.url)}
+          src="https://cdn.mmnews.co.kr/news/photo/202202/6259_5414_549.jpg"
           alt="프로필 사진"
         />
 

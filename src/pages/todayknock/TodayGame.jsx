@@ -6,17 +6,17 @@ import * as Api from "../../api";
 const limit = 1;
 const randomId = Math.floor(Math.random() * 10) + 21;
 
-const TodayGame = ({ onExit }) => {
+const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
   const [showModal, setShowModal] = useState(false);
   const [leftButtonClickCount, setLeftButtonClickCount] = useState(0);
   const [rightButtonClickCount, setRightButtonClickCount] = useState(0);
 
-  const [card, setCard] = useState();
+  
 
   const cardsGetRequest = async () => {
     try {
       const res = await Api.get(`/cards?limit=${limit}`);
-      setCard(res.data.card);
+      onCardSelect(res.data.card);
     } catch (err) {
       if (err.response.data.message) {
         // alert(err.response.data.message);
@@ -61,7 +61,7 @@ const TodayGame = ({ onExit }) => {
     setRightButtonClickCount(0);
   };
 
-  console.log(randomId);
+  console.log(selectedCard);
 
   useEffect(() => {
     cardsGetRequest();
@@ -78,10 +78,10 @@ const TodayGame = ({ onExit }) => {
                   Right
                 </button>
               </ButtonGroup>
-              {card ?
+              {selectedCard ?
               <CardImageContainer>
-                <CardImage src={card.CardFile?.File?.url} />
-                <p>{card.content}</p>
+                <CardImage src={selectedCard.CardFile?.File?.url} />
+                <p>{selectedCard.content}</p>
               </CardImageContainer> 
               :
               <Container>
