@@ -3,10 +3,9 @@ import styled from "styled-components";
 import * as Api from "../../api";
 import { Link } from "react-router-dom";
 import { getImageSrc } from "../../util/imageCheck";
-import { getImageSrc } from "../../util/imageCheck";
+
 const UserPostAndParticipants = () => {
   const [posts, setPosts] = useState([]);
-  const [joins, setJoins] = useState([]);
   const [joins, setJoins] = useState([]);
 
   const fetchData = async () => {
