@@ -651,7 +651,7 @@ const CommentNicknameBox = styled.div`
   margin-right: 10px;
 
   p {
-    margin: 0px 10px 0px 0px;
+    margin: 5px 10px 0px 0px;
   }
 `
 
