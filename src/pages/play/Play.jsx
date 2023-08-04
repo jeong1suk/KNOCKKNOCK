@@ -40,14 +40,17 @@ function Play()  {
 
   return(
     <>
-      <PostButtonBox>
-        <p>같이 놀자</p>
-        <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+      <TopBox>
+        <TopPtagBox>
+          <p>같이 놀자</p>
+          <br></br>
+          <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+        </TopPtagBox>
         <TopButtonBox>
           <PostButton style={{marginRight: "10px"}} onClick={() => navigate(`/playadd`)}>게시글 만들기</PostButton>
         </TopButtonBox>
         
-      </PostButtonBox>
+      </TopBox>
       <CategoryButtonBox>
         <CategoryButton onClick={() => setPostType('')}>전체</CategoryButton>
         <CategoryButton onClick={() => setPostType('술')}>술</CategoryButton>
@@ -73,12 +76,12 @@ function Play()  {
 export default Play;
 
 
-const PostButtonBox = styled.div`
+const TopBox = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   height: 10%;
   margin: 50px 0px 50px 0px;
+  gap: 40%;
   
   p {
     font-size: 2rem; 
@@ -199,9 +202,19 @@ const PostBox = styled.div`
 const TopButtonBox = styled.div`
   display: flex;
   width: 20%;
+
+  @media (max-width: 516px) {
+    width: 40%;
+  }
 `
 const PostCardBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`
+
+const TopPtagBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 `

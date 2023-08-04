@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { isWriter } from '../../util/isWriter';
 import { getImageSrc } from "../../util/imageCheck";
 import { formatDate } from "../../util/formatDate";
+import { timeAgo } from "../../util/TimeAgo";
 
 import DropdownMenu from "../../components/modal/DropdownMenu";
 import Modal from "../../components/modal/Modal";
@@ -185,7 +186,6 @@ function PlayDetail() {
 
 
 
-
   const handlePostDelete = async (postId) => {
     const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmDelete) {
@@ -209,9 +209,6 @@ function PlayDetail() {
       }
     }
   }
-
-
-
 
 
 
@@ -515,21 +512,27 @@ const postComment = async (postId) => {
           <p>수락된 참가자만 댓글확인 및 작성 할 수 있습니다.</p>
           }
           
-          {comments.map((comment, index) => (
-            <CommentDetailBox key={index}>
-              <img
-                src={getImageSrc(comment.User?.UserFiles?.[0]?.File?.url)}
-                alt="유저 프로필"
-                style={{
-                  height: "2.5rem",
-                  width: "2.5rem",
-                  borderRadius: "50%",
-                  backgroundColor: "#F9FAFB",
-                  marginRight: "20px",
-                }}
-              />
+          {comments.map((comment, commentId) => (
+            <CommentDetailBox key={commentId}>
+              <CommentImageBox>
+                <img
+                  src={getImageSrc(comment.User?.UserFiles?.[0]?.File?.url)}
+                  alt="유저 프로필"
+                  style={{
+                    height: "2.5rem",
+                    width: "2.5rem",
+                    borderRadius: "50%",
+                    backgroundColor: "#F9FAFB",
+                    marginRight: "20px",
+                  }}
+                />
+              </CommentImageBox>
               <CommentContentBox>
-                <p style={{ margin: "0px 0px" }}>{comment.User.nickname}</p>
+                <CommentNicknameBox>
+                  <p style={{fontWeight: "bold"}}>{comment.User.nickname}</p>
+                  <p style={{color: "#555"}}>{timeAgo(dayjs(comment.createdAt).format('YYYY-MM-DD HH:mm'))}</p>
+                </CommentNicknameBox>
+                
                 {comment.commentId === isEditing ? (
                   <input
                     type="text"
@@ -619,6 +622,9 @@ const RecruitAbleBox = styled.div`
   color: white; // To contrast with the background
 `;
 
+
+
+
 const CommentBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -632,6 +638,22 @@ const CommentDetailBox = styled.div`
   width: 100%;
   border-bottom: 1px solid #cccccc; // Light gray border
 `;
+
+const CommentImageBox = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: start;
+`
+
+const CommentNicknameBox = styled.div`
+  display: flex;
+  justify-content: start;
+  margin-right: 10px;
+
+  p {
+    margin: 0px 10px 0px 0px;
+  }
+`
 
 const CommentContentBox = styled.div`
   display: flex;
