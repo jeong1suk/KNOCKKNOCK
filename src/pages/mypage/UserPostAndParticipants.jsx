@@ -2,15 +2,19 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import * as Api from "../../api";
 import { Link } from "react-router-dom";
+import { getImageSrc } from "../../util/imageCheck";
 const UserPostAndParticipants = () => {
   const [posts, setPosts] = useState([]);
-  const [join, setJoin] = useState([]);
+  const [joins, setJoins] = useState([]);
 
   const fetchData = async () => {
     try {
-      const res = await Api.get("/users/mypage/posts");
-      console.log(res.data.posts);
-      setPosts(res.data.posts);
+      const resPosts = await Api.get("/users/mypage/posts");
+      const resJoin = await Api.get("/users/mypage/participants");
+      console.log(resPosts.data.posts);
+      // console.log(resJoin.data);
+      setPosts(resPosts.data.posts);
+      setJoins(resJoin.data.participants);
     } catch (err) {
       console.error(err);
     }
@@ -18,6 +22,7 @@ const UserPostAndParticipants = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  getImageSrc;
   return (
     <Userbox>
       <Postbox>
@@ -34,7 +39,20 @@ const UserPostAndParticipants = () => {
         ))}
       </Postbox>
 
-      <Postbox>참가한 Participants</Postbox>
+      <Postbox>
+        <div>참가한 play</div>
+        {joins.map((join) => (
+          <div style={{ border: "1px solid #000", padding: "10px" }}>
+            <Link to={`/playdetail/${join.postId}`}>
+              <div>되나?</div>
+              {/* <div>내용:{join.content}</div>
+              <div>장소:{join.place}</div>
+              <div>제목:{join.title}</div>
+              <div>type:{join.type}</div> */}
+            </Link>
+          </div>
+        ))}
+      </Postbox>
     </Userbox>
   );
 };
