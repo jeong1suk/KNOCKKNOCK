@@ -45,7 +45,6 @@ function Play()  {
         <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
         <TopButtonBox>
           <PostButton style={{marginRight: "10px"}} onClick={() => navigate(`/playadd`)}>게시글 만들기</PostButton>
-          <PostButton>내가 쓴 게시글 보기</PostButton>
         </TopButtonBox>
         
       </PostButtonBox>
