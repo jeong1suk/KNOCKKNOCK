@@ -3,8 +3,10 @@ import styled from "styled-components";
 import * as Api from "../../api";
 import { Link } from "react-router-dom";
 import { getImageSrc } from "../../util/imageCheck";
+import { getImageSrc } from "../../util/imageCheck";
 const UserPostAndParticipants = () => {
   const [posts, setPosts] = useState([]);
+  const [joins, setJoins] = useState([]);
   const [joins, setJoins] = useState([]);
 
   const fetchData = async () => {
@@ -12,7 +14,7 @@ const UserPostAndParticipants = () => {
       const resPosts = await Api.get("/users/mypage/posts");
       const resJoin = await Api.get("/users/mypage/participants");
       console.log(resPosts.data.posts);
-      console.log(resJoin.data);
+      // console.log(resJoin.data);
       setPosts(resPosts.data.posts);
       setJoins(resJoin.data.participants);
     } catch (err) {
@@ -22,6 +24,7 @@ const UserPostAndParticipants = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  getImageSrc;
   return (
     <Userbox>
       <div>내가 쓴 Post</div>
