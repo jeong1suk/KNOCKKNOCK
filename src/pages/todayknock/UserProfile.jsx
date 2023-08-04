@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { getImageSrc } from "../../util/imageCheck";
 
 const UserProfileContainer = styled.div`
   display: flex;
@@ -54,8 +55,17 @@ const UserInfoText = styled.p`
 `;
 
 const UserProfile = ({ user }) => {
-  const { nickname, gender, birthday, age, job, region, mbti, height, introduce } =
-    user;
+  const {
+    nickname,
+    gender,
+    birthday,
+    age,
+    job,
+    region,
+    mbti,
+    height,
+    introduce,
+  } = user;
 
   const handleMouseEnter = () => {
     document.getElementById(`userInfo-${user.userId}`).style.opacity = 1;
@@ -72,7 +82,7 @@ const UserProfile = ({ user }) => {
         onMouseLeave={handleMouseLeave}
       >
         <ProfilePicture
-          src="https://cdn.mmnews.co.kr/news/photo/202202/6259_5414_549.jpg"
+          src={getImageSrc(user.UserFiles[0].File.url)}
           alt="프로필 사진"
         />
 

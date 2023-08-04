@@ -22,12 +22,12 @@ function TodayKnock() {
       if (err.response.data.message) {
         // alert(err.response.data.message);
       } else {
-        alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
+  };
 
-  const handleUserProfileClick = async(userId) => {
+  const handleUserProfileClick = async (userId) => {
     try {
       const res = await Api.get(`/users/yourpage/${userId}`);
       setSelectedUser(res.data);
@@ -36,11 +36,10 @@ function TodayKnock() {
       if (err.response.data.message) {
         // alert(err.response.data.message);
       } else {
-        alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
   };
-
 
   useEffect(() => {
     cardsGetRequest();

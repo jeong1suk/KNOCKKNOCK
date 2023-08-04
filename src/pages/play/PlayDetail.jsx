@@ -1,11 +1,11 @@
-import React, { useState, useEffect,useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 import * as Api from "../../api";
 
-import styled from 'styled-components';
-import { isWriter } from '../../util/isWriter';
+import styled from "styled-components";
+import { isWriter } from "../../util/isWriter";
 import { getImageSrc } from "../../util/imageCheck";
 import { formatDate } from "../../util/formatDate";
 
@@ -14,7 +14,7 @@ import Modal from "../../components/modal/Modal";
 import GenderInfo from "../../components/play/GenderInfo";
 import ParticipantList from "../../components/play/ParticipantList";
 
-import { UserStateContext } from "../../App";
+import { UserStateContext } from "../../context/user/UserProvider";
 
 const limit = 5;
 
@@ -23,21 +23,19 @@ function PlayDetail() {
   const location = useLocation();
   const userState = useContext(UserStateContext);
 
-
   const postId = location.pathname.match(/\/playdetail\/(\d+)/)[1];
   const userId = Number(localStorage.getItem("userId"));
 
   const [post, setPost] = useState([]);
   const [participantsList, setParticipantsList] = useState([]);
   const [participationFlag, setParticipationFlag] = useState();
-  
+
   const [canceled, setCanceled] = useState();
   const [status, setStatus] = useState();
 
   const [dropdownSelection, setDropdownSelection] = useState("신청인원");
   const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
   const [modalCursor, setModalCursor] = useState(0);
-
 
   const [comments, setComments] = useState([]);
   const [commentProfileImage, setCommentProfileImage] = useState();
@@ -51,77 +49,61 @@ function PlayDetail() {
   const [isEditing, setIsEditing] = useState(null);
   const [editedContent, setEditedContent] = useState("");
 
-
-
-
-
-
   useEffect(() => {
-    if(isParticipantModalOpen){
+    if (isParticipantModalOpen) {
       fetchParticipantsList();
     }
   }, [isParticipantModalOpen, dropdownSelection]);
 
-
-
   const fetchParticipantsList = async () => {
     try {
-      
       const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
       let res;
-      if(status == "pending") {
-        res = await Api.get(`/participants/${postId}/userlist?cursor=${modalCursor}&limit=${limit}`);
+      if (status == "pending") {
+        res = await Api.get(
+          `/participants/${postId}/userlist?cursor=${modalCursor}&limit=${limit}`
+        );
         setParticipantsList(res.data.participantsList);
-      }
-      else if(status == "accepted") {
+      } else if (status == "accepted") {
         res = await Api.get(`/participants/${postId}/acceptedlist`);
         setParticipantsList(res.data.acceptedUsers);
       }
-      
-      
-      
     } catch (err) {
-      
-      alert('참여자 정보를 불러오는 데 실패했습니다.');
+      alert("참여자 정보를 불러오는 데 실패했습니다.");
     }
-  }
+  };
 
   const handleAccept = async (participantId) => {
     try {
       const res = await Api.put(`/participants/${participantId}/allow`);
-      fetchParticipantsList(); 
+      fetchParticipantsList();
     } catch (err) {
-      alert('수락 처리에 실패했습니다.');
+      alert("수락 처리에 실패했습니다.");
     }
-  }
+  };
 
   const handleReject = async (participantId) => {
     try {
       await Api.put(`/participants/${participantId}/deny`);
-      fetchParticipantsList();  
+      fetchParticipantsList();
     } catch (err) {
-      alert('거절 처리에 실패했습니다.');
+      alert("거절 처리에 실패했습니다.");
     }
-  }
-
-  
+  };
 
   const fetchGetDetail = async () => {
     try {
       const res = await Api.get(`/posts/${postId}`);
       const postData = res.data.post;
       setPost(postData);
-
     } catch (err) {
       if (err.response.data.message) {
-          alert(err.response.data.message);
+        alert(err.response.data.message);
       } else {
-          alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
-
-
+  };
 
   const handleApplyPost = async (postId) => {
     const confirmApplyPost = window.confirm("모임에 참가신청하시겠습니까?");
@@ -129,16 +111,17 @@ function PlayDetail() {
       applyPostRequest(postId);
       alert("신청되었습니다");
     }
-  }
+  };
 
   const handleApplyPut = async (postId) => {
-    const confirmApplyPut = window.confirm("정말로 참가신청을 취소하시겠습니까?");
+    const confirmApplyPut = window.confirm(
+      "정말로 참가신청을 취소하시겠습니까?"
+    );
     if (confirmApplyPut) {
       applyPutRequest(postId);
       alert("취소되었습니다");
     }
-  }
-
+  };
 
   const applyPostRequest = async (postId) => {
     try {
@@ -146,12 +129,12 @@ function PlayDetail() {
       applyGetRequest();
     } catch (err) {
       if (err.response.data.message) {
-          alert(err.response.data.message);
+        alert(err.response.data.message);
       } else {
-          alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
+  };
 
   const applyPutRequest = async (postId) => {
     try {
@@ -159,13 +142,13 @@ function PlayDetail() {
       applyGetRequest();
     } catch (err) {
       if (err.response.data.message) {
-          alert(err.response.data.message);
+        alert(err.response.data.message);
       } else {
-          alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
-  
+  };
+
   const applyGetRequest = async () => {
     try {
       const res = await Api.get(`/participants/${postId}`);
@@ -174,100 +157,83 @@ function PlayDetail() {
       setStatus(data.status);
     } catch (err) {
       if (err.response.data.message) {
-          // alert(err.response.data.message);
-          setCanceled(true);
+        // alert(err.response.data.message);
+        setCanceled(true);
       } else {
-          alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
-
-
-
-
+  };
 
   const handlePostDelete = async (postId) => {
     const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmDelete) {
-
       deletePostRequest(postId);
     }
-  }
-
+  };
 
   const deletePostRequest = async (postId) => {
-    
     try {
-  
       await Api.del(`/posts/${postId}`);
       navigate(`/play`);
     } catch (err) {
       if (err.response.data.message) {
         alert(err.response.data.message);
       } else {
-        alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
+  };
 
+  const fetchGetComment = useCallback(
+    async (cursor) => {
+      try {
+        if (cursor === -1) {
+          setIsLoading(false);
+          return;
+        }
+        setIsLoading(true);
 
+        const res = await Api.get(
+          `/comments/${postId}?cursor=${cursor}&limit=${limit}`
+        );
+        const commentData = res.data;
+        setIsAccepter(true);
 
+        if (commentData.commentList?.length < limit) {
+          setNextCursor(-1);
+        } else {
+          setNextCursor(
+            commentData.commentList[commentData.commentList.length - 1]
+              .commentId
+          );
+        }
 
+        let newComments;
 
+        if (cursor === 0) {
+          newComments = commentData.commentList;
+        } else if (cursor > 0 && commentData.commentList.length > 0) {
+          newComments = [...comments, ...commentData.commentList];
+        } else if (commentData.commentList.length === 0) {
+          newComments = [...comments];
+        }
 
-
-
-  
-const fetchGetComment = useCallback(
-  async cursor => {
-    try {
-      if (cursor === -1) {
+        setComments(newComments);
+        setIsReached(false);
+      } catch (err) {
+        if (err.response.data.message) {
+          // alert(err.response.data.message);
+          setIsAccepter(false);
+        } else {
+          alert("라우팅 경로가 잘못되었습니다.");
+        }
+      } finally {
         setIsLoading(false);
-        return;
       }
-      setIsLoading(true);
-
-      const res = await Api.get(`/comments/${postId}?cursor=${cursor}&limit=${limit}`);
-      const commentData = res.data;
-      setIsAccepter(true);
-
-      if (commentData.commentList?.length < limit) {
-        setNextCursor(-1);
-        
-      } else {
-        setNextCursor(commentData.commentList[commentData.commentList.length - 1].commentId);
-      }
-
-      let newComments;
-
-
-      if (cursor === 0) {
-        newComments = commentData.commentList;
-      } else if (cursor > 0 && commentData.commentList.length > 0) {
-        newComments = [...comments, ...commentData.commentList];
-      } else if (commentData.commentList.length === 0) {
-        newComments = [...comments];
-      }
-
-      setComments(newComments);
-      setIsReached(false);
-
-    } catch (err) {
-      if (err.response.data.message) {
-        // alert(err.response.data.message);
-        setIsAccepter(false);
-      } else {
-        alert('라우팅 경로가 잘못되었습니다.');
-      } 
-    } finally {
-
-      setIsLoading(false);
-    }
-}, [isReached]);
-
-
-
-
+    },
+    [isReached]
+  );
 
   const handleScroll = useCallback(() => {
     const scrollHeight = document.documentElement.scrollHeight;
@@ -275,77 +241,71 @@ const fetchGetComment = useCallback(
     const clientHeight = document.documentElement.clientHeight;
 
     if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
-        setIsReached(true);
+      setIsReached(true);
     }
   }, []);
-
 
   useEffect(() => {
     // 페이지 초기 렌더링 시에 List를 불러오기 위해 호출
     fetchGetComment(nextCursor);
     // 스크롤 이벤트 핸들러 등록 및 해제
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-        window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
-}, [fetchGetComment]);
+  }, [fetchGetComment]);
 
+  const postComment = async (postId) => {
+    try {
+      const body = {
+        content: comment,
+      };
 
-
-
-const postComment = async (postId) => {
-  try {
-    const body = {
-      content: comment,
-    };
-    
-    const res = await Api.post(`/comments/${postId}`, body);
+      const res = await Api.post(`/comments/${postId}`, body);
       // 새로 작성된 댓글 정보를 직접 만들어서 기존 댓글 목록에 추가
       const newComment = {
         content: comment,
         userId: userId,
         commentId: res.data.commentId,
         User: {
-          UserFiles: [{
-            File: {
-              url: userState.user?.url
-            }
-          }],
-          nickname: userState.user.nickname
-        }
+          UserFiles: [
+            {
+              File: {
+                url: userState.user?.url,
+              },
+            },
+          ],
+          nickname: userState.user.nickname,
+        },
       };
 
-      setComments(prevComments => [newComment, ...prevComments]);
-      setComment("");  
-
-  } catch (err) {
-    if (err.response.data.message) {
-      alert(err.response.data.message);
-    } else {
-      alert('라우팅 경로가 잘못되었습니다.');
+      setComments((prevComments) => [newComment, ...prevComments]);
+      setComment("");
+    } catch (err) {
+      if (err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("라우팅 경로가 잘못되었습니다.");
+      }
     }
-  }
-}
-
-
+  };
 
   const editComment = (commentId, content) => {
     setIsEditing(commentId);
     setEditedContent(content);
-  }
-  
+  };
+
   const saveComment = (commentId) => {
     editCommentRequest(commentId, editedContent);
     setIsEditing(null);
-  }
-  
+  };
+
   const deleteComment = (commentId) => {
     const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmDelete) {
       deleteCommentRequest(commentId);
     }
-  }
-  
+  };
 
   const editCommentRequest = async (commentId, editedContent) => {
     try {
@@ -360,49 +320,44 @@ const postComment = async (postId) => {
         userId: userId,
         commentId: commentId,
         User: {
-          UserFiles: [{
-            File: {
-              url: userState.user?.url
-            }
-          }],
-          nickname: userState.user.nickname
-        }
+          UserFiles: [
+            {
+              File: {
+                url: userState.user?.url,
+              },
+            },
+          ],
+          nickname: userState.user.nickname,
+        },
       };
 
-      setComments(prevComments => [newComment, ...prevComments.slice(1)]);
-
-
+      setComments((prevComments) => [newComment, ...prevComments.slice(1)]);
     } catch (err) {
       if (err.response.data.message) {
         alert(err.response.data.message);
       } else {
-        alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
-  
+  };
+
   const deleteCommentRequest = async (commentId) => {
     try {
       const res = await Api.del(`/comments/${postId}/${commentId}`);
-      setComments(prevComments => [...prevComments.slice(1)]);
-
+      setComments((prevComments) => [...prevComments.slice(1)]);
     } catch (err) {
       if (err.response.data.message) {
         alert(err.response.data.message);
       } else {
-        alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
+  };
 
-
-  
   useEffect(() => {
     fetchGetDetail();
     applyGetRequest();
-
   }, []);
-
 
   console.log(post);
 
@@ -412,27 +367,35 @@ const postComment = async (postId) => {
         <TopInnerBox>
           <p>같이 놀자</p>
           <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
-          {
-            isWriter({userId, post}) ?
-              <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>신청인원 보기</TopBoxButton>
-            :
-              (
-                status === "rejected" ? 
-                  <TopBoxButton onClick={() => alert("거절당한 참가자는 신청할 수 없습니다.")}>신청하기</TopBoxButton>
-                : 
-                post.isCompleted == true ?
-                <TopBoxButton onClick={() => alert("이미 모집 완료된 게시글 입니다.")}>신청하기</TopBoxButton>
-                :
-                  canceled ? 
-                    <TopBoxButton onClick={() => handleApplyPost(postId)}>신청하기</TopBoxButton>
-                  : 
-                    <TopBoxButton onClick={() => handleApplyPut(postId)}>취소하기</TopBoxButton>
-              )
-          }
+          {isWriter({ userId, post }) ? (
+            <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>
+              신청인원 보기
+            </TopBoxButton>
+          ) : status === "rejected" ? (
+            <TopBoxButton
+              onClick={() => alert("거절당한 참가자는 신청할 수 없습니다.")}
+            >
+              신청하기
+            </TopBoxButton>
+          ) : post.isCompleted == true ? (
+            <TopBoxButton
+              onClick={() => alert("이미 모집 완료된 게시글 입니다.")}
+            >
+              신청하기
+            </TopBoxButton>
+          ) : canceled ? (
+            <TopBoxButton onClick={() => handleApplyPost(postId)}>
+              신청하기
+            </TopBoxButton>
+          ) : (
+            <TopBoxButton onClick={() => handleApplyPut(postId)}>
+              취소하기
+            </TopBoxButton>
+          )}
 
           {isParticipantModalOpen && (
             <Modal onClose={() => setIstParticipantModalOpen(false)}>
-              <DropdownMenu 
+              <DropdownMenu
                 options={[
                   { label: "신청인원", value: "신청인원" },
                   { label: "모집된 인원", value: "모집된 인원" },
@@ -444,7 +407,7 @@ const postComment = async (postId) => {
                 participantsList={participantsList}
                 handleAccept={handleAccept}
                 handleReject={handleReject}
-                selectedOption ={dropdownSelection}
+                selectedOption={dropdownSelection}
               />
             </Modal>
           )}
@@ -453,34 +416,44 @@ const postComment = async (postId) => {
       <PostDetailBox>
         <PostDetailFirstBox>
           <EditDeleteButtonBox>
-          {isWriter({userId, post}) &&
-            <>
-              <TopBoxButton onClick={() => navigate(`/playedit/${postId}`)}>수정하기</TopBoxButton>
-              <TopBoxButton onClick={() => handlePostDelete(postId)}>삭제하기</TopBoxButton>
-            </>
-          }
-          </EditDeleteButtonBox>   
+            {isWriter({ userId, post }) && (
+              <>
+                <TopBoxButton onClick={() => navigate(`/playedit/${postId}`)}>
+                  수정하기
+                </TopBoxButton>
+                <TopBoxButton onClick={() => handlePostDelete(postId)}>
+                  삭제하기
+                </TopBoxButton>
+              </>
+            )}
+          </EditDeleteButtonBox>
           <InputBox>
-            {post.isCompleted ? 
+            {post.isCompleted ? (
               <RecruitAbleBox>모집완료</RecruitAbleBox>
-              :
+            ) : (
               <RecruitAbleBox>모집중</RecruitAbleBox>
-            }
+            )}
             <GenderInfoBox>
-              <GenderInfo total={post.totalM} filled={post.recruitedM} color='blue' />
-              <GenderInfo total={post.totalF} filled={post.recruitedF} color='red' />
+              <GenderInfo
+                total={post.totalM}
+                filled={post.recruitedM}
+                color="blue"
+              />
+              <GenderInfo
+                total={post.totalF}
+                filled={post.recruitedF}
+                color="red"
+              />
             </GenderInfoBox>
-
           </InputBox>
           <InputBox>
-            <p style={{ fontSize: "2vw", fontWeight: "bold" }}>
-              {post.title}
-            </p>
-            
+            <p style={{ fontSize: "2vw", fontWeight: "bold" }}>{post.title}</p>
           </InputBox>
           <InputBox style={{ flexDirection: "column", alignItems: "start" }}>
             <p style={{ margin: "0px 0px" }}>장소: {post.place}</p>
-            <p style={{ margin: "10px 0px" }}>만남시간: {formatDate(post.meetingTime)}</p>
+            <p style={{ margin: "10px 0px" }}>
+              만남시간: {formatDate(post.meetingTime)}
+            </p>
           </InputBox>
           <InputBox>
             <img
@@ -499,22 +472,22 @@ const postComment = async (postId) => {
           </InputBox>
         </PostDetailFirstBox>
         <CommentBox>
-          {isAccepter ? 
-          <>
-            <p>댓글</p>
-            <CommentInputArea>
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="댓글을 작성해주세요."
-              />
-              <button onClick={() => postComment(postId)}>댓글 등록</button>
-            </CommentInputArea>
-          </>
-          :
-          <p>수락된 참가자만 댓글확인 및 작성 할 수 있습니다.</p>
-          }
-          
+          {isAccepter ? (
+            <>
+              <p>댓글</p>
+              <CommentInputArea>
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="댓글을 작성해주세요."
+                />
+                <button onClick={() => postComment(postId)}>댓글 등록</button>
+              </CommentInputArea>
+            </>
+          ) : (
+            <p>수락된 참가자만 댓글확인 및 작성 할 수 있습니다.</p>
+          )}
+
           {comments.map((comment, index) => (
             <CommentDetailBox key={index}>
               <img
@@ -542,11 +515,21 @@ const postComment = async (postId) => {
                 {comment.userId === userId && (
                   <>
                     {comment.commentId === isEditing ? (
-                      <button onClick={() => saveComment(comment.commentId)}>저장</button>
+                      <button onClick={() => saveComment(comment.commentId)}>
+                        저장
+                      </button>
                     ) : (
-                      <button onClick={() => editComment(comment.commentId, comment.content)}>수정</button>
+                      <button
+                        onClick={() =>
+                          editComment(comment.commentId, comment.content)
+                        }
+                      >
+                        수정
+                      </button>
                     )}
-                    <button onClick={() => deleteComment(comment.commentId)}>삭제</button>
+                    <button onClick={() => deleteComment(comment.commentId)}>
+                      삭제
+                    </button>
                   </>
                 )}
               </CommentContentBox>
@@ -558,14 +541,13 @@ const postComment = async (postId) => {
   );
 }
 
-
 export default PlayDetail;
 
 const TopBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
   height: 200px;
   margin: 100px 0px 0px 0px;
 `;
@@ -575,12 +557,10 @@ const TopInnerBox = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 75%;
-  
-`
-
+`;
 
 const TopBoxButton = styled.button`
-  background-color: #007BFF;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -594,7 +574,7 @@ const PostDetailBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #F8F8F8; 
+  background-color: #f8f8f8;
   height: 100%;
   margin: 50px 0 0 0;
   padding: 20px 50px 20px 50px;
@@ -606,11 +586,11 @@ const InputBox = styled.div`
   align-items: center;
   padding: 10px;
   width: 80%;
-  font-family: 'San Francisco', Arial, sans-serif; 
+  font-family: "San Francisco", Arial, sans-serif;
 `;
 
 const RecruitAbleBox = styled.div`
-  background-color: #007BFF; // Same as the button above
+  background-color: #007bff; // Same as the button above
   display: flex;
   justify-content: center;
   align-items: center;
@@ -662,7 +642,7 @@ const CommentInputArea = styled.div`
 
   button {
     width: 10%;
-    background-color: #007BFF; // Same as the button above
+    background-color: #007bff; // Same as the button above
     color: white;
     padding: 10px;
     border: none;
@@ -681,16 +661,16 @@ const GenderInfoBox = styled.div`
   align-items: start;
   padding: 10px;
   gap: 10px;
-`
+`;
 
 const PostDetailFirstBox = styled.div`
   background: #ffffff;
-  border-radius: 10px; 
+  border-radius: 10px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   padding: 20px;
-  margin-bottom: 20px; 
-  width: 80%; 
-`
+  margin-bottom: 20px;
+  width: 80%;
+`;
 
 const EditDeleteButtonBox = styled.div`
   display: flex;
@@ -698,5 +678,5 @@ const EditDeleteButtonBox = styled.div`
   align-items: center;
   padding: 10px;
   gap: 10px;
-  font-family: 'San Francisco', Arial, sans-serif; 
-`
+  font-family: "San Francisco", Arial, sans-serif;
+`;

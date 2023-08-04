@@ -4,6 +4,7 @@ import * as Api from "../../api";
 // import { UserStateContext } from "../../App";
 import UserProfileEdit from "./UserProfileEdit";
 import { getImageSrc } from "../../util/imageCheck";
+import { UserStateContext } from "../../context/user/UserProvider";
 // import { DndProvider, useDrag, useDrop } from "react-dnd";
 // import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -136,6 +137,7 @@ function shuffleArray(array) {
 }
 const UserProfileLarge = () => {
   const [user, setUser] = useState([]);
+  const userState = useContext(UserStateContext);
   useEffect(() => {
     Api.get("/users/mypage")
       .then((response) => {
@@ -145,7 +147,7 @@ const UserProfileLarge = () => {
       .catch((error) => {
         console.error("API 호출 오류:", error);
       });
-  }, []);
+  }, [userState]);
 
   const shuffledHobby = shuffleArray(user.hobby || []);
   const shuffledIdeal = shuffleArray(user.ideal || []);

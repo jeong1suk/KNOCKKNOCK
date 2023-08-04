@@ -8,7 +8,7 @@ import { ModalPersonality } from "../register/ModalPersonality";
 import { ModalIdeal } from "../register/ModalIdeal";
 import * as Api from "../../api";
 import { showAlert, showSuccess } from "../../assets/alert";
-import { DispatchContext } from "../../App";
+import { DispatchContext } from "../../context/user/UserProvider";
 const UserProfileEdit = ({ user }) => {
   const dispatch = useContext(DispatchContext);
   const { opened, onOpen, onClose } = useToggle();

@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { DispatchContext, UserStateContext } from "../../App";
+import {
+  DispatchContext,
+  UserStateContext,
+} from "../../context/user/UserProvider";
 import { ROUTE } from "../../routes/routes";
 import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";
@@ -18,7 +21,6 @@ const Header = () => {
     showSuccess("로그아웃되었습니다.");
     navigate("/");
   };
-
 
   return (
     <HeaderWrap>
@@ -94,47 +96,6 @@ const NavigationBox = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
-`;
-
-const Navigation = styled.div`
-  display: flex;
-`;
-
-const NavMenu = styled.ul`
-  display: flex;
-  align-items: center;
-  height: 100%;
-`;
-
-const MenuList = styled.li`
-  padding: 0 1rem;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  font-weight: bold;
-  letter-spacing: -0.5px;
-  color: #252525;
-  cursor: pointer;
-  text-decoration: none;
-  &:hover {
-    color: #f1b24a;
-  }
-  a {
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: #111;
-    text-decoration: none;
-    margin-left: 4rem;
-    &:hover {
-      color: #f1b24a;
-    }
-  }
-`;
-
-const MobileMenubox = styled.div`
-  margin-left: 24px;
 `;
 
 export default Header;

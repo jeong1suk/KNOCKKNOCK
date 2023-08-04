@@ -1,11 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import RequiredInputs from "./RequiredInputs";
 import OptionalInputs from "./OptionalInputs";
 import * as S from "./style";
 import * as Api from "../../api";
-import { DispatchContext } from "../../App";
+import { DispatchContext } from "../../context/user/UserProvider";
 import { useNavigate } from "react-router-dom";
-import ValidationFields from "./ValidationFields";
 import { showAlert } from "../../assets/alert";
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -18,9 +17,10 @@ const RegisterPage = () => {
     // setErrorMessage("");
     setPreviewURL(URL.createObjectURL(file));
   };
-
+  console.log("부모");
   const handleRegistration = async (formData) => {
     try {
+      console.log("등록버튼함수안: ", formData);
       let response;
       if (selectedFile) {
         const formImgData = new FormData();
@@ -80,9 +80,26 @@ const RegisterPage = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          const formData = {
+            name: e.target.name.value,
+            nickname: e.target.nickname.value,
+            email: e.target.email.value,
+            password: e.target.password.value,
+            gender: e.target.gender.value,
+            birthdate: e.target.birthdate.value,
+            job: e.target.job.value,
+            region: e.target.region.value,
+            // mbti: e.target.mbti.value,
+            // height: e.target.height.value,
+            // hobby: e.target.hobby.value,
+            // personality: e.personality,
+            // ideal: e.ideal,
+            // introduce: e.introduce,
+          };
           handleRegistration({
-            ...RequiredInputs.getFormData(),
-            ...ValidationFields.getFormData(),
+            formData,
+            // ...RequiredInputs.getFormData(),
+            // ...ValidationFields.getFormData(),
             ...OptionalInputs.getFormData(), //아무값도 return을 받지 않으면 안됨. 왜지?
           });
         }}
