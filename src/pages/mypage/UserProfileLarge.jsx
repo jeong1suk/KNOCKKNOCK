@@ -142,7 +142,7 @@ function UserProfile() {
         <Tagline>{user.introduce}</Tagline>
         <UserInformation>
           <UserLineContainer>
-            <UserLine>Name: {user.username}</UserLine>
+            <UserLine>Name: {user.name}</UserLine>
           </UserLineContainer>
           <UserLineContainer>
             <UserLine>MBTI: {user.mbti}</UserLine>
