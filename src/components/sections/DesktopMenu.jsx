@@ -1,9 +1,13 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTE } from "../../routes/routes";
-const DesktopMenu = ({ isLogin, user, logout }) => {
+const DesktopMenu = ({ isLogin, user }) => {
   //logout 처리
-
+  const logout = () => {
+    localStorage.removeItem('userToken');
+    dispatch({ type: 'LOGOUT' });
+    navigate('/');
+};
   return (
     <DesktopMenuContainer>
       <DesktopNavMenu>

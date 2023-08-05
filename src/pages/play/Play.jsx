@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import * as Api from '../../api';
 
 import PostCard from '../../components/play/PostCard';
-import Pagination from '../../components/play/Pagenation';
+import Pagination from '../../components/commons/Pagenation';
 
 function Play()  {
   const navigate = useNavigate();
@@ -40,15 +40,17 @@ function Play()  {
 
   return(
     <>
-      <PostButtonBox>
-        <p>같이 놀자</p>
-        <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+      <TopBox>
+        <TopPtagBox>
+          <p>같이 놀자</p>
+          <br></br>
+          <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+        </TopPtagBox>
         <TopButtonBox>
           <PostButton style={{marginRight: "10px"}} onClick={() => navigate(`/playadd`)}>게시글 만들기</PostButton>
-          <PostButton>내가 쓴 게시글 보기</PostButton>
         </TopButtonBox>
         
-      </PostButtonBox>
+      </TopBox>
       <CategoryButtonBox>
         <CategoryButton onClick={() => setPostType('')}>전체</CategoryButton>
         <CategoryButton onClick={() => setPostType('술')}>술</CategoryButton>
@@ -62,7 +64,7 @@ function Play()  {
       </CategoryButtonBox>
       <PostCardBox>
         {postList.map(post => (
-          <PostCard key={post.post_id} post={post} />
+          <PostCard key={post.posId} post={post} />
         ))}
       </PostCardBox>
 
@@ -73,14 +75,13 @@ function Play()  {
 
 export default Play;
 
-const PostButtonBox = styled.div`
+
+const TopBox = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  background-color: #FFFFFF;
+  justify-content: center;
   height: 10%;
   margin: 50px 0px 50px 0px;
-  padding-left: 50px;
+  gap: 40%;
   
   p {
     font-size: 2rem; 
@@ -89,14 +90,14 @@ const PostButtonBox = styled.div`
     line-height: 1.2;
   }
 
-  p:last-child {
-    font-size: 1.5rem; 
+  p:last-of-type {
+    font-size: 1rem; 
     color: #1d1d1f; 
     font-weight: 500;
     line-height: 1.2;
   }
   @media (min-width: 1024px) {
-    padding: 50px 0 0 80px;
+    padding: 50px 0 0 0;
 
     p {
       font-size: 3rem; 
@@ -106,25 +107,49 @@ const PostButtonBox = styled.div`
       font-size: 2rem; 
     }
   }
+
+  @media (min-width: 390px) {    
+    p {
+      font-size: 2rem;
+      margin-bottom: -0.3px;
+    }
+
+    p:last-of-type {
+      font-size: 0.8rem;
+    }
 `
 
 const PostButton = styled.button`
   font-size: 100%;
   padding: 10px 20px;
-  background-color: #AAC4FF;
+  background-color: #F7CBD0;
   color: black;
   border: none;
-  border-radius: 10px;
+  border-radius: 50px;
   cursor: pointer;
-  margin: 20px 0 20px 0; // Changed margin from the reference PostButton style
+  margin: 20px 0 20px 20px; 
   width: 80%;
   height: 100px;
   transition: 0.3s;
+  text-overflow: ellipsis;
 
   &:hover {
-    background-color: #809FFF; 
+    background-color: #FECDE4; 
     color: white;
     transform: scale(1.02);
+  }
+  @media (max-width: 1200px) {
+    width: 100%;
+    white-space: normal; /* Allow the text to wrap */
+    max-width: 1000px;
+    font-size:0.5rem;
+  }
+  @media (max-width: 390px) {
+    width: 90%; 
+    font-size: 0.4rem; /* Adjust the font size for smaller screens */
+    height: 80px; /* Reduce the height for smaller screens */
+    padding: 10px 15px; /* Adjust the padding for smaller screens */
+    margin: 20px 0 20px 0; /* Adjust the margin for smaller screens */
   }
 `
 const CategoryButtonBox = styled.div`
@@ -138,23 +163,32 @@ const CategoryButtonBox = styled.div`
   @media (min-width: 1024px) {
     justify-content: space-evenly;
   }
+  @media (min-width: 390px) {
+    margin: 0px;
+  }
 `
 
 const CategoryButton = styled.div`
   font-size: 1.2rem;
   color: #1d1d1f;
-  padding: 10px 20px;
-  border-radius: 25px;
+  // padding: 10px 20px;
+  // border-radius: 25px;
   cursor: pointer;
   transition: 0.3s;
   text-align: center;
   
   &:hover {
-    transform: scale(1.3);
+    transform: scale(1.2);
+    color: #809FFF;
   }
 
   @media (min-width: 1024px) {
     font-size: 1.5rem;
+  }
+  @media (max-width: 516px) {
+    font-size: 0.8rem;
+    max-width: 100px; /* Set the maximum width for the button */
+    white-space: normal; /* Allow the text to wrap */
   }
 `
 
@@ -167,11 +201,20 @@ const PostBox = styled.div`
 
 const TopButtonBox = styled.div`
   display: flex;
-  width: 30%;
-`
+  width: 20%;
 
+  @media (max-width: 516px) {
+    width: 40%;
+  }
+`
 const PostCardBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`
+
+const TopPtagBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 `

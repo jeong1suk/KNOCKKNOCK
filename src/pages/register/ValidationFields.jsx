@@ -36,10 +36,11 @@ const ValidationFields = () => {
       [name]: value,
     }));
   };
+
   ValidationFields.getFormData = () => {
     return formData;
   };
-
+  // console.log("유효성");
   return (
     <>
       <S.Heading>이메일</S.Heading>

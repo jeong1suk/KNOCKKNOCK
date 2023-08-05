@@ -7,6 +7,7 @@ import Play from "../pages/play/Play";
 import PlayAdd from "../pages/play/PlayAdd";
 import MyPage from "../pages/mypage/MyPage";
 import PlayDetail from "../pages/play/PlayDetail";
+import PlayEdit from "../pages/play/PlayEdit";
 
 export const ROUTE = {
   MAIN: {
@@ -43,6 +44,11 @@ export const ROUTE = {
     path: "/playadd",
     link: "/playadd",
     element: PlayAdd,
+  },
+  PlayEdit: {
+    path: "/playedit/:id",
+    link: "/playedit",
+    element: PlayEdit,
   },
   PlayDetail: {
     path: "/playdetail/:id",

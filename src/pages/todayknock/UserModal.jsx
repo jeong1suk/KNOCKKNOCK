@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { getImageSrc } from "../../util/imageCheck";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -154,12 +155,13 @@ function UserProfile({ user }) {
   const shuffledHobby = shuffleArray(user.hobby || []);
   const shuffledIdeal = shuffleArray(user.ideal || []);
   const shuffledPersonality = shuffleArray(user.personality || []);
+  console.log(user);
   return (
     <Container>
       <UserProfileBox>
         <BackgroundImage />
         <ProfilePicture
-          src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg"
+          src={getImageSrc(user.profileImage)}
           alt="Profile Picture"
         />
         <UserProfileContainer>
@@ -169,7 +171,7 @@ function UserProfile({ user }) {
           <UserInfomationBox>
             <UserInformation>
               <UserLineContainer>
-                <UserLine>Name: {user.username}</UserLine>
+                <UserLine>Name: {user.name}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
                 <UserLine>MBTI: {user.mbti}</UserLine>
@@ -182,9 +184,6 @@ function UserProfile({ user }) {
               </UserLineContainer>
               <UserLineContainer>
                 <UserLine>Region: {user.region || "비공개"}</UserLine>
-              </UserLineContainer>
-              <UserLineContainer>
-                <UserLine>Religion: {user.religion}</UserLine>
               </UserLineContainer>
             </UserInformation>
             <HobbyAllBox>

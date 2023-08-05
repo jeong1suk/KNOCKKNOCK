@@ -2,8 +2,164 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import UserProfile from "./UserProfile";
 import TodayGame from "./TodayGame";
-import * as API from "../../api";
+import * as Api from "../../api";
 import UserModal from "./UserModal";
+
+const limit = 3;
+
+function TodayKnock() {
+  const [showStartModal, setShowStartModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [randomLovers, setRandomLovers] = useState([]);
+  const [randomUsers, setRandomUsers] = useState([]);
+
+  const [selectedCard, setSelectedCard] = useState();
+
+  const usersGetRequest = async () => {
+    try {
+      const res = await Api.get(`users/network`);
+      setRandomUsers(res.data.randomUsers);
+    } catch (err) {
+      if (err.response.data.message) {
+        alert(err.response.data.message)
+      }
+      else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
+  
+  const cardsGetRequest = async () => {
+    try {
+      const res = await Api.get(`/cards?limit=${limit}`);
+      console.log(res.data.randomLovers);
+      setRandomLovers(res.data.randomLovers);
+      setSelectedCard(res.data.card);
+    } catch (err) {
+      if (err.response.data.message) {
+        // alert(err.response.data.message);
+      } else {
+        alert("라우팅 경로가 잘못되었습니다.");
+      }
+    }
+  };
+
+  const handleUserProfileClick = async (userId) => {
+    try {
+      const res = await Api.get(`/users/yourpage/${userId}`);
+      setSelectedUser(res.data);
+      setShowUserModal(true);
+    } catch (err) {
+      if (err.response.data.message) {
+        // alert(err.response.data.message);
+      } else {
+        alert("라우팅 경로가 잘못되었습니다.");
+      }
+    }
+  };
+
+
+
+  const handleStartClick = () => {
+    setShowStartModal(true);
+  };
+
+  const handleStartModalExit = () => {
+    cardsGetRequest();
+    setShowStartModal(false);
+  };
+
+  const handleUserModalExit = () => {
+    setShowUserModal(false);
+  };
+
+  const bannerImages = [
+    "url('https://assets.xboxservices.com/assets/9d/26/9d2649d8-ce95-4845-9956-a8b54715d112.jpg?n=Accessory-Hub_Page-Hero-1084_403913_1920x720.jpg')",
+    "url('https://news.xbox.com/en-us/wp-content/uploads/sites/2/2022/03/Hero_Family_JPG.jpg')",
+    "url('https://www.nintendo.co.kr/switch/awuxa/assets/img/top/hero/switch.png')",
+  ];
+
+  const [bannerIndex, setBannerIndex] = useState(0);
+
+  const handleNextBanner = () => {
+    setBannerIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
+  };
+
+  const handlePrevBanner = () => {
+    setBannerIndex((prevIndex) =>
+      prevIndex === 0 ? bannerImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  useEffect(() => {
+    usersGetRequest();
+    cardsGetRequest();
+  }, []);
+
+
+
+  return (
+    <Container>
+      <div style={{ height: "10vh" }} />
+      <Banner style={{ backgroundImage: bannerImages[bannerIndex] }}>
+        <StartButton onClick={handleStartClick}>START</StartButton>
+        <ArrowButtonLeft onClick={handlePrevBanner}>{"<"}</ArrowButtonLeft>
+        <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight>
+      </Banner>
+      <div style={{ height: "10vh" }} />
+      {showStartModal && (
+        <ModalOverlay>
+          <ModalContent>
+            <TodayGame onExit={handleStartModalExit}
+                        selectedCard={selectedCard}
+                        onCardSelect={setSelectedCard} />
+          </ModalContent>
+        </ModalOverlay>
+      )}
+      {showUserModal && selectedUser && (
+        <ModalOverlay onClick={handleUserModalExit}>
+          <ModalContentUser onClick={(e) => e.stopPropagation()}>
+            <UserModal
+              user={selectedUser}
+              // onClose={handleUserModalExit}
+            />
+          </ModalContentUser>
+        </ModalOverlay>
+      )}
+      <UserProfilesContainer>
+
+        {randomLovers.map((user) => (
+          <UserProfileBox
+            key={user.id}
+            onClick={() => handleUserProfileClick(user.User.userId)}
+          >
+            <UserProfile user={user.User} />
+          </UserProfileBox>
+        ))}
+      </UserProfilesContainer>
+      <UserProfilesContainer>
+        {selectedCard && 
+          <>
+            {randomUsers.map((user) => (
+              <UserProfileBox
+                key={user.userId}
+                onClick={() => handleUserProfileClick(user.userId)}
+              >
+                <UserProfile user={user} />
+              </UserProfileBox>
+            ))}
+          </> 
+        }
+      </UserProfilesContainer>
+      
+      
+    </Container>
+  );
+}
+
+export default TodayKnock;
+
 const Container = styled.div`
   margin-bottom: 20rem;
 `;
@@ -120,104 +276,3 @@ const ArrowButtonLeft = styled(ArrowButton)`
 const ArrowButtonRight = styled(ArrowButton)`
   right: 20px;
 `;
-
-function TodayKnock() {
-  const [showStartModal, setShowStartModal] = useState(false);
-  const [showUserModal, setShowUserModal] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-
-  const handleUserProfileClick = (userId) => {
-    API.get(`/users/${userId}`)
-      .then((response) => {
-        console.log("유저 정보 가져오기 성공:", response.data);
-        setSelectedUser(response.data);
-        setShowUserModal(true);
-      })
-      .catch((error) => {
-        console.error("API 호출 오류:", error);
-      });
-  };
-
-  useEffect(() => {
-    API.get("/users/network")
-      .then((response) => {
-        console.log("넘어오긴 햇음");
-        setUsers(response.data.randomUsers);
-      })
-      .catch((error) => {
-        console.error("API 호출 오류:", error);
-      });
-  }, []);
-
-  const handleStartClick = () => {
-    setShowStartModal(true);
-  };
-
-  const handleStartModalExit = () => {
-    setShowStartModal(false);
-  };
-
-  const handleUserModalExit = () => {
-    setShowUserModal(false);
-  };
-
-  const bannerImages = [
-    "url('https://assets.xboxservices.com/assets/9d/26/9d2649d8-ce95-4845-9956-a8b54715d112.jpg?n=Accessory-Hub_Page-Hero-1084_403913_1920x720.jpg')",
-    "url('https://news.xbox.com/en-us/wp-content/uploads/sites/2/2022/03/Hero_Family_JPG.jpg')",
-    "url('https://www.nintendo.co.kr/switch/awuxa/assets/img/top/hero/switch.png')",
-  ];
-
-  const [bannerIndex, setBannerIndex] = useState(0);
-
-  const handleNextBanner = () => {
-    setBannerIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
-  };
-
-  const handlePrevBanner = () => {
-    setBannerIndex((prevIndex) =>
-      prevIndex === 0 ? bannerImages.length - 1 : prevIndex - 1
-    );
-  };
-
-  return (
-    <Container>
-      <div style={{ height: "10vh" }} />
-      <Banner style={{ backgroundImage: bannerImages[bannerIndex] }}>
-        <StartButton onClick={handleStartClick}>START</StartButton>
-        <ArrowButtonLeft onClick={handlePrevBanner}>{"<"}</ArrowButtonLeft>
-        <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight>
-      </Banner>
-      <div style={{ height: "10vh" }} />
-      {showStartModal && (
-        <ModalOverlay>
-          <ModalContent>
-            <TodayGame onExit={handleStartModalExit} />
-          </ModalContent>
-        </ModalOverlay>
-      )}
-      {showUserModal && selectedUser && (
-        <ModalOverlay onClick={handleUserModalExit}>
-          <ModalContentUser onClick={(e) => e.stopPropagation()}>
-            <UserModal
-              user={selectedUser}
-              // onClose={handleUserModalExit}
-            />
-          </ModalContentUser>
-        </ModalOverlay>
-      )}
-      <UserProfilesContainer>
-        {users.map((user) => (
-          <UserProfileBox
-            key={user.user_id}
-            onClick={() => handleUserProfileClick(user.user_id)}
-          >
-            <UserProfile user={user} />
-          </UserProfileBox>
-        ))}
-      </UserProfilesContainer>
-    </Container>
-  );
-}
-
-export default TodayKnock;
