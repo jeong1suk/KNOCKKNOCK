@@ -6,9 +6,8 @@ const ParticipantList = ({ participantsList, handleAccept, handleReject, selecte
   return (
     <ParticipantModalDiv>
       {participantsList.map((participant, index) => (
-        
         <Card key={index}>
-          <Image src={participant.profile_image} alt="profile" />
+          <Image src={participant.User?.UserFiles?.[0]?.File?.url} alt="profile" />
           <Info>
             <p>Nickname: {participant.User.nickname}</p>
             <p>Gender: {participant.User.gender}</p>

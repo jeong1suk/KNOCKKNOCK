@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+
+import { FaEllipsisV, FaEdit, FaTrashAlt } from 'react-icons/fa';
+
 import dayjs from "dayjs";
 
 import * as Api from "../../api";
@@ -44,6 +47,8 @@ function PlayDetail() {
   const [commentProfileImage, setCommentProfileImage] = useState();
   const [comment, setComment] = useState("");
   const [isAccepter, setIsAccepter] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(null);
+
 
   const [nextCursor, setNextCursor] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -81,6 +86,8 @@ function PlayDetail() {
       alert("참여자 정보를 불러오는 데 실패했습니다.");
     }
   };
+
+  console.log(participantsList);
 
   const handleAccept = async (participantId) => {
     try {
@@ -541,33 +548,47 @@ const fetchGetComment = useCallback(
                 </CommentNicknameBox>
                 
                 {comment.commentId === isEditing ? (
-                  <input
-                    type="text"
-                    value={editedContent}
-                    onChange={(e) => setEditedContent(e.target.value)}
-                  />
+                  <CommentEditArea>
+                    <textarea
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                      style={{width: "100%", minHeight: "40px"}}
+                    />
+                    
+                      <button onClick={() => setIsEditing(null)}>취소</button>
+                      <button onClick={() => saveComment(comment.commentId)}>수정</button>
+                    
+                  </CommentEditArea>
                 ) : (
-                  <p>{comment.content}</p>
-                )}
-                {comment.userId === userId && (
-                  <>
-                    {comment.commentId === isEditing ? (
-                      <button onClick={() => saveComment(comment.commentId)}>
-                        저장
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() =>
-                          editComment(comment.commentId, comment.content)
-                        }
-                      >
-                        수정
-                      </button>
+                  <CommentEditDeleteBox>
+                    <p>{comment.content}</p>
+                    {comment.userId === userId && (
+                      <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setMenuOpen((prev) => (prev === commentId ? null : commentId));
+                          }}
+                        >
+                          <FaEllipsisV />
+                        </IconButton>
+                        {menuOpen === commentId && (
+                          <MenuWrapper>
+                            <IconButton
+                              onClick={() => editComment(comment.commentId, comment.content)}
+                            >
+                              <FaEdit /> 수정
+                            </IconButton>
+                            <IconButton
+                              onClick={() => deleteComment(comment.commentId)}
+                            >
+                              <FaTrashAlt /> 삭제
+                            </IconButton>
+                          </MenuWrapper>
+                        )}
+                      </div>
                     )}
-                    <button onClick={() => deleteComment(comment.commentId)}>
-                      삭제
-                    </button>
-                  </>
+                  </CommentEditDeleteBox>
                 )}
               </CommentContentBox>
             </CommentDetailBox>
@@ -579,6 +600,26 @@ const fetchGetComment = useCallback(
 }
 
 export default PlayDetail;
+const IconButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #555;
+  padding: 10px;
+  &:hover {
+    color: #333;
+  }
+`;
+
+const MenuWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+`;
 
 const TopBox = styled.div`
   display: flex;
@@ -673,7 +714,47 @@ const CommentContentBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  width: 90%;
 `;
+
+const CommentEditArea = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 100%;
+
+textarea {
+  width: 90%;
+  padding: 10px;
+  margin-right: 10px;
+  resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
+  border: 1px solid #cccccc; // Light gray border
+}
+
+button {
+  width: 10%;
+  background-color: #007bff; // Same as the button above
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 3%;
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+`
+
+const CommentEditDeleteBox = styled.div`
+  display: flex;
+  width: 100%;
+
+  p {
+    width: 90%;
+  }
+`
+
 
 const ParticipantModalDiv = styled.div`
   display: flex;
