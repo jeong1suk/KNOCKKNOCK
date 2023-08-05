@@ -16,7 +16,7 @@ const ChatContainer = styled.div`
 const MessageChat = styled.div`
   display: flex;
   width: 30rem;
-  height: 70vh;
+  height: 72vh;
   flex-direction: column;
   background-color: #f5f5f7;
   padding: 2rem;
@@ -134,31 +134,32 @@ function ChatComponent() {
   const [profileImage, setProfileImage] = useState("");
   const [userName, setUserName] = useState("");
   const [senderId, setSenderId] = useState(null);
+  const [recieverId, setRecieverId] = useState("");
   const chatRef = useRef(null);
-
+  console.log(senderId);
   useEffect(() => {
-    // 새로운 유저가 접속했을 때 서버로부터 받은 온라인 유저 목록 업데이트
     socket.on("getOnlineUsers", (onlineUsers) => {
       setAllChats(onlineUsers);
     });
-
-    // 서버로부터 새로운 메시지가 도착했을 때 메시지 목록 업데이트
+    // socket.emit("addNewUser", senderId);
     socket.on("getMessage", (message) => {
-      setChatHistory((prevChatHistory) => [...prevChatHistory, message]);
+      const newMessage = {
+        chatId: chatId,
+        content: message.trim(),
+      };
+      setChatHistory((prevChatHistory) => [...prevChatHistory, newMessage]);
     });
 
-    // 서버로부터 알림이 도착했을 때 처리 (알림 처리 로직은 여기서 추가해야 함)
     // socket.on("getNotification", (notification) => {
     //   // TODO: 알림 처리 로직 구현
     // });
 
-    // 컴포넌트가 언마운트될 때 소켓 이벤트 리스너 제거
     return () => {
       socket.off("getOnlineUsers");
       socket.off("getMessage");
       socket.off("getNotification");
     };
-  }, [chatId]); // chatId가 변경될 때마다 useEffect 내의 소켓 이벤트 리스너를 재등록
+  }, [chatId, senderId]);
 
   useEffect(() => {
     API.get("/chats")
@@ -167,7 +168,7 @@ function ChatComponent() {
         console.log("allchat!!!", response.data);
       })
       .catch((error) => {
-        console.error("채팅 목록 가져오는데 실패,,", error);
+        console.error("유저 목록 가져오는데 실패,,", error);
       });
   }, []);
   const handleSendMessage = async () => {
@@ -177,18 +178,13 @@ function ChatComponent() {
         content: message.trim(),
       };
       try {
+        socket.emit("sendMessage", {
+          content: message,
+          recieverId: recieverId,
+        });
         const response = await API.post("/messages", newMessage);
-        const updatedChat = response.data;
-        setChatHistory([...chatHistory, updatedChat]);
+        setChatHistory([...chatHistory, newMessage]);
         setMessage("");
-        try {
-          const messagesResponse = await API.get(`/messages/${chatId}`);
-          const messages = messagesResponse.data.messageList;
-          console.log(messages, "message!!!");
-          setChatHistory(messages);
-        } catch (error) {
-          console.error("채팅 메시지를 가져오는데 실패:", error);
-        }
       } catch (error) {
         console.error("메시지 전송에 실패했습니다:", error);
       }
@@ -197,10 +193,13 @@ function ChatComponent() {
 
   const handleChatClick = async (chat) => {
     try {
+      setRecieverId(chat.currentUserInfo.reciever);
       setChatId(chat.currentUserInfo.chatId);
       setProfileImage(chat.recieverInfo.UserFiles[0].File.url);
       setUserName(chat.recieverInfo.nickname);
       setSenderId(chat.currentUserInfo.sender);
+      socket.emit("addNewUser", chat.currentUserInfo.sender);
+
       const messagesResponse = await API.get(
         `/messages/${chat.currentUserInfo.chatId}`
       );
@@ -238,7 +237,7 @@ function ChatComponent() {
                   <Bubble>{chat.content}</Bubble>
                 ) : (
                   <>
-                    <ProfileImage src={profileImage} alt="사진이 안 떠용가리" />
+                    <ProfileImage src={profileImage} alt="프로필사진" />
                     <Bubble>{chat.content}</Bubble>
                   </>
                 )}
@@ -268,10 +267,7 @@ function ChatComponent() {
                   key={chat.currentUserInfo.chatId}
                   onClick={() => handleChatClick(chat)}
                 >
-                  <ProfileImage
-                    src={profileImageUrl}
-                    alt="사진이 안 떠용가리"
-                  />
+                  <ProfileImage src={profileImageUrl} alt="프로필사진" />
                   <UserName>{chat.recieverInfo.nickname}</UserName>
                 </UserListItem>
               );
@@ -283,105 +279,3 @@ function ChatComponent() {
 }
 
 export default ChatComponent;
-
-// import { useCallback } from "react";
-// import { createContext, useState, useEffect } from "react";
-// import { io } from "socket.io-client";
-
-// export const ChatContext = createContext();
-
-// export const ChatContextProvider = ({ children, user }) => {
-//   const [useChats, setUserChats] = useState(null);
-//   const [isUserChatsLoading, setIsUserChatsLoading] = useState(false);
-//   const [userChatsError, setUserChatsError] = useState(null);
-//   const [potentialChats, setPotentialChats] = useState([]);
-//   const [currentChat, setCurrentChat] = useState(null);
-//   const [messages, setMessages] = useState(null);
-//   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
-//   const [messagesError, setMessagesError] = useState(null);
-//   const [sendTextMessageError, setSendTextMessageError] = useState(null);
-//   const [newMessage, setNewMessage] = useState(null);
-//   const [socket, setSocket] = useState(null);
-
-//   console.log("messages", messages);
-//   const sendMessage = (text, sender) => {
-//     if (text.trim() !== "") {
-//       const newMessage = {
-//         text: text.trim(),
-//         sender: sender,
-//         chatId: currentChat._id,
-//       };
-//       socket.emit("sendMessage", newMessage);
-//     }
-//   };
-//   useEffect(() => {
-//     if (socket === null) return;
-
-//     socket.on("getMessage", (message) => {
-//       setMessages((prevMessages) => [...prevMessages, message]);
-//     });
-
-//     return () => {
-//       socket.off("getMessage");
-//     };
-//   }, [socket]);
-//   useEffect(() => {
-//     const newSocket = io("http://localhost:3000");
-//     setSocket(newSocket);
-
-//     return () => {
-//       newSocket.disconnect();
-//     };
-//   }, [user]);
-//   //add online users
-//   useEffect(() => {
-//     if (socket === null) return;
-//     socket.emit("addNewUser", user?._id);
-//     socket.on("getOnlineUsers", (res) => {
-//       setOnlineusers(res);
-//     });
-//     return () => {
-//       socket.off("getOnlineUsers");
-//     };
-//   }, [socket]);
-//   //send message
-//   useEffect(() => {
-//     if (socket === null) return;
-
-//     const recipientId = currentChat?.members?.find((id) => id !== user?._id);
-
-//     socket.emit("sendMessage", { ...newMessage, recipientId });
-//   }, [newMessage]);
-//   //receive message
-//   useEffect(() => {
-//     if (socket === null) return;
-
-//     socket.on("getMessage", (res) => {
-//       if (currentChat?._id !== res.chatId) return;
-
-//       setMessages((prev) => [...prev, res]);
-//     });
-
-//     return () => {
-//       socket.off("getMessage");
-//     };
-//   }, [socket, currentChat]);
-
-//   useEffect(() => {
-//     const getUsers = async () => {
-//       const response = await getRequest(`${baseUrl}/users`);
-//       if (response.error) {
-//         return console.log("Error fetching users", response);
-//       }
-//     };
-//     return (
-//       <ChatContext.Provider
-//         value={{
-//           messages,
-//           sendMessage,
-//         }}
-//       >
-//         {children}
-//       </ChatContext.Provider>
-//     );
-//   });

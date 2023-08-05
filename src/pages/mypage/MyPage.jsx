@@ -1,6 +1,9 @@
 // import React, { useState } from "react";
 // import styled, { keyframes } from "styled-components";
+// import { getImageSrc } from "../../util/imageCheck";
+// import UserPostAndParticipants from "./UserPostAndParticipants";
 // import UserProfileLarge from "./UserProfileLarge";
+// import ChatComponent from "./ChatService";
 
 // const Container = styled.div`
 //   display: flex;
@@ -192,44 +195,7 @@
 //               </SectionButton>
 //             </Section>
 
-//             {activeSection === "chat" && (
-//               <MessageChat>
-//                 <ProfileImageBox>
-//                   <ProfileImage
-//                     src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg"
-//                     alt="Profile Image"
-//                   />
-//                   <UserName>토리</UserName>
-//                 </ProfileImageBox>
-//                 <MessageBox>
-//                   <MessageContainer>
-//                     <ProfileImage
-//                       src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg"
-//                       alt="Profile Image"
-//                     />
-//                     <Bubble>안녕하세요!</Bubble>
-//                   </MessageContainer>
-//                   <MessageContainer>
-//                     <ProfileImage
-//                       src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg"
-//                       alt="Profile Image"
-//                     />
-//                     <Bubble>잘 지내시나요?</Bubble>
-//                   </MessageContainer>
-//                   <MessageContainer>
-//                     <ProfileImage
-//                       src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg"
-//                       alt="Profile Image"
-//                     />
-//                     <Bubble>네니오</Bubble>
-//                   </MessageContainer>
-//                   <ChatInputContainer>
-//                     <ChatInput type="text" placeholder="메시지를 입력하세요" />
-//                     <SendButton>전송</SendButton>
-//                   </ChatInputContainer>
-//                 </MessageBox>
-//               </MessageChat>
-//             )}
+//             {activeSection === "chat" && <ChatComponent />}
 //             {activeSection === "myPosts" && <div>안녕</div>}
 //           </RightSection>
 //         </RightSectionWrapper>
@@ -245,9 +211,7 @@ import styled, { keyframes } from "styled-components";
 import { getImageSrc } from "../../util/imageCheck";
 import UserPostAndParticipants from "./UserPostAndParticipants";
 import UserProfileLarge from "./UserProfileLarge";
-<<<<<<< HEAD
 import ChatComponent from "./ChatService";
-=======
 import * as Api from "../../api";
 const MyPage = () => {
   const [activeSection, setActiveSection] = useState("chat");
@@ -258,7 +222,6 @@ const MyPage = () => {
   const handleSectionChange = (section) => {
     setActiveSection(section);
   };
->>>>>>> origin/dev
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -296,44 +259,7 @@ const MyPage = () => {
               </SectionButton>
             </Section>
 
-            {activeSection === "chat" && (
-              <MessageChat>
-                <ProfileImageBox>
-                  <ProfileImage
-                    src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg"
-                    alt="Profile Image"
-                  />
-                  <UserName>토리</UserName>
-                </ProfileImageBox>
-                <MessageBox>
-                  <MessageContainer>
-                    <ProfileImage
-                      src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg"
-                      alt="Profile Image"
-                    />
-                    <Bubble>안녕하세요!</Bubble>
-                  </MessageContainer>
-                  <MessageContainer>
-                    <ProfileImage
-                      src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg"
-                      alt="Profile Image"
-                    />
-                    <Bubble>잘 지내시나요?</Bubble>
-                  </MessageContainer>
-                  <MessageContainer>
-                    <ProfileImage
-                      src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg"
-                      alt="Profile Image"
-                    />
-                    <Bubble>네니오</Bubble>
-                  </MessageContainer>
-                  <ChatInputContainer>
-                    <ChatInput type="text" placeholder="메시지를 입력하세요" />
-                    <SendButton>전송</SendButton>
-                  </ChatInputContainer>
-                </MessageBox>
-              </MessageChat>
-            )}
+            {activeSection === "chat" && <ChatComponent />}
             {activeSection === "myPosts" && <UserPostAndParticipants />}
           </RightSection>
         </RightSectionWrapper>
@@ -514,52 +440,4 @@ const SectionButton = styled.button`
   cursor: pointer;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
-<<<<<<< HEAD
-
-function MyPage() {
-  const [activeSection, setActiveSection] = useState("chat");
-
-  const handleSectionChange = (section) => {
-    setActiveSection(section);
-  };
-
-  return (
-    <Container>
-      <UserProfileBox>
-        <BackgroundImage />
-        <ProfilePicture
-          src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg"
-          alt="Profile Picture"
-        />
-        <RightSectionWrapper>
-          <LeftSection>
-            <UserProfileLarge />
-          </LeftSection>
-          <RightSection>
-            <Section>
-              <SectionButton
-                onClick={() => handleSectionChange("chat")}
-                isActive={activeSection === "chat"}
-              >
-                채팅
-              </SectionButton>
-              <SectionButton
-                onClick={() => handleSectionChange("myPosts")}
-                isActive={activeSection === "myPosts"}
-              >
-                내가쓴글
-              </SectionButton>
-            </Section>
-
-            {activeSection === "chat" && <ChatComponent />}
-            {activeSection === "myPosts" && <div>안녕</div>}
-          </RightSection>
-        </RightSectionWrapper>
-      </UserProfileBox>
-    </Container>
-  );
-}
-
-=======
->>>>>>> origin/dev
 export default MyPage;
