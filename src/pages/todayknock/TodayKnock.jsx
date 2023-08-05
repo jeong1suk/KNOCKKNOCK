@@ -16,6 +16,8 @@ function TodayKnock() {
 
   const [selectedCard, setSelectedCard] = useState();
 
+  console.log(randomLovers);
+
   const usersGetRequest = async () => {
     try {
       const res = await Api.get(`users/network`);

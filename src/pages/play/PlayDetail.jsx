@@ -35,6 +35,8 @@ function PlayDetail() {
   const [status, setStatus] = useState();
 
   const [dropdownSelection, setDropdownSelection] = useState("신청인원");
+  const [genderSelection, setGenderSelection] = useState("전체");
+
   const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
   const [modalCursor, setModalCursor] = useState(0);
 
@@ -54,20 +56,26 @@ function PlayDetail() {
     if (isParticipantModalOpen) {
       fetchParticipantsList();
     }
-  }, [isParticipantModalOpen, dropdownSelection]);
+  }, [isParticipantModalOpen, dropdownSelection, genderSelection]);
 
   const fetchParticipantsList = async () => {
     try {
       const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
       let res;
       if(status == "pending") {
-        res = await Api.get(`/participants/${postId}/userlist`);
+        if(genderSelection == "전체"){
+            res = await Api.get(`/participants/${postId}/userlist`);
+        }
+        else{
+            res = await Api.get(`/participants/${postId}/userlist?gender=${genderSelection}`);
+        }
         setParticipantsList(res.data.participantsList);
-        console.log(res);
+        
       }
       else if(status == "accepted") {
         res = await Api.get(`/participants/${postId}/acceptedlist`);
         setParticipantsList(res.data.acceptedUsers);
+
       }
     } catch (err) {
       alert("참여자 정보를 불러오는 데 실패했습니다.");
@@ -369,7 +377,6 @@ const fetchGetComment = useCallback(
   }, []);
 
 
-  console.log(post);
 
   return (
     <>
@@ -403,8 +410,9 @@ const fetchGetComment = useCallback(
             </TopBoxButton>
           )}
 
-          {isParticipantModalOpen && (
-            <Modal onClose={() => setIstParticipantModalOpen(false)}>
+        {isParticipantModalOpen && (
+          <Modal onClose={() => setIstParticipantModalOpen(false)}>
+            <DropdownMenuDiv>
               <DropdownMenu
                 options={[
                   { label: "신청인원", value: "신청인원" },
@@ -413,14 +421,27 @@ const fetchGetComment = useCallback(
                 selectedOption={dropdownSelection}
                 handleOptionChange={(e) => setDropdownSelection(e.target.value)}
               />
-              <ParticipantList
-                participantsList={participantsList}
-                handleAccept={handleAccept}
-                handleReject={handleReject}
-                selectedOption={dropdownSelection}
-              />
-            </Modal>
-          )}
+
+              {dropdownSelection === "신청인원" && (
+                <DropdownMenu
+                  options={[
+                    { label: "전체", value: "전체" },
+                    { label: "남", value: "남" },
+                    { label: "여", value: "여" },
+                  ]}
+                  selectedOption={genderSelection}
+                  handleOptionChange={(e) => setGenderSelection(e.target.value)}
+                />
+              )}
+            </DropdownMenuDiv>
+            <ParticipantList
+              participantsList={participantsList}
+              handleAccept={handleAccept}
+              handleReject={handleReject}
+              selectedOption={dropdownSelection}
+            />
+          </Modal>
+        )}
         </TopInnerBox>
       </TopBox>
       <PostDetailBox>
@@ -660,6 +681,11 @@ const ParticipantModalDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+const DropdownMenuDiv = styled.div`
+  display: flex;
+  gap: 10px;
+`
 
 const CommentInputArea = styled.div`
   display: flex;
