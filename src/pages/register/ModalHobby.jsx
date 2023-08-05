@@ -1,20 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./style";
 import styled from "styled-components";
 import { hobbyList } from "../../constants/registerConstants";
 import { useToggle } from "../../components/hooks/useToggle";
+import { isMaxArrayReached } from "../../util/arrayUtils";
 export const ModalHobby = ({ formData, handleHobbyClick }) => {
   const { hobby } = formData;
+
   const { opened, onOpen, onClose } = useToggle();
+  const isMaxHobbyReached = isMaxArrayReached(hobby, 5);
 
   return (
     <S.RightAlignedBox>
       <S.ToggleButton style={{ textAlign: "center" }} onClick={onOpen}>
         취미 선택하기
       </S.ToggleButton>
+
       {opened && (
         <S.Modal>
           <h3 style={{ textAlign: "center" }}>취미</h3>
+          {isMaxHobbyReached && (
+            <p style={{ color: "red" }}>You can only select up to 5 hobbies.</p>
+          )}
           <ButtonContainer>
             {hobbyList.map((elements, index) => (
               <ModalButton

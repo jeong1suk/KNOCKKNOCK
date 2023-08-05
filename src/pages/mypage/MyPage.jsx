@@ -242,9 +242,105 @@
 
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
+import { getImageSrc } from "../../util/imageCheck";
+import UserPostAndParticipants from "./UserPostAndParticipants";
 import UserProfileLarge from "./UserProfileLarge";
+<<<<<<< HEAD
 import ChatComponent from "./ChatService";
+=======
+import * as Api from "../../api";
+const MyPage = () => {
+  const [activeSection, setActiveSection] = useState("chat");
+  // const res = await Api.get("/users/mypage/posts");
+  // console.log(res.data.posts);
+  // console.log(res.data.participants);
+  const [isHovered, setIsHovered] = useState(false);
+  const handleSectionChange = (section) => {
+    setActiveSection(section);
+  };
+>>>>>>> origin/dev
 
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  return (
+    <Container>
+      <BackgroundImage />
+      <UserProfileBox>
+        {/* <ProfilePicture
+          src={getImageSrc(user.UserFiles?.[-1]?.File?.url)}
+          alt="Profile Picture"
+        /> */}
+        <RightSectionWrapper>
+          <LeftSection>
+            <UserProfileLarge />
+          </LeftSection>
+          <RightSection>
+            <Section>
+              <SectionButton
+                onClick={() => handleSectionChange("chat")}
+                isactive={activeSection === "chat"}
+              >
+                채팅
+              </SectionButton>
+              <SectionButton
+                onClick={() => handleSectionChange("myPosts")}
+                isactive={activeSection === "myPosts"}
+              >
+                내가쓴글
+              </SectionButton>
+            </Section>
+
+            {activeSection === "chat" && (
+              <MessageChat>
+                <ProfileImageBox>
+                  <ProfileImage
+                    src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg"
+                    alt="Profile Image"
+                  />
+                  <UserName>토리</UserName>
+                </ProfileImageBox>
+                <MessageBox>
+                  <MessageContainer>
+                    <ProfileImage
+                      src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg"
+                      alt="Profile Image"
+                    />
+                    <Bubble>안녕하세요!</Bubble>
+                  </MessageContainer>
+                  <MessageContainer>
+                    <ProfileImage
+                      src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg"
+                      alt="Profile Image"
+                    />
+                    <Bubble>잘 지내시나요?</Bubble>
+                  </MessageContainer>
+                  <MessageContainer>
+                    <ProfileImage
+                      src="https://cdn.discordapp.com/attachments/1090903178603659326/1127977609351934072/image0.jpg"
+                      alt="Profile Image"
+                    />
+                    <Bubble>네니오</Bubble>
+                  </MessageContainer>
+                  <ChatInputContainer>
+                    <ChatInput type="text" placeholder="메시지를 입력하세요" />
+                    <SendButton>전송</SendButton>
+                  </ChatInputContainer>
+                </MessageBox>
+              </MessageChat>
+            )}
+            {activeSection === "myPosts" && <UserPostAndParticipants />}
+          </RightSection>
+        </RightSectionWrapper>
+      </UserProfileBox>
+    </Container>
+  );
+};
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -266,8 +362,26 @@ const BackgroundImage = styled.div`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   background-size: cover;
   background-position: center;
+  position: relative;
+  &:hover {
+    background: gray;
+    cursor: pointer;
+  }
 `;
-
+const ChangeBackgroundButton = styled.button`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px 20px;
+  background-color: white;
+  border: 2px solid #f0987f;
+  border-radius: 4px;
+  color: #f0987f;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+`;
 const ProfilePicture = styled.img`
   width: 8rem;
   height: 8rem;
@@ -277,6 +391,7 @@ const ProfilePicture = styled.img`
   border-radius: 100%;
   margin-top: -5.5rem;
   margin-right: 50rem;
+  z-index: 1;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
@@ -386,19 +501,20 @@ const SendButton = styled.button`
 const Section = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 4.5rem;
   margin-bottom: 2rem;
 `;
 
 const SectionButton = styled.button`
   padding: 10px;
   margin: 0 10px;
-  background-color: ${(props) => (props.isActive ? "#ddd" : "transparent")};
+  background-color: ${(props) => (props.isactive ? "#ddd" : "transparent")};
   border: none;
   border-radius: 5px;
   cursor: pointer;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
+<<<<<<< HEAD
 
 function MyPage() {
   const [activeSection, setActiveSection] = useState("chat");
@@ -444,4 +560,6 @@ function MyPage() {
   );
 }
 
+=======
+>>>>>>> origin/dev
 export default MyPage;

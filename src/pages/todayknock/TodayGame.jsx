@@ -1,6 +1,189 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import UserProfile from "./UserProfile";
+import * as Api from "../../api";
+
+const limit = 1;
+const randomId = Math.floor(Math.random() * 10) + 21;
+
+const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
+  const [showModal, setShowModal] = useState(false);
+  const [leftButtonClickCount, setLeftButtonClickCount] = useState(0);
+  const [rightButtonClickCount, setRightButtonClickCount] = useState(0);
+
+  
+
+  const cardsGetRequest = async () => {
+    try {
+      const res = await Api.get(`/cards?limit=${limit}`);
+      onCardSelect(res.data.card);
+    } catch (err) {
+      if (err.response.data.message) {
+        // alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
+
+
+  const cardsPostRequset = async (cardId) => {
+    try {
+      await Api.post(`/cards?cardId=${cardId}`);
+      cardsGetRequest();
+
+    } catch (err) {
+      if (err.response.data.message) {
+        // alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
+
+  const handleCardClick = (cardId) => {
+    cardsPostRequset(cardId)
+  }
+
+  const handleButtonClick = (side) => {
+    if (leftButtonClickCount + rightButtonClickCount < 5) {
+      if (side === "left") {
+        setLeftButtonClickCount(leftButtonClickCount + 1);
+      } else if (side === "right") {
+        setRightButtonClickCount(rightButtonClickCount + 1);
+      }
+    }
+  };
+
+  const handleExitModal = () => {
+    setShowModal(false);
+    setLeftButtonClickCount(0);
+    setRightButtonClickCount(0);
+  };
+
+  console.log(selectedCard);
+
+  useEffect(() => {
+    cardsGetRequest();
+  }, [])
+  return (
+    <>
+      {!showModal ? (
+        <>
+          {leftButtonClickCount + rightButtonClickCount < 5 ? (
+            <>
+              <ButtonGroup>
+                <button onClick={() => handleButtonClick("left")}>Left</button>
+                <button onClick={() => handleButtonClick("right")}>
+                  Right
+                </button>
+              </ButtonGroup>
+              {selectedCard ?
+              <CardImageContainer>
+                <CardImage src={selectedCard.CardFile?.File?.url} />
+                <p>{selectedCard.content}</p>
+              </CardImageContainer> 
+              :
+              <Container>
+                <ImageContainer>
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+              </Container>
+              }
+              
+              <br />
+              {/* <Container>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"012.png"} />
+                </ImageContainer>
+                <ImageContainer>
+                  <Image src={"011.png"} />
+                </ImageContainer>
+              </Container> */}
+            </>
+          ) : (
+            <>
+              <p style={{ fontSize: 30 }}>Top3</p>
+              <RankUser>
+                <UserProfile />
+                <UserProfile />
+                <UserProfile />
+              </RankUser>
+            </>
+          )}
+        </>
+      ) : (
+        <ModalOverlay>
+          <ModalContent>
+            <div>End</div>
+            <ExitButton onClick={handleExitModal}>Exit</ExitButton>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+      {/* {leftButtonClickCount + rightButtonClickCount >= 5 && (
+        <ExitBox>
+          <ExitButton onClick={onExit}>Exit</ExitButton>
+        </ExitBox>
+      )} */}
+      <ExitBox>
+        <ExitButton onClick={onExit}>Exit</ExitButton>
+      </ExitBox>
+    </>
+  );
+};
+
+export default TodayGame;
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -59,63 +242,38 @@ const RankUser = styled.div`
   justify-content: space-around;
   align-items: center;
 `;
+const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const ImageContainer = styled.div`
+  width: 155px;
+  height: 245px;
+  background-color: aliceblue;
+  text-align: center;
+  line-height: 100px;
+  transition: width 1s, height 1s;
+`;
 
-const TodayGame = ({ onExit }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [leftButtonClickCount, setLeftButtonClickCount] = useState(0);
-  const [rightButtonClickCount, setRightButtonClickCount] = useState(0);
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: width 1s, height 1s;
 
-  const handleButtonClick = (side) => {
-    if (leftButtonClickCount + rightButtonClickCount < 5) {
-      if (side === "left") {
-        setLeftButtonClickCount(leftButtonClickCount + 1);
-      } else if (side === "right") {
-        setRightButtonClickCount(rightButtonClickCount + 1);
-      }
-    }
-  };
+  ${ImageContainer}:hover & {
+    width: 200px;
+    height: 300px;
+  }
+`;
 
-  const handleExitModal = () => {
-    setShowModal(false);
-    setLeftButtonClickCount(0);
-    setRightButtonClickCount(0);
-  };
+const CardImage = styled.img`
+  width: 40%;
+`
 
-  return (
-    <>
-      {!showModal ? (
-        <>
-          {leftButtonClickCount + rightButtonClickCount < 5 ? (
-            <ButtonGroup>
-              <button onClick={() => handleButtonClick("left")}>Left</button>
-              <button onClick={() => handleButtonClick("right")}>Right</button>
-            </ButtonGroup>
-          ) : (
-            <>
-              <p style={{ fontSize: 30 }}>Top3</p>
-              <RankUser>
-                <UserProfile />
-                <UserProfile />
-                <UserProfile />
-              </RankUser>
-            </>
-          )}
-        </>
-      ) : (
-        <ModalOverlay>
-          <ModalContent>
-            <div>End</div>
-            <ExitButton onClick={handleExitModal}>Exit</ExitButton>
-          </ModalContent>
-        </ModalOverlay>
-      )}
-      {leftButtonClickCount + rightButtonClickCount >= 5 && (
-        <ExitBox>
-          <ExitButton onClick={onExit}>Exit</ExitButton>
-        </ExitBox>
-      )}
-    </>
-  );
-};
-
-export default TodayGame;
+const CardImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`

@@ -2,10 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as Api from "../../api";
 
-import { hobbyList } from "../../constants/HobbyListConstant";
-import { mbtiList } from "../../constants/MbtiListConstants";
-import { personalityList } from "../../constants/PersonalityListConstants";
-import { idealList } from "../../constants/idealListConstants";
+import {
+  mbtiList,
+  idealList,
+  hobbyList,
+  personalityList,
+} from "../../constants/registerConstants";
 
 import { useImageUpload } from "../../components/hooks/UseImageUpload";
 
@@ -28,7 +30,13 @@ function RegisterForm() {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
   const today = new Date().toISOString().split("T")[0];
-
+  // const [form, setForm] = React.useState({
+  //   name: "",
+  //   nickname: "",
+  //   email: "",
+  //   password: "",
+  //   confirmPassword: "",
+  // })
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");

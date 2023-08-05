@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./style";
 import { mbtiList } from "../../constants/registerConstants";
 import { ModalHobby } from "./ModalHobby";
@@ -11,7 +11,7 @@ const OptionalInputs = () => {
     hobby: [],
     personality: [],
     ideal: [],
-    introduce: "", //아무값도 있지 않으면 OptionalInputs.getFormData이게 return을 못받아서 오류가 뜸.
+    introduce: "",
   });
   const { height, mbti, hobby, personality, ideal, introduce } = formData;
 
@@ -22,26 +22,34 @@ const OptionalInputs = () => {
       [name]: value,
     }));
   };
-  const onArrayChange = (array, element, arrayPropertyName) => {
-    setFormData((prev) => ({
-      ...prev,
-      [arrayPropertyName]: array.includes(element)
+  const onArrayChange = (array, element, arrayPropertyName, maxLimit) => {
+    setFormData((prev) => {
+      const newArray = array.includes(element)
         ? array.filter((e) => e !== element)
-        : [...array, element],
-    }));
+        : [...array, element];
+
+      if (newArray.length > maxLimit) {
+        newArray.splice(maxLimit);
+      }
+      return {
+        ...prev,
+        [arrayPropertyName]: newArray,
+      };
+    });
   };
 
   const handleHobbyClick = (element) => {
-    onArrayChange(hobby, element, "hobby");
+    onArrayChange(hobby, element, "hobby", 5);
   };
 
   const handlePersonalityClick = (element) => {
-    onArrayChange(personality, element, "personality");
+    onArrayChange(personality, element, "personality", 5);
   };
 
   const handleIdealClick = (element) => {
-    onArrayChange(ideal, element, "ideal");
+    onArrayChange(ideal, element, "ideal", 5);
   };
+  // console.log("옵셔널");
   OptionalInputs.getFormData = () => {
     return formData;
   };

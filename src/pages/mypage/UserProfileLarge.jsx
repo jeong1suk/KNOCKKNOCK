@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import * as Api from "../../api";
+// import { UserStateContext } from "../../App";
+import UserProfileEdit from "./UserProfileEdit";
+import { getImageSrc } from "../../util/imageCheck";
+import { UserStateContext } from "../../context/user/UserProvider";
 // import { DndProvider, useDrag, useDrop } from "react-dnd";
 // import { HTML5Backend } from "react-dnd-html5-backend";
 
 const UserProfileContainer = styled.div`
   width: 22rem;
-  margin-top: -3rem;
+  margin-top: 2rem;
 `;
 const UserProfileBox = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin-left: 3rem;
+  margin-left: 6rem;
   margin-right: 3rem;
 `;
 const Nickname = styled.h2`
@@ -110,7 +114,19 @@ const HobbyBoxContainer = styled.div`
   justify-content: center;
   margin: 1rem;
 `;
-
+const ProfilePicture = styled.img`
+  width: 8rem;
+  height: 8rem;
+  border-color: #f2f2f2e2;
+  border-width: 4px;
+  border-style: solid;
+  border-radius: 100%;
+  margin-top: -5.5rem;
+  margin-right: 50rem;
+  margin-left: 8rem;
+  z-index: 1;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+`;
 function shuffleArray(array) {
   const shuffledArray = array.slice();
   for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -119,8 +135,9 @@ function shuffleArray(array) {
   }
   return shuffledArray;
 }
-function UserProfile() {
+const UserProfileLarge = () => {
   const [user, setUser] = useState([]);
+  const userState = useContext(UserStateContext);
   useEffect(() => {
     Api.get("/users/mypage")
       .then((response) => {
@@ -130,19 +147,28 @@ function UserProfile() {
       .catch((error) => {
         console.error("API 호출 오류:", error);
       });
-  }, []);
+  }, [userState]);
+
   const shuffledHobby = shuffleArray(user.hobby || []);
   const shuffledIdeal = shuffleArray(user.ideal || []);
   const shuffledPersonality = shuffleArray(user.personality || []);
   return (
     <UserProfileContainer>
+      <ProfilePicture
+        src={getImageSrc(user.profileImage)}
+        alt="Profile Picture"
+      />
+      <UserProfileEdit user={user} />
+
       <UserProfileBox>
-        <Nickname>{user.nickname}</Nickname>
-        <Email>{user.email}</Email>
-        <Tagline>{user.introduce}</Tagline>
+        <UserInformation>
+          <Nickname>{user.nickname}</Nickname>
+          <Email>{user.email}</Email>
+          <Tagline>{user.introduce}</Tagline>
+        </UserInformation>
         <UserInformation>
           <UserLineContainer>
-            <UserLine>Name: {user.username}</UserLine>
+            <UserLine>Name: {user.name}</UserLine>
           </UserLineContainer>
           <UserLineContainer>
             <UserLine>MBTI: {user.mbti}</UserLine>
@@ -155,9 +181,6 @@ function UserProfile() {
           </UserLineContainer>
           <UserLineContainer>
             <UserLine>Region: {user.region || "비공개"}</UserLine>
-          </UserLineContainer>
-          <UserLineContainer>
-            <UserLine>Religion: {user.religion}</UserLine>
           </UserLineContainer>
         </UserInformation>
       </UserProfileBox>
@@ -184,6 +207,6 @@ function UserProfile() {
       </HobbyBoxContainer>
     </UserProfileContainer>
   );
-}
+};
 
-export default UserProfile;
+export default UserProfileLarge;
