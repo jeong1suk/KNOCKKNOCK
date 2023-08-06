@@ -21,7 +21,7 @@ const RegisterPage = () => {
   // console.log("부모");
   const handleRegistration = async (formData) => {
     try {
-      console.log("등록버튼함수안: ", formData);
+      // console.log("등록버튼함수안: ", formData);
       let response;
       if (selectedFile) {
         const formImgData = new FormData();

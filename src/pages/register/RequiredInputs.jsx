@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as S from "./style";
 import styled from "styled-components";
 import ValidationFields from "./ValidationFields";
-import "react-datepicker/dist/react-datepicker.css";
+
 import { regions } from "../../constants/registerConstants";
 const RequiredInputs = () => {
   const [formData, setFormData] = useState({
