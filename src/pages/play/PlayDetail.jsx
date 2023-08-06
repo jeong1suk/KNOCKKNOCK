@@ -125,7 +125,7 @@ function PlayDetail() {
     const confirmApplyPost = window.confirm("모임에 참가신청하시겠습니까?");
     if (confirmApplyPost) {
       applyPostRequest(postId);
-      alert("신청되었습니다");
+      
     }
   };
 
@@ -142,7 +142,9 @@ function PlayDetail() {
   const applyPostRequest = async (postId) => {
     try {
       const res = await Api.post(`/participants/${postId}`);
+      alert("신청되었습니다");
       applyGetRequest();
+      
     } catch (err) {
       if (err.response.data.message) {
         alert(err.response.data.message);

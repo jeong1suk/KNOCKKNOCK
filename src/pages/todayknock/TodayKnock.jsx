@@ -16,7 +16,6 @@ function TodayKnock() {
 
   const [selectedCard, setSelectedCard] = useState();
 
-  console.log(randomLovers);
 
   const usersGetRequest = async () => {
     try {
@@ -35,7 +34,6 @@ function TodayKnock() {
   const cardsGetRequest = async () => {
     try {
       const res = await Api.get(`/cards?limit=${limit}`);
-      console.log(res.data.randomLovers);
       setRandomLovers(res.data.randomLovers);
       setSelectedCard(res.data.card);
     } catch (err) {
@@ -97,7 +95,9 @@ function TodayKnock() {
   useEffect(() => {
     usersGetRequest();
     cardsGetRequest();
+
   }, []);
+
 
 
 
@@ -131,28 +131,29 @@ function TodayKnock() {
       )}
       <UserProfilesContainer>
 
-        {randomLovers.map((user) => (
-          <UserProfileBox
-            key={user.id}
-            onClick={() => handleUserProfileClick(user.User.userId)}
-          >
-            <UserProfile user={user.User} />
-          </UserProfileBox>
-        ))}
-      </UserProfilesContainer>
-      <UserProfilesContainer>
         {selectedCard && 
           <>
-            {randomUsers.map((user) => (
+            {randomLovers.map((user) => (
               <UserProfileBox
-                key={user.userId}
-                onClick={() => handleUserProfileClick(user.userId)}
+                key={user.id}
+                onClick={() => handleUserProfileClick(user.User.userId)}
               >
-                <UserProfile user={user} />
+                <UserProfile user={user.User} />
               </UserProfileBox>
             ))}
-          </> 
+          </>
         }
+      </UserProfilesContainer>
+      <UserProfilesContainer>     
+      {randomUsers.map((user) => (
+        <UserProfileBox
+          key={user.userId}
+          onClick={() => handleUserProfileClick(user.userId)}
+        >
+          <UserProfile user={user} />
+        </UserProfileBox>
+      ))}
+
       </UserProfilesContainer>
       
       
@@ -223,7 +224,8 @@ const ModalContentUser = styled.div`
 
 const ModalContent = styled.div`
   width: 70%;
-  height: 70%;
+  height: 90%;
+  overflow: auto;
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
