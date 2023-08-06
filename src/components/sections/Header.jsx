@@ -28,7 +28,7 @@ const Header = () => {
         <LogoBox>
           <Link to={ROUTE.MAIN.link}>
             <LogoImgBox>
-              <img src="src/assets/knock.png" />
+              <img src="002.png" />
             </LogoImgBox>
           </Link>
         </LogoBox>
