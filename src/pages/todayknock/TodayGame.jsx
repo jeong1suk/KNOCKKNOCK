@@ -81,7 +81,7 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
 {selectedCard ?
       <CardImageContainer>
         <CardImage src={selectedCard.CardFile?.File?.url} />
-        <p>{selectedCard.content[0]}</p>
+        <p>{userState.user.nickname}{selectedCard.content[0]}</p>
         <p>{userState.user.nickname}{selectedCard.content[1]}</p>
       </CardImageContainer>
               :
