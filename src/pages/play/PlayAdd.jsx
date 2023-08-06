@@ -113,7 +113,7 @@ function PlayAdd() {
           <StyledInput style={{width: "81%"}} type="text" value={postTitle} onChange={e => setPostTitle(e.target.value)} required />
         </InputBox>
         <InputBox>
-          <StyledLabel>이렇게 놀까?</StyledLabel>
+          <StyledLabel>뭐하고 놀까?</StyledLabel>
           <StyledSelect value={postType} onChange={handleCategoryChange} required>
             {categories.map((category, index) => 
               <option key={index} value={category}>{category}</option>

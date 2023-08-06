@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+
+import { FaEllipsisV, FaEdit, FaTrashAlt } from 'react-icons/fa';
+
 import dayjs from "dayjs";
 
 import * as Api from "../../api";
@@ -28,6 +31,8 @@ function PlayDetail() {
   const userId = Number(localStorage.getItem("userId"));
 
   const [post, setPost] = useState([]);
+  const [postMenuOpen, setPostMenuOpen] = useState(null);
+
   const [participantsList, setParticipantsList] = useState([]);
   const [participationFlag, setParticipationFlag] = useState();
 
@@ -35,6 +40,8 @@ function PlayDetail() {
   const [status, setStatus] = useState();
 
   const [dropdownSelection, setDropdownSelection] = useState("신청인원");
+  const [genderSelection, setGenderSelection] = useState("전체");
+
   const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
   const [modalCursor, setModalCursor] = useState(0);
 
@@ -42,6 +49,8 @@ function PlayDetail() {
   const [commentProfileImage, setCommentProfileImage] = useState();
   const [comment, setComment] = useState("");
   const [isAccepter, setIsAccepter] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(null);
+
 
   const [nextCursor, setNextCursor] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,25 +63,33 @@ function PlayDetail() {
     if (isParticipantModalOpen) {
       fetchParticipantsList();
     }
-  }, [isParticipantModalOpen, dropdownSelection]);
+  }, [isParticipantModalOpen, dropdownSelection, genderSelection]);
 
   const fetchParticipantsList = async () => {
     try {
       const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
       let res;
       if(status == "pending") {
-        res = await Api.get(`/participants/${postId}/userlist`);
+        if(genderSelection == "전체"){
+            res = await Api.get(`/participants/${postId}/userlist`);
+        }
+        else{
+            res = await Api.get(`/participants/${postId}/userlist?gender=${genderSelection}`);
+        }
         setParticipantsList(res.data.participantsList);
-        console.log(res);
+        
       }
       else if(status == "accepted") {
         res = await Api.get(`/participants/${postId}/acceptedlist`);
         setParticipantsList(res.data.acceptedUsers);
+
       }
     } catch (err) {
       alert("참여자 정보를 불러오는 데 실패했습니다.");
     }
   };
+
+
 
   const handleAccept = async (participantId) => {
     try {
@@ -110,7 +127,7 @@ function PlayDetail() {
     const confirmApplyPost = window.confirm("모임에 참가신청하시겠습니까?");
     if (confirmApplyPost) {
       applyPostRequest(postId);
-      alert("신청되었습니다");
+      
     }
   };
 
@@ -127,7 +144,9 @@ function PlayDetail() {
   const applyPostRequest = async (postId) => {
     try {
       const res = await Api.post(`/participants/${postId}`);
+      alert("신청되었습니다");
       applyGetRequest();
+      
     } catch (err) {
       if (err.response.data.message) {
         alert(err.response.data.message);
@@ -369,14 +388,16 @@ const fetchGetComment = useCallback(
   }, []);
 
 
-  console.log(post);
 
   return (
     <>
       <TopBox>
         <TopInnerBox>
-          <p>같이 놀자</p>
-          <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+          <TopPtagBox>
+            <p>같이 놀자</p>
+            <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+          </TopPtagBox>
+          
           {isWriter({ userId, post }) ? (
             <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>
               신청인원 보기
@@ -403,8 +424,9 @@ const fetchGetComment = useCallback(
             </TopBoxButton>
           )}
 
-          {isParticipantModalOpen && (
-            <Modal onClose={() => setIstParticipantModalOpen(false)}>
+        {isParticipantModalOpen && (
+          <Modal onClose={() => setIstParticipantModalOpen(false)}>
+            <DropdownMenuDiv>
               <DropdownMenu
                 options={[
                   { label: "신청인원", value: "신청인원" },
@@ -413,29 +435,51 @@ const fetchGetComment = useCallback(
                 selectedOption={dropdownSelection}
                 handleOptionChange={(e) => setDropdownSelection(e.target.value)}
               />
-              <ParticipantList
-                participantsList={participantsList}
-                handleAccept={handleAccept}
-                handleReject={handleReject}
-                selectedOption={dropdownSelection}
-              />
-            </Modal>
-          )}
+
+              {dropdownSelection === "신청인원" && (
+                <DropdownMenu
+                  options={[
+                    { label: "전체", value: "전체" },
+                    { label: "남", value: "남" },
+                    { label: "여", value: "여" },
+                  ]}
+                  selectedOption={genderSelection}
+                  handleOptionChange={(e) => setGenderSelection(e.target.value)}
+                />
+              )}
+            </DropdownMenuDiv>
+            <ParticipantList
+              participantsList={participantsList}
+              handleAccept={handleAccept}
+              handleReject={handleReject}
+              selectedOption={dropdownSelection}
+            />
+          </Modal>
+        )}
         </TopInnerBox>
       </TopBox>
       <PostDetailBox>
         <PostDetailFirstBox>
           <EditDeleteButtonBox>
-            {isWriter({ userId, post }) && (
-              <>
-                <TopBoxButton onClick={() => navigate(`/playedit/${postId}`)}>
-                  수정하기
-                </TopBoxButton>
-                <TopBoxButton onClick={() => handlePostDelete(postId)}>
-                  삭제하기
-                </TopBoxButton>
-              </>
-            )}
+          <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            setPostMenuOpen((prev) => (prev === postId ? null : postId));
+          }}
+        >
+          <FaEllipsisV />
+        </IconButton>
+        {isWriter({ userId, post }) && postMenuOpen === postId && (
+          <DropdownMenuDiv>
+            <IconButton onClick={() => navigate(`/playedit/${postId}`)}>
+
+              <FaEdit /> 수정하기
+            </IconButton>
+            <IconButton onClick={() => handlePostDelete(postId)}>
+            <FaTrashAlt />삭제하기
+            </IconButton>
+          </DropdownMenuDiv>
+        )}
           </EditDeleteButtonBox>
           <InputBox>
             {post.isCompleted ? (
@@ -520,33 +564,47 @@ const fetchGetComment = useCallback(
                 </CommentNicknameBox>
                 
                 {comment.commentId === isEditing ? (
-                  <input
-                    type="text"
-                    value={editedContent}
-                    onChange={(e) => setEditedContent(e.target.value)}
-                  />
+                  <CommentEditArea>
+                    <textarea
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                      style={{width: "100%", minHeight: "40px"}}
+                    />
+                    
+                      <button onClick={() => setIsEditing(null)}>취소</button>
+                      <button onClick={() => saveComment(comment.commentId)}>수정</button>
+                    
+                  </CommentEditArea>
                 ) : (
-                  <p>{comment.content}</p>
-                )}
-                {comment.userId === userId && (
-                  <>
-                    {comment.commentId === isEditing ? (
-                      <button onClick={() => saveComment(comment.commentId)}>
-                        저장
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() =>
-                          editComment(comment.commentId, comment.content)
-                        }
-                      >
-                        수정
-                      </button>
+                  <CommentEditDeleteBox>
+                    <p>{comment.content}</p>
+                    {comment.userId === userId && (
+                      <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setMenuOpen((prev) => (prev === commentId ? null : commentId));
+                          }}
+                        >
+                          <FaEllipsisV />
+                        </IconButton>
+                        {menuOpen === commentId && (
+                          <MenuWrapper>
+                            <IconButton
+                              onClick={() => editComment(comment.commentId, comment.content)}
+                            >
+                              <FaEdit /> 수정
+                            </IconButton>
+                            <IconButton
+                              onClick={() => deleteComment(comment.commentId)}
+                            >
+                              <FaTrashAlt /> 삭제
+                            </IconButton>
+                          </MenuWrapper>
+                        )}
+                      </div>
                     )}
-                    <button onClick={() => deleteComment(comment.commentId)}>
-                      삭제
-                    </button>
-                  </>
+                  </CommentEditDeleteBox>
                 )}
               </CommentContentBox>
             </CommentDetailBox>
@@ -558,6 +616,26 @@ const fetchGetComment = useCallback(
 }
 
 export default PlayDetail;
+const IconButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #555;
+  padding: 10px;
+  &:hover {
+    color: #333;
+  }
+`;
+
+const MenuWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
+  z-index: 1;
+`;
 
 const TopBox = styled.div`
   display: flex;
@@ -570,23 +648,52 @@ const TopBox = styled.div`
 
 const TopInnerBox = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: 20%;
   width: 75%;
 `;
 
+const TopPtagBox = styled.div`
+  font-family: 'KIMM_Bold';
+  font-size: 3rem; 
+  color: #1d1d1f; 
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 0px;
+
+  p:last-of-type {
+    font-size: 1.5rem; 
+    color: #1d1d1f; 
+    font-weight: 500;
+    line-height: 1.2;
+  }
+`;
+
 const TopBoxButton = styled.button`
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  font-size: 100%;
+  font-family: 'KIMM_Bold';
+  padding: 10px 10px;
+  background-color: #F7CBD0;
+  color: black;
+  border: 10px double #fff;
+  border-radius: 50px;
   cursor: pointer;
-  padding: 10px 20px;
-  margin-top: 20px;
-  width: 15%;
+  margin: 10px 0;
+  width: 30%;
+  height: 30%;
+  transition: 0.3s;
+  text-overflow: ellipsis;
+
+  &:hover {
+    border: 1px solid #3B0B0B;
+    color: #3B0B0B;
+    transform: scale(1.02);
+  }
 `;
 
 const PostDetailBox = styled.div`
+  font-family: 'KIMM_Bold';
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -603,16 +710,21 @@ const InputBox = styled.div`
   padding: 10px;
   width: 80%;
   font-family: "San Francisco", Arial, sans-serif;
+
+  p {
+    font-family: 'KIMM_Bold';
+  }
 `;
 
 const RecruitAbleBox = styled.div`
-  background-color: #007bff; // Same as the button above
+  font-family: 'KIMM_Bold';
+  background-color: #F7CBD0; // Same as the button above
   display: flex;
   justify-content: center;
   align-items: center;
   width: 15%;
   padding: 20px 0px 20px 0px;
-  color: white; // To contrast with the background
+
 `;
 
 
@@ -652,7 +764,47 @@ const CommentContentBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  width: 90%;
 `;
+
+const CommentEditArea = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 100%;
+
+textarea {
+  width: 90%;
+  padding: 10px;
+  margin-right: 10px;
+  resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
+  border: 1px solid #cccccc; // Light gray border
+}
+
+button {
+  width: 10%;
+  background-color: #007bff; // Same as the button above
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 3%;
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+`
+
+const CommentEditDeleteBox = styled.div`
+  display: flex;
+  width: 100%;
+
+  p {
+    width: 90%;
+  }
+`
+
 
 const ParticipantModalDiv = styled.div`
   display: flex;
@@ -660,6 +812,11 @@ const ParticipantModalDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+const DropdownMenuDiv = styled.div`
+  display: flex;
+  gap: 10px;
+`
 
 const CommentInputArea = styled.div`
   display: flex;
@@ -699,6 +856,7 @@ const GenderInfoBox = styled.div`
 `;
 
 const PostDetailFirstBox = styled.div`
+
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);

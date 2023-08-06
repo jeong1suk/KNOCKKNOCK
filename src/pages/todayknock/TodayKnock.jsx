@@ -16,6 +16,7 @@ function TodayKnock() {
 
   const [selectedCard, setSelectedCard] = useState();
 
+
   const usersGetRequest = async () => {
     try {
       const res = await Api.get(`users/network`);
@@ -33,7 +34,6 @@ function TodayKnock() {
   const cardsGetRequest = async () => {
     try {
       const res = await Api.get(`/cards?limit=${limit}`);
-      console.log(res.data.randomLovers);
       setRandomLovers(res.data.randomLovers);
       setSelectedCard(res.data.card);
     } catch (err) {
@@ -75,37 +75,37 @@ function TodayKnock() {
   };
 
   const bannerImages = [
-    "url('https://assets.xboxservices.com/assets/9d/26/9d2649d8-ce95-4845-9956-a8b54715d112.jpg?n=Accessory-Hub_Page-Hero-1084_403913_1920x720.jpg')",
-    "url('https://news.xbox.com/en-us/wp-content/uploads/sites/2/2022/03/Hero_Family_JPG.jpg')",
-    "url('https://www.nintendo.co.kr/switch/awuxa/assets/img/top/hero/switch.png')",
+    "url('https://assets.xboxservices.com/assets/9d/26/9d2649d8-ce95-4845-9956-a8b54715d112.jpg?n=Accessory-Hub_Page-Hero-1084_403913_1920x720.jpg')"
   ];
 
-  const [bannerIndex, setBannerIndex] = useState(0);
+  // const [bannerIndex, setBannerIndex] = useState(0);
 
-  const handleNextBanner = () => {
-    setBannerIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
-  };
+  // const handleNextBanner = () => {
+  //   setBannerIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
+  // };
 
-  const handlePrevBanner = () => {
-    setBannerIndex((prevIndex) =>
-      prevIndex === 0 ? bannerImages.length - 1 : prevIndex - 1
-    );
-  };
+  // const handlePrevBanner = () => {
+  //   setBannerIndex((prevIndex) =>
+  //     prevIndex === 0 ? bannerImages.length - 1 : prevIndex - 1
+  //   );
+  // };
 
   useEffect(() => {
     usersGetRequest();
     cardsGetRequest();
+
   }, []);
+
 
 
 
   return (
     <Container>
       <div style={{ height: "10vh" }} />
-      <Banner style={{ backgroundImage: bannerImages[bannerIndex] }}>
+      <Banner>
         <StartButton onClick={handleStartClick}>START</StartButton>
-        <ArrowButtonLeft onClick={handlePrevBanner}>{"<"}</ArrowButtonLeft>
-        <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight>
+        {/* <ArrowButtonLeft onClick={handlePrevBanner}>{"<"}</ArrowButtonLeft>
+        <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight> */}
       </Banner>
       <div style={{ height: "10vh" }} />
       {showStartModal && (
@@ -129,28 +129,29 @@ function TodayKnock() {
       )}
       <UserProfilesContainer>
 
-        {randomLovers.map((user) => (
-          <UserProfileBox
-            key={user.id}
-            onClick={() => handleUserProfileClick(user.User.userId)}
-          >
-            <UserProfile user={user.User} />
-          </UserProfileBox>
-        ))}
-      </UserProfilesContainer>
-      <UserProfilesContainer>
         {selectedCard && 
           <>
-            {randomUsers.map((user) => (
+            {randomLovers.map((user) => (
               <UserProfileBox
-                key={user.userId}
-                onClick={() => handleUserProfileClick(user.userId)}
+                key={user.id}
+                onClick={() => handleUserProfileClick(user.User.userId)}
               >
-                <UserProfile user={user} />
+                <UserProfile user={user.User} />
               </UserProfileBox>
             ))}
-          </> 
+          </>
         }
+      </UserProfilesContainer>
+      <UserProfilesContainer>     
+      {randomUsers.map((user) => (
+        <UserProfileBox
+          key={user.userId}
+          onClick={() => handleUserProfileClick(user.userId)}
+        >
+          <UserProfile user={user} />
+        </UserProfileBox>
+      ))}
+
       </UserProfilesContainer>
       
       
@@ -169,7 +170,7 @@ const Banner = styled.div`
   display: flex;
   justify-content: flex-end;
   background-color: #fff;
-  background-image: url("https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202001/29/a61d0ff9-df15-4d47-a4a6-79b377c3655a.jpg");
+  background-image: url("/gamebackground.webp");
   position: relative;
   background-size: contain;
   background-position: center;
@@ -221,7 +222,8 @@ const ModalContentUser = styled.div`
 
 const ModalContent = styled.div`
   width: 70%;
-  height: 70%;
+  height: 90%;
+  overflow: auto;
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;

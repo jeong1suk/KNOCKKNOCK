@@ -80,7 +80,7 @@ function PlayEdit() {
           postImage: ["post", res.data], 
         })
       }
-      else if (fetchedImageUrl) {
+      else if (fetchedImageUrl || fetchedImageUrl == null) {
         await Api.put(`posts/${postId}`, {
           title: postTitle,
           content: postContent,
