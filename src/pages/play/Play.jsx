@@ -189,8 +189,6 @@ const CategoryButton = styled.div`
   font-size: 1.5rem;
   font-family: 'Pretendard-Regular';
   color: #1d1d1f;
-  // padding: 10px 20px;
-  // border-radius: 25px;
   cursor: pointer;
   text-align: center;
   
@@ -226,9 +224,7 @@ const TopButtonBox = styled.div`
 `
 const PostCardBox = styled.div`
   display: grid;
-  // flex-direction: column;
   grid-template-columns: repeat(auto-fit, minmax(30vw,1fr));
-  // grid-gap: 1px;
   padding: 20px;
   margin: 0 auto;
   justify-items: center;

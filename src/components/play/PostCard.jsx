@@ -76,13 +76,17 @@ const Card = styled.div`
   border: 3px solid #d3d3d3;
   margin: 20px 0 20px 0;
   padding: 20px;
-  // transition: transform 0.2s ease-in-out;
+  font-family: 'Pretendard-Regular';  
   width: 25vw;
+
+  // transition: transform 0.2s ease-in-out;
   // height: 60vh;
+  
   &:hover {
     transform: scale(1.02);
     cursor: pointer;
   }
+  
   @media (max-width: 768px) {
     display: block;
     width: 70%; /* Set width to 50% for two cards in one row on larger screens */
@@ -93,13 +97,9 @@ const ImageBox = styled.div`
   // width: 25vw;
   height: 30vh;
   border-radius: 10px; 
-
-  // flex: 1;
   display: flex;
   justify-content: center;
-  // align-items: center;
-  // padding-right: 20px;
-  // border-right: 1px solid #d3d3d3;
+
   @media (max-width: 1100px) {
     height: 20vh;
     border-right: 0px
@@ -111,7 +111,7 @@ const Image = styled.img`
   height: auto;
   object-fit: cover;
   border-radius: 10px;
-  `;
+`;
 
 const ContentBox = styled.div`
   flex: 1;
@@ -122,19 +122,19 @@ const ContentBox = styled.div`
   // padding-left: 20px;
 `;
 
-const PostContent = styled.p`
-  margin-left: 10px;
-  font-size: 12px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  // flex: 1;
-  // color: #333;
-  // margin-bottom: 10px;
-  // white-space: pre-wrap;  // 개행이 반영되도록 설정
-`;
+// const PostContent = styled.p`
+//   margin-left: 10px;
+//   font-size: 12px;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   display: -webkit-box;
+//   -webkit-line-clamp: 3;
+//   -webkit-box-orient: vertical;
+//   // flex: 1;
+//   // color: #333;
+//   // margin-bottom: 10px;
+//   // white-space: pre-wrap;  // 개행이 반영되도록 설정
+// `;
 
 const Category = styled.h2`
   background-color: #F7CBD0;
@@ -174,7 +174,10 @@ const DetailItem = styled.p`
 const ProfileBox = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 20px;
+  margin: 5px 20px;
+  background-color: #F7E2EA;
+  opacity: 80%;
+  border-radius: 40px;
 `;
 
 const ProfileImage = styled.img`
@@ -185,9 +188,9 @@ const ProfileImage = styled.img`
 `;
 
 const Nickname = styled.span`
-  color: #333;
   font-weight: bold;
-  font-size: 0.9em;
+  font-size: 1.1rem;
+  margin-left: 3px;
 `;
 
 const InfoContainer = styled.div`
