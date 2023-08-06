@@ -38,28 +38,31 @@ function PostCard({post})  {
 
   return (
     <Card onClick = {() => navigate(`/playdetail/${post.postId}`)}>
-      <ImageBox>
-        <Image src={getImageSrc(post.PostFiles?.[0]?.File?.url)} alt="postImage" />
-      </ImageBox>
       <ContentBox>
-        <Category>{post.type}</Category>
-        <Title>{post.title}</Title>
-        <DetailBox>
-          <DetailItem>남자</DetailItem>
-          <GenderInfo total={post.totalM} filled={post.recruitedM} color='blue' />
-          <DetailItem>여자</DetailItem>
-          <GenderInfo total={post.totalF} filled={post.recruitedF} color='red' />
-          <DetailItem>장소: {post.place}</DetailItem>
-          <DetailItem>{timeAgo(dayjs(post.createdAt).format('YYYY-MM-DD HH:mm'))}</DetailItem>
-        </DetailBox>
         <ProfileBox>
           <ProfileImage src={getImageSrc(post.User.UserFiles?.[0]?.File?.url)} alt="유저 프로필" />
           <Nickname>{post.User.nickname}</Nickname>
         </ProfileBox>
-      </ContentBox>
-      <PostContent>
+        {/* <PostContent>
           {post.content.length > MAX_CONTENT_LENGTH ? `${content.substring(0, MAX_CONTENT_LENGTH)}...` : post.content}
-      </PostContent>
+        </PostContent> */}
+        <ImageBox>
+          <Image src={getImageSrc(post.PostFiles?.[0]?.File?.url)} alt="postImage" />
+        </ImageBox>
+        <Category>{post.type}</Category>
+        <Title>{post.title}</Title>
+        <DetailBox>
+          {/* <DetailItem></DetailItem> */}
+          <GenderInfo total={post.totalM} filled={post.recruitedM} color='#819FF7' gender='🙆🏻‍♂️'/>
+          {/* <DetailItem>여자</DetailItem> */}
+          <GenderInfo total={post.totalF} filled={post.recruitedF} color='#F78181' gender='🙆🏻‍♀️'/>
+          <InfoContainer>
+            <DetailItem>장소: {post.place}</DetailItem>
+            <DetailItem>{timeAgo(dayjs(post.createdAt).format('YYYY-MM-DD HH:mm'))}</DetailItem>
+          </InfoContainer>
+        </DetailBox>
+      </ContentBox>
+
     </Card>
   );
 };
@@ -68,19 +71,22 @@ export default PostCard;
 
 const Card = styled.div`
   display: flex;
-  border: 1px solid #d3d3d3;
-  border-radius: 15px;
+  flex-direction: row;
+  border-radius: 10px;
+  border: 3px solid #d3d3d3;
   margin: 20px 0 20px 0;
-  justify-content: center;
-  align-items: center;
   padding: 20px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease-in-out;
-  width: 80vw;
+  font-family: 'Pretendard-Regular';  
+  width: 25vw;
+
+  // transition: transform 0.2s ease-in-out;
+  // height: 60vh;
+  
   &:hover {
     transform: scale(1.02);
     cursor: pointer;
   }
+  
   @media (max-width: 768px) {
     display: block;
     width: 70%; /* Set width to 50% for two cards in one row on larger screens */
@@ -88,13 +94,15 @@ const Card = styled.div`
 `;
 
 const ImageBox = styled.div`
-  flex: 1;
+  // width: 25vw;
+  height: 30vh;
+  border-radius: 10px; 
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding-right: 20px;
-  border-right: 1px solid #d3d3d3;
-  @media (max-width: 768px) {
+  margin: 20px 0px;
+
+  @media (max-width: 1100px) {
+    height: 20vh;
     border-right: 0px
   }
 `;
@@ -103,59 +111,94 @@ const Image = styled.img`
   width: 60%;
   height: auto;
   object-fit: cover;
+  border-radius: 10px;
 `;
 
 const ContentBox = styled.div`
   flex: 1;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-between;
   // background-color: red;
-  padding-left: 20px;
+  // padding-left: 20px;
 `;
 
-const PostContent = styled.p`
-  flex: 1;
-  color: #333;
-  margin-bottom: 10px;
-  white-space: pre-wrap;  // 개행이 반영되도록 설정
-`;
+// const PostContent = styled.p`
+//   margin-left: 10px;
+//   font-size: 12px;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   display: -webkit-box;
+//   -webkit-line-clamp: 3;
+//   -webkit-box-orient: vertical;
+//   // flex: 1;
+//   // color: #333;
+//   // margin-bottom: 10px;
+//   // white-space: pre-wrap;  // 개행이 반영되도록 설정
+// `;
 
 const Category = styled.h2`
-  color: #0070d3;
-  font-size: 1.1rem;
+  background-color: #F7CBD0;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  margin-top: 20px;
   margin-bottom: 10px;
+  margin-left: 25px;
+  display: inline-block;
+  padding: 3px 7px 3px 7px;
 `;
 
-const Title = styled.h3`
+const Title = styled.p`
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-left: 10px;
+  display: inline-block;
+  // width: 18vw;
+  // white-space: nowrap;
+  // text-overflow: ellipsis;
+  // overflow: hidden;
 `;
 
 const DetailBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   font-size: 0.9em;
   color: #555;
-  margin-bottom: 20px;
+  margin: 10px 0 20px 30px;
 `;
 
 const DetailItem = styled.p`
-  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 1.04rem;
+  margin: 10px 20px 5px 0;
 `;
 
 const ProfileBox = styled.div`
   display: flex;
   align-items: center;
+  margin: 5px 20px;
+  background-color: #F7E2EA;
+  opacity: 80%;
+  border-radius: 40px;
 `;
 
 const ProfileImage = styled.img`
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
   margin-right: 10px;
 `;
 
 const Nickname = styled.span`
-  color: #333;
   font-weight: bold;
-  font-size: 0.9em;
+  font-size: 1.1rem;
+  margin-left: 3px;
 `;
 
+const InfoContainer = styled.div`
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+`
 
 
