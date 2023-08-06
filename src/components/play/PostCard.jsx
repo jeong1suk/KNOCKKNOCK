@@ -43,14 +43,14 @@ function PostCard({post})  {
           <ProfileImage src={getImageSrc(post.User.UserFiles?.[0]?.File?.url)} alt="유저 프로필" />
           <Nickname>{post.User.nickname}</Nickname>
         </ProfileBox>
-        <Category>{post.type}</Category>
-        <Title>{post.title}</Title>
         {/* <PostContent>
           {post.content.length > MAX_CONTENT_LENGTH ? `${content.substring(0, MAX_CONTENT_LENGTH)}...` : post.content}
         </PostContent> */}
         <ImageBox>
           <Image src={getImageSrc(post.PostFiles?.[0]?.File?.url)} alt="postImage" />
         </ImageBox>
+        <Category>{post.type}</Category>
+        <Title>{post.title}</Title>
         <DetailBox>
           {/* <DetailItem></DetailItem> */}
           <GenderInfo total={post.totalM} filled={post.recruitedM} color='#819FF7' gender='🙆🏻‍♂️'/>
@@ -99,6 +99,7 @@ const ImageBox = styled.div`
   border-radius: 10px; 
   display: flex;
   justify-content: center;
+  margin: 20px 0px;
 
   @media (max-width: 1100px) {
     height: 20vh;
@@ -140,6 +141,7 @@ const Category = styled.h2`
   background-color: #F7CBD0;
   border-radius: 30px;
   font-size: 0.8rem;
+  margin-top: 20px;
   margin-bottom: 10px;
   margin-left: 25px;
   display: inline-block;
@@ -148,7 +150,7 @@ const Category = styled.h2`
 
 const Title = styled.p`
   font-weight: bold;
-  margin: 10px 0 15px 10px;
+  margin-left: 10px;
   display: inline-block;
   // width: 18vw;
   // white-space: nowrap;
@@ -162,7 +164,7 @@ const DetailBox = styled.div`
   flex-wrap: wrap;
   font-size: 0.9em;
   color: #555;
-  margin: 20px 0 20px 30px;
+  margin: 10px 0 20px 30px;
 `;
 
 const DetailItem = styled.p`
