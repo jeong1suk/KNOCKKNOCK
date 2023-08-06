@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { keyframes } from 'styled-components';
 import UserProfile from "./UserProfile";
 import * as Api from "../../api";
+
+import { UserStateContext } from "../../context/user/UserProvider";
 
 const limit = 3;
 const randomId = Math.floor(Math.random() * 10) + 21;
@@ -12,7 +14,7 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
   const [leftButtonClickCount, setLeftButtonClickCount] = useState(0);
   const [rightButtonClickCount, setRightButtonClickCount] = useState(0);
 
-  
+  const userState = useContext(UserStateContext);
 
   const cardsGetRequest = async () => {
     try {
@@ -79,7 +81,8 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
 {selectedCard ?
       <CardImageContainer>
         <CardImage src={selectedCard.CardFile?.File?.url} />
-        <p>{selectedCard.content}</p>
+        <p>{selectedCard.content[0]}</p>
+        <p>{userState.user.nickname}{selectedCard.content[1]}</p>
       </CardImageContainer>
               :
               <Container>
@@ -254,7 +257,7 @@ const CardImageContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  animation: ${fadeIn} 1s;
+  animation: ${fadeIn} 3s;
 
 `
 
