@@ -75,7 +75,7 @@ const RegisterPage = () => {
       const jwtToken = user.token;
 
       localStorage.setItem("userToken", jwtToken);
-      // localStorage.setItem("userId", user.userId);
+      localStorage.setItem("userId", user.userId);
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: user,

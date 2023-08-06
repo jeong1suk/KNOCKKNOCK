@@ -87,7 +87,7 @@ function PlayDetail() {
     }
   };
 
-  console.log(participantsList);
+
 
   const handleAccept = async (participantId) => {
     try {
@@ -386,7 +386,9 @@ const fetchGetComment = useCallback(
   }, []);
 
 
-
+  console.log(isWriter({ userId, post }));
+  console.log(userId);
+  console.log(post);
   return (
     <>
       <TopBox>
