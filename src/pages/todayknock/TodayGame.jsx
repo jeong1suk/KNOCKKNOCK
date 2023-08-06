@@ -82,13 +82,11 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
 
 {selectedCard ?
       <CardImageContainer>
-        <BackgroundImage>
           <CardImage src={selectedCard.CardFile?.File?.url} />
           <CardContent>
             <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[0]}</p>
             <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[1]}</p>
           </CardContent>
-        </BackgroundImage>
       </CardImageContainer>
               :
               <Container>
@@ -159,8 +157,14 @@ const fadeIn = keyframes`
 const CardDiv = styled.div`
   display: flex;
   flex-direction: column;
+  justify-center: center;
   align-items: center;
-  height: 100%;
+  height: 90%;
+  // border: 3px solid yellow;
+  background-image: url(/cardblack.jpg);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 `
 const ModalOverlay = styled.div`
   position: fixed;
@@ -196,7 +200,7 @@ const ExitBox = styled.div`
 `;
 
 const ExitButton = styled.button`
-  margin-top: 1rem;
+  margin-top: 2rem;
   height: 2rem;
   background-color: #9ea7d6;
   color: #fff;
@@ -262,39 +266,42 @@ const Image = styled.img`
 `;
 
 const CardImage = styled.img`
-  // margin-top: 50px;
-  border: 1px solid blue;
-  width: 40%;
+  margin-top: 30px;
+  // border: 1px solid blue;
+  border-radius: 10px;
+  width: 25%;
   // height: 30%;
 `
 
 const CardImageContainer = styled.div`
   display: flex;
-  // flex-direction: column;
+  flex-direction: column;
   justify-content: center;
-  align-items: start;
+  align-items: center;
   animation: ${fadeIn} 3s;
-  border: 1px solid red;
-  width: 100%;
+  // border: 1px solid red;
+  height: 90%;
+  width: 70%;
   margin-top: 50px;
 `
 const CardContent = styled.div`
   margin: 20px 20px;
+  padding: 5px;
   color: #fff;
   width: 45%;
 `
 const Nickname = styled.span`
   font-weight: bold;
-  color: #9A1663;
+  color: #FFC4C4;
 `
 const BackgroundImage=styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  // width: 70%;
-  background-image: url(/cardblack.jpg);
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+  // width: 90%;
+  // background-image: url(/cardblack.jpg);
+  // background-size: contain;
+  // background-position: center;
+  // background-repeat: no-repeat;
 `
