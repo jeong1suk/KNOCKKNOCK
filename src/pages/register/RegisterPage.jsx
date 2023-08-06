@@ -82,6 +82,7 @@ const RegisterPage = () => {
       });
 
       navigate("/", { replace: true });
+      window.location.reload();
     } catch (err) {
       console.log(err);
       if (err.response.data.message) {
@@ -144,7 +145,7 @@ const RegisterPage = () => {
         <S.Header>선택 입력</S.Header>
         <OptionalInputs />
 
-        <S.JoinButton type="submit">Register</S.JoinButton>
+        <S.JoinButton type="submit" onSubmit={() => handleRegistration()}>Register</S.JoinButton>
       </form>
     </S.Content>
   );

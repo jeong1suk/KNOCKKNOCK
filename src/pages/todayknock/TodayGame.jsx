@@ -16,6 +16,8 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
 
   const userState = useContext(UserStateContext);
 
+  console.log(userState.user);
+
   const cardsGetRequest = async () => {
     try {
       const res = await Api.get(`/cards?limit=${limit}`);
@@ -70,7 +72,7 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
     setRightButtonClickCount(0);
   };
 
-  console.log(selectedCard);
+
 
   useEffect(() => {
     cardsGetRequest();
