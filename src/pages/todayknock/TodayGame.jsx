@@ -78,13 +78,17 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
     cardsGetRequest();
   }, [])
   return (
-    <>
+    <CardDiv>
 
 {selectedCard ?
       <CardImageContainer>
-        <CardImage src={selectedCard.CardFile?.File?.url} />
-        <p>{userState.user.nickname}{selectedCard.content[0]}</p>
-        <p>{userState.user.nickname}{selectedCard.content[1]}</p>
+        <BackgroundImage>
+          <CardImage src={selectedCard.CardFile?.File?.url} />
+          <CardContent>
+            <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[0]}</p>
+            <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[1]}</p>
+          </CardContent>
+        </BackgroundImage>
       </CardImageContainer>
               :
               <Container>
@@ -130,7 +134,7 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
       <ExitBox>
         <ExitButton onClick={onExit}>Exit</ExitButton>
       </ExitBox>
-    </>
+    </CardDiv>
   );
 };
 
@@ -151,6 +155,13 @@ const fadeIn = keyframes`
   from { opacity: 0; }
   to { opacity: 1; }
 `;
+
+const CardDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+`
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -251,15 +262,39 @@ const Image = styled.img`
 `;
 
 const CardImage = styled.img`
+  // margin-top: 50px;
+  border: 1px solid blue;
   width: 40%;
+  // height: 30%;
 `
 
 const CardImageContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   animation: ${fadeIn} 3s;
-
+  border: 1px solid red;
+  width: 100%;
+  margin-top: 50px;
 `
-
+const CardContent = styled.div`
+  margin: 20px 20px;
+  color: #fff;
+  width: 45%;
+`
+const Nickname = styled.span`
+  font-weight: bold;
+  color: #9A1663;
+`
+const BackgroundImage=styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  // width: 70%;
+  background-image: url(/cardblack.jpg);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+`
