@@ -31,6 +31,8 @@ function PlayDetail() {
   const userId = Number(localStorage.getItem("userId"));
 
   const [post, setPost] = useState([]);
+  const [postMenuOpen, setPostMenuOpen] = useState(null);
+
   const [participantsList, setParticipantsList] = useState([]);
   const [participationFlag, setParticipationFlag] = useState();
 
@@ -386,15 +388,16 @@ const fetchGetComment = useCallback(
   }, []);
 
 
-  console.log(isWriter({ userId, post }));
-  console.log(userId);
-  console.log(post);
+
   return (
     <>
       <TopBox>
         <TopInnerBox>
-          <p>같이 놀자</p>
-          <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+          <TopPtagBox>
+            <p>같이 놀자</p>
+            <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+          </TopPtagBox>
+          
           {isWriter({ userId, post }) ? (
             <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>
               신청인원 보기
@@ -458,16 +461,25 @@ const fetchGetComment = useCallback(
       <PostDetailBox>
         <PostDetailFirstBox>
           <EditDeleteButtonBox>
-            {isWriter({ userId, post }) && (
-              <>
-                <TopBoxButton onClick={() => navigate(`/playedit/${postId}`)}>
-                  수정하기
-                </TopBoxButton>
-                <TopBoxButton onClick={() => handlePostDelete(postId)}>
-                  삭제하기
-                </TopBoxButton>
-              </>
-            )}
+          <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            setPostMenuOpen((prev) => (prev === postId ? null : postId));
+          }}
+        >
+          <FaEllipsisV />
+        </IconButton>
+        {isWriter({ userId, post }) && postMenuOpen === postId && (
+          <DropdownMenuDiv>
+            <IconButton onClick={() => navigate(`/playedit/${postId}`)}>
+
+              <FaEdit /> 수정하기
+            </IconButton>
+            <IconButton onClick={() => handlePostDelete(postId)}>
+            <FaTrashAlt />삭제하기
+            </IconButton>
+          </DropdownMenuDiv>
+        )}
           </EditDeleteButtonBox>
           <InputBox>
             {post.isCompleted ? (
@@ -621,7 +633,7 @@ const MenuWrapper = styled.div`
   display: flex;
   flex-direction: column;
   background: #fff;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
   z-index: 1;
 `;
 
@@ -636,23 +648,52 @@ const TopBox = styled.div`
 
 const TopInnerBox = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: 20%;
   width: 75%;
 `;
 
+const TopPtagBox = styled.div`
+  font-family: 'KIMM_Bold';
+  font-size: 3rem; 
+  color: #1d1d1f; 
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 0px;
+
+  p:last-of-type {
+    font-size: 1.5rem; 
+    color: #1d1d1f; 
+    font-weight: 500;
+    line-height: 1.2;
+  }
+`;
+
 const TopBoxButton = styled.button`
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  font-size: 100%;
+  font-family: 'KIMM_Bold';
+  padding: 10px 10px;
+  background-color: #F7CBD0;
+  color: black;
+  border: 10px double #fff;
+  border-radius: 50px;
   cursor: pointer;
-  padding: 10px 20px;
-  margin-top: 20px;
-  width: 15%;
+  margin: 10px 0;
+  width: 30%;
+  height: 30%;
+  transition: 0.3s;
+  text-overflow: ellipsis;
+
+  &:hover {
+    border: 1px solid #3B0B0B;
+    color: #3B0B0B;
+    transform: scale(1.02);
+  }
 `;
 
 const PostDetailBox = styled.div`
+  font-family: 'KIMM_Bold';
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -669,16 +710,21 @@ const InputBox = styled.div`
   padding: 10px;
   width: 80%;
   font-family: "San Francisco", Arial, sans-serif;
+
+  p {
+    font-family: 'KIMM_Bold';
+  }
 `;
 
 const RecruitAbleBox = styled.div`
-  background-color: #007bff; // Same as the button above
+  font-family: 'KIMM_Bold';
+  background-color: #F7CBD0; // Same as the button above
   display: flex;
   justify-content: center;
   align-items: center;
   width: 15%;
   padding: 20px 0px 20px 0px;
-  color: white; // To contrast with the background
+
 `;
 
 
@@ -810,6 +856,7 @@ const GenderInfoBox = styled.div`
 `;
 
 const PostDetailFirstBox = styled.div`
+
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
