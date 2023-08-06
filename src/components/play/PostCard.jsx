@@ -15,7 +15,7 @@ import GenderInfo from './GenderInfo';
 
 
 
-const MAX_CONTENT_LENGTH = 200;
+const MAX_TITLE_LENGTH = 10;
 
 function PostCard({post})  {
   const navigate = useNavigate();
@@ -43,14 +43,13 @@ function PostCard({post})  {
           <ProfileImage src={getImageSrc(post.User.UserFiles?.[0]?.File?.url)} alt="유저 프로필" />
           <Nickname>{post.User.nickname}</Nickname>
         </ProfileBox>
-        {/* <PostContent>
-          {post.content.length > MAX_CONTENT_LENGTH ? `${content.substring(0, MAX_CONTENT_LENGTH)}...` : post.content}
-        </PostContent> */}
         <ImageBox>
           <Image src={getImageSrc(post.PostFiles?.[0]?.File?.url)} alt="postImage" />
         </ImageBox>
         <Category>{post.type}</Category>
-        <Title>{post.title}</Title>
+        <Title>
+          {post.title.length > MAX_TITLE_LENGTH ? `${post.title.substring(0, MAX_TITLE_LENGTH)}...` : post.title}
+        </Title>
         <DetailBox>
           {/* <DetailItem></DetailItem> */}
           <GenderInfo total={post.totalM} filled={post.recruitedM} color='#819FF7' gender='🙆🏻‍♂️'/>
