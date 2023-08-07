@@ -693,7 +693,6 @@ const TopBoxButton = styled.button`
 `;
 
 const PostDetailBox = styled.div`
-  font-family: 'KIMM_Bold';
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -710,10 +709,6 @@ const InputBox = styled.div`
   padding: 10px;
   width: 80%;
   font-family: "San Francisco", Arial, sans-serif;
-
-  p {
-    font-family: 'KIMM_Bold';
-  }
 `;
 
 const RecruitAbleBox = styled.div`
@@ -724,7 +719,6 @@ const RecruitAbleBox = styled.div`
   align-items: center;
   width: 15%;
   padding: 20px 0px 20px 0px;
-
 `;
 
 
@@ -735,11 +729,16 @@ const CommentBox = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 80%;
+
+  @media (max-width: 600px) {    
+    width: 100%;
 `;
 
 const CommentDetailBox = styled.div`
   display: flex;
   align-items: flex-start;
+  margin-top: 11px;
+  background-color: red;
   width: 100%;
   border-bottom: 1px solid #cccccc; // Light gray border
 `;
@@ -871,5 +870,5 @@ const EditDeleteButtonBox = styled.div`
   align-items: center;
   padding: 10px;
   gap: 10px;
-  font-family: "San Francisco", Arial, sans-serif;
+  // font-family: "San Francisco", Arial, sans-serif;
 `;
