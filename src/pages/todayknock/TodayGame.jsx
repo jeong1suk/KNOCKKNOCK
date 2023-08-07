@@ -78,16 +78,18 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
     cardsGetRequest();
   }, [])
   return (
-    <CardDiv>
+    <>
 
-{selectedCard ?
-      <CardImageContainer>
-          <CardImage src={selectedCard.CardFile?.File?.url} />
-          <CardContent>
-            <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[0]}</p>
-            <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[1]}</p>
-          </CardContent>
-      </CardImageContainer>
+              {selectedCard ?
+                <CardDiv>
+                <CardImageContainer>
+                    <CardImage src={selectedCard.CardFile?.File?.url} />
+                    <CardContent>
+                      <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[0]}</p>
+                      <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[1]}</p>
+                    </CardContent>
+                </CardImageContainer>
+              </CardDiv>
               :
               <Container>
                 <ImageContainer className="image-container">
@@ -132,7 +134,7 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
       <ExitBox>
         <ExitButton onClick={onExit}>Exit</ExitButton>
       </ExitBox>
-    </CardDiv>
+    </>
   );
 };
 

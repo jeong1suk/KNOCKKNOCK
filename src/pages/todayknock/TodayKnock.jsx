@@ -8,7 +8,7 @@ import { showAlert } from "../../assets/alert";
 import { useNavigate } from "react-router-dom";
 
 const limit = 3;
-
+const isLoverUser = ["Lover", "User"];
 function TodayKnock() {
   const navigate = useNavigate();
   const [showStartModal, setShowStartModal] = useState(false);
@@ -125,28 +125,35 @@ function TodayKnock() {
           </ModalContentUser>
         </ModalOverlay>
       )}
-      <UserProfilesContainer>
-        {selectedCard && (
-          <>
+
+      {selectedCard && (
+        <>
+          <RandomUserExplainDiv>
+            <p>같은 연애운을 가진 사람을 찾아봐요!</p>
+          </RandomUserExplainDiv>
+          <UserProfilesContainer>
             {randomLovers.map((user) => (
-              <UserProfileBox
+              <UserProfile
+                user={user.User}
                 key={user.id}
                 onClick={() => handleUserProfileClick(user.User.userId)}
-              >
-                <UserProfile user={user.User} />
-              </UserProfileBox>
+                isLoverUser={isLoverUser[0]}
+              />
             ))}
-          </>
-        )}
-      </UserProfilesContainer>
+          </UserProfilesContainer>
+        </>
+      )}
+      <RandomUserExplainDiv>
+        <p>다양한 사람들을 알아봐요!</p>
+      </RandomUserExplainDiv>
       <UserProfilesContainer>
         {randomUsers.map((user) => (
-          <UserProfileBox
+          <UserProfile
+            user={user}
             key={user.userId}
             onClick={() => handleUserProfileClick(user.userId)}
-          >
-            <UserProfile user={user} />
-          </UserProfileBox>
+            isLoverUser={isLoverUser[1]}
+          />
         ))}
       </UserProfilesContainer>
     </Container>
@@ -226,50 +233,33 @@ const ModalContent = styled.div`
 
 const UserProfilesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30vw,1fr)));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+  gap: 10%;
+  padding: 10%;
   margin: -3rem 0;
   & > :nth-child(n) {
     margin-top: 5rem;
   }
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
+    grid-gap: 1px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  }
 `;
 
-const UserProfileBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const ArrowButton = styled.button`
-  font-size: 5rem;
-  color: #fff;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  border-radius: 50%;
-  width: 5rem;
-  height: 5rem;
+const RandomUserExplainDiv = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  &:focus {
-    outline: none;
+  border: 10px double #f7cbd0;
+  p {
+    font-family: "KIMM_Bold";
+    font-size: 3rem;
+    color: #1d1d1f;
+    font-weight: 600;
+    line-height: 1.2;
   }
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-`;
-
-const ArrowButtonLeft = styled(ArrowButton)`
-  left: 20px;
-`;
-
-const ArrowButtonRight = styled(ArrowButton)`
-  right: 20px;
 `;

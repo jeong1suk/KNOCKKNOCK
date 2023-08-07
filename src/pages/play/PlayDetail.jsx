@@ -491,12 +491,12 @@ const fetchGetComment = useCallback(
               <GenderInfo
                 total={post.totalM}
                 filled={post.recruitedM}
-                color="blue"
+                color="#819FF7"
               />
               <GenderInfo
                 total={post.totalF}
                 filled={post.recruitedF}
-                color="red"
+                color="#F78181"
               />
             </GenderInfoBox>
           </InputBox>
@@ -718,6 +718,7 @@ const RecruitAbleBox = styled.div`
   justify-content: center;
   align-items: center;
   width: 15%;
+  border-radius: 30px;
   padding: 20px 0px 20px 0px;
 `;
 
@@ -738,7 +739,6 @@ const CommentDetailBox = styled.div`
   display: flex;
   align-items: flex-start;
   margin-top: 11px;
-  background-color: red;
   width: 100%;
   border-bottom: 1px solid #cccccc; // Light gray border
 `;
@@ -850,6 +850,7 @@ const GenderInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
+  margin-top:15px;
   padding: 10px;
   gap: 10px;
 `;
