@@ -11,6 +11,7 @@ import {
   MOBILE_BREAK_POINT,
   TABLET_BREAK_POINT,
 } from "../../components/layout/breakpoint";
+import { showAlert } from "../../assets/alert";
 
 function Play() {
   const navigate = useNavigate();
@@ -24,18 +25,20 @@ function Play() {
   const lastPage = Math.ceil(allPostCount / perPage);
 
   const fetchPosts = async () => {
-    const res = await Api.get(
-      `/posts?page=${currentPage}&perPage=${perPage}&type=${postType}`
-    );
-    console.log(postType, res);
-    setPostList(res.data.postList);
-    setAllPostCount(res.data.allPostCount);
+    try {
+      const res = await Api.get(
+        `/posts?page=${currentPage}&perPage=${perPage}&type=${postType}`
+      );
+      console.log(postType, res);
+      setPostList(res.data.postList);
+      setAllPostCount(res.data.allPostCount);
+    } catch (err) {
+      showAlert(err.response.data.message);
+      navigate("/login", { replace: true });
+    }
   };
 
   useEffect(() => {
-    if (user.user === null) {
-      navigate("/login", { replace: true });
-    }
     setCurrentPage(1);
     fetchPosts();
   }, [postType]);

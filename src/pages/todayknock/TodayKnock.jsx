@@ -4,10 +4,13 @@ import UserProfile from "./UserProfile";
 import TodayGame from "./TodayGame";
 import * as Api from "../../api";
 import UserModal from "./UserModal";
+import { showAlert } from "../../assets/alert";
+import { useNavigate } from "react-router-dom";
 
 const limit = 3;
 
 function TodayKnock() {
+  const navigate = useNavigate();
   const [showStartModal, setShowStartModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -16,21 +19,20 @@ function TodayKnock() {
 
   const [selectedCard, setSelectedCard] = useState();
 
-
   const usersGetRequest = async () => {
     try {
       const res = await Api.get(`users/network`);
       setRandomUsers(res.data.randomUsers);
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message)
-      }
-      else {
-        alert('라우팅 경로가 잘못되었습니다.');
+        showAlert(err.response.data.message);
+        navigate("/login", { replace: true });
+      } else {
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
-  
+  };
+
   const cardsGetRequest = async () => {
     try {
       const res = await Api.get(`/cards?limit=${limit}`);
@@ -59,8 +61,6 @@ function TodayKnock() {
     }
   };
 
-
-
   const handleStartClick = () => {
     setShowStartModal(true);
   };
@@ -75,7 +75,7 @@ function TodayKnock() {
   };
 
   const bannerImages = [
-    "url('https://assets.xboxservices.com/assets/9d/26/9d2649d8-ce95-4845-9956-a8b54715d112.jpg?n=Accessory-Hub_Page-Hero-1084_403913_1920x720.jpg')"
+    "url('https://assets.xboxservices.com/assets/9d/26/9d2649d8-ce95-4845-9956-a8b54715d112.jpg?n=Accessory-Hub_Page-Hero-1084_403913_1920x720.jpg')",
   ];
 
   // const [bannerIndex, setBannerIndex] = useState(0);
@@ -93,11 +93,7 @@ function TodayKnock() {
   useEffect(() => {
     usersGetRequest();
     cardsGetRequest();
-
   }, []);
-
-
-
 
   return (
     <Container>
@@ -111,9 +107,11 @@ function TodayKnock() {
       {showStartModal && (
         <ModalOverlay>
           <ModalContent>
-            <TodayGame onExit={handleStartModalExit}
-                        selectedCard={selectedCard}
-                        onCardSelect={setSelectedCard} />
+            <TodayGame
+              onExit={handleStartModalExit}
+              selectedCard={selectedCard}
+              onCardSelect={setSelectedCard}
+            />
           </ModalContent>
         </ModalOverlay>
       )}
@@ -128,8 +126,7 @@ function TodayKnock() {
         </ModalOverlay>
       )}
       <UserProfilesContainer>
-
-        {selectedCard && 
+        {selectedCard && (
           <>
             {randomLovers.map((user) => (
               <UserProfileBox
@@ -140,21 +137,18 @@ function TodayKnock() {
               </UserProfileBox>
             ))}
           </>
-        }
+        )}
       </UserProfilesContainer>
-      <UserProfilesContainer>     
-      {randomUsers.map((user) => (
-        <UserProfileBox
-          key={user.userId}
-          onClick={() => handleUserProfileClick(user.userId)}
-        >
-          <UserProfile user={user} />
-        </UserProfileBox>
-      ))}
-
+      <UserProfilesContainer>
+        {randomUsers.map((user) => (
+          <UserProfileBox
+            key={user.userId}
+            onClick={() => handleUserProfileClick(user.userId)}
+          >
+            <UserProfile user={user} />
+          </UserProfileBox>
+        ))}
       </UserProfilesContainer>
-      
-      
     </Container>
   );
 }
@@ -169,7 +163,7 @@ const Banner = styled.div`
   height: 40vh;
   display: flex;
   justify-content: flex-end;
-  background-color: #391F41;
+  background-color: #391f41;
   background-image: url("/gamebackground.webp");
   position: relative;
   background-size: contain;
