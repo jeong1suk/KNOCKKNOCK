@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+
 const Ai = () => {
   const [result, setResult] = useState("");
   const [base64, setBase64] = useState("");
+  const [click, setClick] = useState(false);
   // const [uploadedImage, setUploadedImage] = useState("phto.png");
   const [selectedFile, setSelectedFile] = useState("phto.png");
   const [previewURL, setPreviewURL] = useState("phto.png");
@@ -26,6 +28,7 @@ const Ai = () => {
     formData.append("file", selectedFile);
     console.log(formData);
     try {
+      setClick(true);
       const response = await axios.post(
         "http://127.0.0.1:5002/analyze",
         formData,
@@ -39,6 +42,7 @@ const Ai = () => {
       console.log(response.data);
       // 서버에서 받은 결과(response.data)를 사용하여 처리
       setResult(response.data.result);
+      setClick(false);
     } catch (err) {
       console.log(err);
     }
@@ -59,6 +63,7 @@ const Ai = () => {
     // 메이크업 버튼이 클릭되었을 때 처리할 로직을 추가할 수 있습니다.
     // console.log("메이크업 받기 버튼이 클릭되었습니다.");
     try {
+      setClick(true);
       const res = await axios.post("http://127.0.0.1:5002/makeup", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -72,6 +77,7 @@ const Ai = () => {
     }
   };
   useEffect(() => {
+    setResult("");
     setBase64("");
   }, [selectedFile]);
 
@@ -90,6 +96,7 @@ const Ai = () => {
                 <UploadedImage src={previewURL} alt="Uploaded" />
               </UploadedImageContainer>
             )}
+
             <br />
 
             {/* <MakeupButton>styleGAN</MakeupButton> */}
@@ -100,6 +107,11 @@ const Ai = () => {
                 퍼스널컬러진단하기
               </SectionButton>
               <div>{result ? <p>분석 결과: {result}</p> : null}</div>
+              <div>
+                {click && !result && (
+                  <UploadedImage src="src/assets/loading.png" />
+                )}
+              </div>
 
               <SectionButton onClick={handleMakeupClick}>
                 beautyGAN
@@ -108,6 +120,9 @@ const Ai = () => {
               <br />
               {base64 && (
                 <img src={`data:image/png;base64,${base64}`} alt="Result" />
+              )}
+              {click && !base64 && (
+                <UploadedImage src="src/assets/loading.png" />
               )}
               <SectionButton onClick={handleMakeupClick}>
                 StyleGAN
