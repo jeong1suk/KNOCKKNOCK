@@ -6,17 +6,18 @@ import * as Api from "../../api";
 
 import { UserStateContext } from "../../context/user/UserProvider";
 
+import Typewriter from 'typewriter-effect';
+
 const limit = 3;
 const randomId = Math.floor(Math.random() * 10) + 21;
 
 const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
-  const [showModal, setShowModal] = useState(false);
-  const [leftButtonClickCount, setLeftButtonClickCount] = useState(0);
-  const [rightButtonClickCount, setRightButtonClickCount] = useState(0);
+
 
   const userState = useContext(UserStateContext);
 
-  console.log(userState.user);
+  const [showIntro, setShowIntro] = useState(true);
+
 
   const cardsGetRequest = async () => {
     try {
@@ -56,23 +57,29 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
     }, 1000); // Wait for the animations to finish
   };
 
-  const handleButtonClick = (side) => {
-    if (leftButtonClickCount + rightButtonClickCount < 5) {
-      if (side === "left") {
-        setLeftButtonClickCount(leftButtonClickCount + 1);
-      } else if (side === "right") {
-        setRightButtonClickCount(rightButtonClickCount + 1);
-      }
+  const Intro = () => (
+    <IntroContainer>
+      <IntroImage src={"./gameExplain.png"} />
+      <Typewriter
+        options={{
+          strings: ['연애운을 미리 알아보아요!'],
+          autoStart: true,
+          loop: false,
+          delay: 50 // this means 50ms delay between each character, adjust according to your needs
+        }}
+      />
+    </IntroContainer>
+  );
+  
+  useEffect(() => {
+    if (showIntro) {
+      setTimeout(() => {
+        setShowIntro(false);
+      }, 5000); // 5초 후에 사라짐
     }
-  };
+  }, [showIntro]);
 
-  const handleExitModal = () => {
-    setShowModal(false);
-    setLeftButtonClickCount(0);
-    setRightButtonClickCount(0);
-  };
-
-
+  console.log(showIntro);
 
   useEffect(() => {
     cardsGetRequest();
@@ -80,17 +87,24 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
   return (
     <>
 
-              {selectedCard ?
+{showIntro ? <Intro /> : (
+      selectedCard ?
+              <>
                 <CardDiv>
-                <CardImageContainer>
+                  <CardImageContainer>
                     <CardImage src={selectedCard.CardFile?.File?.url} />
                     <CardContent>
                       <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[0]}</p>
                       <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[1]}</p>
                     </CardContent>
-                </CardImageContainer>
-              </CardDiv>
+                  </CardImageContainer>
+                </CardDiv>
+                <ExitBox>
+                <ExitButton onClick={onExit}>Exit</ExitButton>
+                </ExitBox>
+                </>
               :
+              <>
               <Container>
                 <ImageContainer className="image-container">
                   <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
@@ -123,17 +137,15 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
                   <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
                 </ImageContainer>
               </Container>
-              }
+              <ExitBox>
+                <ExitButton onClick={onExit}>Exit</ExitButton>
+              </ExitBox>
+              </>
+              )}
               
 
-      {/* {leftButtonClickCount + rightButtonClickCount >= 5 && (
-        <ExitBox>
-          <ExitButton onClick={onExit}>Exit</ExitButton>
-        </ExitBox>
-      )} */}
-      <ExitBox>
-        <ExitButton onClick={onExit}>Exit</ExitButton>
-      </ExitBox>
+
+      
     </>
   );
 };
@@ -167,38 +179,14 @@ const CardDiv = styled.div`
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  
 `
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-`;
-
-const ModalContent = styled.div`
-  width: 25%;
-  height: 25%;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-`;
 
 const ExitBox = styled.div`
   display: flex;
   justify-content: center;
+
+  animation: ${fadeIn} 2s;
 `;
 
 const ExitButton = styled.button`
@@ -219,23 +207,19 @@ const ExitButton = styled.button`
   }
 `;
 
-const RankUser = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-`;
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+
+  animation: ${fadeIn} 2s;
 `;
 
 const ImageContainer = styled.div`
   flex: 0 0 20%; /* 초기 크기를 20%로 설정 (5장씩 나열) */
   min-width: 75px; /* 카드의 최소 크기 설정을 75px로 변경 */
-  height: 10%; /* 높이를 절반으로 줄임 */
-  background-color: aliceblue;
+  height: 70%; /* 높이를 절반으로 줄임 */
+  background-color: #FFFFFF;
   text-align: center;
   line-height: 50px; /* line-height를 절반으로 줄임 */
   transition: width 1s, height 1s;
@@ -296,14 +280,21 @@ const Nickname = styled.span`
   font-weight: bold;
   color: #FFC4C4;
 `
-const BackgroundImage=styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  // width: 90%;
-  // background-image: url(/cardblack.jpg);
-  // background-size: contain;
-  // background-position: center;
-  // background-repeat: no-repeat;
-`
+
+const IntroContainer = styled.div`
+position: absolute;
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 70vw;
+height: 90vw;
+font-size: 2rem;
+font-family: 'SEBANG_Gothic_Bold';
+animation: ${fadeIn} 2s, ${fadeOut} 2s 3s forwards; /* fade in 애니메이션은 2초 동안, 그리고 3초 후에 fade out 애니메이션을 2초 동안 적용 */
+`;
+
+const IntroImage = styled.img`
+width: 40%;
+height: 40%;
+`;
+

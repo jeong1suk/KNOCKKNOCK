@@ -104,7 +104,7 @@ function TodayKnock() {
   return (
     <Container>
       <div style={{ height: "10vh" }} />
-      <Banner>
+      <Banner onClick={handleStartClick}>
         <StartButton onClick={handleStartClick}>START</StartButton>
         {/* <ArrowButtonLeft onClick={handlePrevBanner}>{"<"}</ArrowButtonLeft>
         <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight> */}
@@ -175,6 +175,7 @@ const Banner = styled.div`
   background-color: #391F41;
   background-image: url("/gamebackground.webp");
   position: relative;
+  cursor: pointer;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -238,7 +239,7 @@ const UserProfilesContainer = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
   gap: 10%;
   padding: 10%;
-  margin: -3rem 0;
+  margin: -10rem 0 -5rem 0 ;
   & > :nth-child(n) {
     margin-top: 5rem;
   }
