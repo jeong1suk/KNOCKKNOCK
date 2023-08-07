@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import Router from "../../routes/Router";
-import { BaseLayout } from "../layout/Layout";
 import Header from "./Header";
+import { BaseLayout } from "../layout/Layout";
 // import Footer from "./Footer";
 const Layout = () => {
   return (
