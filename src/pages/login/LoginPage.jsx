@@ -105,7 +105,7 @@ const LoginForm = () => {
             )}
           </S.InputBox>
           <br />
-          <S.Forgot>회원가입</S.Forgot>
+          <S.Forgot>아이디가 없으신가요?</S.Forgot>
           <S.SubmitButton
             type="submit"
             value="로그인"
