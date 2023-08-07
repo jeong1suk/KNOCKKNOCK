@@ -25,15 +25,13 @@ const UserProfile = ({ user, onClick, isLoverUser }) => {
     document.getElementById(`userInfo-${user.userId}`).style.opacity = 0;
   };
 
-
-
   return (
     <>
 
       {isLoverUser == "Lover" ? 
       <LoverProfileContainer>
         <LoverProfilePicture
-        src={getImageSrc(user.UserFiles[0]?.File?.url)}
+        src={getImageSrc(user.UserFiles?.[0]?.File?.url)}
         alt="프로필 사진"
         onClick={onClick}
         />

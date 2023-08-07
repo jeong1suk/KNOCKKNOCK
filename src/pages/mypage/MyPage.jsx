@@ -289,10 +289,10 @@ const BackgroundImage = styled.div`
   background-size: cover;
   background-position: center;
   position: relative;
-  &:hover {
+  /* &:hover {
     background: gray;
     cursor: pointer;
-  }
+  } */
 `;
 const ChangeBackgroundButton = styled.button`
   position: absolute;

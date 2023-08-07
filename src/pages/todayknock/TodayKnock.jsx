@@ -4,10 +4,13 @@ import UserProfile from "./UserProfile";
 import TodayGame from "./TodayGame";
 import * as Api from "../../api";
 import UserModal from "./UserModal";
+import { showAlert } from "../../assets/alert";
+import { useNavigate } from "react-router-dom";
 
 const limit = 3;
-const isLoverUser = ["Lover", "User"]
+const isLoverUser = ["Lover", "User"];
 function TodayKnock() {
+  const navigate = useNavigate();
   const [showStartModal, setShowStartModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -15,7 +18,6 @@ function TodayKnock() {
   const [randomUsers, setRandomUsers] = useState([]);
 
   const [selectedCard, setSelectedCard] = useState();
-  
 
   const usersGetRequest = async () => {
     try {
@@ -23,14 +25,14 @@ function TodayKnock() {
       setRandomUsers(res.data.randomUsers);
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message)
-      }
-      else {
-        alert('라우팅 경로가 잘못되었습니다.');
+        showAlert(err.response.data.message);
+        navigate("/login", { replace: true });
+      } else {
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
-  
+  };
+
   const cardsGetRequest = async () => {
     try {
       const res = await Api.get(`/cards?limit=${limit}`);
@@ -46,10 +48,8 @@ function TodayKnock() {
   };
 
   const handleUserProfileClick = async (userId) => {
-    console.log(11);
     try {
-      const res = await Api.get(`/users/yourpage/${userId}`);
-      
+      const res = await Api.get(`/users/${userId}`);
       setSelectedUser(res.data);
       setShowUserModal(true);
     } catch (err) {
@@ -60,8 +60,6 @@ function TodayKnock() {
       }
     }
   };
-
-
 
   const handleStartClick = () => {
     setShowStartModal(true);
@@ -77,7 +75,7 @@ function TodayKnock() {
   };
 
   const bannerImages = [
-    "url('https://assets.xboxservices.com/assets/9d/26/9d2649d8-ce95-4845-9956-a8b54715d112.jpg?n=Accessory-Hub_Page-Hero-1084_403913_1920x720.jpg')"
+    "url('https://assets.xboxservices.com/assets/9d/26/9d2649d8-ce95-4845-9956-a8b54715d112.jpg?n=Accessory-Hub_Page-Hero-1084_403913_1920x720.jpg')",
   ];
 
   // const [bannerIndex, setBannerIndex] = useState(0);
@@ -95,16 +93,12 @@ function TodayKnock() {
   useEffect(() => {
     usersGetRequest();
     cardsGetRequest();
-
   }, []);
-
-
-
 
   return (
     <Container>
       <div style={{ height: "10vh" }} />
-      <Banner>
+      <Banner onClick={handleStartClick}>
         <StartButton onClick={handleStartClick}>START</StartButton>
         {/* <ArrowButtonLeft onClick={handlePrevBanner}>{"<"}</ArrowButtonLeft>
         <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight> */}
@@ -113,9 +107,11 @@ function TodayKnock() {
       {showStartModal && (
         <ModalOverlay>
           <ModalContent>
-            <TodayGame onExit={handleStartModalExit}
-                        selectedCard={selectedCard}
-                        onCardSelect={setSelectedCard} />
+            <TodayGame
+              onExit={handleStartModalExit}
+              selectedCard={selectedCard}
+              onCardSelect={setSelectedCard}
+            />
           </ModalContent>
         </ModalOverlay>
       )}
@@ -129,35 +125,37 @@ function TodayKnock() {
           </ModalContentUser>
         </ModalOverlay>
       )}
-      
 
-        {selectedCard && 
-          <>
-            <RandomUserExplainDiv>
-              <p>같은 연애운을 가진 사람을 찾아봐요!</p>
-            </RandomUserExplainDiv>
-              <UserProfilesContainer>
-              {randomLovers.map((user) => (
-                  <UserProfile user={user.User} key={user.id}
-                  onClick={() => handleUserProfileClick(user.User.userId)}
-                  isLoverUser={isLoverUser[0]} />
-              ))}
-            </UserProfilesContainer>
-          </>
-          
-        }
+      {selectedCard && (
+        <>
+          <RandomUserExplainDiv>
+            <p>같은 연애운을 가진 사람을 찾아봐요!</p>
+          </RandomUserExplainDiv>
+          <UserProfilesContainer>
+            {randomLovers.map((user) => (
+              <UserProfile
+                user={user.User}
+                key={user.id}
+                onClick={() => handleUserProfileClick(user.User.userId)}
+                isLoverUser={isLoverUser[0]}
+              />
+            ))}
+          </UserProfilesContainer>
+        </>
+      )}
       <RandomUserExplainDiv>
         <p>다양한 사람들을 알아봐요!</p>
       </RandomUserExplainDiv>
-      <UserProfilesContainer>     
-      {randomUsers.map((user) => (
-          <UserProfile user={user} key={user.userId}
-          onClick={() => handleUserProfileClick(user.userId)}
-          isLoverUser={isLoverUser[1]} />
-      ))}
+      <UserProfilesContainer>
+        {randomUsers.map((user) => (
+          <UserProfile
+            user={user}
+            key={user.userId}
+            onClick={() => handleUserProfileClick(user.userId)}
+            isLoverUser={isLoverUser[1]}
+          />
+        ))}
       </UserProfilesContainer>
-      
-      
     </Container>
   );
 }
@@ -172,9 +170,10 @@ const Banner = styled.div`
   height: 40vh;
   display: flex;
   justify-content: flex-end;
-  background-color: #391F41;
+  background-color: #391f41;
   background-image: url("/gamebackground.webp");
   position: relative;
+  cursor: pointer;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -238,34 +237,30 @@ const UserProfilesContainer = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
   gap: 10%;
   padding: 10%;
-  margin: -3rem 0;
+  margin: -10rem 0 -5rem 0 ;
   & > :nth-child(n) {
     margin-top: 5rem;
   }
 
   @media (max-width: 1100px) {
     grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
-    grid-gap:1px;
+    grid-gap: 1px;
   }
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
   }
-
 `;
-
 
 const RandomUserExplainDiv = styled.div`
   display: flex;
   justify-content: center;
-  border: 10px double #F7CBD0;
+  border: 10px double #f7cbd0;
   p {
-    font-family: 'KIMM_Bold';
-    font-size: 3rem; 
-    color: #1d1d1f; 
+    font-family: "KIMM_Bold";
+    font-size: 3rem;
+    color: #1d1d1f;
     font-weight: 600;
     line-height: 1.2;
   }
-
-`
-
+`;
