@@ -86,5 +86,3 @@ const PageButton = styled.button`
 const Ellipsis = styled.span`
   color: #c7c7cc;
 `;
-
-
