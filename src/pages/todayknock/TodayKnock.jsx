@@ -169,11 +169,12 @@ const Banner = styled.div`
   height: 40vh;
   display: flex;
   justify-content: flex-end;
-  background-color: #fff;
+  background-color: #391F41;
   background-image: url("/gamebackground.webp");
   position: relative;
   background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
   max-height: 100%;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
 `;
@@ -231,7 +232,7 @@ const ModalContent = styled.div`
 
 const UserProfilesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(30vw,1fr)));
   gap: 10px;
   margin: -3rem 0;
   & > :nth-child(n) {
