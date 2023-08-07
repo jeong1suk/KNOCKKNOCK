@@ -1,34 +1,34 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTE } from "../../routes/routes";
-import { useToggle } from "../hooks/useToggle";
 import { getImageSrc } from "../../util/imageCheck";
-const DesktopMenu = ({ isLogin, user }) => {
-  const { opened, onOpen, onClose } = useToggle();
-  //logout 처리
-  const logout = () => {
-    localStorage.removeItem("userToken");
-    dispatch({ type: "LOGOUT" });
-    navigate("/");
-  };
+const DesktopMenu = ({ isLogin, user, logout, opened, onOpen, onClose }) => {
   return (
     <DesktopMenuContainer>
       <DesktopNavMenu>
         <NavMenu>
           <MenuList>
-            <Link to={ROUTE.MAIN.link}>메인페이지</Link>
+            <Link to={ROUTE.MAIN.link} onClick={onClose}>
+              메인페이지
+            </Link>
           </MenuList>
           <MenuList>
-            <Link to={ROUTE.AI.link}>인공지능</Link>
+            <Link to={ROUTE.AI.link} onClick={onClose}>
+              인공지능
+            </Link>
           </MenuList>
 
           {isLogin ? (
             <>
               <MenuList>
-                <Link to={ROUTE.TodayKnock.link}>오늘의 낙낙</Link>
+                <Link to={ROUTE.TodayKnock.link} onClick={onClose}>
+                  오늘의 낙낙
+                </Link>
               </MenuList>
               <MenuList>
-                <Link to={ROUTE.Play.link}>같이 놀자</Link>
+                <Link to={ROUTE.Play.link} onClick={onClose}>
+                  같이 놀자
+                </Link>
               </MenuList>
               <ProfileContainer>
                 <ProfilePicture

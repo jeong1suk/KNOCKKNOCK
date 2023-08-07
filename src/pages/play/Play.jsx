@@ -1,46 +1,51 @@
-import styled,{ keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 
-import { useAsyncValue, useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
-import * as Api from '../../api';
+import { useAsyncValue, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import * as Api from "../../api";
 
-import PostCard from '../../components/play/PostCard';
-import Pagination from '../../components/commons/Pagenation';
+import PostCard from "../../components/play/PostCard";
+import Pagination from "../../components/commons/Pagenation";
+import { UserStateContext } from "../../context/user/UserProvider";
+import {
+  MOBILE_BREAK_POINT,
+  TABLET_BREAK_POINT,
+} from "../../components/layout/breakpoint";
 
-function Play()  {
+function Play() {
   const navigate = useNavigate();
-  
+  const user = useContext(UserStateContext);
   const [postList, setPostList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [allPostCount, setAllPostCount] = useState(0);
-  const [postType, setPostType] = useState('');
+  const [postType, setPostType] = useState("");
 
   const perPage = 6;
   const lastPage = Math.ceil(allPostCount / perPage);
 
   const fetchPosts = async () => {
-    const res = await Api.get(`/posts?page=${currentPage}&perPage=${perPage}&type=${postType}`);
-    console.log(postType,res);
+    const res = await Api.get(
+      `/posts?page=${currentPage}&perPage=${perPage}&type=${postType}`
+    );
+    console.log(postType, res);
     setPostList(res.data.postList);
     setAllPostCount(res.data.allPostCount);
   };
 
-
-
   useEffect(() => {
-    setCurrentPage(1); 
+    if (user.user === null) {
+      navigate("/login", { replace: true });
+    }
+    setCurrentPage(1);
     fetchPosts();
   }, [postType]);
-  
+
   useEffect(() => {
     fetchPosts();
   }, [currentPage]);
 
-  
-
-
-  return(
-    <div>
+  return (
+    <>
       <TopBox>
         <TopPtagBox>
           <p>같이 놀자 !</p>
@@ -48,31 +53,53 @@ function Play()  {
           <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
         </TopPtagBox>
         <TopButtonBox>
-          <PostButton style={{marginRight: "10px"}} onClick={() => navigate(`/playadd`)}>게시글 만들기</PostButton>
+          <PostButton
+            style={{ marginRight: "10px" }}
+            onClick={() => navigate(`/playadd`)}
+          >
+            게시글 만들기
+          </PostButton>
         </TopButtonBox>
-        
       </TopBox>
       <CategoryButtonBox>
-        <CategoryButton onClick={() => setPostType('')}>🚪전체</CategoryButton>
-        <CategoryButton onClick={() => setPostType('술')}>🍻술</CategoryButton>
-        <CategoryButton onClick={() => setPostType('영화')}>🍿영화</CategoryButton>
-        <CategoryButton onClick={() => setPostType('식사')}>🍽️식사</CategoryButton>
-        <CategoryButton onClick={() => setPostType('카페')}>🧋카페</CategoryButton>
-        <CategoryButton onClick={() => setPostType('산책')}>🧑‍🤝‍🧑산책</CategoryButton>
-        <CategoryButton onClick={() => setPostType('드라이브')}>🚗드라이브</CategoryButton>
-        <CategoryButton onClick={() => setPostType('공연관람')}>🎭공연관람</CategoryButton>
-        <CategoryButton onClick={() => setPostType('기타')}>⚫기타</CategoryButton>
+        <CategoryButton onClick={() => setPostType("")}>🚪전체</CategoryButton>
+        <CategoryButton onClick={() => setPostType("술")}>🍻술</CategoryButton>
+        <CategoryButton onClick={() => setPostType("영화")}>
+          🍿영화
+        </CategoryButton>
+        <CategoryButton onClick={() => setPostType("식사")}>
+          🍽️식사
+        </CategoryButton>
+        <CategoryButton onClick={() => setPostType("카페")}>
+          🧋카페
+        </CategoryButton>
+        <CategoryButton onClick={() => setPostType("산책")}>
+          🧑‍🤝‍🧑산책
+        </CategoryButton>
+        <CategoryButton onClick={() => setPostType("드라이브")}>
+          🚗드라이브
+        </CategoryButton>
+        <CategoryButton onClick={() => setPostType("공연관람")}>
+          🎭공연관람
+        </CategoryButton>
+        <CategoryButton onClick={() => setPostType("기타")}>
+          ⚫기타
+        </CategoryButton>
       </CategoryButtonBox>
       <PostCardBox>
-        {postList.map(post => (
+        {postList.map((post) => (
           <PostCard key={post.posId} post={post} />
         ))}
       </PostCardBox>
 
-      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} lastPage={lastPage} />
-    </div>
-  )
-};
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        lastPage={lastPage}
+      />
+    </>
+  );
+}
 
 export default Play;
 
@@ -132,99 +159,100 @@ const TopBox = styled.div`
     p:last-of-type {
       font-size: 0.8rem;
     }
-`
+`;
 
 const PostButton = styled.button`
-  font-size: 100%;
-  font-family: 'KIMM_Bold';
+  font-size: 15px;
+  font-family: "KIMM_Bold";
   padding: 10px 10px;
-  background-color: #F7CBD0;
+  background-color: #f7cbd0;
   color: black;
   border: 10px double #fff;
   border-radius: 50px;
   cursor: pointer;
-  margin: 200px 0 0 30px; 
+  margin: 200px 0 0 30px;
   width: 80%;
   height: 100px;
   transition: 0.3s;
   text-overflow: ellipsis;
 
   &:hover {
-    border: 10px double #3B0B0B;
-    color: #3B0B0B;
+    border: 10px double #3b0b0b;
+    color: #3b0b0b;
     transform: scale(1.02);
   }
-  @media (max-width: 420px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%;
     white-space: nowrap; /* Allow the text to wrap */
     max-width: 1000px;
     margin: 40px 0 0 0;
+    font-size: 0.4rem;
   }
-  @media (max-width: 1024px) {
-    width: 100%; 
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    width: 100%;
     font-size: 0.4rem; /* Adjust the font size for smaller screens */
     padding: 10px 15px; /* Adjust the padding for smaller screens */
     margin: 150px 0 0 0; /* Adjust the margin for smaller screens */
   }
-`
+`;
 const CategoryButtonBox = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 0px -35px 50px -35px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 20px 0;
   border-top: 1px solid #d2d2d2;
   border-bottom: 1px solid #d2d2d2;
   animation: ${fadeInAnimation} 0.6s ease-in-out;
 
-  @media (min-width: 1024px) {
+  @media (min-width: ${TABLET_BREAK_POINT}) {
     justify-content: space-evenly;
   }
-  @media (min-width: 390px) {
+  @media (min-width: ${MOBILE_BREAK_POINT}) {
     margin: 0px;
   }
-`
+`;
 
 const CategoryButton = styled.div`
   font-size: 1.5rem;
-  font-family: 'Pretendard-Regular';
+  font-family: "Pretendard-Regular";
   color: #1d1d1f;
   cursor: pointer;
   text-align: center;
-  
+
   &:hover {
     transform: scale(1.1);
-    color: #F7CBD0;
+    color: #f7cbd0;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: ${MOBILE_BREAK_POINT}) {
     font-size: 1.5rem;
   }
-  @media (max-width: 750px) {
+  @media (max-width: ${TABLET_BREAK_POINT}) {
     font-size: 0.7rem;
     max-width: 100px; /* Set the maximum width for the button */
     white-space: normal; /* Allow the text to wrap */
   }
-`
+`;
 
 const PostBox = styled.div`
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   margin: 30px 50px 30px 50px;
-`
+`;
 
 const TopButtonBox = styled.div`
   display: flex;
-  width: 15%;
+  width: 20%;
 
-  @media (max-width: 516px) {
-    width: 40%;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 10%;
   }
-`
+`;
 const PostCardBox = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30vw,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
   padding: 20px;
   margin: 0 auto;
   justify-items: center;
@@ -232,18 +260,18 @@ const PostCardBox = styled.div`
   max-width: 90vw;
   animation: ${fadeInAnimation} 0.6s ease-in-out;
 
-  @media (max-width: 1100px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
-    grid-gap:1px;
+    grid-gap: 1px;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${TABLET_BREAK_POINT}) {
     grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
   }
-  `
+`;
 
 const TopPtagBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
-`
+`;
