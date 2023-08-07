@@ -40,7 +40,7 @@ function Play()  {
 
 
   return(
-    <>
+    <div>
       <TopBox>
         <TopPtagBox>
           <p>같이 놀자 !</p>
@@ -70,7 +70,7 @@ function Play()  {
       </PostCardBox>
 
       <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} lastPage={lastPage} />
-    </>
+    </div>
   )
 };
 
