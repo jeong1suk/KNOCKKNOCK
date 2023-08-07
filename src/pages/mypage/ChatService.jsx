@@ -1,25 +1,74 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
 import * as API from "../../api";
 
 const socket = io.connect("http://localhost:3000", {
-  path: "/socket.io", // 서버 path와 일치시켜줍니다.
-  transports: ["websocket"], // 웹 소켓을 사용하도록 지정합니다.
+  path: "/socket.io",
+  transports: ["websocket"],
 });
+const ChatContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const MessageChat = styled.div`
   display: flex;
-  height: 80vh;
-  justify-content: space-between;
+  width: 30rem;
+  height: 72vh;
   flex-direction: column;
   background-color: #f5f5f7;
   padding: 2rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  margin-right: 1rem;
+  justify-content: space-between;
+`;
+
+const ChatRoom = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #f5f5f7;
+  padding: 4rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  height: 64vh;
+  overflow-y: scroll;
+  margin-top: 2rem;
+`;
+
+const UserListItem = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.5rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
+`;
+const UserList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 const MessageBox = styled.div`
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+`;
+
+const Bubble = styled.div`
+  background-color: white;
+  padding: 10px;
+  border-radius: 20px;
+  margin: 0 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 0.8rem;
 `;
 
 const MessageContainer = styled.div`
@@ -30,8 +79,15 @@ const MessageContainer = styled.div`
   justify-content: ${(props) =>
     props.isUserMessage ? "flex-end" : "flex-start"};
 
-  &:nth-child(even) {
+  &:nth-child() {
     flex-direction: ${(props) => (props.isUserMessage ? "row-reverse" : "row")};
+  }
+
+  .message-bubble {
+    ${(props) =>
+      props.isUserMessage
+        ? "margin-left: 10px; margin-right: 0;"
+        : "margin-right: 10px; margin-left: 0;"}
   }
 `;
 
@@ -44,19 +100,11 @@ const ProfileImage = styled.img`
 
 const UserName = styled.div``;
 
-const Bubble = styled.div`
-  background-color: white;
-  padding: 10px;
-  border-radius: 20px;
-  margin: 0 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  font-size: 0.8rem;
-`;
-
 const ChatInputContainer = styled.div`
   display: flex;
   align-items: center;
   margin: 2rem 1rem 0rem 1rem;
+  margin-top: auto;
 `;
 
 const ChatInput = styled.input`
@@ -85,172 +133,164 @@ const SendButton = styled.button`
   }
 `;
 
-// function ChatComponent() {
-//   const [message, setMessage] = useState("");
-//   const [chatHistory, setChatHistory] = useState([]);
-//   const [profileImage, setProfileImage] = useState(""); // 상대방 프로필 이미지
-//   const [userName, setUserName] = useState(""); // 상대방 이름
-
-//   useEffect(() => {
-//     // 채팅 메시지를 수신하는 이벤트 핸들러
-//     socket.on("receive-message", (message) => {
-//       setChatHistory((prevChat) => [...prevChat, message]);
-//     });
-
-//     // 유저 정보 가져오기
-//     const userId = 7; // 상대방의 userId를 적절하게 지정해야 합니다.
-//     API.get(`/users/${userId}`)
-//       .then((response) => {
-//         console.log("유저 정보 가져오기 성공!!:", response.data);
-//         setProfileImage(response.data.profileImage);
-//         setUserName(response.data.nickname);
-//       })
-//       .catch((error) => {
-//         console.error("유저 정보 가져오기 실패:", error);
-//       });
-
-//     return () => {
-//       // 컴포넌트가 unmount될 때 이벤트 핸들러 제거
-//       socket.off("receive-message");
-//     };
-//   }, []);
-
-//   const sendMessage = (text, sender) => {
-//     if (text.trim() !== "") {
-//       const newMessage = {
-//         text: text.trim(),
-//         sender: sender,
-//       };
-//       socket.emit("send-message", newMessage);
-//       setChatHistory((prevChat) => [...prevChat, newMessage]);
-//       setMessage("");
-//     }
-//   };
-
-//   const handleSendMessage = () => {
-//     sendMessage(message, "user"); // 사용자가 보낸 메시지인 경우 sender를 "user"로 설정
-//   };
-
-//   return (
-//     <MessageChat>
-//       {/* 상대방 프로필 이미지와 이름을 채팅창 상단에 표시 */}
-//       <ProfileImage src={profileImage} alt="Profile Image" />
-//       <UserName>{userName}</UserName>
-//       <MessageBox>
-//         {chatHistory.map((msg, index) => (
-//           <MessageContainer key={index}>
-//             {/* 사용자 프로필 이미지는 기존과 동일하게 사용 */}
-//             <ProfileImage
-//               src={
-//                 msg.sender === "user"
-//                   ? "사용자 프로필 이미지 URL"
-//                   : profileImage
-//               }
-//               alt="Profile Image"
-//             />
-//             <Bubble>{msg.text}</Bubble>
-//           </MessageContainer>
-//         ))}
-//       </MessageBox>
-//       <ChatInputContainer>
-//         <ChatInput
-//           type="text"
-//           placeholder="메시지를 입력하세요"
-//           value={message}
-//           onChange={(e) => setMessage(e.target.value)}
-//         />
-//         <SendButton onClick={handleSendMessage}>전송</SendButton>
-//       </ChatInputContainer>
-//     </MessageChat>
-//   );
-// }
-
-// export default ChatComponent;
-
 function ChatComponent() {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
+  const [chatId, setChatId] = useState(null);
+  const [allChats, setAllChats] = useState([]);
   const [profileImage, setProfileImage] = useState("");
   const [userName, setUserName] = useState("");
-
+  const [senderId, setSenderId] = useState(null);
+  const [recieverId, setRecieverId] = useState("");
+  const chatRef = useRef(null);
+  console.log(senderId);
   useEffect(() => {
-    socket.on("receive-message", (message) => {
-      setChatHistory((prevChat) => [...prevChat, message]);
+    // socket.on("getOnlineUsers", (onlineUsers) => {
+    //   setAllChats(onlineUsers);
+    // });
+    // socket.emit("addNewUser", senderId);
+    socket.on("getMessage", (message) => {
+      const newMessage = {
+        chatId: chatId,
+        content: message.content.trim(),
+        senderId: message.senderId,
+      };
+      setChatHistory((prevChatHistory) => [...prevChatHistory, newMessage]);
     });
 
-    API.get("/chats")
-      .then((response) => {
-        console.log("채팅 목록 가져오기 성공:", response.data);
-        const allChatList = response.data.allChatList;
-        if (allChatList.length > 0) {
-          const chatRoom = allChatList[0];
-          // 채팅 메시지 배열을 "messages" 키로 가정하고 추출하여 업데이트합니다.
-          const chatMessages = chatRoom.messages;
-          if (Array.isArray(chatMessages)) {
-            setChatHistory(chatMessages);
-          } else {
-            console.error("채팅 메시지 배열이 올바르지 않습니다.");
-          }
-          setUserName(chatRoom.User.nickname);
-          if (chatRoom.User.UserFiles.length > 0) {
-            setProfileImage(chatRoom.User.UserFiles[0].url);
-          }
-        }
-      })
-      .catch((error) => {
-        console.error("채팅 목록 가져오기 실패:", error);
-      });
+    // socket.on("getNotification", (notification) => {
+    //   // TODO: 알림 처리 로직 구현
+    // });
 
     return () => {
-      socket.off("receive-message");
+      socket.off("getOnlineUsers");
+      socket.off("getMessage");
+      socket.off("getNotification");
     };
+  }, [chatId, senderId]);
+  useEffect(() => {
+    API.get("/chats")
+      .then((response) => {
+        setAllChats(response.data.allChats);
+        console.log("allchat!!!", response.data.allChats);
+        console.log(
+          response.data.allChats[0].recieverInfo.UserFiles[0].File.url
+        );
+        setProfileImage(null);
+      })
+      .catch((error) => {
+        console.error("유저 목록 가져오는데 실패,,", error);
+      });
   }, []);
-
-  const sendMessage = (text, sender) => {
-    if (text.trim() !== "") {
+  const handleSendMessage = async () => {
+    if (chatId && message.trim() !== "") {
       const newMessage = {
-        text: text.trim(),
-        sender: sender,
+        chatId: chatId,
+        content: message.trim(),
+        senderId,
       };
-      socket.emit("sendMessage", newMessage);
-      setChatHistory((prevChat) => [...prevChat, newMessage]);
-      setMessage("");
+      try {
+        socket.emit("sendMessage", {
+          content: message,
+          recieverId: recieverId,
+          senderId,
+        });
+        const response = await API.post("/messages", newMessage);
+        setChatHistory([...chatHistory, newMessage]);
+        setMessage("");
+      } catch (error) {
+        console.error("메시지 전송에 실패했습니다:", error);
+      }
     }
   };
 
-  const handleSendMessage = () => {
-    sendMessage(message, "user");
+  console.log(profileImage);
+
+  const handleChatClick = async (chat) => {
+    try {
+      setRecieverId(chat.currentUserInfo.reciever);
+      setChatId(chat.currentUserInfo.chatId);
+      setProfileImage(chat.recieverInfo.UserFiles[0].File.url);
+      setUserName(chat.recieverInfo.nickname);
+      setSenderId(chat.currentUserInfo.sender);
+      socket.emit("addNewUser", chat.currentUserInfo.sender);
+
+      const messagesResponse = await API.get(
+        `/messages/${chat.currentUserInfo.chatId}`
+      );
+      const messages = messagesResponse.data.messageList;
+      console.log(messages, "message!!!");
+      setChatHistory(messages);
+    } catch (error) {
+      console.error("채팅 정보를 가져오는데 실패했습니다:", error);
+    }
   };
 
+  useEffect(() => {
+    if (chatId) {
+      API.get(`/messages/${chatId}`)
+        .then((response) => {
+          const messages = response.data.messageList;
+          console.log(messages, "message!!!");
+          setChatHistory(messages);
+        })
+        .catch((error) => {
+          console.error("채팅 메시지를 가져오는데 실패:", error);
+        });
+    }
+  }, [chatId]);
+  console.log(chatHistory);
   return (
-    <MessageChat>
-      <ProfileImage src={profileImage} alt="Profile Image" />
-      <UserName>{userName}</UserName>
-      <MessageBox>
-        {chatHistory.map((msg, index) => (
-          <MessageContainer key={index}>
-            <ProfileImage
-              src={
-                msg.sender === "user"
-                  ? "사용자 프로필 이미지 URL"
-                  : profileImage
-              }
-              alt="Profile Image"
-            />
-            <Bubble>{msg.text}</Bubble>
-          </MessageContainer>
-        ))}
-      </MessageBox>
-      <ChatInputContainer>
-        <ChatInput
-          type="text"
-          placeholder="메시지를 입력하세요"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <SendButton onClick={handleSendMessage}>전송</SendButton>
-      </ChatInputContainer>
-    </MessageChat>
+    <ChatContainer>
+      <MessageChat>
+        <ProfileImage src={profileImage} />
+        <UserName>{userName}</UserName>
+        <MessageBox>
+          {Array.isArray(chatHistory) && chatHistory.length > 0 ? (
+            chatHistory.map((chat) => (
+              <MessageContainer
+                key={chat.messageId}
+                isUserMessage={Number(chat.senderId) === senderId}
+              >
+                {Number(chat.senderId) !== senderId && (
+                  <ProfileImage src={profileImage} alt="프로필사진" />
+                )}
+
+                <Bubble className="message-bubble">{chat.content}</Bubble>
+              </MessageContainer>
+            ))
+          ) : (
+            <div>채팅 기록이 없습니다.</div>
+          )}
+        </MessageBox>
+        <ChatInputContainer>
+          <ChatInput
+            type="text"
+            placeholder="메시지를 입력하세요"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <SendButton onClick={handleSendMessage}>전송</SendButton>
+        </ChatInputContainer>
+      </MessageChat>
+      <ChatRoom ref={chatRef}>
+        <UserList>
+          {allChats.length > 0 &&
+            allChats.map((chat) => {
+              const profileImageUrl = chat.recieverInfo.UserFiles[0].File.url;
+              return (
+                <UserListItem
+                  key={chat.currentUserInfo.chatId}
+                  onClick={() => handleChatClick(chat)}
+                >
+                  <ProfileImage src={profileImageUrl} alt="프로필사진" />
+                  <UserName>{chat.recieverInfo.nickname}</UserName>
+                </UserListItem>
+              );
+            })}
+        </UserList>
+      </ChatRoom>
+    </ChatContainer>
   );
 }
 
