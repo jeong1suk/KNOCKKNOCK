@@ -28,7 +28,7 @@ const Header = () => {
         <LogoBox>
           <Link to={ROUTE.MAIN.link}>
             <LogoImgBox>
-              <img src="src/assets/knock.png" />
+              <img src="002.png" />
             </LogoImgBox>
           </Link>
         </LogoBox>
@@ -55,12 +55,14 @@ const Header = () => {
 };
 
 const HeaderWrap = styled.div`
+  max-width: 1024px;
   width: 100%;
   height: 3rem;
   background-color: #f7f7f7;
   position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
   z-index: 998;
 `;
 

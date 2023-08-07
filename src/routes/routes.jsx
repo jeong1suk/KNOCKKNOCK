@@ -1,6 +1,6 @@
 import Mainpage from "../pages/mainpage/MainPage";
 import Ai from "../pages/ai/Ai";
-import LoginForm from "../pages/login/LoginForm";
+import LoginPage from "../pages/login/LoginPage";
 import RegisterPage from "../pages/register/RegisterPage";
 import TodayKnock from "../pages/todayknock/TodayKnock";
 import Play from "../pages/play/Play";
@@ -18,7 +18,7 @@ export const ROUTE = {
   LOGIN: {
     path: "/login",
     link: "/login",
-    element: LoginForm,
+    element: LoginPage,
   },
   REGISTER: {
     path: "/register",

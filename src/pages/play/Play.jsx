@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled,{ keyframes } from 'styled-components';
 
 import { useAsyncValue, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
@@ -15,11 +15,12 @@ function Play()  {
   const [allPostCount, setAllPostCount] = useState(0);
   const [postType, setPostType] = useState('');
 
-  const perPage = 5;
+  const perPage = 6;
   const lastPage = Math.ceil(allPostCount / perPage);
 
   const fetchPosts = async () => {
     const res = await Api.get(`/posts?page=${currentPage}&perPage=${perPage}&type=${postType}`);
+    console.log(postType,res);
     setPostList(res.data.postList);
     setAllPostCount(res.data.allPostCount);
   };
@@ -39,10 +40,10 @@ function Play()  {
 
 
   return(
-    <>
+    <div>
       <TopBox>
         <TopPtagBox>
-          <p>같이 놀자</p>
+          <p>같이 놀자 !</p>
           <br></br>
           <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
         </TopPtagBox>
@@ -52,15 +53,15 @@ function Play()  {
         
       </TopBox>
       <CategoryButtonBox>
-        <CategoryButton onClick={() => setPostType('')}>전체</CategoryButton>
-        <CategoryButton onClick={() => setPostType('술')}>술</CategoryButton>
-        <CategoryButton onClick={() => setPostType('영화')}>영화</CategoryButton>
-        <CategoryButton onClick={() => setPostType('식사')}>식사</CategoryButton>
-        <CategoryButton onClick={() => setPostType('카페')}>카페</CategoryButton>
-        <CategoryButton onClick={() => setPostType('산책')}>산책</CategoryButton>
-        <CategoryButton onClick={() => setPostType('드라이브')}>드라이브</CategoryButton>
-        <CategoryButton onClick={() => setPostType('공연관람')}>공연관람</CategoryButton>
-        <CategoryButton onClick={() => setPostType('기타')}>기타</CategoryButton>
+        <CategoryButton onClick={() => setPostType('')}>🚪전체</CategoryButton>
+        <CategoryButton onClick={() => setPostType('술')}>🍻술</CategoryButton>
+        <CategoryButton onClick={() => setPostType('영화')}>🍿영화</CategoryButton>
+        <CategoryButton onClick={() => setPostType('식사')}>🍽️식사</CategoryButton>
+        <CategoryButton onClick={() => setPostType('카페')}>🧋카페</CategoryButton>
+        <CategoryButton onClick={() => setPostType('산책')}>🧑‍🤝‍🧑산책</CategoryButton>
+        <CategoryButton onClick={() => setPostType('드라이브')}>🚗드라이브</CategoryButton>
+        <CategoryButton onClick={() => setPostType('공연관람')}>🎭공연관람</CategoryButton>
+        <CategoryButton onClick={() => setPostType('기타')}>⚫기타</CategoryButton>
       </CategoryButtonBox>
       <PostCardBox>
         {postList.map(post => (
@@ -69,34 +70,48 @@ function Play()  {
       </PostCardBox>
 
       <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} lastPage={lastPage} />
-    </>
+    </div>
   )
 };
 
 export default Play;
 
+const fadeInAnimation = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const TopBox = styled.div`
   display: flex;
   justify-content: center;
   height: 10%;
-  margin: 50px 0px 50px 0px;
-  gap: 40%;
+  margin: 50px 0px 60px 0px;
+  gap: 10%;
   
   p {
-    font-size: 2rem; 
+    font-family: 'KIMM_Bold';
+    font-size: 6rem; 
     color: #1d1d1f; 
     font-weight: 600;
     line-height: 1.2;
+    margin-bottom: 0px;
   }
 
   p:last-of-type {
-    font-size: 1rem; 
+    font-size: 2rem; 
     color: #1d1d1f; 
     font-weight: 500;
     line-height: 1.2;
   }
-  @media (min-width: 1024px) {
+
+  animation: ${fadeInAnimation} 0.5s ease-in-out;
+  @media (max-width: 1024px) {
     padding: 50px 0 0 0;
 
     p {
@@ -108,7 +123,7 @@ const TopBox = styled.div`
     }
   }
 
-  @media (min-width: 390px) {    
+  @media (max-width: 420px) {    
     p {
       font-size: 2rem;
       margin-bottom: -0.3px;
@@ -121,35 +136,35 @@ const TopBox = styled.div`
 
 const PostButton = styled.button`
   font-size: 100%;
-  padding: 10px 20px;
+  font-family: 'KIMM_Bold';
+  padding: 10px 10px;
   background-color: #F7CBD0;
   color: black;
-  border: none;
+  border: 10px double #fff;
   border-radius: 50px;
   cursor: pointer;
-  margin: 20px 0 20px 20px; 
+  margin: 200px 0 0 30px; 
   width: 80%;
   height: 100px;
   transition: 0.3s;
   text-overflow: ellipsis;
 
   &:hover {
-    background-color: #FECDE4; 
-    color: white;
+    border: 10px double #3B0B0B;
+    color: #3B0B0B;
     transform: scale(1.02);
   }
-  @media (max-width: 1200px) {
+  @media (max-width: 420px) {
     width: 100%;
-    white-space: normal; /* Allow the text to wrap */
+    white-space: nowrap; /* Allow the text to wrap */
     max-width: 1000px;
-    font-size:0.5rem;
+    margin: 40px 0 0 0;
   }
-  @media (max-width: 390px) {
-    width: 90%; 
+  @media (max-width: 1024px) {
+    width: 100%; 
     font-size: 0.4rem; /* Adjust the font size for smaller screens */
-    height: 80px; /* Reduce the height for smaller screens */
     padding: 10px 15px; /* Adjust the padding for smaller screens */
-    margin: 20px 0 20px 0; /* Adjust the margin for smaller screens */
+    margin: 150px 0 0 0; /* Adjust the margin for smaller screens */
   }
 `
 const CategoryButtonBox = styled.div`
@@ -160,6 +175,8 @@ const CategoryButtonBox = styled.div`
   padding: 20px 0;
   border-top: 1px solid #d2d2d2;
   border-bottom: 1px solid #d2d2d2;
+  animation: ${fadeInAnimation} 0.6s ease-in-out;
+
   @media (min-width: 1024px) {
     justify-content: space-evenly;
   }
@@ -169,24 +186,22 @@ const CategoryButtonBox = styled.div`
 `
 
 const CategoryButton = styled.div`
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  font-family: 'Pretendard-Regular';
   color: #1d1d1f;
-  // padding: 10px 20px;
-  // border-radius: 25px;
   cursor: pointer;
-  transition: 0.3s;
   text-align: center;
   
   &:hover {
-    transform: scale(1.2);
-    color: #809FFF;
+    transform: scale(1.1);
+    color: #F7CBD0;
   }
 
   @media (min-width: 1024px) {
     font-size: 1.5rem;
   }
-  @media (max-width: 516px) {
-    font-size: 0.8rem;
+  @media (max-width: 750px) {
+    font-size: 0.7rem;
     max-width: 100px; /* Set the maximum width for the button */
     white-space: normal; /* Allow the text to wrap */
   }
@@ -201,17 +216,31 @@ const PostBox = styled.div`
 
 const TopButtonBox = styled.div`
   display: flex;
-  width: 20%;
+  width: 15%;
 
   @media (max-width: 516px) {
     width: 40%;
   }
 `
 const PostCardBox = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30vw,1fr));
+  padding: 20px;
+  margin: 0 auto;
+  justify-items: center;
   align-items: center;
-`
+  max-width: 90vw;
+  animation: ${fadeInAnimation} 0.6s ease-in-out;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
+    grid-gap:1px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  }
+  `
 
 const TopPtagBox = styled.div`
   display: flex;

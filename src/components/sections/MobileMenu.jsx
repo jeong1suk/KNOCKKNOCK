@@ -27,15 +27,15 @@ const MobileMenu = ({ isLogin, user, logout }) => {
           </MenuItem>
           <MenuItem to={ROUTE.AI.link} onClick={onClose}>
             인공지능
-          </MenuItem>
-          <MenuItem to={ROUTE.TodayKnock.link} onClick={onClose}>
-            오늘의 낙낙
-          </MenuItem>
-          <MenuItem to={ROUTE.Play.link} onClick={onClose}>
-            같이 놀자
           </MenuItem>{" "}
           {isLogin ? (
             <>
+              <MenuItem to={ROUTE.TodayKnock.link} onClick={onClose}>
+                오늘의 낙낙
+              </MenuItem>
+              <MenuItem to={ROUTE.Play.link} onClick={onClose}>
+                같이 놀자
+              </MenuItem>
               <MenuItem to={ROUTE.Mypage.link} onClick={onClose}>
                 마이페이지
               </MenuItem>

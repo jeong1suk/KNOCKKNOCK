@@ -11,42 +11,47 @@ export const ModalHobby = ({ formData, handleHobbyClick }) => {
   const isMaxHobbyReached = isMaxArrayReached(hobby, 5);
 
   return (
-    <S.RightAlignedBox>
-      <S.ToggleButton style={{ textAlign: "center" }} onClick={onOpen}>
-        취미 선택하기
-      </S.ToggleButton>
-
-      {opened && (
-        <S.Modal>
-          <h3 style={{ textAlign: "center" }}>취미</h3>
-          {isMaxHobbyReached && (
-            <p style={{ color: "red" }}>You can only select up to 5 hobbies.</p>
-          )}
-          <ButtonContainer>
-            {hobbyList.map((elements, index) => (
-              <ModalButton
-                key={index}
-                active={hobby.includes(elements)}
-                onClick={() => handleHobbyClick(elements)}
-              >
-                <div style={{ textAlign: "center" }}>{elements}</div>
-              </ModalButton>
+    <>
+      <S.ToggleButtonWrapper>
+        <S.ToggleButton style={{ textAlign: "center" }} onClick={onOpen}>
+          취미 선택하기
+        </S.ToggleButton>
+      </S.ToggleButtonWrapper>
+      <S.Box>
+        {opened && (
+          <S.Modal>
+            <h3 style={{ textAlign: "center" }}>취미</h3>
+            {isMaxHobbyReached && (
+              <p style={{ color: "red" }}>
+                You can only select up to 5 hobbies.
+              </p>
+            )}
+            <ButtonContainer>
+              {hobbyList.map((elements, index) => (
+                <ModalButton
+                  key={index}
+                  active={hobby.includes(elements)}
+                  onClick={() => handleHobbyClick(elements)}
+                >
+                  <div style={{ textAlign: "center" }}>{elements}</div>
+                </ModalButton>
+              ))}
+            </ButtonContainer>
+            {/* <ModalButton onClick={onClose}>Close</ModalButton> */}
+            <button onClick={onClose}>Close</button>
+          </S.Modal>
+        )}
+        {hobby.length > 0 && (
+          <S.HobbyBoxContainer>
+            {hobby.map((item, index) => (
+              <HobbyBox key={index} style={{ marginLeft: "20px" }}>
+                {item}
+              </HobbyBox>
             ))}
-          </ButtonContainer>
-          {/* <ModalButton onClick={onClose}>Close</ModalButton> */}
-          <button onClick={onClose}>Close</button>
-        </S.Modal>
-      )}
-      {hobby.length > 0 && (
-        <S.HobbyBoxContainer>
-          {hobby.map((item, index) => (
-            <HobbyBox key={index} style={{ marginLeft: "20px" }}>
-              {item}
-            </HobbyBox>
-          ))}
-        </S.HobbyBoxContainer>
-      )}
-    </S.RightAlignedBox>
+          </S.HobbyBoxContainer>
+        )}
+      </S.Box>
+    </>
   );
 };
 const MultiCheckBox = styled.button`

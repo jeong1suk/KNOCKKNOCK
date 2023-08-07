@@ -6,7 +6,7 @@ import * as Api from "../../api";
 import UserModal from "./UserModal";
 
 const limit = 3;
-
+const isLoverUser = ["Lover", "User"]
 function TodayKnock() {
   const [showStartModal, setShowStartModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
@@ -15,6 +15,7 @@ function TodayKnock() {
   const [randomUsers, setRandomUsers] = useState([]);
 
   const [selectedCard, setSelectedCard] = useState();
+  
 
   const usersGetRequest = async () => {
     try {
@@ -33,7 +34,6 @@ function TodayKnock() {
   const cardsGetRequest = async () => {
     try {
       const res = await Api.get(`/cards?limit=${limit}`);
-      console.log(res.data.randomLovers);
       setRandomLovers(res.data.randomLovers);
       setSelectedCard(res.data.card);
     } catch (err) {
@@ -46,8 +46,10 @@ function TodayKnock() {
   };
 
   const handleUserProfileClick = async (userId) => {
+    console.log(11);
     try {
       const res = await Api.get(`/users/yourpage/${userId}`);
+      
       setSelectedUser(res.data);
       setShowUserModal(true);
     } catch (err) {
@@ -75,37 +77,37 @@ function TodayKnock() {
   };
 
   const bannerImages = [
-    "url('https://assets.xboxservices.com/assets/9d/26/9d2649d8-ce95-4845-9956-a8b54715d112.jpg?n=Accessory-Hub_Page-Hero-1084_403913_1920x720.jpg')",
-    "url('https://news.xbox.com/en-us/wp-content/uploads/sites/2/2022/03/Hero_Family_JPG.jpg')",
-    "url('https://www.nintendo.co.kr/switch/awuxa/assets/img/top/hero/switch.png')",
+    "url('https://assets.xboxservices.com/assets/9d/26/9d2649d8-ce95-4845-9956-a8b54715d112.jpg?n=Accessory-Hub_Page-Hero-1084_403913_1920x720.jpg')"
   ];
 
-  const [bannerIndex, setBannerIndex] = useState(0);
+  // const [bannerIndex, setBannerIndex] = useState(0);
 
-  const handleNextBanner = () => {
-    setBannerIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
-  };
+  // const handleNextBanner = () => {
+  //   setBannerIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
+  // };
 
-  const handlePrevBanner = () => {
-    setBannerIndex((prevIndex) =>
-      prevIndex === 0 ? bannerImages.length - 1 : prevIndex - 1
-    );
-  };
+  // const handlePrevBanner = () => {
+  //   setBannerIndex((prevIndex) =>
+  //     prevIndex === 0 ? bannerImages.length - 1 : prevIndex - 1
+  //   );
+  // };
 
   useEffect(() => {
     usersGetRequest();
     cardsGetRequest();
+
   }, []);
+
 
 
 
   return (
     <Container>
       <div style={{ height: "10vh" }} />
-      <Banner style={{ backgroundImage: bannerImages[bannerIndex] }}>
+      <Banner>
         <StartButton onClick={handleStartClick}>START</StartButton>
-        <ArrowButtonLeft onClick={handlePrevBanner}>{"<"}</ArrowButtonLeft>
-        <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight>
+        {/* <ArrowButtonLeft onClick={handlePrevBanner}>{"<"}</ArrowButtonLeft>
+        <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight> */}
       </Banner>
       <div style={{ height: "10vh" }} />
       {showStartModal && (
@@ -127,30 +129,32 @@ function TodayKnock() {
           </ModalContentUser>
         </ModalOverlay>
       )}
-      <UserProfilesContainer>
+      
 
-        {randomLovers.map((user) => (
-          <UserProfileBox
-            key={user.id}
-            onClick={() => handleUserProfileClick(user.User.userId)}
-          >
-            <UserProfile user={user.User} />
-          </UserProfileBox>
-        ))}
-      </UserProfilesContainer>
-      <UserProfilesContainer>
         {selectedCard && 
           <>
-            {randomUsers.map((user) => (
-              <UserProfileBox
-                key={user.userId}
-                onClick={() => handleUserProfileClick(user.userId)}
-              >
-                <UserProfile user={user} />
-              </UserProfileBox>
-            ))}
-          </> 
+            <RandomUserExplainDiv>
+              <p>같은 연애운을 가진 사람을 찾아봐요!</p>
+            </RandomUserExplainDiv>
+              <UserProfilesContainer>
+              {randomLovers.map((user) => (
+                  <UserProfile user={user.User} key={user.id}
+                  onClick={() => handleUserProfileClick(user.User.userId)}
+                  isLoverUser={isLoverUser[0]} />
+              ))}
+            </UserProfilesContainer>
+          </>
+          
         }
+      <RandomUserExplainDiv>
+        <p>다양한 사람들을 알아봐요!</p>
+      </RandomUserExplainDiv>
+      <UserProfilesContainer>     
+      {randomUsers.map((user) => (
+          <UserProfile user={user} key={user.userId}
+          onClick={() => handleUserProfileClick(user.userId)}
+          isLoverUser={isLoverUser[1]} />
+      ))}
       </UserProfilesContainer>
       
       
@@ -168,11 +172,12 @@ const Banner = styled.div`
   height: 40vh;
   display: flex;
   justify-content: flex-end;
-  background-color: #fff;
-  background-image: url("https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202001/29/a61d0ff9-df15-4d47-a4a6-79b377c3655a.jpg");
+  background-color: #391F41;
+  background-image: url("/gamebackground.webp");
   position: relative;
   background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
   max-height: 100%;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
 `;
@@ -221,7 +226,8 @@ const ModalContentUser = styled.div`
 
 const ModalContent = styled.div`
   width: 70%;
-  height: 70%;
+  height: 90%;
+  overflow: auto;
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
@@ -229,50 +235,37 @@ const ModalContent = styled.div`
 
 const UserProfilesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+  gap: 10%;
+  padding: 10%;
   margin: -3rem 0;
   & > :nth-child(n) {
     margin-top: 5rem;
   }
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
+    grid-gap:1px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  }
+
 `;
 
-const UserProfileBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-`;
 
-const ArrowButton = styled.button`
-  font-size: 5rem;
-  color: #fff;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  border-radius: 50%;
-  width: 5rem;
-  height: 5rem;
+const RandomUserExplainDiv = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  &:focus {
-    outline: none;
+  border: 10px double #F7CBD0;
+  p {
+    font-family: 'KIMM_Bold';
+    font-size: 3rem; 
+    color: #1d1d1f; 
+    font-weight: 600;
+    line-height: 1.2;
   }
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-`;
 
-const ArrowButtonLeft = styled(ArrowButton)`
-  left: 20px;
-`;
+`
 
-const ArrowButtonRight = styled(ArrowButton)`
-  right: 20px;
-`;

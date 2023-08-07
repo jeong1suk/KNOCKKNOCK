@@ -165,103 +165,138 @@ const UserProfileEdit = ({ user }) => {
         정보 수정하기
       </S.ToggleButton>
       {opened && (
-        <S.Modal style={{ marginTop: "200px" }}>
-          {/* <ProfilePicture
+        <ModalOverlay>
+          <S.Modal style={{ marginTop: "200px" }}>
+            <CloseButton onClick={onClose}>X</CloseButton>
+            {/* <ProfilePicture
             src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg"
             alt="Profile Picture"
           /> */}
-
-          <S.Box>
-            <S.Heading>Name: {user.name}</S.Heading>
-          </S.Box>
-          <S.Box>
-            <S.Heading>닉네임</S.Heading>
-            <S.Input
-              name="nickname"
-              value={nickname}
-              placeholder={user.nickname}
-              onChange={onChange}
-            />
-          </S.Box>
-          <S.Box>
-            <S.Heading>비밀번호</S.Heading>
-            <S.Input name="password" value={password} onChange={onChange} />
-          </S.Box>
-
-          <S.Box>
-            <S.Heading>직업</S.Heading>
-            <S.Input
-              name="job"
-              value={job}
-              placeholder={user.job}
-              onChange={onChange}
-            />
-          </S.Box>
-          <S.Box>
-            <S.Heading>지역</S.Heading>
-            <S.Input
-              name="region"
-              value={region}
-              placeholder={user.region}
-              onChange={onChange}
-            />
-          </S.Box>
-          <S.Heading>사진</S.Heading>
-          <S.Box>
-            <S.Input type="file" onChange={handleFileChange} />
-          </S.Box>
-          {selectedFile && (
-            <div>
-              <h6>미리보기</h6>
-              <img
-                src={previewURL}
-                alt="Selected Image"
-                style={{ width: "50%" }}
+            <br />
+            <S.Box>
+              <S.Heading>
+                Name: {"\t"}
+                {user.name}
+              </S.Heading>
+            </S.Box>
+            <S.Box>
+              <S.Heading>닉네임</S.Heading>
+              <S.Input
+                name="nickname"
+                value={nickname}
+                placeholder={user.nickname}
+                onChange={onChange}
               />
-            </div>
-          )}
-          <S.Box>
-            <S.Heading>키</S.Heading>
-            <S.Input
-              name="height"
-              value={height}
-              placeholder={user.height}
-              onChange={onChange}
+            </S.Box>
+            <S.Box>
+              <S.Heading>비밀번호</S.Heading>
+              <S.Input name="password" value={password} onChange={onChange} />
+            </S.Box>
+
+            <S.Box>
+              <S.Heading>직업</S.Heading>
+              <S.Input
+                name="job"
+                value={job}
+                placeholder={user.job}
+                onChange={onChange}
+              />
+            </S.Box>
+            <S.Box>
+              <S.Heading>지역</S.Heading>
+              <S.Input
+                name="region"
+                value={region}
+                placeholder={user.region}
+                onChange={onChange}
+              />
+            </S.Box>
+            <S.Heading>사진</S.Heading>
+            <S.Box>
+              <S.Input type="file" onChange={handleFileChange} />
+            </S.Box>
+            {selectedFile && (
+              <div>
+                <h6>미리보기</h6>
+                <img
+                  src={previewURL}
+                  alt="Selected Image"
+                  style={{ width: "50%" }}
+                />
+              </div>
+            )}
+            <S.Box>
+              <S.Heading>키</S.Heading>
+              <S.Input
+                name="height"
+                value={height}
+                placeholder={user.height}
+                onChange={onChange}
+              />
+            </S.Box>
+            <S.Box>
+              <S.Heading>mbti</S.Heading>
+              <S.Select
+                name="mbti"
+                value={mbti}
+                placeholder={user.mbti}
+                onChange={onChange}
+              >
+                <option>{user.mbti}</option>
+                {mbtiList.map((mbti) => (
+                  <option key={mbti} value={mbti}>
+                    {mbti}
+                  </option>
+                ))}
+              </S.Select>
+            </S.Box>
+            <ModalHobby
+              formData={formData}
+              handleHobbyClick={handleHobbyClick}
             />
-          </S.Box>
-          <S.Box>
-            <S.Heading>mbti</S.Heading>
-            <S.Select
-              name="mbti"
-              value={mbti}
-              placeholder={user.mbti}
-              onChange={onChange}
-            >
-              <option>{user.mbti}</option>
-              {mbtiList.map((mbti) => (
-                <option key={mbti} value={mbti}>
-                  {mbti}
-                </option>
-              ))}
-            </S.Select>
-          </S.Box>
-          <ModalHobby formData={formData} handleHobbyClick={handleHobbyClick} />
-          <ModalPersonality
-            formData={formData}
-            handlePersonalityClick={handlePersonalityClick}
-          />
-          <ModalIdeal formData={formData} handleIdealClick={handleIdealClick} />
+            <ModalPersonality
+              formData={formData}
+              handlePersonalityClick={handlePersonalityClick}
+            />
+            <ModalIdeal
+              formData={formData}
+              handleIdealClick={handleIdealClick}
+            />
 
-          <S.Heading>한줄 자기소개</S.Heading>
-          <S.Box>
-            <S.Input name="introduce" value={introduce} onChange={onChange} />
-          </S.Box>
+            <S.Heading>한줄 자기소개</S.Heading>
+            <S.Box>
+              <S.Input name="introduce" value={introduce} onChange={onChange} />
+            </S.Box>
 
-          <button onClick={handleSubmit}>정보 수정하기</button>
-          <button onClick={onClose}>Close</button>
-        </S.Modal>
+            <button onClick={handleSubmit}>정보 수정하기</button>
+            <button onClick={onClose}>Close</button>
+          </S.Modal>
+        </ModalOverlay>
       )}
     </>
   );
 };
 export default UserProfileEdit;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin-bottom: 10px;
+`;
