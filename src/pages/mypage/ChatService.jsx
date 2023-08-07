@@ -62,6 +62,15 @@ const MessageBox = styled.div`
   overflow-y: scroll;
 `;
 
+const Bubble = styled.div`
+  background-color: white;
+  padding: 10px;
+  border-radius: 20px;
+  margin: 0 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 0.8rem;
+`;
+
 const MessageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -70,8 +79,15 @@ const MessageContainer = styled.div`
   justify-content: ${(props) =>
     props.isUserMessage ? "flex-end" : "flex-start"};
 
-  &:nth-child(even) {
+  &:nth-child() {
     flex-direction: ${(props) => (props.isUserMessage ? "row-reverse" : "row")};
+  }
+
+  .message-bubble {
+    ${(props) =>
+      props.isUserMessage
+        ? "margin-left: 10px; margin-right: 0;"
+        : "margin-right: 10px; margin-left: 0;"}
   }
 `;
 
@@ -83,15 +99,6 @@ const ProfileImage = styled.img`
 `;
 
 const UserName = styled.div``;
-
-const Bubble = styled.div`
-  background-color: white;
-  padding: 10px;
-  border-radius: 20px;
-  margin: 0 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  font-size: 0.8rem;
-`;
 
 const ChatInputContainer = styled.div`
   display: flex;
@@ -138,14 +145,15 @@ function ChatComponent() {
   const chatRef = useRef(null);
   console.log(senderId);
   useEffect(() => {
-    socket.on("getOnlineUsers", (onlineUsers) => {
-      setAllChats(onlineUsers);
-    });
+    // socket.on("getOnlineUsers", (onlineUsers) => {
+    //   setAllChats(onlineUsers);
+    // });
     // socket.emit("addNewUser", senderId);
     socket.on("getMessage", (message) => {
       const newMessage = {
         chatId: chatId,
-        content: message.trim(),
+        content: message.content.trim(),
+        senderId: message.senderId,
       };
       setChatHistory((prevChatHistory) => [...prevChatHistory, newMessage]);
     });
@@ -160,12 +168,15 @@ function ChatComponent() {
       socket.off("getNotification");
     };
   }, [chatId, senderId]);
-
   useEffect(() => {
     API.get("/chats")
       .then((response) => {
         setAllChats(response.data.allChats);
-        console.log("allchat!!!", response.data);
+        console.log("allchat!!!", response.data.allChats);
+        console.log(
+          response.data.allChats[0].recieverInfo.UserFiles[0].File.url
+        );
+        setProfileImage(null);
       })
       .catch((error) => {
         console.error("유저 목록 가져오는데 실패,,", error);
@@ -176,11 +187,13 @@ function ChatComponent() {
       const newMessage = {
         chatId: chatId,
         content: message.trim(),
+        senderId,
       };
       try {
         socket.emit("sendMessage", {
           content: message,
           recieverId: recieverId,
+          senderId,
         });
         const response = await API.post("/messages", newMessage);
         setChatHistory([...chatHistory, newMessage]);
@@ -190,6 +203,8 @@ function ChatComponent() {
       }
     }
   };
+
+  console.log(profileImage);
 
   const handleChatClick = async (chat) => {
     try {
@@ -224,6 +239,7 @@ function ChatComponent() {
         });
     }
   }, [chatId]);
+  console.log(chatHistory);
   return (
     <ChatContainer>
       <MessageChat>
@@ -232,15 +248,15 @@ function ChatComponent() {
         <MessageBox>
           {Array.isArray(chatHistory) && chatHistory.length > 0 ? (
             chatHistory.map((chat) => (
-              <MessageContainer key={chat.messageId}>
-                {chat.senderId === senderId ? (
-                  <Bubble>{chat.content}</Bubble>
-                ) : (
-                  <>
-                    <ProfileImage src={profileImage} alt="프로필사진" />
-                    <Bubble>{chat.content}</Bubble>
-                  </>
+              <MessageContainer
+                key={chat.messageId}
+                isUserMessage={Number(chat.senderId) === senderId}
+              >
+                {Number(chat.senderId) !== senderId && (
+                  <ProfileImage src={profileImage} alt="프로필사진" />
                 )}
+
+                <Bubble className="message-bubble">{chat.content}</Bubble>
               </MessageContainer>
             ))
           ) : (
