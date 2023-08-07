@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 import * as Api from '../../api';
 
-import { currentDate, currentTime } from '../../constants/currentDateTime';
+import { currentDate, currentTime } from '../../util/currentDateTime';
 
 import { categories } from '../../constants/CategoryConstants';
 import { useImageUpload } from '../../components/hooks/UseImageUpload';
