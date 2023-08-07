@@ -30,7 +30,7 @@ const Header = () => {
         <LogoBox>
           <Link to={ROUTE.MAIN.link} onClick={onClose}>
             <LogoImgBox>
-              <img src="002.png" />
+              <img src="/002.png" />
             </LogoImgBox>
           </Link>
         </LogoBox>
