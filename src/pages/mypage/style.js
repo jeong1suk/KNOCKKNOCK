@@ -70,6 +70,7 @@ export const Heading = styled.h3`
 export const Box = styled.span`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 51px;
   border: solid 1px #dadada;
@@ -82,7 +83,7 @@ export const Box = styled.span`
 export const Input = styled.input`
   display: block;
   position: relative;
-  width: 100%;
+  width: 70%;
   height: 29px;
   border: none;
   background: #fff;
@@ -107,14 +108,16 @@ export const RightAlignedBox = styled(Box)`
 `;
 export const Modal = styled.div`
   position: absolute;
-  width: 80%;
-  top: 50%;
+  width: 50%;
+  top: 30%;
   left: 50%;
+  overflow-y: auto; /* Enable vertical scroll */
+  max-height: 80vh;
   transform: translate(-50%, -50%);
   background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  z-index: 10;
+  /* z-index: 10; */
 `;
 export const ToggleButton = styled.a`
   box-shadow: inset 0px 1px 0px 0px #dcecfb;

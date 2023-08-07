@@ -10,38 +10,44 @@ export const ModalIdeal = ({ formData, handleIdealClick }) => {
   const isMaxIdealReached = isMaxArrayReached(ideal, 5);
 
   return (
-    <S.RightAlignedBox>
-      <S.ToggleButton onClick={onOpen}>나의 이상형은?</S.ToggleButton>
-      {opened && (
-        <S.Modal>
-          <h3 style={{ textAlign: "center" }}>이상형</h3>
-          {isMaxIdealReached && (
-            <p style={{ color: "red" }}>You can only select up to 5 Ideals.</p>
-          )}
-          <ButtonContainer>
-            {idealList.map((elements, index) => (
-              <ModalButton
-                key={index}
-                active={ideal.includes(elements)}
-                onClick={() => handleIdealClick(elements)}
-              >
-                <div style={{ textAlign: "center" }}>{elements}</div>
-              </ModalButton>
+    <>
+      <S.ToggleButtonWrapper>
+        <S.ToggleButton onClick={onOpen}>나의 이상형은?</S.ToggleButton>
+      </S.ToggleButtonWrapper>
+      <S.Box>
+        {opened && (
+          <S.Modal>
+            <h3 style={{ textAlign: "center" }}>이상형</h3>
+            {isMaxIdealReached && (
+              <p style={{ color: "red" }}>
+                You can only select up to 5 Ideals.
+              </p>
+            )}
+            <ButtonContainer>
+              {idealList.map((elements, index) => (
+                <ModalButton
+                  key={index}
+                  active={ideal.includes(elements)}
+                  onClick={() => handleIdealClick(elements)}
+                >
+                  <div style={{ textAlign: "center" }}>{elements}</div>
+                </ModalButton>
+              ))}
+            </ButtonContainer>
+            <button onClick={onClose}>Close</button>
+          </S.Modal>
+        )}
+        {ideal.length > 0 && (
+          <S.HobbyBoxContainer>
+            {ideal.map((item, index) => (
+              <IdealBox key={index} style={{ marginLeft: "20px" }}>
+                {item}
+              </IdealBox>
             ))}
-          </ButtonContainer>
-          <button onClick={onClose}>Close</button>
-        </S.Modal>
-      )}
-      {ideal.length > 0 && (
-        <S.HobbyBoxContainer>
-          {ideal.map((item, index) => (
-            <IdealBox key={index} style={{ marginLeft: "20px" }}>
-              {item}
-            </IdealBox>
-          ))}
-        </S.HobbyBoxContainer>
-      )}
-    </S.RightAlignedBox>
+          </S.HobbyBoxContainer>
+        )}
+      </S.Box>
+    </>
   );
 };
 

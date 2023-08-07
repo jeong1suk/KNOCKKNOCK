@@ -60,7 +60,7 @@ const RegisterPage = () => {
           hobby: formData.hobby,
           personality: formData.personality,
           introduce: formData.introduce || "반가워요!",
-          profileImage: ["profile", "http://placekitten.com/200/200"],
+          // profileImage: ["profile", "http://placekitten.com/200/200"],
         });
       }
       // console.log(formData);
