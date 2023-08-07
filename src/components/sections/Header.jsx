@@ -10,10 +10,12 @@ import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";
 import useIsMobile from "../hooks/useIsMobile";
 import { showSuccess } from "../../assets/alert";
+import { useToggle } from "../hooks/useToggle";
 const Header = () => {
   const isMobile = useIsMobile();
   const { user } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
+  const { opened, onOpen, onClose } = useToggle();
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("userToken");
@@ -26,7 +28,7 @@ const Header = () => {
     <HeaderWrap>
       <HeaderContainer>
         <LogoBox>
-          <Link to={ROUTE.MAIN.link}>
+          <Link to={ROUTE.MAIN.link} onClick={onClose}>
             <LogoImgBox>
               <img src="002.png" />
             </LogoImgBox>
@@ -38,6 +40,9 @@ const Header = () => {
               isLogin={user ? true : false}
               user={user}
               logout={logout}
+              opened={opened}
+              onOpen={onOpen}
+              onClose={onClose}
             />
           )}
 
@@ -46,6 +51,9 @@ const Header = () => {
               isLogin={user ? true : false}
               user={user}
               logout={logout}
+              opened={opened}
+              onOpen={onOpen}
+              onClose={onClose}
             />
           )}
         </NavigationBox>

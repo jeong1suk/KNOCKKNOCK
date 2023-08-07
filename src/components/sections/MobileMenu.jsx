@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { ROUTE } from "../../routes/routes";
-import { useToggle } from "../hooks/useToggle";
 import { getImageSrc } from "../../util/imageCheck";
-const MobileMenu = ({ isLogin, user, logout }) => {
-  const { opened, onOpen, onClose } = useToggle();
-
+const MobileMenu = ({ isLogin, user, logout, opened, onOpen, onClose }) => {
   return (
     <>
       <HamburgerButton onClick={onOpen}>
