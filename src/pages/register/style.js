@@ -154,5 +154,5 @@ export const HobbyBoxContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  /* margin: 0.2rem; */
+  /* margin: 0.1rem; */
 `;
