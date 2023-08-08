@@ -30,6 +30,7 @@
     "react-textarea-autosize": "^8.5.2",
     "react-transition-group": "^4.4.5",
     "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.7.2",
     "styled-components": "^6.0.4",
     "sweetalert2": "^11.7.20",
     "typewriter-effect": "^2.20.1"
