@@ -3,6 +3,7 @@ import styled from "styled-components";
 import * as Api from "../../api";
 // import { UserStateContext } from "../../App";
 import UserProfileEdit from "./UserProfileEdit";
+import UserNewPwdandOut from "./UserNewPwdandOut";
 import { getImageSrc } from "../../util/imageCheck";
 import { UserStateContext } from "../../context/user/UserProvider";
 // import { DndProvider, useDrag, useDrop } from "react-dnd";
@@ -159,7 +160,7 @@ const UserProfileLarge = () => {
         alt="Profile Picture"
       />
       <UserProfileEdit user={user} />
-
+      <UserNewPwdandOut user={user} />
       <UserProfileBox>
         <UserInformation>
           <Nickname>{user.nickname}</Nickname>
