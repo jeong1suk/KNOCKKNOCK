@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import { getImageSrc } from '../../util/imageCheck';
 
-const ParticipantList = ({ participantsList, handleAccept, handleReject, selectedOption }) => {
+const ParticipantList = ({ participantsList, handleAccept, handleReject, selectedOption, setIsProfileModalOpen, setSelectedUserId }) => {
+
+  const handleProfileModalOpen = (participantUserId) => {
+    console.log(participantUserId);
+    setIsProfileModalOpen(true);
+    setSelectedUserId(participantUserId);
+  }
+
+
+
   return (
     <ParticipantModalDiv>
       {participantsList.map((participant, index) => (
         <Card key={index}>
-          <Image src={participant.User?.UserFiles?.[0]?.File?.url} alt="profile" />
+          <Image src={getImageSrc(participant.User?.UserFiles?.[0]?.File?.url)} alt="profile" onClick={() => handleProfileModalOpen(participant.userId)}/>
           <Info>
-            <p>Nickname: {participant.User.nickname}</p>
-            <p>Gender: {participant.User.gender}</p>
-            <p>Age: {participant.User.age}</p>
-            <p>Job: {participant.User.job}</p>
+            <p>{participant.User.nickname}</p>
+            <p>🚻{participant.User.gender}</p>
+            <p>⏱{participant.User.age}살</p>
+            <p>🛄{participant.User.job}</p>
           </Info>
           {selectedOption == "신청인원" ?
           <Actions>
@@ -54,7 +64,8 @@ const Card = styled.div`
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
-  width: 100%;
+  width: 80%;
+  height: 30%;
 `;
 
 const Image = styled.img`
@@ -62,14 +73,25 @@ const Image = styled.img`
   height: 70px;
   border-radius: 50%;
   object-fit: cover;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 0.5;
+  }
 `;
 
 const Info = styled.div`
+  font-family: 'KIMM_Bold';
   flex: 1;
   margin-left: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  p {
+    margin: 2px 0px;
+  }
 `;
 
 const Actions = styled.div`
@@ -79,9 +101,10 @@ const Actions = styled.div`
 `;
 
 const Button = styled.button`
-  background: #007BFF;
-  border: none;
-  color: white;
+  font-family: "KIMM_Bold";
+  background-color: #f7cbd0;
+  border: 10px double #fff;
+  color: black;
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
@@ -89,5 +112,12 @@ const Button = styled.button`
   font-size: 16px;
   margin: 5px 2px;
   cursor: pointer;
-  border-radius: 5px;
+  transition: 0.3s;
+  border-radius: 50px;
+
+  &:hover {
+    border: 10px double #3b0b0b;
+    color: #3b0b0b;
+    transform: scale(1.02);
+  }
 `;
