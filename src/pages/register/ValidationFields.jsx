@@ -51,28 +51,31 @@ const ValidationFields = () => {
       {!isEmailValid && email.length > 0 && (
         <S.ErrorBox>올바른 이메일을 입력해주세요.</S.ErrorBox>
       )}
-
-      <S.Input>
-        <input
-          id="password"
-          type={showPassword ? "text" : "password"}
-          name="password"
-          value={password}
-          placeholder="비밀번호"
-          onChange={onChange}
-        />
-        <label htmlFor="email">비밀번호</label>
-        {showPassword ? (
-          <BiHide className="pswdIcon" onClick={togglePasswordVisibility} />
-        ) : (
-          <BiShow className="pswdIcon" onClick={togglePasswordVisibility} />
-        )}
-      </S.Input>
+      <S.RightAlignedBox>
+        <S.Input
+          style={{ width: "90%", display: "flex", alignItems: "center" }}
+        >
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={password}
+            placeholder="비밀번호"
+            onChange={onChange}
+          />
+          <label htmlFor="email">비밀번호</label>
+          {showPassword ? (
+            <BiHide className="pswdIcon" onClick={togglePasswordVisibility} />
+          ) : (
+            <BiShow className="pswdIcon" onClick={togglePasswordVisibility} />
+          )}
+        </S.Input>
+      </S.RightAlignedBox>
       {!isPasswordValid && password.length > 0 && (
         <S.ErrorBox>숫자, 문자, 특수문자 포함 8글자 이상</S.ErrorBox>
       )}
 
-      <S.Input>
+      <S.Input style={{ width: "90%", display: "flex", alignItems: "center" }}>
         <input
           id="confirmpwd"
           type={showConfirmPassword ? "text" : "password"}
@@ -81,7 +84,7 @@ const ValidationFields = () => {
           placeholder="비밀번호 확인"
           onChange={onChange}
         />
-
+        <label htmlFor="confirmpwd">비밀번호 확인</label>
         {showConfirmPassword ? (
           <BiHide
             className="pswdIcon"
@@ -93,7 +96,6 @@ const ValidationFields = () => {
             onClick={toggleConfirmPasswordVisibility}
           />
         )}
-        <label htmlFor="confirmpwd">비밀번호 확인</label>
       </S.Input>
       {!isPasswordSame && isPasswordValid && (
         <S.ErrorBox>비밀번호가 다릅니다.</S.ErrorBox>

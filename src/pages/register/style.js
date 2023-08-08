@@ -158,6 +158,12 @@ export const Input = styled.div`
     -moz-transition: all 0.2s ease;
     -o-transition: all 0.2s ease;
   }
+  .pswdIcon {
+    /* your password icon styles */
+    cursor: pointer;
+    margin-left: 10px;
+    /* right: 0; */
+  }
 `;
 export const ErrorBox = styled.span`
   /* margin-top: 4px; */
@@ -168,31 +174,29 @@ export const Select = styled.select`
   width: 100%;
   height: 29px;
   text-align: center;
-  border: none;
+  border: 1px solid #8aa1a1;
+  border-radius: 20px;
   background: #fff;
   font-size: 15px;
 `;
-export const RightAlignedBox = styled(Box)`
+export const RightAlignedBox = styled.div`
+  /* display: flex; */
+
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 15px;
 `;
 export const UploadedImageContainer = styled.div`
   border: 2px dashed #ccc;
   border-radius: 20px;
   padding: 20px;
-  margin-top: 20px;
-  width: 100%;
-  /* @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 100%;
-  }
-  @media (max-width: ${TABLET_BREAK_POINT}) {
-    width: 90%;
-  } */
+  margin: 20px auto;
+  width: 80%;
 `;
 export const UploadedImage = styled.img`
   width: 100%;
   max-height: 300px;
-  margin-top: 10px;
+  margin: 10px auto;
 `;
 export const Modal = styled.div`
   position: absolute;

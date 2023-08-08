@@ -63,17 +63,34 @@ const RequiredInputs = () => {
         setFormData={setFormData}
         onChange={onChange}
       />
-      <S.RightAlignedBox style={{ marginTop: "20px" }}>
-        <S.Select
-          name="gender"
-          value={gender}
-          onChange={onChange}
-          style={{ flex: 1, textAlign: "right" }}
-        >
-          <option>성별</option>
-          <option value="남">남자</option>
-          <option value="여">여자</option>
-        </S.Select>
+      <S.RightAlignedBox style={{ marginTop: "20px", border: "none" }}>
+        <S.Input style={{ width: "100%" }}>
+          <S.Select
+            name="gender"
+            value={gender}
+            onChange={onChange}
+            style={{ flex: 1 }}
+          >
+            <option>성별</option>
+            <option value="남">남자</option>
+            <option value="여">여자</option>
+          </S.Select>
+        </S.Input>
+        <S.Input style={{ width: "100%" }}>
+          <S.Select
+            name="region"
+            value={region}
+            onChange={onChange}
+            style={{ flex: 1 }}
+          >
+            <option>지역</option>
+            {regions.map((region) => (
+              <option key={region} value={region}>
+                {region}
+              </option>
+            ))}
+          </S.Select>
+        </S.Input>
       </S.RightAlignedBox>
 
       <S.Input>
@@ -100,21 +117,6 @@ const RequiredInputs = () => {
         />
         <label htmlFor="job">직업</label>
       </S.Input>
-      <S.RightAlignedBox style={{ marginTop: "20px" }}>
-        <S.Select
-          name="region"
-          value={region}
-          onChange={onChange}
-          style={{ flex: 1, textAlign: "right" }}
-        >
-          <option>지역</option>
-          {regions.map((region) => (
-            <option key={region} value={region}>
-              {region}
-            </option>
-          ))}
-        </S.Select>
-      </S.RightAlignedBox>
     </>
   );
 };

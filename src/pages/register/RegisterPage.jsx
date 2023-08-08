@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
   const [previewURL, setPreviewURL] = useState(null);
-  const [selectedFile, setSelectedFile] = useState("phto.png");
+  const [selectedFile, setSelectedFile] = useState("/phto.png");
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
@@ -114,17 +114,12 @@ const RegisterPage = () => {
         <S.Box>
           <S.FileInput type="file" onChange={handleFileChange} />
         </S.Box>
-        {selectedFile && (
-          <div>
-            <h6>미리보기</h6>
-            <img
-              src={previewURL}
-              alt="Selected Image"
-              style={{ width: "50%" }}
-            />
-          </div>
+        {previewURL && (
+          <S.UploadedImageContainer>
+            <S.UploadedImage src={previewURL} alt="Selected Image" />
+          </S.UploadedImageContainer>
         )}
-        <S.Header>선택 입력</S.Header>
+        <S.Header style={{ border: 0 }}>선택 입력</S.Header>
         <OptionalInputs />
 
         <S.JoinButton type="submit" onSubmit={() => handleRegistration()}>

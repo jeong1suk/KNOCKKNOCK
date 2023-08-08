@@ -72,7 +72,7 @@ const OptionalInputs = () => {
           name="mbti"
           value={mbti}
           onChange={onChange}
-          style={{ textAlign: "right" }}
+          style={{ border: "none" }}
         >
           <option>MBTI</option>
           {mbtiList.map((mbti) => (
