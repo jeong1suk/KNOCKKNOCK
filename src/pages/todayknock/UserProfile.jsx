@@ -35,7 +35,8 @@ const UserProfile = ({ user, onClick, isLoverUser }) => {
         alt="프로필 사진"
         onClick={onClick}
         />
-        <HoverText>프로필 정보 보기</HoverText> 
+        <HoverText>프로필 정보 보기</HoverText>
+        <LoverProfileNickname>{user.nickname}</LoverProfileNickname>      
       </LoverProfileContainer>
         
       :
@@ -50,16 +51,16 @@ const UserProfile = ({ user, onClick, isLoverUser }) => {
           />
 
           <UserInfo id={`userInfo-${user.userId}`}>
-            <UserInfoText>{mbti}</UserInfoText>
-            <UserInfoText>{birthday}</UserInfoText>
-            <UserInfoText>{job}</UserInfoText>
-            <UserInfoText>{height || "비공개"}</UserInfoText>
-            <UserInfoText>{region || "비공개"}</UserInfoText>
-            <UserInfoText>{age}세</UserInfoText>
-            <UserInfoText>{gender}</UserInfoText>
+
+            <UserInfoText>{nickname}</UserInfoText>
+            <UserInfoText>{age}</UserInfoText>
             <UserInfoText>{introduce || "안녕하세요. 반갑습니다."}</UserInfoText>
+
+
+            {/* <UserInfoText>{nickname}</UserInfoText>
+            <UserInfoText>{age}세</UserInfoText>
+            <UserInfoText>{introduce || "안녕하세요. 반갑습니다."}</UserInfoText> */}
           </UserInfo>
-          <Name>{nickname}</Name>
         </UserProfileContainer>
         }
       
@@ -71,26 +72,22 @@ export default UserProfile;
 
 const UserProfileContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-end;
   width: 100%;
-  height: 100%;
-  background-color: #fff;
+  height: 70%;
   overflow: hidden;
   position: relative;
   transition: background-color 0.3s;
   cursor: pointer;
-  border: 7px solid #f0f0f0;
-  border-radius: 5px;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-  background-color: #edecec;
+  border-radius: 10%;
+
 `;
 
 const ProfilePicture = styled.img`
-  width: 15rem;
-  height: 15rem;
-  border: 3px solid #e9e9e9;
-  margin-top: 1rem;
+  width: 100%;
+  height: 100%;
+
   position: relative;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
   border-radius: 10%;
@@ -102,12 +99,15 @@ const Name = styled.h3`
 `;
 
 const UserInfo = styled.div`
+  display: flex;
+  flex-direciton: column;
+  align-items: flex-start;
   position: absolute;
-  top: 0;
+  top: 60%;
   left: 0;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, black);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -121,7 +121,12 @@ const UserInfoText = styled.p`
   margin: 5px;
 `;
 
+const UserNicknameAgeTextDiv = styled.div`
+  display: flex;
+`
+
 const LoverProfileContainer = styled.div`
+  flex-direction: column;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -131,8 +136,8 @@ const LoverProfileContainer = styled.div`
 `
 
 const LoverProfilePicture = styled.img`
-  width: 100%;
-  height: 80%;
+  width: 120%;
+  height: 60%;
   border: 4px solid #F7CBD0;
   border-radius: 100%;
   cursor: pointer;
@@ -143,6 +148,11 @@ const LoverProfilePicture = styled.img`
     transform: scale(1.02);
     opacity: 0.5; // Image will darken on hover
   }
+`
+
+const LoverProfileNickname = styled.p`
+  font-size: 0.8rem;
+  
 `
 
 const HoverText = styled.p`

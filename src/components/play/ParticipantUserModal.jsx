@@ -14,54 +14,82 @@ function shuffleArray(array) {
   }
   return shuffledArray;
 }
-function UserProfile({ user }) {
+function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
   const navigate = useNavigate();
+  const [selected, setSelectedUser] = useState();
 
-  const handleChatButtonClick = async () => {
-    console.log(Api.get("/chats"));
+  const ProfileGetRequest = async (userId) => {
     try {
-      const response = await Api.post("/chats", {
-        anotherId: user.userId,
-      });
-      const chatId = response.data.chatId;
-      navigate("/mypage");
-    } catch (error) {
-      console.error("채팅방 생성에 실패했습니다:", error);
+      const res = await Api.get(`/users/${userId}`);
+      setSelectedUser(res.data);
+      setShowUserModal(true);
+    } catch (err) {
+      if (err.response.data.message) {
+        // alert(err.response.data.message);
+      } else {
+        alert("라우팅 경로가 잘못되었습니다.");
+      }
     }
   };
-  const shuffledHobby = shuffleArray(user.hobby || []);
-  const shuffledIdeal = shuffleArray(user.ideal || []);
-  const shuffledPersonality = shuffleArray(user.personality || []);
-  console.log(user, "user~~~!!");
+
+
+
+
+  // const handleChatButtonClick = async () => {
+  //   console.log(Api.get("/chats"));
+  //   try {
+  //     const response = await Api.post("/chats", {
+  //       anotherId: user.userId,
+  //     });
+  //     const chatId = response.data.chatId;
+  //     navigate("/mypage");
+  //   } catch (error) {
+  //     console.error("채팅방 생성에 실패했습니다:", error);
+  //   }
+  // };
+
+  const shuffledHobby = shuffleArray(selected?.hobby || []);
+  const shuffledIdeal = shuffleArray(selected?.ideal || []);
+  const shuffledPersonality = shuffleArray(selected?.personality || []);
+
+
+  useEffect(() => {
+    ProfileGetRequest(userId);
+  }, [])
+
   return (
     <Container>
       <UserProfileBox>
-        <BackgroundImage />
+        <BackgroundImage>
+          <BackButton onClick={() => setIsProfileModalOpen(false)}>
+            뒤로가기
+          </BackButton>
+        </BackgroundImage>
         <ProfilePicture
-          src={getImageSrc(user.profileImage)}
+          src={getImageSrc(selected?.profileImage)}
           alt="Profile Picture"
         />
         <UserProfileContainer>
-          <Nickname>{user.nickname}</Nickname>
-          <Email>{user.email}</Email>
-          <Tagline>{user.introduce}</Tagline>
+          <Nickname>{selected?.nickname}</Nickname>
+          <Email>{selected?.email}</Email>
+          <Tagline>{selected?.introduce}</Tagline>
           <UserInfomationBox>
-            <ChatButton onClick={handleChatButtonClick}>채팅하기</ChatButton>
+            {/* <ChatButton onClick={handleChatButtonClick}>채팅하기</ChatButton> */}
             <UserInformation>
               <UserLineContainer>
-                <UserLine>Name: {user.name}</UserLine>
+                <UserLine>Name: {selected?.name}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>MBTI: {user.mbti}</UserLine>
+                <UserLine>MBTI: {selected?.mbti}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Height: {user.height || "비공개"}</UserLine>
+                <UserLine>Height: {selected?.height || "비공개"}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Job: {user.job}</UserLine>
+                <UserLine>Job: {selected?.job}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Region: {user.region || "비공개"}</UserLine>
+                <UserLine>Region: {selected?.region || "비공개"}</UserLine>
               </UserLineContainer>
             </UserInformation>
             <HobbyAllBox>
@@ -94,7 +122,7 @@ function UserProfile({ user }) {
   );
 }
 
-export default UserProfile;
+export default ParticipantUserModal;
 
 const ChatButton = styled.button`
   margin-top: 1rem;
@@ -111,6 +139,7 @@ const ChatButton = styled.button`
   }
 `;
 const Container = styled.div`
+
   display: flex;
   flex-direction: column;
   background-color: #f7f7f7;
@@ -130,6 +159,7 @@ const UserProfileBox = styled.div`
   flex-direction: column;
 `;
 const BackgroundImage = styled.div`
+  display: flex;
   width: 100%;
   height: 15vh;
   background: linear-gradient(to left, #f0987f, #f8d6cc);
@@ -137,6 +167,24 @@ const BackgroundImage = styled.div`
   background-size: cover;
   background-position: center;
 `;
+
+const BackButton = styled.button`
+  font-family: 'KIMM_Bold';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+  height: 30%;
+  background-color: transparent;  // 배경색을 투명하게
+  border: none;  // 외곽선을 없애줍니다.
+  outline: none;  // 클릭 시에 생기는 외곽선도 없애줍니다. (필요에 따라)
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;  // 마우스 호버 시 텍스트에 밑줄이 그어집니다.
+  }
+`
+
+
 const ProfilePicture = styled.img`
   width: 6rem;
   height: 6rem;

@@ -234,7 +234,7 @@ const ModalContent = styled.div`
 
 const UserProfilesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
   gap: 10%;
   padding: 10%;
   margin: -10rem 0 -5rem 0 ;

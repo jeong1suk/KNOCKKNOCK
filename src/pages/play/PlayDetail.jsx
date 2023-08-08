@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 
 import * as Api from "../../api";
 
+
 import styled from "styled-components";
 import { isWriter } from "../../util/isWriter";
 import { getImageSrc } from "../../util/imageCheck";
@@ -17,6 +18,7 @@ import DropdownMenu from "../../components/modal/DropdownMenu";
 import Modal from "../../components/modal/Modal";
 import GenderInfo from "../../components/play/GenderInfo";
 import ParticipantList from "../../components/play/ParticipantList";
+import ParticipantUserModal from "../../components/play/ParticipantUserModal";
 
 import { UserStateContext } from "../../context/user/UserProvider";
 
@@ -35,6 +37,7 @@ function PlayDetail() {
 
   const [participantsList, setParticipantsList] = useState([]);
   const [participationFlag, setParticipationFlag] = useState();
+  const [selectedUserId, setSelectedUserId] = useState();
 
   const [canceled, setCanceled] = useState();
   const [status, setStatus] = useState();
@@ -42,8 +45,8 @@ function PlayDetail() {
   const [dropdownSelection, setDropdownSelection] = useState("신청인원");
   const [genderSelection, setGenderSelection] = useState("전체");
 
-  const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
-  const [modalCursor, setModalCursor] = useState(0);
+  const [isParticipantModalOpen, setIsParticipantModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const [comments, setComments] = useState([]);
   const [commentProfileImage, setCommentProfileImage] = useState();
@@ -399,7 +402,7 @@ const fetchGetComment = useCallback(
           </TopPtagBox>
           
           {isWriter({ userId, post }) ? (
-            <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>
+            <TopBoxButton onClick={() => setIsParticipantModalOpen(true)}>
               신청인원 보기
             </TopBoxButton>
           ) : status === "rejected" ? (
@@ -424,8 +427,8 @@ const fetchGetComment = useCallback(
             </TopBoxButton>
           )}
 
-        {isParticipantModalOpen && (
-          <Modal onClose={() => setIstParticipantModalOpen(false)}>
+        {isParticipantModalOpen &&  (
+          <Modal onClose={() => setIsParticipantModalOpen(false)}>
             <DropdownMenuDiv>
               <DropdownMenu
                 options={[
@@ -453,9 +456,23 @@ const fetchGetComment = useCallback(
               handleAccept={handleAccept}
               handleReject={handleReject}
               selectedOption={dropdownSelection}
+              setIsProfileModalOpen={setIsProfileModalOpen}
+              setSelectedUserId={setSelectedUserId}
             />
           </Modal>
         )}
+
+        {isProfileModalOpen &&  (
+          <ModalOverlay>
+            <ModalContentUser>
+              <ParticipantUserModal
+                userId={selectedUserId}
+                setIsProfileModalOpen={setIsProfileModalOpen}
+              />
+            </ModalContentUser>
+          </ModalOverlay>
+        )}
+
         </TopInnerBox>
       </TopBox>
       <PostDetailBox>
@@ -814,8 +831,10 @@ const ParticipantModalDiv = styled.div`
 
 const DropdownMenuDiv = styled.div`
   display: flex;
-  gap: 10px;
-`
+  gap: 20px; // 간격을 조금 더 넓혀 깔끔한 느낌을 줍니다.
+  align-items: center; // 가운데 정렬로 조금 더 깔끔하게 보이도록 합니다.
+`;
+
 
 const CommentInputArea = styled.div`
   display: flex;
@@ -872,4 +891,27 @@ const EditDeleteButtonBox = styled.div`
   padding: 10px;
   gap: 10px;
   // font-family: "San Francisco", Arial, sans-serif;
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
+const ModalContentUser = styled.div`
+  width: 40%;
+  height: 80%;
+  background-color: #fff;
+  padding: 1rem;
+  padding-top: 2rem;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 `;
