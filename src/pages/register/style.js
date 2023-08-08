@@ -116,6 +116,13 @@ export const Modal = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 10;
 `;
+export const ToggleButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding-bottom: 5px;
+`;
 export const ToggleButton = styled.a`
   box-shadow: inset 0px 1px 0px 0px #dcecfb;
   background: linear-gradient(to bottom, #bddbfa 5%, #80b5ea 100%);
@@ -131,7 +138,8 @@ export const ToggleButton = styled.a`
   padding: 6px 24px;
   text-decoration: none;
   text-shadow: 0px 1px 0px #528ecc;
-
+  width: 100px; // Set the desired width
+  height: 20px; // Set the desired height
   &:hover {
     background: linear-gradient(to bottom, #80b5ea 5%, #bddbfa 100%);
     background-color: #80b5ea;
@@ -146,5 +154,5 @@ export const HobbyBoxContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin: 1rem;
+  /* margin: 0.2rem; */
 `;

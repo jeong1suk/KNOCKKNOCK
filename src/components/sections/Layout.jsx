@@ -1,13 +1,16 @@
 import { BrowserRouter } from "react-router-dom";
 import Router from "../../routes/Router";
 import Header from "./Header";
-import Footer from "./Footer";
+import { BaseLayout } from "../layout/Layout";
+// import Footer from "./Footer";
 const Layout = () => {
   return (
     <BrowserRouter>
-      <Header />
-      <Router />
-      <Footer />
+      <BaseLayout>
+        <Header />
+        <Router />
+        {/* <Footer /> */}
+      </BaseLayout>
     </BrowserRouter>
   );
 };

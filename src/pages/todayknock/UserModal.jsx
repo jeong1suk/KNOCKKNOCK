@@ -1,5 +1,23 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { getImageSrc } from "../../util/imageCheck";
+import { useNavigate } from "react-router-dom";
+import * as Api from "../../api";
+
+const ChatButton = styled.button`
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #f0987f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: #f0795e;
+  }
+`;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -151,15 +169,30 @@ function shuffleArray(array) {
   return shuffledArray;
 }
 function UserProfile({ user }) {
+  const navigate = useNavigate();
+
+  const handleChatButtonClick = async () => {
+    console.log(Api.get("/chats"));
+    try {
+      const response = await Api.post("/chats", {
+        anotherId: user.userId,
+      });
+      const chatId = response.data.chatId;
+      navigate("/mypage");
+    } catch (error) {
+      console.error("채팅방 생성에 실패했습니다:", error);
+    }
+  };
   const shuffledHobby = shuffleArray(user.hobby || []);
   const shuffledIdeal = shuffleArray(user.ideal || []);
   const shuffledPersonality = shuffleArray(user.personality || []);
+  console.log(user, "user~~~!!");
   return (
     <Container>
       <UserProfileBox>
         <BackgroundImage />
         <ProfilePicture
-          src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg"
+          src={getImageSrc(user.profileImage)}
           alt="Profile Picture"
         />
         <UserProfileContainer>
@@ -167,9 +200,10 @@ function UserProfile({ user }) {
           <Email>{user.email}</Email>
           <Tagline>{user.introduce}</Tagline>
           <UserInfomationBox>
+            <ChatButton onClick={handleChatButtonClick}>채팅하기</ChatButton>
             <UserInformation>
               <UserLineContainer>
-                <UserLine>Name: {user.username}</UserLine>
+                <UserLine>Name: {user.name}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
                 <UserLine>MBTI: {user.mbti}</UserLine>
@@ -182,9 +216,6 @@ function UserProfile({ user }) {
               </UserLineContainer>
               <UserLineContainer>
                 <UserLine>Region: {user.region || "비공개"}</UserLine>
-              </UserLineContainer>
-              <UserLineContainer>
-                <UserLine>Religion: {user.religion}</UserLine>
               </UserLineContainer>
             </UserInformation>
             <HobbyAllBox>

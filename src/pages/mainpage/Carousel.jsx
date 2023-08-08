@@ -1,29 +1,104 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-function MainCarousel() {
-  const slider = [
-    { id: 0, bg: "001.png" },
-    { id: 1, bg: "002.png" },
-    { id: 2, bg: "005.png" },
-  ];
+import Slider from "react-slick";
+import { Link } from "react-router-dom";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
+
+function Carousel() {
+    const settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 2,
+      slidesToScroll: 1,
+      centerMode: true,
+      autoplay:true,
+      autoplaySpeed: 2000,
+      rtl: false,
+      arrows: false,
+    };
+  
+  
   return (
-    <>
-      {slider.map((val) => (
-        <ImageContainer key={val.id}>
-          <img src={val.bg} alt={val.bg} />
-        </ImageContainer>
-      ))}
-    </>
-  );
-}
+      <div>
+        <StyledSlider {...settings}>
+          <ImageContainer>
+            <Link to="/play">
+            <Image src="001.png"/>
+            </Link>
+          </ImageContainer>
+          <ImageContainer>
+            <Link to="/play">
+            <Image src="012.png" />
+            </Link>
+          </ImageContainer>
+          <ImageContainer>
+          <Link to="/play">
+            <Image src="002.png" />
+            </Link>
+          </ImageContainer>
+          <ImageContainer>
+          <Link to="/play">
+            <Image src="011.png" />
+            </Link>
+          </ImageContainer>
+        </StyledSlider>
+      </div>
+    );
+  }
+
+const StyledSlider = styled(Slider)`
+  left: 6rem;
+  height: 100%;
+  width: 85%;  
+  margin: 10px 0 80px 0;
+  position: relative;
+  
+  .slick-dots li button::before {
+    left: 3rem;
+    color: #F48FB1
+  }
+  .slick-slide {
+    margin: 30px 0 30px 0;
+  }
+  .slick-prev::before, .slick-next::before {
+    font-size: 20px;
+    color: #dfdfdf
+  }
+  @media (max-width: 1120px) {
+    left: 0;
+    width: 100%;
+    margin: 30px 0 40px 0;
+  }
+  @media (max-width: 760px) {
+    left: 0;
+    width: 100%;
+  }
+`;
 
 const ImageContainer = styled.div`
-  position: relative;
   margin: auto;
-  border: 1px solid #000;
-  width: 70%;
-  max-width: 800px;
-  height: 80%;
 `;
-export default MainCarousel;
+
+const Image = styled.img`
+  border-radius: 20px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+  width: 18rem;
+  @media (max-width: 760px) {
+    width: 12rem;
+    height: 17rem;
+  }
+
+  height: 25rem;
+  max-width: 100%;
+  max-height: 100%;
+  background-color: #F7F6F0; 
+  @media (max-width: 400px) {
+    width: 6rem;
+    height: 15rem;
+  }
+`;
+
+export default Carousel;

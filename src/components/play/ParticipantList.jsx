@@ -6,9 +6,8 @@ const ParticipantList = ({ participantsList, handleAccept, handleReject, selecte
   return (
     <ParticipantModalDiv>
       {participantsList.map((participant, index) => (
-        
         <Card key={index}>
-          <Image src={participant.profile_image} alt="profile" />
+          <Image src={participant.User?.UserFiles?.[0]?.File?.url} alt="profile" />
           <Info>
             <p>Nickname: {participant.User.nickname}</p>
             <p>Gender: {participant.User.gender}</p>
@@ -36,11 +35,14 @@ export default ParticipantList;
 const ParticipantModalDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   width: 100%;
   padding: 20px;
+  height: 500px;
+  overflow-y: auto;
 `;
+
 
 const Card = styled.div`
   display: flex;

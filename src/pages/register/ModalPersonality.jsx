@@ -3,41 +3,52 @@ import * as S from "./style";
 import styled from "styled-components";
 import { personalityList } from "../../constants/registerConstants";
 import { useToggle } from "../../components/hooks/useToggle";
+import { isMaxArrayReached } from "../../util/arrayUtils";
 export const ModalPersonality = ({ formData, handlePersonalityClick }) => {
   const { personality } = formData;
   const { opened, onOpen, onClose } = useToggle();
+  const isMaxPersonalityReached = isMaxArrayReached(personality, 5);
 
   return (
-    <S.RightAlignedBox>
-      <S.ToggleButton onClick={onOpen}>내가 생각하는 나</S.ToggleButton>
-      {opened && (
-        <S.Modal>
-          <h3 style={{ textAlign: "center" }}>내 성격</h3>
-          <ButtonContainer>
-            {personalityList.map((elements, index) => (
-              <ModalButton
-                key={index}
-                active={personality.includes(elements)}
-                onClick={() => handlePersonalityClick(elements)}
-              >
-                <div style={{ textAlign: "center" }}>{elements}</div>
-              </ModalButton>
-            ))}
-          </ButtonContainer>
-          <button onClick={onClose}>Close</button>
-        </S.Modal>
-      )}
+    <>
+      <S.ToggleButtonWrapper>
+        <S.ToggleButton onClick={onOpen}>내가 생각하는 나</S.ToggleButton>
+      </S.ToggleButtonWrapper>
+      <S.Box>
+        {opened && (
+          <S.Modal>
+            <h3 style={{ textAlign: "center" }}>내 성격</h3>
+            {isMaxPersonalityReached && (
+              <p style={{ color: "red" }}>
+                You can only select up to 5 personality.
+              </p>
+            )}
+            <ButtonContainer>
+              {personalityList.map((elements, index) => (
+                <ModalButton
+                  key={index}
+                  active={personality.includes(elements)}
+                  onClick={() => handlePersonalityClick(elements)}
+                >
+                  <div style={{ textAlign: "center" }}>{elements}</div>
+                </ModalButton>
+              ))}
+            </ButtonContainer>
+            <button onClick={onClose}>Close</button>
+          </S.Modal>
+        )}
 
-      {personality.length > 0 && (
-        <S.HobbyBoxContainer>
-          {personality.map((item, index) => (
-            <PersonBox key={index} style={{ marginLeft: "20px" }}>
-              {item}
-            </PersonBox>
-          ))}
-        </S.HobbyBoxContainer>
-      )}
-    </S.RightAlignedBox>
+        {personality.length > 0 && (
+          <S.HobbyBoxContainer>
+            {personality.map((item, index) => (
+              <PersonBox key={index} style={{ marginLeft: "20px" }}>
+                {item}
+              </PersonBox>
+            ))}
+          </S.HobbyBoxContainer>
+        )}
+      </S.Box>
+    </>
   );
 };
 const PersonBox = styled.div`

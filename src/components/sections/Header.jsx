@@ -1,42 +1,36 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { DispatchContext, UserStateContext } from "../../App";
+import {
+  DispatchContext,
+  UserStateContext,
+} from "../../context/user/UserProvider";
 import { ROUTE } from "../../routes/routes";
 import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";
 import useIsMobile from "../hooks/useIsMobile";
+import { showSuccess } from "../../assets/alert";
+import { useToggle } from "../hooks/useToggle";
 const Header = () => {
   const isMobile = useIsMobile();
   const { user } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
+  const { opened, onOpen, onClose } = useToggle();
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("userToken");
     dispatch({ type: "LOGOUT" });
+    showSuccess("로그아웃되었습니다.");
     navigate("/");
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 800);
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    // setUserId(localStorage.getItem("userId"));
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <HeaderWrap>
       <HeaderContainer>
         <LogoBox>
-          <Link to={ROUTE.MAIN.link}>
+          <Link to={ROUTE.MAIN.link} onClick={onClose}>
             <LogoImgBox>
-              <img src="src/assets/knock.png" />
+              <img src="/002.png" />
             </LogoImgBox>
           </Link>
         </LogoBox>
@@ -46,6 +40,9 @@ const Header = () => {
               isLogin={user ? true : false}
               user={user}
               logout={logout}
+              opened={opened}
+              onOpen={onOpen}
+              onClose={onClose}
             />
           )}
 
@@ -54,6 +51,9 @@ const Header = () => {
               isLogin={user ? true : false}
               user={user}
               logout={logout}
+              opened={opened}
+              onOpen={onOpen}
+              onClose={onClose}
             />
           )}
         </NavigationBox>
@@ -63,13 +63,15 @@ const Header = () => {
 };
 
 const HeaderWrap = styled.div`
+  max-width: 1024px;
   width: 100%;
   height: 3rem;
   background-color: #f7f7f7;
   position: fixed;
   top: 0;
-  left: 0;
-  /* z-index: 998; */
+  left: 50%;
+  z-index: 998;
+  transform: translate(-50%, 0);
 `;
 
 const HeaderContainer = styled.div`
@@ -104,47 +106,6 @@ const NavigationBox = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
-`;
-
-const Navigation = styled.div`
-  display: flex;
-`;
-
-const NavMenu = styled.ul`
-  display: flex;
-  align-items: center;
-  height: 100%;
-`;
-
-const MenuList = styled.li`
-  padding: 0 1rem;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  font-weight: bold;
-  letter-spacing: -0.5px;
-  color: #252525;
-  cursor: pointer;
-  text-decoration: none;
-  &:hover {
-    color: #f1b24a;
-  }
-  a {
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: #111;
-    text-decoration: none;
-    margin-left: 4rem;
-    &:hover {
-      color: #f1b24a;
-    }
-  }
-`;
-
-const MobileMenubox = styled.div`
-  margin-left: 24px;
 `;
 
 export default Header;

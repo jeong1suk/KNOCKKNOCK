@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 export const GradientBackground = styled.div`
   /* Gradient background with two colors: #e6e9f0 and #eef1f5 */
   background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
@@ -116,11 +117,22 @@ export const SubmitButton = styled.input`
   height: 35px;
   font-size: 14pt;
   margin-top: 20px;
-`;
+  cursor: pointer;
+  &:disabled {
+    cursor: not-allowed;
+  }
+`; // 로그인 버튼 활성화 시 커서 모양 변하는 것 추가
 
-export const Forgot = styled.div`
+export const Forgot = styled(Link)`
   text-align: right;
   font-size: 12pt;
   color: #179972;
   margin: 10px 0px;
+`;
+
+export const WarningMessage = styled.p`
+  color: red;
+  font-size: 0.7rem;
+  margin: 0;
+  padding: 0;
 `;

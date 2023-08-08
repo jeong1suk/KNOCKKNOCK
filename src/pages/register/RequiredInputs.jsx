@@ -1,36 +1,37 @@
 import React, { useState } from "react";
 import * as S from "./style";
-
+import styled from "styled-components";
 import ValidationFields from "./ValidationFields";
-const today = new Date().toISOString().split("T")[0];
-const allRegions = [
-  "서울특별시",
-  "경기도",
-  "인천광역시",
-  // ... (전체 지역 목록에 대한 나머지 항목들)
-];
-const RequiredInputs = ({ onRegistration }) => {
+
+import { regions } from "../../constants/registerConstants";
+const RequiredInputs = () => {
   const [formData, setFormData] = useState({
     name: "",
     nickname: "",
+    birthdate: "",
     gender: "",
     job: "",
     region: "",
   });
-  const { name, nickname, gender, job, region } = formData;
+  const { name, nickname, birthdate, gender, job, region } = formData;
 
   const onChange = (e) => {
     const { name, value } = e.currentTarget;
+    const newValue = name === "birthdate" ? formatDate(value) : value;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: newValue,
     }));
+  };
+  const formatDate = (date) => {
+    const formattedDate = new Date(date).toISOString().split("T")[0];
+    return formattedDate;
   };
 
   RequiredInputs.getFormData = () => {
     return formData;
   };
-
+  // console.log("필수");
   return (
     <>
       <S.Heading>이름</S.Heading>
@@ -46,7 +47,6 @@ const RequiredInputs = ({ onRegistration }) => {
         setFormData={setFormData}
         onChange={onChange}
       />
-      {/* <BirthDateForm birthdate={formData.birthdate} onChange={onChange} /> */}
       <S.RightAlignedBox style={{ marginTop: "20px" }}>
         <S.Heading>성별</S.Heading>
         <S.Select
@@ -61,12 +61,22 @@ const RequiredInputs = ({ onRegistration }) => {
         </S.Select>
       </S.RightAlignedBox>
 
+      <S.Heading>생년월일</S.Heading>
+      <S.Box>
+        <S.Input
+          type="date"
+          name="birthdate"
+          value={birthdate}
+          onChange={onChange}
+        />
+      </S.Box>
+
       <S.Heading>직업</S.Heading>
       <S.Box>
         <S.Input name="job" value={job} onChange={onChange} />
       </S.Box>
+      <S.Heading>지역</S.Heading>
       <S.RightAlignedBox style={{ marginTop: "20px" }}>
-        <S.Heading>지역</S.Heading>
         <S.Select
           name="region"
           value={region}
@@ -74,7 +84,7 @@ const RequiredInputs = ({ onRegistration }) => {
           style={{ flex: 1, textAlign: "right" }}
         >
           <option>지역</option>
-          {allRegions.map((region) => (
+          {regions.map((region) => (
             <option key={region} value={region}>
               {region}
             </option>
@@ -86,3 +96,60 @@ const RequiredInputs = ({ onRegistration }) => {
 };
 
 export default RequiredInputs;
+
+const StyledLabel = styled.label`
+  display: flex;
+  font-weight: bold;
+  margin-right: 10px;
+  width: 15%;
+`;
+const StyledInput = styled.input`
+  background: transparent;
+  border: none;
+  border-bottom: solid 1px #ccc;
+  padding: 20px 0px 5px 0px;
+  font-size: 14pt;
+  width: 50%;
+
+  &:placeholder-shown + ${StyledLabel} {
+    color: #aaa;
+    font-size: 14pt;
+    top: 15px;
+  }
+
+  &:focus + ${StyledLabel} {
+    color: #8aa1a1;
+    font-size: 10pt;
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+
+  &:not(:placeholder-shown) + ${StyledLabel} {
+    color: #8aa1a1;
+    font-size: 10pt;
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+
+  &:focus,
+  &:not(:placeholder-shown) {
+    border-bottom: solid 1px #8aa1a1;
+    outline: none;
+  }
+`;
