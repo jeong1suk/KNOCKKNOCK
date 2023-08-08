@@ -19,11 +19,8 @@ const MobileMenu = ({ isLogin, user, logout, opened, onOpen, onClose }) => {
 
       {opened ? (
         <DropdownMenu>
-          <MenuItem to={ROUTE.MAIN.link} onClick={onClose}>
-            메인페이지
-          </MenuItem>
           <MenuItem to={ROUTE.AI.link} onClick={onClose}>
-            인공지능
+            뷰티톡톡
           </MenuItem>{" "}
           {isLogin ? (
             <>
@@ -31,7 +28,7 @@ const MobileMenu = ({ isLogin, user, logout, opened, onOpen, onClose }) => {
                 오늘의 낙낙
               </MenuItem>
               <MenuItem to={ROUTE.Play.link} onClick={onClose}>
-                같이 놀자
+                히히낙낙
               </MenuItem>
               <MenuItem to={ROUTE.Mypage.link} onClick={onClose}>
                 마이페이지
