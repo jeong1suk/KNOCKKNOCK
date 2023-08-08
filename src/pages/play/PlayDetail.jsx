@@ -490,7 +490,7 @@ const fetchGetComment = useCallback(
             }
               
             {postMenuOpen === postId && (
-              <DropdownMenuDiv>
+              <DropModifyDeleteDiv>
                 <IconButton onClick={() => navigate(`/playedit/${postId}`)}>
 
                   <FaEdit /> 수정하기
@@ -498,7 +498,7 @@ const fetchGetComment = useCallback(
                 <IconButton onClick={() => handlePostDelete(postId)}>
                   <FaTrashAlt />삭제하기
                 </IconButton>
-              </DropdownMenuDiv>
+              </DropModifyDeleteDiv>
             )}
           </EditDeleteButtonBox>
           <InputBox>
@@ -800,25 +800,30 @@ width: 100%;
 textarea {
   width: 90%;
   padding: 10px;
-  margin-right: 10px;
+  margin: 10px 10px 10px 0px;
   resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
   border: 1px solid #cccccc; // Light gray border
 }
 
 button {
   width: 10%;
-  background-color: #007bff; // Same as the button above
-  color: white;
+  background-color: #F7CBD0;
+  color: black;
   padding: 10px;
-  border: none;
-  border-radius: 5px;
+  border: 5px double #fff;
+  border-radius: 10px;
   cursor: pointer;
+  transition: 0.3s;
   margin-right: 3%;
+  text-overflow: ellipsis;
   &:hover {
-    background-color: #0056b3;
+    border: 5px solid #3B0B0B;
+    color: #3B0B0B;
+    transform: scale(1.02);
   }
 }
 `
+
 
 const CommentEditDeleteBox = styled.div`
   position: relative;
@@ -830,15 +835,14 @@ const CommentEditDeleteBox = styled.div`
   }
 `
 
-
-const ParticipantModalDiv = styled.div`
+const DropdownMenuDiv = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  gap: 20px;
   align-items: center;
 `;
 
-const DropdownMenuDiv = styled.div`
+
+const DropModifyDeleteDiv = styled.div`
   position: absolute;
   top: 100%;  // 아이콘의 바로 아래에 위치하도록 설정
   right: 0%;   // 아이콘의 왼쪽 끝을 기준으로 설정
@@ -864,19 +868,25 @@ const CommentInputArea = styled.div`
   }
 
   button {
-    width: 10%;
-    background-color: #007bff; // Same as the button above
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
+    width: 20%;
+    background-color: #F7CBD0;
+    color: black;
+    padding: 10px 10px;
+    border: 5px double #fff;
+    border-radius: 10px;
     cursor: pointer;
-
+    transition: 0.3s;
+    text-overflow: ellipsis;
+    
     &:hover {
-      background-color: #0056b3;
+      border: 5px solid #3B0B0B;
+      color: #3B0B0B;
+      transform: scale(1.02);
     }
   }
 `;
+
+
 
 const GenderInfoBox = styled.div`
   display: flex;
