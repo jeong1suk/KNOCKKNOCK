@@ -8,13 +8,8 @@ const DesktopMenu = ({ isLogin, user, logout, opened, onOpen, onClose }) => {
       <DesktopNavMenu>
         <NavMenu>
           <MenuList>
-            <Link to={ROUTE.MAIN.link} onClick={onClose}>
-              메인페이지
-            </Link>
-          </MenuList>
-          <MenuList>
             <Link to={ROUTE.AI.link} onClick={onClose}>
-              인공지능
+              뷰티톡톡
             </Link>
           </MenuList>
 
@@ -27,7 +22,7 @@ const DesktopMenu = ({ isLogin, user, logout, opened, onOpen, onClose }) => {
               </MenuList>
               <MenuList>
                 <Link to={ROUTE.Play.link} onClick={onClose}>
-                  같이 놀자
+                  히히낙낙
                 </Link>
               </MenuList>
               <ProfileContainer>
@@ -112,6 +107,7 @@ const MenuList = styled.li`
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
+  font-family: 'KIMM_Bold';
   font-weight: bold;
   letter-spacing: -0.5px;
   color: #252525;

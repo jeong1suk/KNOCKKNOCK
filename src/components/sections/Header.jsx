@@ -65,8 +65,8 @@ const Header = () => {
 const HeaderWrap = styled.div`
   max-width: 1024px;
   width: 100%;
-  height: 3rem;
-  background-color: #f7f7f7;
+  height: 4rem;
+  background-color: #fff;
   position: fixed;
   top: 0;
   left: 50%;
