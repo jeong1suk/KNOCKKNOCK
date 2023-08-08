@@ -49,24 +49,25 @@ const OptionalInputs = () => {
   const handleIdealClick = (element) => {
     onArrayChange(ideal, element, "ideal", 5);
   };
-  // console.log("옵셔널");
+
   OptionalInputs.getFormData = () => {
     return formData;
   };
 
   return (
     <>
-      <S.Box>
-        <S.Heading>키</S.Heading>
-        <S.Input
+      <S.Input>
+        <input
+          id="height"
+          type="text"
           name="height"
           value={height}
+          placeholder="키"
           onChange={onChange}
-          style={{ marginLeft: "30px", textAlign: "right" }}
         />
-      </S.Box>
+        <label htmlFor="height">키</label>
+      </S.Input>
       <S.Box>
-        <S.Heading>MBTI</S.Heading>
         <S.Select
           name="mbti"
           value={mbti}
@@ -88,10 +89,17 @@ const OptionalInputs = () => {
       />
       <ModalIdeal formData={formData} handleIdealClick={handleIdealClick} />
 
-      <S.Heading>한줄 자기소개</S.Heading>
-      <S.Box>
-        <S.Input name="introduce" value={introduce} onChange={onChange} />
-      </S.Box>
+      <S.Input style={{ marginTop: "20px" }}>
+        <input
+          id="introduce"
+          type="text"
+          name="introduce"
+          value={introduce}
+          placeholder="자기소개"
+          onChange={onChange}
+        />
+        <label htmlFor="height">자기소개</label>
+      </S.Input>
     </>
   );
 };

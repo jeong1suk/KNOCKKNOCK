@@ -99,24 +99,6 @@ const RegisterPage = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          /*
-          const formData = {
-            name: e.target.name.value,
-            nickname: e.target.nickname.value,
-            email: e.target.email.value,
-            password: e.target.password.value,
-            gender: e.target.gender.value,
-            birthdate: e.target.birthdate.value,
-            job: e.target.job.value,
-            region: e.target.region.value,
-            mbti: e.target.mbti.value,
-            height: e.target.height.value,
-            hobby: e.target.hobby.value,
-            personality: e.personality,
-            ideal: e.ideal,
-            introduce: e.introduce,
-          };
-          */
           handleRegistration({
             ...RequiredInputs.getFormData(),
             ...ValidationFields.getFormData(),
@@ -126,11 +108,11 @@ const RegisterPage = () => {
       >
         <S.Header style={{ border: 0 }}>Register</S.Header>
 
-        <S.Header>필수 입력</S.Header>
+        {/* <S.Header>필수 입력</S.Header> */}
         <RequiredInputs />
         <S.Heading>사진</S.Heading>
         <S.Box>
-          <S.Input type="file" onChange={handleFileChange} />
+          <S.FileInput type="file" onChange={handleFileChange} />
         </S.Box>
         {selectedFile && (
           <div>
@@ -145,7 +127,9 @@ const RegisterPage = () => {
         <S.Header>선택 입력</S.Header>
         <OptionalInputs />
 
-        <S.JoinButton type="submit" onSubmit={() => handleRegistration()}>Register</S.JoinButton>
+        <S.JoinButton type="submit" onSubmit={() => handleRegistration()}>
+          Register
+        </S.JoinButton>
       </form>
     </S.Content>
   );
