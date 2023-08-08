@@ -176,6 +176,24 @@ export const RightAlignedBox = styled(Box)`
   justify-content: space-between;
   margin-bottom: 15px;
 `;
+export const UploadedImageContainer = styled.div`
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 20px;
+  width: 100%;
+  /* @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 100%;
+  }
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    width: 90%;
+  } */
+`;
+export const UploadedImage = styled.img`
+  width: 100%;
+  max-height: 300px;
+  margin-top: 10px;
+`;
 export const Modal = styled.div`
   position: absolute;
   width: 80%;
