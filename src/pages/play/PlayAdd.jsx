@@ -13,6 +13,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 
 import { handleTotalChange } from '../../util/handleTotalChange';
 import { handleTimeChange } from '../../util/handleTimeChange';
+import { validateTotal } from '../../util/validateTotal';
 
 import styled from 'styled-components';
 
@@ -27,8 +28,8 @@ function PlayAdd() {
   const [meetingHour, setMeetingHour] = useState('');
   const [meetingTime, setMeetingTime] = useState('');
   const [imageUrl, handleImageUpload] = useImageUpload();
-  const [totalM, setTotalM] = useState(1);
-  const [totalF, setTotalF] = useState(1);
+  const [totalM, setTotalM] = useState();
+  const [totalF, setTotalF] = useState();
   const [place, setPlace] = useState('');
   const [postContent, setPostContent] = useState('');
 
@@ -39,11 +40,23 @@ function PlayAdd() {
   const handleCategoryChange = (e) => {
     setPostType(e.target.value);
   }
-
+  const errorMessage = validateTotal(totalM, totalF);
+  if (errorMessage) {
+    alert(errorMessage);
+    setTotalM('');
+    setTotalF('');
+    return;
+  }
 
   const handlePostSubmit = async e => {
     e.preventDefault();
-  
+
+    if (totalM <= 0 || totalM >= 6 || totalF <= 0 || totalF >= 6) {
+      alert("남자와 여자의 수는 1~5 사이의 값이어야 합니다.");
+      setTotalM('');  
+      setTotalF('');  
+      return;  
+    }
 
 
     try {

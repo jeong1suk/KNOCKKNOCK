@@ -478,25 +478,28 @@ const fetchGetComment = useCallback(
       <PostDetailBox>
         <PostDetailFirstBox>
           <EditDeleteButtonBox>
-          <IconButton
-          onClick={(e) => {
-            e.stopPropagation();
-            setPostMenuOpen((prev) => (prev === postId ? null : postId));
-          }}
-        >
-          <FaEllipsisV />
-        </IconButton>
-        {isWriter({ userId, post }) && postMenuOpen === postId && (
-          <DropdownMenuDiv>
-            <IconButton onClick={() => navigate(`/playedit/${postId}`)}>
+            {isWriter({ userId, post }) && 
+              <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                setPostMenuOpen((prev) => (prev === postId ? null : postId));
+              }}
+              >
+                <FaEllipsisV />
+              </IconButton>
+            }
+              
+            {postMenuOpen === postId && (
+              <DropModifyDeleteDiv>
+                <IconButton onClick={() => navigate(`/playedit/${postId}`)}>
 
-              <FaEdit /> 수정하기
-            </IconButton>
-            <IconButton onClick={() => handlePostDelete(postId)}>
-            <FaTrashAlt />삭제하기
-            </IconButton>
-          </DropdownMenuDiv>
-        )}
+                  <FaEdit /> 수정하기
+                </IconButton>
+                <IconButton onClick={() => handlePostDelete(postId)}>
+                  <FaTrashAlt />삭제하기
+                </IconButton>
+              </DropModifyDeleteDiv>
+            )}
           </EditDeleteButtonBox>
           <InputBox>
             {post.isCompleted ? (
@@ -639,6 +642,7 @@ const IconButton = styled.button`
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #555;
   padding: 10px;
   &:hover {
@@ -647,10 +651,14 @@ const IconButton = styled.button`
 `;
 
 const MenuWrapper = styled.div`
+  width: 20%;
+  margin: 0px 0px 0px 0px;
+  position: absolute;
+  top: 0;
+  left: 100%;
   display: flex;
-  flex-direction: column;
   background: #fff;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
+
   z-index: 1;
 `;
 
@@ -658,7 +666,7 @@ const TopBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f8f8f8;
+  background-color: #fff;
   height: 200px;
   margin: 100px 0px 0px 0px;
 `;
@@ -713,7 +721,7 @@ const PostDetailBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f8f8f8;
+  background-color: #fff;
   height: 100%;
   margin: 50px 0 0 0;
   padding: 20px 50px 20px 50px;
@@ -792,27 +800,33 @@ width: 100%;
 textarea {
   width: 90%;
   padding: 10px;
-  margin-right: 10px;
+  margin: 10px 10px 10px 0px;
   resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
   border: 1px solid #cccccc; // Light gray border
 }
 
 button {
   width: 10%;
-  background-color: #007bff; // Same as the button above
-  color: white;
+  background-color: #F7CBD0;
+  color: black;
   padding: 10px;
-  border: none;
-  border-radius: 5px;
+  border: 5px double #fff;
+  border-radius: 10px;
   cursor: pointer;
+  transition: 0.3s;
   margin-right: 3%;
+  text-overflow: ellipsis;
   &:hover {
-    background-color: #0056b3;
+    border: 5px solid #3B0B0B;
+    color: #3B0B0B;
+    transform: scale(1.02);
   }
 }
 `
 
+
 const CommentEditDeleteBox = styled.div`
+  position: relative;
   display: flex;
   width: 100%;
 
@@ -821,19 +835,22 @@ const CommentEditDeleteBox = styled.div`
   }
 `
 
-
-const ParticipantModalDiv = styled.div`
+const DropdownMenuDiv = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  gap: 20px;
   align-items: center;
 `;
 
-const DropdownMenuDiv = styled.div`
+
+const DropModifyDeleteDiv = styled.div`
+  position: absolute;
+  top: 100%;  // 아이콘의 바로 아래에 위치하도록 설정
+  right: 0%;   // 아이콘의 왼쪽 끝을 기준으로 설정
   display: flex;
-  gap: 20px; // 간격을 조금 더 넓혀 깔끔한 느낌을 줍니다.
-  align-items: center; // 가운데 정렬로 조금 더 깔끔하게 보이도록 합니다.
+  gap: 20px;
+  align-items: center;
 `;
+
 
 
 const CommentInputArea = styled.div`
@@ -851,19 +868,25 @@ const CommentInputArea = styled.div`
   }
 
   button {
-    width: 10%;
-    background-color: #007bff; // Same as the button above
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
+    width: 20%;
+    background-color: #F7CBD0;
+    color: black;
+    padding: 10px 10px;
+    border: 5px double #fff;
+    border-radius: 10px;
     cursor: pointer;
-
+    transition: 0.3s;
+    text-overflow: ellipsis;
+    
     &:hover {
-      background-color: #0056b3;
+      border: 5px solid #3B0B0B;
+      color: #3B0B0B;
+      transform: scale(1.02);
     }
   }
 `;
+
+
 
 const GenderInfoBox = styled.div`
   display: flex;
@@ -885,6 +908,7 @@ const PostDetailFirstBox = styled.div`
 `;
 
 const EditDeleteButtonBox = styled.div`
+  position: relative;
   display: flex;
   justify-content: end;
   align-items: center;
