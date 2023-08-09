@@ -46,7 +46,13 @@ function UserProfile({ user, onClose }) {
   const handleCloseClick = () => {
     onClose();
   };
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
 
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
   console.log(user, "user~~~!!");
   return (
     <Container>
