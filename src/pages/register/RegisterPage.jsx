@@ -42,6 +42,7 @@ const RegisterPage = () => {
           height: formData.height,
           hobby: formData.hobby,
           personality: formData.personality,
+          ideal: formData.ideal,
           introduce: formData.introduce || "반가워요!",
           profileImage: ["profile", response.data],
         });
@@ -59,6 +60,7 @@ const RegisterPage = () => {
           height: formData.height,
           hobby: formData.hobby,
           personality: formData.personality,
+          ideal: formData.ideal,
           introduce: formData.introduce || "반가워요!",
           // profileImage: ["profile", "http://placekitten.com/200/200"],
         });

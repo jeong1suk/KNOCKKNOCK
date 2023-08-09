@@ -84,6 +84,16 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
   useEffect(() => {
     cardsGetRequest();
   }, [])
+
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
   return (
     <>
 

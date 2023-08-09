@@ -85,7 +85,7 @@ function PlayAdd() {
         })
       }
 
-      showSuccess("게시물 등록에 성공하였습니다")
+      showSuccess("게시물이 등록되었습니다")
       navigate('/play');
     } catch (err) {
       console.log(err);

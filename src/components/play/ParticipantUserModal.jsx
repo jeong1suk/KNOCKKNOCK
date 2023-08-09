@@ -15,6 +15,7 @@ function shuffleArray(array) {
   return shuffledArray;
 }
 function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
+
   const navigate = useNavigate();
   const [selected, setSelectedUser] = useState();
 

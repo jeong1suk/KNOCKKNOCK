@@ -123,6 +123,8 @@ function PlayDetail() {
     }
   };
 
+
+
   const fetchGetDetail = async () => {
     try {
       const res = await Api.get(`/posts/${postId}`);
@@ -332,6 +334,12 @@ const fetchGetComment = useCallback(
     }
   };
 
+  const handleProfileModalOpen = (commentUserId) => {
+    setIsProfileModalOpen(true);
+    setSelectedUserId(commentUserId);
+  }
+
+  
   const editComment = (commentId, content) => {
     setIsEditing(commentId);
     setEditedContent(content);
@@ -590,13 +598,7 @@ const fetchGetComment = useCallback(
                 <img
                   src={getImageSrc(comment.User?.UserFiles?.[0]?.File?.url)}
                   alt="유저 프로필"
-                  style={{
-                    height: "2.5rem",
-                    width: "2.5rem",
-                    borderRadius: "50%",
-                    backgroundColor: "#F9FAFB",
-                    marginRight: "20px",
-                  }}
+                  onClick={() => handleProfileModalOpen(comment.userId)}
                 />
               </CommentImageBox>
               <CommentContentBox>
@@ -879,6 +881,20 @@ const CommentImageBox = styled.div`
   display: flex;
   justify-content: start;
   align-items: start;
+
+  img {
+    height: 2.5rem;
+    width: 2.5rem;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+    opacity: 0.5;
+    }
+  }
 `
 
 const CommentNicknameBox = styled.div`
@@ -1023,6 +1039,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   z-index: 9999;
 `;
 
@@ -1037,6 +1054,6 @@ const ModalContentUser = styled.div`
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {    
     width: 90%;
-    
+    overflow-y: auto;
   }
 `;
