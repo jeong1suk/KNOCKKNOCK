@@ -176,7 +176,13 @@ function ChatComponent() {
   const [recieverId, setRecieverId] = useState("");
   const [notifications, setNotifications] = useState([]);
   let prevCreatedAt = null;
-  const chatRef = useRef(null);
+
+  const messageRef = useRef(null);
+  const scrollToBottom = () => {
+    if (messageRef.current) {
+      messageRef.current.scrollTop = messageRef.current.scrollHeight;
+    }
+  };
   console.log(senderId);
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -184,11 +190,7 @@ function ChatComponent() {
       handleSendMessage();
     }
   };
-  const scrollToBottom = () => {
-    if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
-  };
+
   useEffect(() => {
     scrollToBottom();
   }, [chatHistory]);
@@ -203,6 +205,7 @@ function ChatComponent() {
         chatId: chatId,
         content: message.content.trim(),
         senderId: message.senderId,
+        createdAt: new Date().toISOString(),
       };
       setChatHistory((prevChatHistory) => [...prevChatHistory, newMessage]);
     });
@@ -326,7 +329,7 @@ function ChatComponent() {
     <ChatContainer>
       <MessageChat>
         <UserName>{userName}</UserName>
-        <MessageBox ref={chatRef}>
+        <MessageBox ref={messageRef}>
           {Array.isArray(chatHistory) && chatHistory.length > 0 ? (
             chatHistory.map((chat, index) => {
               const isUserMessage = Number(chat.senderId) === senderId;
@@ -369,7 +372,7 @@ function ChatComponent() {
           <SendButton onClick={handleSendMessage}>전송</SendButton>
         </ChatInputContainer>
       </MessageChat>
-      <ChatRoom ref={chatRef}>
+      <ChatRoom>
         <UserList>
           {allChats.length > 0 &&
             allChats
