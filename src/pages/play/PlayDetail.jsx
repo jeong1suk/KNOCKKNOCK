@@ -352,13 +352,6 @@ const fetchGetComment = useCallback(
     setMenuOpen(null);
   };
 
-  const deleteComment = (commentId) => {
-    const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
-    if (confirmDelete) {
-      deleteCommentRequest(commentId);
-      showSuccess("삭제되었습니다");
-    }
-  };
 
   const editCommentRequest = async (commentId, editedContent) => {
     try {
@@ -384,7 +377,10 @@ const fetchGetComment = useCallback(
         },
       };
 
-      setComments((prevComments) => [newComment, ...prevComments.slice(1)]);
+      setComments((prevComments) => 
+        prevComments.map(comment => comment.commentId === commentId ? newComment : comment)
+      );
+
       
     } catch (err) {
       if (err.response.data.message) {
@@ -395,10 +391,18 @@ const fetchGetComment = useCallback(
     }
   };
 
+  const deleteComment = (commentId) => {
+    const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+    if (confirmDelete) {
+      deleteCommentRequest(commentId);
+      showSuccess("삭제되었습니다");
+    }
+  };
+
   const deleteCommentRequest = async (commentId) => {
     try {
       const res = await Api.del(`/comments/${postId}/${commentId}`);
-      setComments((prevComments) => [...prevComments.slice(1)]);
+      setComments((prevComments) => prevComments.filter(comment => comment.commentId !== commentId));
     } catch (err) {
       if (err.response.data.message) {
         showAlert(err.response.data.message);
@@ -890,7 +894,7 @@ const CommentImageBox = styled.div`
     margin-right: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
-    
+
     &:hover {
     opacity: 0.5;
     }

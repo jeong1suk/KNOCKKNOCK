@@ -26,7 +26,7 @@ function Play() {
       const res = await Api.get(
         `/posts?page=${currentPage}&perPage=${perPage}&type=${postType}`
       );
-      console.log(postType, res);
+      console.log(res.data);
       setPostList(res.data.postList);
       setAllPostCount(res.data.allPostCount);
     } catch (err) {
