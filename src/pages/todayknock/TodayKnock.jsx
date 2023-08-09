@@ -6,7 +6,7 @@ import * as Api from "../../api";
 import UserModal from "./UserModal";
 import { showAlert } from "../../assets/alert";
 import { useNavigate } from "react-router-dom";
-import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint.js"
+import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint.js";
 
 const limit = 3;
 const isLoverUser = ["Lover", "User"];
@@ -119,10 +119,7 @@ function TodayKnock() {
       {showUserModal && selectedUser && (
         <ModalOverlay onClick={handleUserModalExit}>
           <ModalContentUser onClick={(e) => e.stopPropagation()}>
-            <UserModal
-              user={selectedUser}
-              // onClose={handleUserModalExit}
-            />
+            <UserModal user={selectedUser} onClose={handleUserModalExit} />
           </ModalContentUser>
         </ModalOverlay>
       )}
@@ -210,7 +207,7 @@ const StartButton = styled.button`
   @media (max-width: ${TABLET_BREAK_POINT}) {
     height: 1rem;
     font-size: 13px;
-    width: 4rem;  
+    width: 4rem;
     margin-top: 0.5rem;
   }
 `;
@@ -231,9 +228,10 @@ const ModalOverlay = styled.div`
 const ModalContentUser = styled.div`
   width: 40%;
   height: 80%;
-  background-color: #fff;
+  background-color: #efefef;
   padding: 1rem;
-  padding-top: 2rem;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 `;
@@ -252,7 +250,7 @@ const UserProfilesContainer = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
   gap: 10%;
   padding: 5%;
-  margin: -10rem 0 -5rem 0 ;
+  margin: -10rem 0 -5rem 0;
   & > :nth-child(n) {
     margin-top: 5rem;
   }
@@ -282,8 +280,8 @@ const RandomUserExplainDiv = styled.div`
     color: #1d1d1f;
     font-weight: 600;
     line-height: 1.2;
-    background-color: #FFF0F5;
-    padding:5px;
+    background-color: #fff0f5;
+    padding: 5px;
     border-radius: 30px;
   }
 
@@ -292,10 +290,8 @@ const RandomUserExplainDiv = styled.div`
   }
 
   @media (max-width: ${TABLET_BREAK_POINT}) {
-    p { 
+    p {
       font-size: 18px;
-    } 
+    }
   }
-
-  
 `;
