@@ -63,11 +63,16 @@ const Ai = () => {
     // console.log("메이크업 받기 버튼이 클릭되었습니다.");
     try {
       setClickBG(true);
-      const res = await axios.post("http://34.64.223.226:5002/makeup", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await axios.post(
+        "http://34.64.223.226:5002/makeup",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
       // console.log(res);
       // console.log(res.data.base64_image);
       setBase64(res.data.base64_image);
