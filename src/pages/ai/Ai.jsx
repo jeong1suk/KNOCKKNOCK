@@ -5,7 +5,7 @@ import {
   MOBILE_BREAK_POINT,
   TABLET_BREAK_POINT,
 } from "../../components/layout/breakpoint";
-import spring from "../../assets/spring.jpeg";
+import spring from "../../assets/spring3.webp";
 const Ai = () => {
   const [result, setResult] = useState("");
   const [base64, setBase64] = useState("");
@@ -36,7 +36,7 @@ const Ai = () => {
     try {
       setClickPC(true);
       const response = await axios.post(
-        "http://127.0.0.1:5002/analyze",
+        "http://34.64.223.226:5002/analyze",
         formData,
         {
           headers: {
@@ -63,11 +63,15 @@ const Ai = () => {
     // console.log("메이크업 받기 버튼이 클릭되었습니다.");
     try {
       setClickBG(true);
-      const res = await axios.post("http://127.0.0.1:5002/makeup", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await axios.post(
+        "http://34.64.223.226:5002/makeup",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       // console.log(res);
       // console.log(res.data.base64_image);
       setBase64(res.data.base64_image);
@@ -139,16 +143,16 @@ const Ai = () => {
               </UploadedImageContainer>
             )}
             {result === "spring" && (
-              <UploadedImage src={spring} alt="봄 웜톤" />
+              <img src={spring} alt="봄 웜톤" style={{ height: "80%" }} />
             )}
             {result === "summer" && (
-              <UploadedImage src="src/assets/summer.jpeg" alt="여름 쿨톤" />
+              <UploadedImage src="src/assets/summer1.jpeg" alt="여름 쿨톤" />
             )}
             {result === "fall" && (
-              <UploadedImage src="src/assets/fall.jpeg" alt="가을 웜톤" />
+              <UploadedImage src="src/assets/fall1.jpeg" alt="가을 웜톤" />
             )}
             {result === "winter" && (
-              <UploadedImage src="src/assets/winter.jpeg" alt="겨울 쿨톤" />
+              <UploadedImage src="src/assets/winter1.jpeg" alt="겨울 쿨톤" />
             )}
 
             <div>
