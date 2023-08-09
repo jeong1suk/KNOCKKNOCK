@@ -4,7 +4,7 @@ import styled from "styled-components";
 import {
   MOBILE_BREAK_POINT,
   TABLET_BREAK_POINT,
-} from "../../components/layout/breakpoint";
+} from "../../components/layout/breakPoints";
 import spring from "../../assets/spring.jpeg";
 const Ai = () => {
   const [result, setResult] = useState("");
