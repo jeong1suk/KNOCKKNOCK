@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { TABLET_BREAK_POINT } from "../../components/layout/breakPoints.js";
+import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint.js";
 export const GradientBackground = styled.div`
   /* Gradient background with two colors: #e6e9f0 and #eef1f5 */
   display: flex;
@@ -24,6 +24,7 @@ export const Container = styled.div`
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
   width: 70%;
   margin-top: 20px;
+  max-width: 500px;
   @media (max-width: ${TABLET_BREAK_POINT}) {
     /* viewport 너비가 767px 이하일 경우 */
     max-width: 450px;
@@ -51,6 +52,9 @@ export const Header = styled.header`
 
 export const Form = styled.form`
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const InputBox = styled.div`
@@ -58,8 +62,6 @@ export const InputBox = styled.div`
   margin: 10px 10px;
   height: 60px;
   width: 100%;
-  max-width: 480px;
-  min-width: 300px;
 
   input {
     background: transparent;
@@ -138,13 +140,18 @@ export const SubmitButton = styled.input`
   &:disabled {
     cursor: not-allowed;
   }
+
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    width: 70%;
+  }
 `; // 로그인 버튼 활성화 시 커서 모양 변하는 것 추가
 
 export const Forgot = styled(Link)`
+  width: 100%;
   text-align: right;
   font-size: 12pt;
   color: #179972;
-  margin: 10px 0px;
+  margin: 10px 20px;
 `;
 
 export const WarningMessage = styled.p`
