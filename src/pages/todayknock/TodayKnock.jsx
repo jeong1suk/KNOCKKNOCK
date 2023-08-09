@@ -6,6 +6,7 @@ import * as Api from "../../api";
 import UserModal from "./UserModal";
 import { showAlert } from "../../assets/alert";
 import { useNavigate } from "react-router-dom";
+import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint.js"
 
 const limit = 3;
 const isLoverUser = ["Lover", "User"];
@@ -103,7 +104,7 @@ function TodayKnock() {
         {/* <ArrowButtonLeft onClick={handlePrevBanner}>{"<"}</ArrowButtonLeft>
         <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight> */}
       </Banner>
-      <div style={{ height: "10vh" }} />
+      <div style={{ height: "3vh" }} />
       {showStartModal && (
         <ModalOverlay>
           <ModalContent>
@@ -144,7 +145,7 @@ function TodayKnock() {
         </>
       )}
       <RandomUserExplainDiv>
-        <p>다양한 사람들을 알아봐요!</p>
+        <p>랜덤으로 다양한 사람들을 만나볼까요?</p>
       </RandomUserExplainDiv>
       <UserProfilesContainer>
         {randomUsers.map((user) => (
@@ -163,7 +164,7 @@ function TodayKnock() {
 export default TodayKnock;
 
 const Container = styled.div`
-  margin-bottom: 20rem;
+  margin-bottom: 6rem;
 `;
 
 const Banner = styled.div`
@@ -179,6 +180,13 @@ const Banner = styled.div`
   background-repeat: no-repeat;
   max-height: 100%;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+
+  @media (max-width: 1024px) {
+    height: 25vh;
+  }
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    height: 15vh;
+  }
 `;
 
 const StartButton = styled.button`
@@ -197,6 +205,13 @@ const StartButton = styled.button`
   &:hover {
     background-color: #7b88b8;
     cursor: pointer;
+  }
+
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    height: 1rem;
+    font-size: 13px;
+    width: 4rem;  
+    margin-top: 0.5rem;
   }
 `;
 
@@ -236,31 +251,51 @@ const UserProfilesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
   gap: 10%;
-  padding: 10%;
+  padding: 5%;
   margin: -10rem 0 -5rem 0 ;
   & > :nth-child(n) {
     margin-top: 5rem;
   }
 
-  @media (max-width: 1100px) {
-    grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
-    grid-gap: 1px;
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    gap: 5%;
   }
 
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    grid-template-columns: repeat(auto-fit, minmax(25vw, 1fr));
+    margin: -7rem 0 0 0;
+    gap: 3%;
+    & > :nth-child(n) {
+      margin-top: 3rem;
+    }
   }
 `;
 
 const RandomUserExplainDiv = styled.div`
   display: flex;
-  justify-content: center;
-  border: 10px double #f7cbd0;
+  justify-content: flex-start;
+  margin-bottom: 50px;
   p {
     font-family: "KIMM_Bold";
-    font-size: 3rem;
+    font-size: 2rem;
     color: #1d1d1f;
     font-weight: 600;
     line-height: 1.2;
+    background-color: #FFF0F5;
+    padding:5px;
+    border-radius: 30px;
   }
+
+  @media (max-width: 1024px) {
+    margin: 0 0 50px 20px;
+  }
+
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    p { 
+      font-size: 18px;
+    } 
+  }
+
+  
 `;

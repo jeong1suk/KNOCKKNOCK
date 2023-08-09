@@ -1,20 +1,23 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import { keyframes } from "styled-components";
+import { keyframes } from 'styled-components';
 import UserProfile from "./UserProfile";
 import * as Api from "../../api";
-
+import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint";
 import { UserStateContext } from "../../context/user/UserProvider";
 
-import Typewriter from "typewriter-effect";
+import Typewriter from 'typewriter-effect';
 
 const limit = 3;
 const randomId = Math.floor(Math.random() * 10) + 21;
 
-const TodayGame = ({ onExit, selectedCard, onCardSelect }) => {
+const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
+
+
   const userState = useContext(UserStateContext);
 
   const [showIntro, setShowIntro] = useState(true);
+
 
   const cardsGetRequest = async () => {
     try {
@@ -24,29 +27,31 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect }) => {
       if (err.response.data.message) {
         // alert(err.response.data.message);
       } else {
-        alert("라우팅 경로가 잘못되었습니다.");
+        alert('라우팅 경로가 잘못되었습니다.');
       }
     }
-  };
+  }
+
 
   const cardsPostRequset = async (cardId) => {
     try {
       await Api.post(`/cards?cardId=${cardId}`);
       cardsGetRequest();
+
     } catch (err) {
       if (err.response.data.message) {
         // alert(err.response.data.message);
       } else {
-        alert("라우팅 경로가 잘못되었습니다.");
+        alert('라우팅 경로가 잘못되었습니다.');
       }
     }
-  };
+  }
 
   const handleCardClick = (cardId) => {
     // Start the animations
-    const cards = document.querySelectorAll(".image-container");
-    cards.forEach((card) => card.classList.add("animate"));
-
+    const cards = document.querySelectorAll('.image-container');
+    cards.forEach(card => card.classList.add('animate'));
+  
     setTimeout(() => {
       cardsPostRequset(cardId);
     }, 1000); // Wait for the animations to finish
@@ -57,15 +62,15 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect }) => {
       <IntroImage src={"./gameExplain.png"} />
       <Typewriter
         options={{
-          strings: ["연애운을 미리 알아보아요!"],
+          strings: ['이번 달 연애운을 알아볼까요?'],
           autoStart: true,
           loop: false,
-          delay: 50, // this means 50ms delay between each character, adjust according to your needs
+          delay: 50 // this means 50ms delay between each character, adjust according to your needs
         }}
       />
     </IntroContainer>
   );
-
+  
   useEffect(() => {
     if (showIntro) {
       setTimeout(() => {
@@ -74,76 +79,73 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect }) => {
     }
   }, [showIntro]);
 
-  const handleExitModal = () => {
-    setShowModal(false);
-    setLeftButtonClickCount(0);
-    setRightButtonClickCount(0);
-  };
+  console.log(showIntro);
 
   useEffect(() => {
     cardsGetRequest();
-  }, []);
+  }, [])
   return (
     <>
-      {selectedCard ? (
-        <CardDiv>
-          <CardImageContainer>
-            <CardImage src={selectedCard.CardFile?.File?.url} />
-            <CardContent>
-              <p>
-                <Nickname>{userState.user.nickname}</Nickname>
-                {selectedCard.content[0]}
-              </p>
-              <p>
-                <Nickname>{userState.user.nickname}</Nickname>
-                {selectedCard.content[1]}
-              </p>
-            </CardContent>
-          </CardImageContainer>
-        </CardDiv>
-      ) : (
-        <Container>
-          <ImageContainer className="image-container">
-            <Image src={"011.png"} onClick={() => handleCardClick(randomId)} />
-          </ImageContainer>
-          <ImageContainer className="image-container">
-            <Image src={"012.png"} onClick={() => handleCardClick(randomId)} />
-          </ImageContainer>
-          <ImageContainer className="image-container">
-            <Image src={"011.png"} onClick={() => handleCardClick(randomId)} />
-          </ImageContainer>
-          <ImageContainer className="image-container">
-            <Image src={"012.png"} onClick={() => handleCardClick(randomId)} />
-          </ImageContainer>
-          <ImageContainer className="image-container">
-            <Image src={"011.png"} onClick={() => handleCardClick(randomId)} />
-          </ImageContainer>
-          <ImageContainer className="image-container">
-            <Image src={"012.png"} onClick={() => handleCardClick(randomId)} />
-          </ImageContainer>
-          <ImageContainer className="image-container">
-            <Image src={"011.png"} onClick={() => handleCardClick(randomId)} />
-          </ImageContainer>
-          <ImageContainer className="image-container">
-            <Image src={"012.png"} onClick={() => handleCardClick(randomId)} />
-          </ImageContainer>
-          <ImageContainer className="image-container">
-            <Image src={"011.png"} onClick={() => handleCardClick(randomId)} />
-          </ImageContainer>
-          <ImageContainer className="image-container">
-            <Image src={"012.png"} onClick={() => handleCardClick(randomId)} />
-          </ImageContainer>
-        </Container>
-      )}
 
-      {/* {leftButtonClickCount + rightButtonClickCount >= 5 && (
-        <ExitBox>
-          <ExitButton onClick={onExit}>Exit</ExitButton>
-        </ExitBox>
-      )} */}
-      <ExitBox>
-        <ExitButton onClick={onExit}>Exit</ExitButton>
-      </ExitBox>
+{showIntro ? <Intro /> : (
+      selectedCard ?
+              <>
+                <CardDiv>
+                  <CardImageContainer>
+                    <CardImage src={selectedCard.CardFile?.File?.url} />
+                    <CardContent>
+                      <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[0]}</p>
+                      <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[1]}</p>
+                    </CardContent>
+                  </CardImageContainer>
+                </CardDiv>
+                <ExitBox>
+                <ExitButton onClick={onExit}>Exit</ExitButton>
+                </ExitBox>
+                </>
+              :
+              <>
+              <Container>
+                <ImageContainer className="image-container">
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+              </Container>
+              <ExitBox>
+                <ExitButton onClick={onExit}>Exit</ExitButton>
+              </ExitBox>
+              </>
+              )}
+              
+
+
+      
     </>
   );
 };
@@ -177,34 +179,11 @@ const CardDiv = styled.div`
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-`;
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-`;
-
-const ModalContent = styled.div`
-  width: 25%;
-  height: 25%;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-`;
+  
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    background-size: cover;
+  }
+`
 
 const ExitBox = styled.div`
   display: flex;
@@ -243,7 +222,7 @@ const ImageContainer = styled.div`
   flex: 0 0 20%; /* 초기 크기를 20%로 설정 (5장씩 나열) */
   min-width: 75px; /* 카드의 최소 크기 설정을 75px로 변경 */
   height: 70%; /* 높이를 절반으로 줄임 */
-  background-color: #ffffff;
+  background-color: #FFFFFF;
   text-align: center;
   line-height: 50px; /* line-height를 절반으로 줄임 */
   transition: width 1s, height 1s;
@@ -262,6 +241,7 @@ const ImageContainer = styled.div`
   }
 `;
 
+
 const Image = styled.img`
   width: 50%; /* 너비를 절반으로 줄임 */
   height: 50%; /* 높이를 절반으로 줄임 */
@@ -278,9 +258,13 @@ const CardImage = styled.img`
   margin-top: 30px;
   // border: 1px solid blue;
   border-radius: 10px;
-  width: 25%;
+  width: 30%;
   // height: 30%;
-`;
+
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    width: 40%;
+  }
+`
 
 const CardImageContainer = styled.div`
   display: flex;
@@ -292,25 +276,65 @@ const CardImageContainer = styled.div`
   height: 90%;
   width: 70%;
   margin-top: 50px;
-`;
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    width: 100%;
+  }
+`
 const CardContent = styled.div`
   margin: 20px 20px;
   padding: 5px;
   color: #fff;
-  width: 45%;
-`;
+  width: 50%;
+  font-size: 1.1rem;
+
+  @media (max-width: 1024px) {
+    width: 60%;
+  }
+
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    width: 80%;
+  }
+`
 const Nickname = styled.span`
   font-weight: bold;
-  color: #ffc4c4;
+  color: #FFC4C4;
+`
+
+const IntroContainer = styled.div`
+position: absolute;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+// margin-top: 20%;
+width: 70vw;
+height: 40vw;
+font-size: 2rem;
+font-family: 'SEBANG_Gothic_Bold';
+animation: ${fadeIn} 2s, ${fadeOut} 2s 3s forwards; /* fade in 애니메이션은 2초 동안, 그리고 3초 후에 fade out 애니메이션을 2초 동안 적용 */
+
+@media (max-width: ${TABLET_BREAK_POINT}) {
+  margin-top: 10%;
+  width: 70%;
+  font-size: 1rem;
+  height: 60%;
+}
+
 `;
-const BackgroundImage = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  // width: 90%;
-  // background-image: url(/cardblack.jpg);
-  // background-size: contain;
-  // background-position: center;
-  // background-repeat: no-repeat;
+
+const IntroImage = styled.img`
+width: 80%;
+height: 80%;
+@media (max-width: 1024px) {
+  // width: 60%;
+}
+
+@media (max-width: ${TABLET_BREAK_POINT}) {
+  width: 80%;
+  height:100%;
+}
 `;
+
