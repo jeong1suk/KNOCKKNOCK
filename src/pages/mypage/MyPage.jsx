@@ -249,13 +249,13 @@ const MyPage = () => {
                 onClick={() => handleSectionChange("chat")}
                 isactive={activeSection === "chat"}
               >
-                채팅
+                Chat
               </SectionButton>
               <SectionButton
                 onClick={() => handleSectionChange("myPosts")}
                 isactive={activeSection === "myPosts"}
               >
-                내가쓴글
+                Post
               </SectionButton>
             </Section>
 
@@ -331,14 +331,7 @@ const RightSectionWrapper = styled.div`
   margin-top: 4.4rem;
 `;
 
-const RightSection = styled.div`
-  background-color: #f2f2f2e2;
-  margin-top: -7rem;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  width: 40rem;
-`;
+const RightSection = styled.div``;
 
 const MessageChat = styled.div`
   display: flex;
@@ -427,7 +420,6 @@ const SendButton = styled.button`
 const Section = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 4.5rem;
   margin-bottom: 2rem;
 `;
 
