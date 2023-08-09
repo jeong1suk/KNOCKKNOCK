@@ -84,10 +84,8 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
   useEffect(() => {
     cardsGetRequest();
   }, [])
-  console.log(userState.user);
   return (
     <>
-
 
 {showIntro ? <Intro /> : (
       selectedCard ?

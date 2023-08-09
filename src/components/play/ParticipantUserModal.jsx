@@ -152,6 +152,7 @@ const UserProfileContainer = styled.div`
   align-items: center;
   width: 100%;
   height: auto;
+  margin-top: 20px;
 `;
 const UserProfileBox = styled.div`
   display: flex;
