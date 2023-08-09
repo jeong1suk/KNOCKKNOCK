@@ -89,16 +89,30 @@ const Content = styled.div`
   margin: 20px 20px 0 0;
   width: 10rem;
   height: 70%;
-  padding: 0 0 10px 10px;
+  padding: 1rem;
   cursor: pointer;
 
   &:hover {
     transform: scale(1.01);
   }
 
+  a {
+    text-decoration: none;
+    color: inherit;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
   img {
     width: 5rem;
-    justify-content: flex-end;
+    align-self: center;
+    margin-top: auto;
   }
 `;
 
