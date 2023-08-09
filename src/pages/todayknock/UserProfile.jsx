@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getImageSrc } from "../../util/imageCheck";
-
+import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint.js"
 
 
 const UserProfile = ({ user, onClick, isLoverUser }) => {
@@ -25,6 +25,8 @@ const UserProfile = ({ user, onClick, isLoverUser }) => {
     document.getElementById(`userInfo-${user.userId}`).style.opacity = 0;
   };
 
+  const MAX_NICKNAME_LENGTH = 7;
+
   return (
     <>
 
@@ -36,7 +38,7 @@ const UserProfile = ({ user, onClick, isLoverUser }) => {
         onClick={onClick}
         />
         <HoverText>프로필 정보 보기</HoverText>
-        <LoverProfileNickname>{user.nickname}</LoverProfileNickname>      
+        <LoverProfileNickname>{user.nickname.length > MAX_NICKNAME_LENGTH ? `${user.nickname.substring(0, MAX_NICKNAME_LENGTH)}...` : user.nickname}</LoverProfileNickname>      
       </LoverProfileContainer>
         
       :
@@ -75,7 +77,7 @@ const UserProfileContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-end;
   width: 100%;
-  height: 70%;
+  height: 85%;
   overflow: hidden;
   position: relative;
   transition: background-color 0.3s;
@@ -137,8 +139,8 @@ const LoverProfileContainer = styled.div`
 
 const LoverProfilePicture = styled.img`
   width: 120%;
-  height: 60%;
-  border: 4px solid #F7CBD0;
+  height: 70%;
+  border: 4px dashed #F7CBD0;
   border-radius: 100%;
   cursor: pointer;
   transition: all 0.3s ease; // Transition effect
@@ -148,11 +150,18 @@ const LoverProfilePicture = styled.img`
     transform: scale(1.02);
     opacity: 0.5; // Image will darken on hover
   }
+
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    border: 3px dashed #F7CBD0;
+  }
 `
 
 const LoverProfileNickname = styled.p`
-  font-size: 0.8rem;
-  
+  font-size: 0.9rem;
+
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    font-size: 0.7rem;
+  }
 `
 
 const HoverText = styled.p`
@@ -163,8 +172,13 @@ const HoverText = styled.p`
   opacity: 0;
   color: dark; // Change this as needed
   transition: all 0.3s ease;
+  font-size: 0.8rem;
 
   ${LoverProfileContainer}:hover & {
     opacity: 1;
+  }
+
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    font-size: 0.4rem;
   }
 `
