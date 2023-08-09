@@ -36,7 +36,7 @@ const Ai = () => {
     try {
       setClickPC(true);
       const response = await axios.post(
-        "http://127.0.0.1:5002/analyze",
+        "http://34.64.223.226:5002/analyze",
         formData,
         {
           headers: {
@@ -63,12 +63,16 @@ const Ai = () => {
     // console.log("메이크업 받기 버튼이 클릭되었습니다.");
     try {
       setClickBG(true);
-      setClickPC(false);
-      const res = await axios.post("http://127.0.0.1:5002/makeup", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await axios.post(
+        "http://34.64.223.226:5002/makeup",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
       // console.log(res);
       // console.log(res.data.base64_image);
       setBase64(res.data.base64_image);
@@ -86,9 +90,17 @@ const Ai = () => {
     <>
       <Container>
         <ButtonSection>
+          <Button>
+            <ImageUploadInput
+              id="file-upload"
+              type="file"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="file-upload">파일 선택</label>
+          </Button>
           <Button onClick={handlePersonalColor}>퍼스널컬러</Button>
           <Button onClick={handleMakeupClick}>beautyGAN</Button>
-          <Button>StyleGAN(유료/미구현)</Button>
+          {/* <Button>StyleGAN(유료/미구현)</Button> */}
         </ButtonSection>
 
         <UserProfileBox>
@@ -99,9 +111,6 @@ const Ai = () => {
                   <UploadedImage src={previewURL} alt="Uploaded" />
                 </UploadedImageContainer>
               )}
-              <UploadImageButton htmlFor="image-upload">
-                <input type="file" onChange={handleFileChange} />
-              </UploadImageButton>
             </LeftSection>
 
             {clickbg && (
@@ -158,26 +167,6 @@ const Ai = () => {
     </>
   );
 };
-
-const UploadImageButton = styled.label`
-  display: inline-block;
-  background-color: #f0f0f0;
-  color: #333;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    /* 모바일 화면에서 버튼의 패딩을 작게 조절 */
-    padding: 5px 10px;
-  }
-
-  @media (max-width: ${TABLET_BREAK_POINT}) {
-    /* 태블릿 화면에서 버튼의 폰트 크기를 더 작게 조절 */
-    font-size: 14px;
-  }
-`;
-
 const ImageUploadInput = styled.input`
   display: none;
 `;
