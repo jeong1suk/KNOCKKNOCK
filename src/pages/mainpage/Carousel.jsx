@@ -13,7 +13,7 @@ function Carousel() {
       speed: 500,
       slidesToShow: 2,
       slidesToScroll: 1,
-      centerMode: true,
+      // centerMode: true,
       autoplay:true,
       autoplaySpeed: 2000,
       rtl: false,
@@ -50,10 +50,10 @@ function Carousel() {
   }
 
 const StyledSlider = styled(Slider)`
-  left: 6rem;
+  left: 0;
   height: 100%;
-  width: 85%;  
-  margin: 10px 0 80px 0;
+  width: 100%;  
+  margin: 30px 0 40px 0;
   position: relative;
   
   .slick-dots li button::before {
@@ -67,15 +67,10 @@ const StyledSlider = styled(Slider)`
     font-size: 20px;
     color: #dfdfdf
   }
-  @media (max-width: 1120px) {
-    left: 0;
-    width: 100%;
-    margin: 30px 0 40px 0;
-  }
-  @media (max-width: 760px) {
-    left: 0;
-    width: 100%;
-  }
+  // @media (max-width: 760px) {
+  //   left: 0;
+  //   width: 100%;
+  // }
 `;
 
 const ImageContainer = styled.div`
@@ -87,18 +82,18 @@ const Image = styled.img`
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
   width: 18rem;
   @media (max-width: 760px) {
-    width: 12rem;
-    height: 17rem;
+    width: 9rem;
+    height: 12rem;
   }
 
   height: 25rem;
   max-width: 100%;
   max-height: 100%;
   background-color: #F7F6F0; 
-  @media (max-width: 400px) {
-    width: 6rem;
-    height: 15rem;
-  }
+  // @media (max-width: 400px) {
+  //   width: 6rem;
+  //   height: 15rem;
+  // }
 `;
 
 export default Carousel;

@@ -276,7 +276,7 @@ const CardImageContainer = styled.div`
   animation: ${fadeIn} 3s;
   // border: 1px solid red;
   height: 90%;
-  width: 70%;
+  width: 65%;
   margin-top: 50px;
   @media (max-width: 1024px) {
     width: 100%;
@@ -289,12 +289,7 @@ const CardContent = styled.div`
   margin: 20px 20px;
   padding: 5px;
   color: #fff;
-  width: 50%;
-  font-size: 1.1rem;
-
-  @media (max-width: 1024px) {
-    width: 60%;
-  }
+  width: 45%;
 
   @media (max-width: ${TABLET_BREAK_POINT}) {
     width: 80%;
