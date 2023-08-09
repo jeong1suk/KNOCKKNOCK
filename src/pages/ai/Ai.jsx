@@ -36,7 +36,7 @@ const Ai = () => {
     try {
       setClickPC(true);
       const response = await axios.post(
-        "http://127.0.0.1:5002/analyze",
+        "http://34.64.223.226:5002/analyze",
         formData,
         {
           headers: {
@@ -63,7 +63,7 @@ const Ai = () => {
     // console.log("메이크업 받기 버튼이 클릭되었습니다.");
     try {
       setClickBG(true);
-      const res = await axios.post("http://127.0.0.1:5002/makeup", formData, {
+      const res = await axios.post("http://34.64.223.226:5002/makeup", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
