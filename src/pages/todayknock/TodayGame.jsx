@@ -62,7 +62,7 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
       <IntroImage src={"./gameExplain.png"} />
       <Typewriter
         options={{
-          strings: ['연애운을 미리 알아보아요!'],
+          strings: ['이번 달 연애운을 알아볼까요?'],
           autoStart: true,
           loop: false,
           delay: 50 // this means 50ms delay between each character, adjust according to your needs
@@ -171,7 +171,7 @@ const fadeIn = keyframes`
 const CardDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-center: center;
+  justify-content: center;
   align-items: center;
   height: 90%;
   // border: 3px solid yellow;
