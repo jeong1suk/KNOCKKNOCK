@@ -1,10 +1,20 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { TABLET_BREAK_POINT } from "../../components/layout/breakPoints.js";
 export const GradientBackground = styled.div`
   /* Gradient background with two colors: #e6e9f0 and #eef1f5 */
+  display: flex;
+  justify-content: center;
   background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
-  padding: 100px;
+  margin: 70px;
+  padding: 40px;
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    /* viewport 너비가 767px 이하일 경우 */
+    padding: 0;
+    margin: 70px auto; /* 컨테이너를 가로 중앙 정렬 */
+  }
 `;
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -12,16 +22,15 @@ export const Container = styled.div`
   justify-content: center;
   height: 80vh;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
-  @media (max-width: 480px) {
-    /* viewport 너비가 480px 이하일 경우 */
-    width: 100%; /* 컨테이너 너비를 100%로 설정하여 가로 중앙 정렬 */
+  width: 70%;
+  margin-top: 20px;
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    /* viewport 너비가 767px 이하일 경우 */
+    max-width: 450px;
+    width: 90%;
+    margin: 60px auto; /* 컨테이너를 가로 중앙 정렬 */
   }
 
-  @media (min-width: 481px) {
-    /* viewport 너비가 481px 이상일 경우 */
-    width: 480px; /* 컨테이너의 너비를 480px로 설정 */
-    margin: 0 auto; /* 컨테이너를 가로 중앙 정렬 */
-  }
   /* Gradient background with two colors: red and blue */
   background-image: linear-gradient(
     45deg,
@@ -47,6 +56,10 @@ export const Form = styled.form`
 export const InputBox = styled.div`
   position: relative;
   margin: 10px 10px;
+  height: 60px;
+  width: 100%;
+  max-width: 480px;
+  min-width: 300px;
 
   input {
     background: transparent;
@@ -101,6 +114,10 @@ export const InputBox = styled.div`
 
   label {
     opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    top: 15px;
     transition: all 0.2s ease;
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;

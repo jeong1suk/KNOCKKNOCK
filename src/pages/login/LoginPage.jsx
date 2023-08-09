@@ -64,6 +64,7 @@ const LoginForm = () => {
               placeholder="이메일"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoComplete="off"
               style={{
                 borderBottomColor: email
                   ? isEmailValid
@@ -72,7 +73,7 @@ const LoginForm = () => {
                   : "#ccc",
               }}
             />
-            <label htmlFor="username">이메일</label>
+            <label htmlFor="email">이메일</label>
             {!isEmailValid && email.length > 0 && (
               <S.WarningMessage>
                 유효한 이메일 형식이 아닙니다.
