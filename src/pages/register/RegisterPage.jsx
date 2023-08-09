@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
   const [previewURL, setPreviewURL] = useState(null);
-  const [selectedFile, setSelectedFile] = useState("phto.png");
+  const [selectedFile, setSelectedFile] = useState("/phto.png");
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
@@ -99,24 +99,6 @@ const RegisterPage = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          /*
-          const formData = {
-            name: e.target.name.value,
-            nickname: e.target.nickname.value,
-            email: e.target.email.value,
-            password: e.target.password.value,
-            gender: e.target.gender.value,
-            birthdate: e.target.birthdate.value,
-            job: e.target.job.value,
-            region: e.target.region.value,
-            mbti: e.target.mbti.value,
-            height: e.target.height.value,
-            hobby: e.target.hobby.value,
-            personality: e.personality,
-            ideal: e.ideal,
-            introduce: e.introduce,
-          };
-          */
           handleRegistration({
             ...RequiredInputs.getFormData(),
             ...ValidationFields.getFormData(),
@@ -126,26 +108,23 @@ const RegisterPage = () => {
       >
         <S.Header style={{ border: 0 }}>Register</S.Header>
 
-        <S.Header>필수 입력</S.Header>
+        {/* <S.Header>필수 입력</S.Header> */}
         <RequiredInputs />
         <S.Heading>사진</S.Heading>
         <S.Box>
-          <S.Input type="file" onChange={handleFileChange} />
+          <S.FileInput type="file" onChange={handleFileChange} />
         </S.Box>
-        {selectedFile && (
-          <div>
-            <h6>미리보기</h6>
-            <img
-              src={previewURL}
-              alt="Selected Image"
-              style={{ width: "50%" }}
-            />
-          </div>
+        {previewURL && (
+          <S.UploadedImageContainer>
+            <S.UploadedImage src={previewURL} alt="Selected Image" />
+          </S.UploadedImageContainer>
         )}
-        <S.Header>선택 입력</S.Header>
+        <S.Header style={{ border: 0 }}>선택 입력</S.Header>
         <OptionalInputs />
 
-        <S.JoinButton type="submit" onSubmit={() => handleRegistration()}>Register</S.JoinButton>
+        <S.JoinButton type="submit" onSubmit={() => handleRegistration()}>
+          Register
+        </S.JoinButton>
       </form>
     </S.Content>
   );

@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 
 import * as Api from "../../api";
 
+
 import styled from "styled-components";
 import { isWriter } from "../../util/isWriter";
 import { getImageSrc } from "../../util/imageCheck";
@@ -17,6 +18,8 @@ import DropdownMenu from "../../components/modal/DropdownMenu";
 import Modal from "../../components/modal/Modal";
 import GenderInfo from "../../components/play/GenderInfo";
 import ParticipantList from "../../components/play/ParticipantList";
+import ParticipantUserModal from "../../components/play/ParticipantUserModal";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 
 import { UserStateContext } from "../../context/user/UserProvider";
 
@@ -35,6 +38,7 @@ function PlayDetail() {
 
   const [participantsList, setParticipantsList] = useState([]);
   const [participationFlag, setParticipationFlag] = useState();
+  const [selectedUserId, setSelectedUserId] = useState();
 
   const [canceled, setCanceled] = useState();
   const [status, setStatus] = useState();
@@ -42,8 +46,8 @@ function PlayDetail() {
   const [dropdownSelection, setDropdownSelection] = useState("신청인원");
   const [genderSelection, setGenderSelection] = useState("전체");
 
-  const [isParticipantModalOpen, setIstParticipantModalOpen] = useState(false);
-  const [modalCursor, setModalCursor] = useState(0);
+  const [isParticipantModalOpen, setIsParticipantModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const [comments, setComments] = useState([]);
   const [commentProfileImage, setCommentProfileImage] = useState();
@@ -96,7 +100,11 @@ function PlayDetail() {
       const res = await Api.put(`/participants/${participantId}/allow`);
       fetchParticipantsList();
     } catch (err) {
-      alert("수락 처리에 실패했습니다.");
+      if (err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("라우팅 경로가 잘못되었습니다.");
+      }
     }
   };
 
@@ -105,7 +113,11 @@ function PlayDetail() {
       await Api.put(`/participants/${participantId}/deny`);
       fetchParticipantsList();
     } catch (err) {
-      alert("거절 처리에 실패했습니다.");
+      if (err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("라우팅 경로가 잘못되었습니다.");
+      }
     }
   };
 
@@ -321,11 +333,13 @@ const fetchGetComment = useCallback(
   const editComment = (commentId, content) => {
     setIsEditing(commentId);
     setEditedContent(content);
+    setMenuOpen(null);
   };
 
   const saveComment = (commentId) => {
     editCommentRequest(commentId, editedContent);
     setIsEditing(null);
+    setMenuOpen(null);
   };
 
   const deleteComment = (commentId) => {
@@ -394,12 +408,11 @@ const fetchGetComment = useCallback(
       <TopBox>
         <TopInnerBox>
           <TopPtagBox>
-            <p>같이 놀자</p>
             <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
           </TopPtagBox>
           
           {isWriter({ userId, post }) ? (
-            <TopBoxButton onClick={() => setIstParticipantModalOpen(true)}>
+            <TopBoxButton onClick={() => setIsParticipantModalOpen(true)}>
               신청인원 보기
             </TopBoxButton>
           ) : status === "rejected" ? (
@@ -424,8 +437,8 @@ const fetchGetComment = useCallback(
             </TopBoxButton>
           )}
 
-        {isParticipantModalOpen && (
-          <Modal onClose={() => setIstParticipantModalOpen(false)}>
+        {isParticipantModalOpen &&  (
+          <Modal onClose={() => setIsParticipantModalOpen(false)}>
             <DropdownMenuDiv>
               <DropdownMenu
                 options={[
@@ -453,33 +466,50 @@ const fetchGetComment = useCallback(
               handleAccept={handleAccept}
               handleReject={handleReject}
               selectedOption={dropdownSelection}
+              setIsProfileModalOpen={setIsProfileModalOpen}
+              setSelectedUserId={setSelectedUserId}
             />
           </Modal>
         )}
+
+        {isProfileModalOpen &&  (
+          <ModalOverlay>
+            <ModalContentUser>
+              <ParticipantUserModal
+                userId={selectedUserId}
+                setIsProfileModalOpen={setIsProfileModalOpen}
+              />
+            </ModalContentUser>
+          </ModalOverlay>
+        )}
+
         </TopInnerBox>
       </TopBox>
       <PostDetailBox>
         <PostDetailFirstBox>
           <EditDeleteButtonBox>
-          <IconButton
-          onClick={(e) => {
-            e.stopPropagation();
-            setPostMenuOpen((prev) => (prev === postId ? null : postId));
-          }}
-        >
-          <FaEllipsisV />
-        </IconButton>
-        {isWriter({ userId, post }) && postMenuOpen === postId && (
-          <DropdownMenuDiv>
-            <IconButton onClick={() => navigate(`/playedit/${postId}`)}>
+            {isWriter({ userId, post }) && 
+              <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                setPostMenuOpen((prev) => (prev === postId ? null : postId));
+              }}
+              >
+                <FaEllipsisV />
+              </IconButton>
+            }
+              
+            {postMenuOpen === postId && (
+              <DropModifyDeleteDiv>
+                <IconButton onClick={() => navigate(`/playedit/${postId}`)}>
 
-              <FaEdit /> 수정하기
-            </IconButton>
-            <IconButton onClick={() => handlePostDelete(postId)}>
-            <FaTrashAlt />삭제하기
-            </IconButton>
-          </DropdownMenuDiv>
-        )}
+                  <FaEdit /> 수정하기
+                </IconButton>
+                <IconButton onClick={() => handlePostDelete(postId)}>
+                  <FaTrashAlt />삭제하기
+                </IconButton>
+              </DropModifyDeleteDiv>
+            )}
           </EditDeleteButtonBox>
           <InputBox>
             {post.isCompleted ? (
@@ -487,6 +517,7 @@ const fetchGetComment = useCallback(
             ) : (
               <RecruitAbleBox>모집중</RecruitAbleBox>
             )}
+
             <GenderInfoBox>
               <GenderInfo
                 total={post.totalM}
@@ -500,9 +531,12 @@ const fetchGetComment = useCallback(
               />
             </GenderInfoBox>
           </InputBox>
+
+
           <InputBox>
             <p style={{ fontSize: "2vw", fontWeight: "bold" }}>{post.title}</p>
           </InputBox>
+
           <InputBox style={{ flexDirection: "column", alignItems: "start" }}>
             <p style={{ margin: "0px 0px" }}>장소: {post.place}</p>
             <p style={{ margin: "10px 0px" }}>
@@ -622,6 +656,7 @@ const IconButton = styled.button`
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #555;
   padding: 10px;
   &:hover {
@@ -629,21 +664,19 @@ const IconButton = styled.button`
   }
 `;
 
-const MenuWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
-  z-index: 1;
-`;
+
 
 const TopBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f8f8f8;
+  justify-content: end;
+  background-color: #fff;
   height: 200px;
-  margin: 100px 0px 0px 0px;
+  margin: 0px 0px 50px 0px;
+  padding-bottom: 0px;
+
+  
 `;
 
 const TopInnerBox = styled.div`
@@ -652,6 +685,12 @@ const TopInnerBox = styled.div`
   align-items: center;
   gap: 20%;
   width: 75%;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    flex-direction: column;
+    gap: 0;
+    align-items: start;
+  }
 `;
 
 const TopPtagBox = styled.div`
@@ -662,15 +701,27 @@ const TopPtagBox = styled.div`
   line-height: 1.2;
   margin-bottom: 0px;
 
-  p:last-of-type {
-    font-size: 1.5rem; 
+  p {
+    margin: 0px;
+    font-size: 2.0rem; 
     color: #1d1d1f; 
-    font-weight: 500;
     line-height: 1.2;
+  }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 40px;
+    // padding: 50px 0 0 80px;
+
+    p {
+      font-size: 0.8rem; 
+    }
   }
 `;
 
 const TopBoxButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 100%;
   font-family: 'KIMM_Bold';
   padding: 10px 10px;
@@ -681,7 +732,7 @@ const TopBoxButton = styled.button`
   cursor: pointer;
   margin: 10px 0;
   width: 30%;
-  height: 30%;
+  height: 100px;
   transition: 0.3s;
   text-overflow: ellipsis;
 
@@ -690,15 +741,22 @@ const TopBoxButton = styled.button`
     color: #3B0B0B;
     transform: scale(1.02);
   }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+      height: 40px;
+      width: 50%;
+      font-size: 0.8rem; 
+  }
+
 `;
 
 const PostDetailBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f8f8f8;
+  background-color: #fff;
   height: 100%;
-  margin: 50px 0 0 0;
+  margin: 0 0 0 0;
   padding: 20px 50px 20px 50px;
 `;
 
@@ -708,7 +766,11 @@ const InputBox = styled.div`
   align-items: center;
   padding: 10px;
   width: 80%;
-  font-family: "San Francisco", Arial, sans-serif;
+  font-family: 'KIMM_Bold';
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    font-size: 0.8rem; 
+  }
 `;
 
 const RecruitAbleBox = styled.div`
@@ -720,6 +782,10 @@ const RecruitAbleBox = styled.div`
   width: 15%;
   border-radius: 30px;
   padding: 20px 0px 20px 0px;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 30%;
+}
 `;
 
 
@@ -729,10 +795,48 @@ const CommentBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 80%;
+  width: 85%;
 
-  @media (max-width: 600px) {    
+  @media (max-width: ${MOBILE_BREAK_POINT}) {    
     width: 100%;
+  }
+`;
+
+const CommentInputArea = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  textarea {
+    width: 90%;
+    padding: 10px;
+    margin-right: 10px;
+    resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
+    border: 1px solid #cccccc; // Light gray border
+  }
+
+  button {
+    width: 20%;
+    background-color: #F7CBD0;
+    color: black;
+    padding: 10px 10px;
+    border: 5px double #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-overflow: ellipsis;
+    
+    &:hover {
+      border: 5px solid #3B0B0B;
+      color: #3B0B0B;
+      transform: scale(1.02);
+    }
+
+    @media (max-width: ${MOBILE_BREAK_POINT}) {    
+      font-size: 0.5rem;
+    }
+  }
 `;
 
 const CommentDetailBox = styled.div`
@@ -775,27 +879,33 @@ width: 100%;
 textarea {
   width: 90%;
   padding: 10px;
-  margin-right: 10px;
+  margin: 10px 10px 10px 0px;
   resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
   border: 1px solid #cccccc; // Light gray border
 }
 
 button {
   width: 10%;
-  background-color: #007bff; // Same as the button above
-  color: white;
+  background-color: #F7CBD0;
+  color: black;
   padding: 10px;
-  border: none;
-  border-radius: 5px;
+  border: 5px double #fff;
+  border-radius: 10px;
   cursor: pointer;
+  transition: 0.3s;
   margin-right: 3%;
+  text-overflow: ellipsis;
   &:hover {
-    background-color: #0056b3;
+    border: 5px solid #3B0B0B;
+    color: #3B0B0B;
+    transform: scale(1.02);
   }
 }
 `
 
+
 const CommentEditDeleteBox = styled.div`
+  position: relative;
   display: flex;
   width: 100%;
 
@@ -804,47 +914,47 @@ const CommentEditDeleteBox = styled.div`
   }
 `
 
-
-const ParticipantModalDiv = styled.div`
+const MenuWrapper = styled.div`
+  width: 20%;
+  margin: 0px 0px 0px 0px;
+  position: absolute;
+  top: 0;
+  left: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  background: #fff;
+  background-color: rgba(255, 255, 255, 0);
+
+  z-index: 1;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {    
+    top: 70%;
+    left: 70%;
+    
+  }
+
 `;
+
 
 const DropdownMenuDiv = styled.div`
   display: flex;
-  gap: 10px;
-`
-
-const CommentInputArea = styled.div`
-  display: flex;
-  justify-content: space-between;
+  gap: 20px;
   align-items: center;
-  width: 100%;
-
-  textarea {
-    width: 90%;
-    padding: 10px;
-    margin-right: 10px;
-    resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
-    border: 1px solid #cccccc; // Light gray border
-  }
-
-  button {
-    width: 10%;
-    background-color: #007bff; // Same as the button above
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #0056b3;
-    }
-  }
 `;
+
+
+const DropModifyDeleteDiv = styled.div`
+  position: absolute;
+  top: 100%;  // 아이콘의 바로 아래에 위치하도록 설정
+  right: 0%;   // 아이콘의 왼쪽 끝을 기준으로 설정
+  display: flex;
+  gap: 20px;
+  align-items: center;
+
+  
+`;
+
+
+
+
 
 const GenderInfoBox = styled.div`
   display: flex;
@@ -866,10 +976,34 @@ const PostDetailFirstBox = styled.div`
 `;
 
 const EditDeleteButtonBox = styled.div`
+  position: relative;
   display: flex;
   justify-content: end;
   align-items: center;
   padding: 10px;
   gap: 10px;
   // font-family: "San Francisco", Arial, sans-serif;
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
+const ModalContentUser = styled.div`
+  width: 40%;
+  height: 80%;
+  background-color: #fff;
+  padding: 1rem;
+  padding-top: 2rem;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 `;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { keyframes } from 'styled-components';
 import UserProfile from "./UserProfile";
 import * as Api from "../../api";
-
+import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint";
 import { UserStateContext } from "../../context/user/UserProvider";
 
 import Typewriter from 'typewriter-effect';
@@ -62,7 +62,7 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
       <IntroImage src={"./gameExplain.png"} />
       <Typewriter
         options={{
-          strings: ['연애운을 미리 알아보아요!'],
+          strings: ['이번 달 연애운을 알아볼까요?'],
           autoStart: true,
           loop: false,
           delay: 50 // this means 50ms delay between each character, adjust according to your needs
@@ -84,8 +84,10 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
   useEffect(() => {
     cardsGetRequest();
   }, [])
+  console.log(userState.user);
   return (
     <>
+
 
 {showIntro ? <Intro /> : (
       selectedCard ?
@@ -171,7 +173,7 @@ const fadeIn = keyframes`
 const CardDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-center: center;
+  justify-content: center;
   align-items: center;
   height: 90%;
   // border: 3px solid yellow;
@@ -180,6 +182,9 @@ const CardDiv = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    background-size: cover;
+  }
 `
 
 const ExitBox = styled.div`
@@ -255,8 +260,12 @@ const CardImage = styled.img`
   margin-top: 30px;
   // border: 1px solid blue;
   border-radius: 10px;
-  width: 25%;
+  width: 30%;
   // height: 30%;
+
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    width: 40%;
+  }
 `
 
 const CardImageContainer = styled.div`
@@ -267,14 +276,24 @@ const CardImageContainer = styled.div`
   animation: ${fadeIn} 3s;
   // border: 1px solid red;
   height: 90%;
-  width: 70%;
+  width: 65%;
   margin-top: 50px;
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    width: 100%;
+  }
 `
 const CardContent = styled.div`
   margin: 20px 20px;
   padding: 5px;
   color: #fff;
   width: 45%;
+
+  @media (max-width: ${TABLET_BREAK_POINT}) {
+    width: 80%;
+  }
 `
 const Nickname = styled.span`
   font-weight: bold;
@@ -285,16 +304,34 @@ const IntroContainer = styled.div`
 position: absolute;
 display: flex;
 flex-direction: column;
+justify-content: center;
 align-items: center;
+// margin-top: 20%;
 width: 70vw;
-height: 90vw;
+height: 40vw;
 font-size: 2rem;
 font-family: 'SEBANG_Gothic_Bold';
 animation: ${fadeIn} 2s, ${fadeOut} 2s 3s forwards; /* fade in 애니메이션은 2초 동안, 그리고 3초 후에 fade out 애니메이션을 2초 동안 적용 */
+
+@media (max-width: ${TABLET_BREAK_POINT}) {
+  margin-top: 10%;
+  width: 70%;
+  font-size: 1rem;
+  height: 60%;
+}
+
 `;
 
 const IntroImage = styled.img`
-width: 40%;
-height: 40%;
+width: 80%;
+height: 80%;
+@media (max-width: 1024px) {
+  // width: 60%;
+}
+
+@media (max-width: ${TABLET_BREAK_POINT}) {
+  width: 80%;
+  height:100%;
+}
 `;
 

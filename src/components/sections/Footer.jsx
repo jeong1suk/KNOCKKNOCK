@@ -9,7 +9,7 @@ const FooterWrapper = styled.footer`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 20vh;
+  height: 8rem;
   display: flex;
   justify-content: space-between;
   border-top: 1px solid black;
@@ -22,7 +22,7 @@ const FooterWrapper = styled.footer`
 
 const FooterContent = styled.div`
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
 
   align-items: center;
   color: #000;
@@ -30,6 +30,7 @@ const FooterContent = styled.div`
 
   & > div {
     flex: 1;
+
   }
 `;
 // const FooterContent = styled.div`
@@ -41,16 +42,27 @@ const FooterContent = styled.div`
 //   margin-bottom: 20px; /* 추가: 내용과 하단 간격 설정 */
 // `;
 
+const MemberContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+`;
+
+const Member = styled.div`
+  margin-top: 5px;
+`
+
 const FooterText = styled.div`
   display: flex;
   flex-direction: column; /*변경: 내용을 세로로 정렬*/
-  font-style: italic;
+  // font-style: italic;
+  font-weight: 600;
   text-align: center;
   color: #000;
   font-size: 0.8rem;
   /* padding-top: 1rem; */
-  margin-left: 1rem;
-  margin-right: 1rem;
+  // margin-left: 1rem;
+  // margin-right: 3rem;
 `;
 
 const FooterLink = styled.a`
@@ -62,74 +74,64 @@ const Footer = () => {
   return (
     <FooterWrapper>
       <img
-        src={"006.png"}
+        src={"/006.png"}
         style={{
-          width: "20%",
-          height: "130px",
+          width: "10%",
+          height: "70%",
           marginTop: "30px",
-          marginLeft: "50px",
+          marginLeft: "40px",
           // maxWidth: "50%",
           // maxHeight: "50%",
         }}
       />
       <FooterContent>
-        <FooterText>낙낙</FooterText>
-        <FooterText>대표이사 억만추</FooterText>
+        {/* <FooterText>KnockKnock</FooterText> */}
+        {/* <FooterText>대표이사 억만추</FooterText>
         <FooterText>사업자등록번호 999-99-99999</FooterText>
         <FooterText>통신판매업신고번호 9999-999-999999</FooterText>
-        <FooterText>엘리스랩</FooterText>
+        <FooterText>엘리스랩</FooterText> */}
 
         <FooterText>
-          낙낙 컨텐츠
+        KnockKnock
           <br />
-          인공지능
+          <br />
+          뷰티톡톡
           <br />
           오늘의 낙낙
           <br />
-          같이 놀자
+          히히낙낙
+          <br />
+          마이페이지
         </FooterText>
-        <FooterText>
-          이은석
+        <MemberContainer>
+          <FooterText>
+            Member  
+            <br />
+            <br />
+          </FooterText>
+          <Member>
+            이은석            github @enxxi
+          </Member>
+          <Member>
+            정유진            깃허브
+          </Member>
+          <Member>
+            정원석            깃허브
+          </Member>
+        </MemberContainer>
+        <MemberContainer>
           <br />
-          이메일
           <br />
-          깃허브
-        </FooterText>
-        <FooterText>
-          정유진
-          <br />
-          이메일
-          <br />
-          깃허브
-        </FooterText>
-        <FooterText>
-          정원석
-          <br />
-          이메일
-          <br />
-          깃허브
-        </FooterText>
-        <FooterText>
-          정재훈
-          <br />
-          이메일
-          <br />
-          깃허브
-        </FooterText>
-        <FooterText>
-          최우현
-          <br />
-          이메일
-          <br />
-          깃허브
-        </FooterText>
-        <FooterText>
-          허창원
-          <br />
-          이메일
-          <br />
-          깃허브
-        </FooterText>
+          <Member>
+            정재훈            깃허브
+          </Member>
+          <Member>
+            최우현            깃허브
+          </Member>
+          <Member>
+            허창원            깃허브
+          </Member>
+        </MemberContainer>
       </FooterContent>
     </FooterWrapper>
   );

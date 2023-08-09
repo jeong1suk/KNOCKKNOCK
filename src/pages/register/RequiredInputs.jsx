@@ -31,66 +31,92 @@ const RequiredInputs = () => {
   RequiredInputs.getFormData = () => {
     return formData;
   };
-  // console.log("필수");
+
   return (
     <>
-      <S.Heading>이름</S.Heading>
-      <S.Box>
-        <S.Input name="name" value={name} onChange={onChange} />
-      </S.Box>
-      <S.Heading>닉네임</S.Heading>
-      <S.Box>
-        <S.Input name="nickname" value={nickname} onChange={onChange} />
-      </S.Box>
+      <S.Input>
+        <input
+          id="name"
+          type="text"
+          name="name"
+          value={name}
+          placeholder="이름"
+          onChange={onChange}
+        />
+        <label htmlFor="name">이름</label>
+      </S.Input>
+
+      <S.Input>
+        <input
+          id="nickname"
+          type="text"
+          name="nickname"
+          value={nickname}
+          placeholder="닉네임"
+          onChange={onChange}
+        />
+        <label htmlFor="nickname">닉네임</label>
+      </S.Input>
+
       <ValidationFields
         formData={formData}
         setFormData={setFormData}
         onChange={onChange}
       />
-      <S.RightAlignedBox style={{ marginTop: "20px" }}>
-        <S.Heading>성별</S.Heading>
-        <S.Select
-          name="gender"
-          value={gender}
-          onChange={onChange}
-          style={{ flex: 1, textAlign: "right" }}
-        >
-          <option>성별</option>
-          <option value="남">남자</option>
-          <option value="여">여자</option>
-        </S.Select>
+      <S.RightAlignedBox style={{ marginTop: "20px", border: "none" }}>
+        <S.Input style={{ width: "100%" }}>
+          <S.Select
+            name="gender"
+            value={gender}
+            onChange={onChange}
+            style={{ flex: 1 }}
+          >
+            <option>성별</option>
+            <option value="남">남자</option>
+            <option value="여">여자</option>
+          </S.Select>
+        </S.Input>
+        <S.Input style={{ width: "100%" }}>
+          <S.Select
+            name="region"
+            value={region}
+            onChange={onChange}
+            style={{ flex: 1 }}
+          >
+            <option>지역</option>
+            {regions.map((region) => (
+              <option key={region} value={region}>
+                {region}
+              </option>
+            ))}
+          </S.Select>
+        </S.Input>
       </S.RightAlignedBox>
 
-      <S.Heading>생년월일</S.Heading>
-      <S.Box>
-        <S.Input
+      <S.Input>
+        <input
+          id="birthdate"
           type="date"
           name="birthdate"
           value={birthdate}
           onChange={onChange}
         />
-      </S.Box>
+        <label htmlFor="birthdate" style={{ marginTop: "5px" }}>
+          생년월일
+        </label>
+      </S.Input>
 
-      <S.Heading>직업</S.Heading>
-      <S.Box>
-        <S.Input name="job" value={job} onChange={onChange} />
-      </S.Box>
-      <S.Heading>지역</S.Heading>
-      <S.RightAlignedBox style={{ marginTop: "20px" }}>
-        <S.Select
-          name="region"
-          value={region}
+      <S.Input>
+        <input
+          id="job"
+          type="text"
+          name="job"
+          value={job}
+          placeholder="직업"
           onChange={onChange}
-          style={{ flex: 1, textAlign: "right" }}
-        >
-          <option>지역</option>
-          {regions.map((region) => (
-            <option key={region} value={region}>
-              {region}
-            </option>
-          ))}
-        </S.Select>
-      </S.RightAlignedBox>
+        />
+        <label htmlFor="job">직업</label>
+      </S.Input>
     </>
   );
 };

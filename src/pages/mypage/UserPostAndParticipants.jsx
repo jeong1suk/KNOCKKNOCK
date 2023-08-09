@@ -32,7 +32,7 @@ const UserPostAndParticipants = () => {
           <Content>
             <Link to={`/playdetail/${post.postId}`}>
               <p>{post.title}</p>
-              <img src={getImageSrc(post.PostFiles[0]?.File.url)} ></img>
+              <img src={getImageSrc(post.PostFiles[0]?.File.url)}></img>
             </Link>
           </Content>
         ))}
@@ -40,11 +40,11 @@ const UserPostAndParticipants = () => {
 
       <div>참가한 Participants</div>
       <Postbox>
-        {joins.map((join)=>(
+        {joins.map((join) => (
           <Content>
             <Link to={`/playdetail/${join.Post.postId}`}>
-                <p>{join.Post.title}</p>
-              <img src={getImageSrc(join.Post.PostFiles[0]?.File.url)} ></img>
+              <p>{join.Post.title}</p>
+              <img src={getImageSrc(join.Post.PostFiles[0]?.File.url)}></img>
               <p>{join.status}</p>
             </Link>
           </Content>
@@ -63,6 +63,7 @@ const Userbox = styled.div`
   padding: 2rem;
   overflow: auto;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 33rem;
 `;
 
 const Postbox = styled.div`
@@ -77,28 +78,42 @@ const Postbox = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.0rem;
+    font-size: 1rem;
   }
 `;
 
 const Content = styled.div`
   flex: 0 0 auto;
-  border: 4px double #FFCCCC;
+  border: 4px double #ffcccc;
   border-radius: 10px;
   margin: 20px 20px 0 0;
   width: 10rem;
   height: 70%;
-  padding: 0 0 10px 10px;
+  padding: 1rem;
   cursor: pointer;
 
   &:hover {
     transform: scale(1.01);
   }
-  
-  img {
-    width:5rem; 
-    justify-content:flex-end;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
-`
+
+  img {
+    width: 5rem;
+    align-self: center;
+    margin-top: auto;
+  }
+`;
 
 export default UserPostAndParticipants;

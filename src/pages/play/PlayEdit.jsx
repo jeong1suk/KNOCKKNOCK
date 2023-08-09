@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
+
 import * as Api from "../../api";
+
+import { currentDate, currentTime } from '../../util/currentDateTime';
 
 import { categories } from "../../constants/CategoryConstants";
 import { useImageUpload } from "../../components/hooks/UseImageUpload";
@@ -9,6 +12,9 @@ import { useImageUpload } from "../../components/hooks/UseImageUpload";
 import TextareaAutosize from "react-textarea-autosize";
 
 import { handleTotalChange } from "../../util/handleTotalChange";
+import { handleTimeChange } from '../../util/handleTimeChange';
+import { validateTotal } from '../../util/validateTotal';
+
 import { showSuccess } from "../../assets/alert";
 import styled from "styled-components";
 
@@ -57,6 +63,14 @@ function PlayEdit() {
 
   const handlePutSubmit = async (e) => {
     e.preventDefault();
+
+    const errorMessage = validateTotal(totalM, totalF);
+    if (errorMessage) {
+      alert(errorMessage);
+      setTotalM('');
+      setTotalF('');
+      return;
+    }
 
     try {
       let res;
@@ -113,110 +127,78 @@ function PlayEdit() {
   return (
     <Wrapper>
       <TopBox>
-        <p>같이 놀자! 수정</p>
-        <p>여러분이 원하는 만남을 만들어보세요</p>
+        {/* <p>같이 놀자! 수정</p> */}
+        <p>여러분이 원하는 만남을 수정해보세요 !</p>
       </TopBox>
       <PostAddBox>
         <InputBox>
           <StyledLabel>제목</StyledLabel>
-          <StyledInput
-            style={{ width: "81%" }}
-            type="text"
-            value={postTitle}
-            onChange={(e) => setPostTitle(e.target.value)}
-            required
-          />
-        </InputBox>
-        <InputBox>
-          <StyledLabel>뭐하고 놀까?</StyledLabel>
-          <StyledSelect
-            value={postType}
-            onChange={handleCategoryChange}
-            required
-          >
-            {categories.map((category, index) => (
-              <option key={index} value={category}>
-                {category}
-              </option>
-            ))}
-          </StyledSelect>
-        </InputBox>
-        <InputBox>
-          <StyledLabel>언제놀까?</StyledLabel>
-          <StyledInput
-            style={{ margin: "0 10px 0 10px" }}
-            type="date"
-            onChange={(e) => setMeetingDate(e.target.value)}
-            required
-          />
-          <StyledInput
-            type="time"
-            onChange={(e) => setMeetingHour(e.target.value)}
-            required
-          />
+          <StyledInput style={{width: "81%"}} type="text" value={postTitle} onChange={e => setPostTitle(e.target.value)} required />
         </InputBox>
         <InputBox>
           <StyledLabel>대표사진</StyledLabel>
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{display: "flex", flexDirection: "column"}}>
             <input
-              id="imageUpload"
-              type="file"
-              onChange={(e) => {
-                handleImageUpload(e);
-              }}
+                id="imageUpload"
+                type="file"
+                onChange={e => {
+                    handleImageUpload(e);
+                }}
             />
           </div>
         </InputBox>
         <InputBox>
           {(fetchedImageUrl || imageUrl) && (
-            <div style={{ width: "40%", paddingLeft: "130px" }}>
-              <img
-                src={fetchedImageUrl || imageUrl}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                id="preview"
-                alt="Preview"
-              />
+            <div style={{ width: '200px', paddingLeft: "50px" }}>
+                <img 
+                  src={fetchedImageUrl || imageUrl} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  id="preview" 
+                  alt="Preview" 
+                />
             </div>
           )}
         </InputBox>
         <InputBox>
-          <StyledLabel>누구랑 놀까?</StyledLabel>
-          <GenderSelectBox>
-            <span style={{ marginRight: "10px" }}>남자</span>
-            <StyledInput
-              style={{ width: "10%", marginRight: "10px" }}
-              type="text"
-              value={totalM}
-              onChange={handleTotalChange(setTotalM)}
-              required
-            />
-            <span style={{ marginRight: "10px" }}>여자</span>
-            <StyledInput
-              style={{ width: "10%" }}
-              type="text"
-              value={totalF}
-              onChange={handleTotalChange(setTotalF)}
-              required
-            />
-          </GenderSelectBox>
+          <StyledLabel>뭐할까?</StyledLabel>
+          <StyledSelect value={postType} onChange={handleCategoryChange} required>
+            {categories.map((category, index) => 
+              <option key={index} value={category}>{category}</option>
+            )}
+          </StyledSelect>
         </InputBox>
         <InputBox>
-          <StyledLabel>어디서 만날까?</StyledLabel>
+          <StyledLabel>언제?</StyledLabel>
           <StyledInput
-            style={{ width: "30%" }}
-            type="text"
-            value={place}
-            onChange={(e) => setPlace(e.target.value)}
+            style={{margin: "0 10px 0 25px"}}
+            type="date"
+            onChange={e => setMeetingDate(e.target.value)}
+            min={currentDate} 
+            required
+          />
+          <StyledInput
+            type="time"
+            value={meetingHour}
+            onChange={handleTimeChange(meetingDate, currentDate, currentTime, setMeetingHour)}
             required
           />
         </InputBox>
-        <InputBox style={{ alignItems: "flex-start" }}>
-          <StyledLabel>뭐하고 싶어?</StyledLabel>
-          <StyledTextareaAutosize
-            minRows={3}
-            value={postContent}
-            onChange={(e) => setPostContent(e.target.value)}
-          />
+        <InputBox>
+          <StyledLabel>누구랑?</StyledLabel>
+          <GenderSelectBox>
+            <span style={{marginRight: "10px"}}>🙆🏻‍♂️남자</span>
+            <StyledInput style={{width: "10%", marginRight: "10px"}} type="text" value={totalM} onChange={handleTotalChange(setTotalM)} required />
+            <span style={{marginRight: "10px"}}>🙆🏻‍♀️여자</span>
+            <StyledInput style={{width: "10%"}} type="text" value={totalF} onChange={handleTotalChange(setTotalF)} required />
+          </GenderSelectBox>
+        </InputBox>
+        <InputBox>
+        <StyledLabel>어디서?</StyledLabel>
+          <StyledInput style={{width: "80%"}} type="text" value={place} onChange={e => setPlace(e.target.value)} required />
+        </InputBox>
+        <InputBox style={{alignItems: "flex-start"}}>
+          <StyledLabel>상세 내용</StyledLabel>
+          <StyledTextareaAutosize minRows={3} value={postContent} onChange={e => setPostContent(e.target.value)} />
         </InputBox>
         <PostButton onClick={handlePutSubmit}>수정하기</PostButton>
       </PostAddBox>
@@ -226,80 +208,99 @@ function PlayEdit() {
 
 export default PlayEdit;
 
+
+
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
+`
 
 const TopBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background-color: #ffffff;
-  height: 200px;
-  margin: 50px 0px 0px 0px;
-  padding: 30px 0 0 50px;
+  // background-color: #FFFFdF;
+  height: 100px;
+  margin: 30px 0px -10px 0px;
+  padding: 30px 0 20px 0px;
   text-align: left;
   width: 80%;
 
+  
   p {
-    font-size: 2rem;
-    color: #1d1d1f;
-    font-weight: 600;
+    font-size: 2.0rem; 
+    font-family: 'KIMM_Bold';
+    color: #1d1d1f; 
     line-height: 1.2;
   }
-
-  p:last-child {
-    font-size: 1.5rem;
-    color: #1d1d1f;
-    font-weight: 500;
-    line-height: 1.2;
-  }
-
-  @media (min-width: 1024px) {
-    height: 250px;
-    padding: 50px 0 0 80px;
+  
+  @media (max-width: 870px) {
+    height: 80px;
+    // padding: 50px 0 0 80px;
 
     p {
-      font-size: 3rem;
-    }
-
-    p:last-child {
-      font-size: 2rem;
+      font-size: 1.2rem; 
     }
   }
-`;
+
+  @media (max-width: 510px) {
+    height: 40px;
+    // padding: 50px 0 0 80px;
+
+    p {
+      font-size: 0.8rem; 
+    }
+  }
+`
+
 
 const PostAddBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #ffffff;
-  width: 80vw;
+  background-color: #FFFFFF;
+  width: 70vw;
   height: 100%;
-  margin: 50px 0 50px 0;
-  padding: 50px 50px 50px 50px;
+  margin: 0px 0 50px 0;
+  // padding: 50px 50px 50px 50px;
   border-radius: 15px;
-  font-size: 1.2rem;
-
+  font-size: 1.2rem; 
+  
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-`;
+  @media (max-width: 750px) {
+    // height: 80px;
+    // padding: 50px 0 0 80px;
+    width: 90vw;
+    font-size: 0.9rem;
+  }
+`
+
+
 
 const InputBox = styled.div`
   position: relative;
-  margin: 10px 10px;
+  margin: 10px 0px 25px 0px;
   display: flex;
   align-items: center;
-  width: 80%;
-`;
+  width: 90%;
+
+  @media (max-width: 1200px) {
+    justify-content: space-between;
+  }
+`
 
 const StyledLabel = styled.label`
   display: flex;
   font-weight: bold;
   margin-right: 10px;
   width: 15%;
-`;
+
+  @media (max-width: 1200px) {
+    width: 50%;
+  }
+`
 
 const StyledInput = styled.input`
   background: transparent;
@@ -352,8 +353,9 @@ const StyledInput = styled.input`
   }
 `;
 
+
 const StyledSelect = styled.select`
-  background-color: #ffffff;
+  background-color: #FFFFFF;
   padding: 10px;
   margin: 0 10px 0 0;
   border-radius: 5px;
@@ -367,10 +369,10 @@ const GenderSelectBox = styled.div`
   align-items: center;
   margin: 10px 0;
   width: 50%;
-`;
+`
 
 const StyledTextareaAutosize = styled(TextareaAutosize)`
-  background-color: #ffffff;
+  background-color: #FFFFFF;
   padding: 10px;
   margin-left: 20px;
   border-radius: 5px;
@@ -379,21 +381,29 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
 `;
 
 const PostButton = styled.button`
-  font-size: 2rem;
-  padding: 10px 20px;
-  background-color: #f7cbd0;
+  font-size: 100%;
+  font-family: 'KIMM_Bold';
+  padding: 10px 10px;
+  background-color: #F7CBD0;
   color: black;
-  border: none;
+  border: 10px double #fff;
   border-radius: 50px;
   cursor: pointer;
-  margin: 50px 0 50px 0;
+  margin: 50px 0 30px 0;
   width: 20%;
-  height: 100px;
+  height: 80px;
   transition: 0.3s;
 
   &:hover {
-    background-color: #fecde4;
-    color: white;
+    border: 10px double #3B0B0B;
+    color: #3B0B0B;
     transform: scale(1.02);
   }
-`;
+
+  @media (max-width: 750px) {
+    margin: 20px 0;
+    width: 50%;
+    height: 60px;
+    font-size: 70%;
+  }
+`

@@ -2,27 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
 import * as API from "../../api";
+import { getImageSrc } from "../../util/imageCheck";
 
 const socket = io.connect("http://localhost:3000", {
   path: "/socket.io",
   transports: ["websocket"],
 });
-const ChatContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
 
 const MessageChat = styled.div`
   display: flex;
-  width: 30rem;
-  height: 72vh;
+  width: 33rem;
+  height: 80vh;
   flex-direction: column;
   background-color: #f5f5f7;
   padding: 2rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 2rem;
-  margin-right: 1rem;
   justify-content: space-between;
 `;
 
@@ -32,17 +26,19 @@ const ChatRoom = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   background-color: #f5f5f7;
-  padding: 4rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  height: 64vh;
   overflow-y: scroll;
+  height: 10rem;
   margin-top: 2rem;
+  width: 37rem;
 `;
 
 const UserListItem = styled.div`
   display: flex;
   align-items: center;
-  flex-direction: row;
+  justify-content: center;
+  flex-direction: column;
+  width: 5rem;
   gap: 0.5rem;
   cursor: pointer;
 
@@ -50,12 +46,18 @@ const UserListItem = styled.div`
     background-color: #f2f2f2;
   }
 `;
-const UserList = styled.div`
+const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  justify-content: space-between;
 `;
 
+const UserList = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-top: 2rem;
+`;
 const MessageBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -66,11 +68,21 @@ const Bubble = styled.div`
   background-color: white;
   padding: 10px;
   border-radius: 20px;
-  margin: 0 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   font-size: 0.8rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+`;
+const BubbleWithTime = styled.div`
+  display: flex;
+  flex-direction: ${(props) => (props.isUserMessage ? "row" : "row-reverse")};
+  align-items: flex-end;
 `;
 
+const MessageTime = styled.span`
+  font-size: 0.7rem;
+  color: #999;
+`;
 const MessageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -86,8 +98,8 @@ const MessageContainer = styled.div`
   .message-bubble {
     ${(props) =>
       props.isUserMessage
-        ? "margin-left: 10px; margin-right: 0;"
-        : "margin-right: 10px; margin-left: 0;"}
+        ? "margin-left: 10px; margin-right: 10px;"
+        : "margin-right: 10px; margin-left: 10px;"}
   }
 `;
 
@@ -98,7 +110,11 @@ const ProfileImage = styled.img`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const UserName = styled.div``;
+const UserName = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+`;
 
 const ChatInputContainer = styled.div`
   display: flex;
@@ -114,6 +130,7 @@ const ChatInput = styled.input`
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  outline: none;
 `;
 
 const SendButton = styled.button`
@@ -132,7 +149,22 @@ const SendButton = styled.button`
     background-color: #f2f2f2;
   }
 `;
+function formatMessageTime(createdAt, prevCreatedAt) {
+  const date = new Date(createdAt);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const month = date.toLocaleString("default", { month: "long" });
+  const day = date.getDate();
 
+  if (
+    !prevCreatedAt ||
+    date.toDateString() !== new Date(prevCreatedAt).toDateString()
+  ) {
+    return `${month} ${day}일 ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+  }
+
+  return `${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+}
 function ChatComponent() {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
@@ -142,8 +174,27 @@ function ChatComponent() {
   const [userName, setUserName] = useState("");
   const [senderId, setSenderId] = useState(null);
   const [recieverId, setRecieverId] = useState("");
-  const chatRef = useRef(null);
+  const [notifications, setNotifications] = useState([]);
+  let prevCreatedAt = null;
+
+  const messageRef = useRef(null);
+  const scrollToBottom = () => {
+    if (messageRef.current) {
+      messageRef.current.scrollTop = messageRef.current.scrollHeight;
+    }
+  };
   console.log(senderId);
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatHistory]);
+
   useEffect(() => {
     // socket.on("getOnlineUsers", (onlineUsers) => {
     //   setAllChats(onlineUsers);
@@ -154,13 +205,14 @@ function ChatComponent() {
         chatId: chatId,
         content: message.content.trim(),
         senderId: message.senderId,
+        createdAt: new Date().toISOString(),
       };
       setChatHistory((prevChatHistory) => [...prevChatHistory, newMessage]);
     });
 
-    // socket.on("getNotification", (notification) => {
-    //   // TODO: 알림 처리 로직 구현
-    // });
+    socket.on("getNotification", (notification) => {
+      addNotification(notification.senderId);
+    });
 
     return () => {
       socket.off("getOnlineUsers");
@@ -168,32 +220,64 @@ function ChatComponent() {
       socket.off("getNotification");
     };
   }, [chatId, senderId]);
+  const addNotification = (senderId) => {
+    setNotifications((prevNotifications) => [
+      ...prevNotifications,
+      {
+        senderId,
+        isRead: false,
+        date: new Date(),
+      },
+    ]);
+  };
+
   useEffect(() => {
     API.get("/chats")
       .then((response) => {
-        setAllChats(response.data.allChats);
-        console.log("allchat!!!", response.data.allChats);
-        console.log(
-          response.data.allChats[0].recieverInfo.UserFiles[0].File.url
-        );
-        setProfileImage(null);
+        const chats = response.data.allChats;
+        setAllChats(chats);
+
+        if (chats.length > 0) {
+          const lastChat = chats[chats.length - 1];
+          const lastChatMessages = lastChat.currentUserInfo.chatId
+            ? API.get(`/messages/${lastChat.currentUserInfo.chatId}`)
+            : Promise.resolve({ data: { messageList: [] } });
+
+          Promise.all([lastChatMessages])
+            .then(([messagesResponse]) => {
+              const messages = messagesResponse.data.messageList;
+              setChatHistory(messages);
+              setRecieverId(lastChat.currentUserInfo.reciever);
+              setChatId(lastChat.currentUserInfo.chatId);
+              setProfileImage(lastChat.recieverInfo.UserFiles[0].File.url);
+              setUserName(lastChat.recieverInfo.nickname);
+              setSenderId(lastChat.currentUserInfo.sender);
+              socket.emit("addNewUser", lastChat.currentUserInfo.sender);
+            })
+            .catch((error) => {
+              console.error("채팅 정보를 가져오는데 실패했습니다:", error);
+            });
+        }
       })
       .catch((error) => {
         console.error("유저 목록 가져오는데 실패,,", error);
       });
   }, []);
+
   const handleSendMessage = async () => {
     if (chatId && message.trim() !== "") {
       const newMessage = {
         chatId: chatId,
         content: message.trim(),
         senderId,
+        createdAt: new Date().toISOString(),
       };
       try {
         socket.emit("sendMessage", {
           content: message,
           recieverId: recieverId,
           senderId,
+          createdAt: newMessage.createdAt,
         });
         const response = await API.post("/messages", newMessage);
         setChatHistory([...chatHistory, newMessage]);
@@ -240,27 +324,41 @@ function ChatComponent() {
     }
   }, [chatId]);
   console.log(chatHistory);
+
   return (
     <ChatContainer>
       <MessageChat>
-        <ProfileImage src={profileImage} />
         <UserName>{userName}</UserName>
-        <MessageBox>
+        <MessageBox ref={messageRef}>
           {Array.isArray(chatHistory) && chatHistory.length > 0 ? (
-            chatHistory.map((chat) => (
-              <MessageContainer
-                key={chat.messageId}
-                isUserMessage={Number(chat.senderId) === senderId}
-              >
-                {Number(chat.senderId) !== senderId && (
-                  <ProfileImage src={profileImage} alt="프로필사진" />
-                )}
+            chatHistory.map((chat, index) => {
+              const isUserMessage = Number(chat.senderId) === senderId;
+              const showDate = formatMessageTime(chat.createdAt, prevCreatedAt);
 
-                <Bubble className="message-bubble">{chat.content}</Bubble>
-              </MessageContainer>
-            ))
+              prevCreatedAt = chat.createdAt;
+              return (
+                <MessageContainer
+                  key={chat.messageId}
+                  isUserMessage={isUserMessage}
+                >
+                  {Number(chat.senderId) !== senderId && (
+                    <ProfileImage
+                      src={profileImage || getImageSrc(profileImage)}
+                      alt="프로필사진"
+                    />
+                  )}
+
+                  <BubbleWithTime isUserMessage={isUserMessage}>
+                    {index === 0 || showDate ? (
+                      <MessageTime>{showDate}</MessageTime>
+                    ) : null}
+                    <Bubble className="message-bubble">{chat.content}</Bubble>
+                  </BubbleWithTime>
+                </MessageContainer>
+              );
+            })
           ) : (
-            <div>채팅 기록이 없습니다.</div>
+            <div></div>
           )}
         </MessageBox>
         <ChatInputContainer>
@@ -269,25 +367,32 @@ function ChatComponent() {
             placeholder="메시지를 입력하세요"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <SendButton onClick={handleSendMessage}>전송</SendButton>
         </ChatInputContainer>
       </MessageChat>
-      <ChatRoom ref={chatRef}>
+      <ChatRoom>
         <UserList>
           {allChats.length > 0 &&
-            allChats.map((chat) => {
-              const profileImageUrl = chat.recieverInfo.UserFiles[0].File.url;
-              return (
-                <UserListItem
-                  key={chat.currentUserInfo.chatId}
-                  onClick={() => handleChatClick(chat)}
-                >
-                  <ProfileImage src={profileImageUrl} alt="프로필사진" />
-                  <UserName>{chat.recieverInfo.nickname}</UserName>
-                </UserListItem>
-              );
-            })}
+            allChats
+              .slice()
+              .reverse()
+              .map((chat) => {
+                const profileImageUrl = chat.recieverInfo.UserFiles[0].File.url;
+                return (
+                  <UserListItem
+                    key={chat.currentUserInfo.chatId}
+                    onClick={() => handleChatClick(chat)}
+                  >
+                    <ProfileImage
+                      src={profileImageUrl || getImageSrc(profileImageUrl)}
+                      alt="프로필사진"
+                    />
+                    <UserName>{chat.recieverInfo.nickname}</UserName>
+                  </UserListItem>
+                );
+              })}
         </UserList>
       </ChatRoom>
     </ChatContainer>
