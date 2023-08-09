@@ -73,7 +73,16 @@ const Bubble = styled.div`
   padding-right: 1rem;
   padding-left: 1rem;
 `;
+const BubbleWithTime = styled.div`
+  display: flex;
+  flex-direction: ${(props) => (props.isUserMessage ? "row" : "row-reverse")};
+  align-items: flex-end;
+`;
 
+const MessageTime = styled.span`
+  font-size: 0.7rem;
+  color: #999;
+`;
 const MessageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -140,7 +149,22 @@ const SendButton = styled.button`
     background-color: #f2f2f2;
   }
 `;
+function formatMessageTime(createdAt, prevCreatedAt) {
+  const date = new Date(createdAt);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const month = date.toLocaleString("default", { month: "long" });
+  const day = date.getDate();
 
+  if (
+    !prevCreatedAt ||
+    date.toDateString() !== new Date(prevCreatedAt).toDateString()
+  ) {
+    return `${month} ${day}일 ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+  }
+
+  return `${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+}
 function ChatComponent() {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
@@ -151,7 +175,7 @@ function ChatComponent() {
   const [senderId, setSenderId] = useState(null);
   const [recieverId, setRecieverId] = useState("");
   const [notifications, setNotifications] = useState([]);
-
+  let prevCreatedAt = null;
   const chatRef = useRef(null);
   console.log(senderId);
   const handleKeyDown = (event) => {
@@ -243,12 +267,14 @@ function ChatComponent() {
         chatId: chatId,
         content: message.trim(),
         senderId,
+        createdAt: new Date().toISOString(),
       };
       try {
         socket.emit("sendMessage", {
           content: message,
           recieverId: recieverId,
           senderId,
+          createdAt: newMessage.createdAt,
         });
         const response = await API.post("/messages", newMessage);
         setChatHistory([...chatHistory, newMessage]);
@@ -302,21 +328,32 @@ function ChatComponent() {
         <UserName>{userName}</UserName>
         <MessageBox ref={chatRef}>
           {Array.isArray(chatHistory) && chatHistory.length > 0 ? (
-            chatHistory.map((chat) => (
-              <MessageContainer
-                key={chat.messageId}
-                isUserMessage={Number(chat.senderId) === senderId}
-              >
-                {Number(chat.senderId) !== senderId && (
-                  <ProfileImage
-                    src={profileImage || getImageSrc(profileImage)}
-                    alt="프로필사진"
-                  />
-                )}
+            chatHistory.map((chat, index) => {
+              const isUserMessage = Number(chat.senderId) === senderId;
+              const showDate = formatMessageTime(chat.createdAt, prevCreatedAt);
 
-                <Bubble className="message-bubble">{chat.content}</Bubble>
-              </MessageContainer>
-            ))
+              prevCreatedAt = chat.createdAt;
+              return (
+                <MessageContainer
+                  key={chat.messageId}
+                  isUserMessage={isUserMessage}
+                >
+                  {Number(chat.senderId) !== senderId && (
+                    <ProfileImage
+                      src={profileImage || getImageSrc(profileImage)}
+                      alt="프로필사진"
+                    />
+                  )}
+
+                  <BubbleWithTime isUserMessage={isUserMessage}>
+                    {index === 0 || showDate ? (
+                      <MessageTime>{showDate}</MessageTime>
+                    ) : null}
+                    <Bubble className="message-bubble">{chat.content}</Bubble>
+                  </BubbleWithTime>
+                </MessageContainer>
+              );
+            })
           ) : (
             <div></div>
           )}
