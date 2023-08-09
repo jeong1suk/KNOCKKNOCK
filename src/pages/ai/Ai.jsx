@@ -72,6 +72,7 @@ const Ai = () => {
           },
         }
       );
+
       // console.log(res);
       // console.log(res.data.base64_image);
       setBase64(res.data.base64_image);
