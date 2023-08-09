@@ -234,11 +234,23 @@ const ModalContentUser = styled.div`
   padding-bottom: 2rem;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  @media (max-width: 1080px) {
+    width: 50%;
+    height: 80%;
+  }
+  @media (max-width: 768px) {
+    width: 60%;
+    height: 80%;
+  }
+  @media (max-width: 460px) {
+    width: 90%;
+    height: 80%;
+  }
 `;
 
 const ModalContent = styled.div`
-  width: 70%;
-  height: 90%;
+  /* width: 70%;
+  height: 90%; */
   overflow: auto;
   background-color: #fff;
   padding: 20px;
