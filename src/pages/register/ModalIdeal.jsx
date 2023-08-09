@@ -7,21 +7,19 @@ import { isMaxArrayReached } from "../../util/arrayUtils";
 export const ModalIdeal = ({ formData, handleIdealClick }) => {
   const { ideal } = formData;
   const { opened, onOpen, onClose } = useToggle();
-  const isMaxIdealReached = isMaxArrayReached(ideal, 5);
+  const isMaxIdealReached = isMaxArrayReached(ideal, 6);
 
   return (
     <>
       <S.ToggleButtonWrapper>
-        <S.ToggleButton onClick={onOpen}>나의 이상형은?</S.ToggleButton>
+        <S.Button onClick={onOpen}>나의 이상형은?</S.Button>
       </S.ToggleButtonWrapper>
       <S.Box>
         {opened && (
           <S.Modal>
             <h3 style={{ textAlign: "center" }}>이상형</h3>
             {isMaxIdealReached && (
-              <p style={{ color: "red" }}>
-                You can only select up to 5 Ideals.
-              </p>
+              <p style={{ color: "red" }}>최대 5개까지 선택가능합니다.</p>
             )}
             <ButtonContainer>
               {idealList.map((elements, index) => (

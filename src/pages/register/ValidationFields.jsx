@@ -37,7 +37,7 @@ const ValidationFields = () => {
   // console.log("유효성");
   return (
     <>
-      <S.Input>
+      <S.InputBox>
         <input
           id="email"
           type="text"
@@ -47,12 +47,12 @@ const ValidationFields = () => {
           onChange={onChange}
         />
         <label htmlFor="email">이메일</label>
-      </S.Input>
+      </S.InputBox>
       {!isEmailValid && email.length > 0 && (
         <S.ErrorBox>올바른 이메일을 입력해주세요.</S.ErrorBox>
       )}
       <S.RightAlignedBox>
-        <S.Input
+        <S.InputBox
           style={{ width: "90%", display: "flex", alignItems: "center" }}
         >
           <input
@@ -69,13 +69,15 @@ const ValidationFields = () => {
           ) : (
             <BiShow className="pswdIcon" onClick={togglePasswordVisibility} />
           )}
-        </S.Input>
+        </S.InputBox>
       </S.RightAlignedBox>
       {!isPasswordValid && password.length > 0 && (
         <S.ErrorBox>숫자, 문자, 특수문자 포함 8글자 이상</S.ErrorBox>
       )}
 
-      <S.Input style={{ width: "90%", display: "flex", alignItems: "center" }}>
+      <S.InputBox
+        style={{ width: "90%", display: "flex", alignItems: "center" }}
+      >
         <input
           id="confirmpwd"
           type={showConfirmPassword ? "text" : "password"}
@@ -96,7 +98,7 @@ const ValidationFields = () => {
             onClick={toggleConfirmPasswordVisibility}
           />
         )}
-      </S.Input>
+      </S.InputBox>
       {!isPasswordSame && isPasswordValid && (
         <S.ErrorBox>비밀번호가 다릅니다.</S.ErrorBox>
       )}

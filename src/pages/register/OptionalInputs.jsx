@@ -4,6 +4,7 @@ import { mbtiList } from "../../constants/registerConstants";
 import { ModalHobby } from "./ModalHobby";
 import { ModalPersonality } from "./ModalPersonality";
 import { ModalIdeal } from "./ModalIdeal";
+const maxSelect = 6;
 const OptionalInputs = () => {
   const [formData, setFormData] = useState({
     height: "",
@@ -39,15 +40,15 @@ const OptionalInputs = () => {
   };
 
   const handleHobbyClick = (element) => {
-    onArrayChange(hobby, element, "hobby", 5);
+    onArrayChange(hobby, element, "hobby", maxSelect);
   };
 
   const handlePersonalityClick = (element) => {
-    onArrayChange(personality, element, "personality", 5);
+    onArrayChange(personality, element, "personality", maxSelect);
   };
 
   const handleIdealClick = (element) => {
-    onArrayChange(ideal, element, "ideal", 5);
+    onArrayChange(ideal, element, "ideal", maxSelect);
   };
 
   OptionalInputs.getFormData = () => {
@@ -56,7 +57,7 @@ const OptionalInputs = () => {
 
   return (
     <>
-      <S.Input>
+      <S.InputBox>
         <input
           id="height"
           type="text"
@@ -66,7 +67,7 @@ const OptionalInputs = () => {
           onChange={onChange}
         />
         <label htmlFor="height">키</label>
-      </S.Input>
+      </S.InputBox>
       <S.Box>
         <S.Select
           name="mbti"
@@ -89,7 +90,7 @@ const OptionalInputs = () => {
       />
       <ModalIdeal formData={formData} handleIdealClick={handleIdealClick} />
 
-      <S.Input style={{ marginTop: "20px" }}>
+      <S.InputBox style={{ marginTop: "20px" }}>
         <input
           id="introduce"
           type="text"
@@ -99,7 +100,7 @@ const OptionalInputs = () => {
           onChange={onChange}
         />
         <label htmlFor="height">자기소개</label>
-      </S.Input>
+      </S.InputBox>
     </>
   );
 };
