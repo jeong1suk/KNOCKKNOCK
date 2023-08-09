@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import { keyframes } from 'styled-components';
+import { keyframes } from "styled-components";
 import UserProfile from "./UserProfile";
 import * as Api from "../../api";
 
@@ -9,7 +9,7 @@ import { UserStateContext } from "../../context/user/UserProvider";
 const limit = 3;
 const randomId = Math.floor(Math.random() * 10) + 21;
 
-const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
+const TodayGame = ({ onExit, selectedCard, onCardSelect }) => {
   const [showModal, setShowModal] = useState(false);
   const [leftButtonClickCount, setLeftButtonClickCount] = useState(0);
   const [rightButtonClickCount, setRightButtonClickCount] = useState(0);
@@ -26,31 +26,29 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
       if (err.response.data.message) {
         // alert(err.response.data.message);
       } else {
-        alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
-
+  };
 
   const cardsPostRequset = async (cardId) => {
     try {
       await Api.post(`/cards?cardId=${cardId}`);
       cardsGetRequest();
-
     } catch (err) {
       if (err.response.data.message) {
         // alert(err.response.data.message);
       } else {
-        alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
+  };
 
   const handleCardClick = (cardId) => {
     // Start the animations
-    const cards = document.querySelectorAll('.image-container');
-    cards.forEach(card => card.classList.add('animate'));
-  
+    const cards = document.querySelectorAll(".image-container");
+    cards.forEach((card) => card.classList.add("animate"));
+
     setTimeout(() => {
       cardsPostRequset(cardId);
     }, 1000); // Wait for the animations to finish
@@ -72,59 +70,61 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
     setRightButtonClickCount(0);
   };
 
-
-
   useEffect(() => {
     cardsGetRequest();
-  }, [])
+  }, []);
   return (
     <>
-
-              {selectedCard ?
-                <CardDiv>
-                <CardImageContainer>
-                    <CardImage src={selectedCard.CardFile?.File?.url} />
-                    <CardContent>
-                      <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[0]}</p>
-                      <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[1]}</p>
-                    </CardContent>
-                </CardImageContainer>
-              </CardDiv>
-              :
-              <Container>
-                <ImageContainer className="image-container">
-                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
-                </ImageContainer>
-                <ImageContainer className="image-container">
-                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
-                </ImageContainer>
-                <ImageContainer className="image-container">
-                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
-                </ImageContainer>
-                <ImageContainer className="image-container">
-                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
-                </ImageContainer>
-                <ImageContainer className="image-container">
-                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
-                </ImageContainer>
-                <ImageContainer className="image-container">
-                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
-                </ImageContainer>
-                <ImageContainer className="image-container">
-                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
-                </ImageContainer>
-                <ImageContainer className="image-container">
-                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
-                </ImageContainer>
-                <ImageContainer className="image-container">
-                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
-                </ImageContainer>
-                <ImageContainer className="image-container">
-                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
-                </ImageContainer>
-              </Container>
-              }
-              
+      {selectedCard ? (
+        <CardDiv>
+          <CardImageContainer>
+            <CardImage src={selectedCard.CardFile?.File?.url} />
+            <CardContent>
+              <p>
+                <Nickname>{userState.user.nickname}</Nickname>
+                {selectedCard.content[0]}
+              </p>
+              <p>
+                <Nickname>{userState.user.nickname}</Nickname>
+                {selectedCard.content[1]}
+              </p>
+            </CardContent>
+          </CardImageContainer>
+        </CardDiv>
+      ) : (
+        <Container>
+          <ImageContainer className="image-container">
+            <Image src={"011.png"} onClick={() => handleCardClick(randomId)} />
+          </ImageContainer>
+          <ImageContainer className="image-container">
+            <Image src={"012.png"} onClick={() => handleCardClick(randomId)} />
+          </ImageContainer>
+          <ImageContainer className="image-container">
+            <Image src={"011.png"} onClick={() => handleCardClick(randomId)} />
+          </ImageContainer>
+          <ImageContainer className="image-container">
+            <Image src={"012.png"} onClick={() => handleCardClick(randomId)} />
+          </ImageContainer>
+          <ImageContainer className="image-container">
+            <Image src={"011.png"} onClick={() => handleCardClick(randomId)} />
+          </ImageContainer>
+          <ImageContainer className="image-container">
+            <Image src={"012.png"} onClick={() => handleCardClick(randomId)} />
+          </ImageContainer>
+          <ImageContainer className="image-container">
+            <Image src={"011.png"} onClick={() => handleCardClick(randomId)} />
+          </ImageContainer>
+          <ImageContainer className="image-container">
+            <Image src={"012.png"} onClick={() => handleCardClick(randomId)} />
+          </ImageContainer>
+          <ImageContainer className="image-container">
+            <Image src={"011.png"} onClick={() => handleCardClick(randomId)} />
+          </ImageContainer>
+          <ImageContainer className="image-container">
+            <Image src={"012.png"} onClick={() => handleCardClick(randomId)} />
+          </ImageContainer>
+        </Container>
+      )}
 
       {/* {leftButtonClickCount + rightButtonClickCount >= 5 && (
         <ExitBox>
@@ -159,7 +159,7 @@ const fadeIn = keyframes`
 const CardDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-center: center;
+  justify-content: center;
   align-items: center;
   height: 90%;
   // border: 3px solid yellow;
@@ -167,7 +167,7 @@ const CardDiv = styled.div`
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-`
+`;
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -254,7 +254,6 @@ const ImageContainer = styled.div`
   }
 `;
 
-
 const Image = styled.img`
   width: 50%; /* 너비를 절반으로 줄임 */
   height: 50%; /* 높이를 절반으로 줄임 */
@@ -273,7 +272,7 @@ const CardImage = styled.img`
   border-radius: 10px;
   width: 25%;
   // height: 30%;
-`
+`;
 
 const CardImageContainer = styled.div`
   display: flex;
@@ -285,18 +284,18 @@ const CardImageContainer = styled.div`
   height: 90%;
   width: 70%;
   margin-top: 50px;
-`
+`;
 const CardContent = styled.div`
   margin: 20px 20px;
   padding: 5px;
   color: #fff;
   width: 45%;
-`
+`;
 const Nickname = styled.span`
   font-weight: bold;
-  color: #FFC4C4;
-`
-const BackgroundImage=styled.div`
+  color: #ffc4c4;
+`;
+const BackgroundImage = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -306,4 +305,4 @@ const BackgroundImage=styled.div`
   // background-size: contain;
   // background-position: center;
   // background-repeat: no-repeat;
-`
+`;
