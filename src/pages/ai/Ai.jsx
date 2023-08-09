@@ -5,7 +5,7 @@ import {
   MOBILE_BREAK_POINT,
   TABLET_BREAK_POINT,
 } from "../../components/layout/breakpoint";
-import spring from "../../assets/spring.jpeg";
+import spring from "../../assets/spring3.webp";
 const Ai = () => {
   const [result, setResult] = useState("");
   const [base64, setBase64] = useState("");
@@ -139,7 +139,7 @@ const Ai = () => {
               </UploadedImageContainer>
             )}
             {result === "spring" && (
-              <UploadedImage src={spring} alt="봄 웜톤" />
+              <img src={spring} alt="봄 웜톤" style={{ height: "80%" }} />
             )}
             {result === "summer" && (
               <UploadedImage src="src/assets/summer.jpeg" alt="여름 쿨톤" />
