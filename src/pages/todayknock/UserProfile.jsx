@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getImageSrc } from "../../util/imageCheck";
-import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint.js"
-
+import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint.js";
 
 const UserProfile = ({ user, onClick, isLoverUser }) => {
   const {
@@ -29,19 +28,21 @@ const UserProfile = ({ user, onClick, isLoverUser }) => {
 
   return (
     <>
-
-      {isLoverUser == "Lover" ? 
-      <LoverProfileContainer>
-        <LoverProfilePicture
-        src={getImageSrc(user.UserFiles?.[0]?.File?.url)}
-        alt="프로필 사진"
-        onClick={onClick}
-        />
-        <HoverText>프로필 정보 보기</HoverText>
-        <LoverProfileNickname>{user.nickname.length > MAX_NICKNAME_LENGTH ? `${user.nickname.substring(0, MAX_NICKNAME_LENGTH)}...` : user.nickname}</LoverProfileNickname>      
-      </LoverProfileContainer>
-        
-      :
+      {isLoverUser == "Lover" ? (
+        <LoverProfileContainer>
+          <LoverProfilePicture
+            src={getImageSrc(user.UserFiles?.[0]?.File?.url)}
+            alt="프로필 사진"
+            onClick={onClick}
+          />
+          <HoverText>프로필 정보 보기</HoverText>
+          <LoverProfileNickname>
+            {user.nickname.length > MAX_NICKNAME_LENGTH
+              ? `${user.nickname.substring(0, MAX_NICKNAME_LENGTH)}...`
+              : user.nickname}
+          </LoverProfileNickname>
+        </LoverProfileContainer>
+      ) : (
         <UserProfileContainer
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -53,19 +54,18 @@ const UserProfile = ({ user, onClick, isLoverUser }) => {
           />
 
           <UserInfo id={`userInfo-${user.userId}`}>
-
             <UserInfoText>{nickname}</UserInfoText>
             <UserInfoText>{age}</UserInfoText>
-            <UserInfoText>{introduce || "안녕하세요. 반갑습니다."}</UserInfoText>
-
+            <UserInfoText>
+              {introduce || "안녕하세요. 반갑습니다."}
+            </UserInfoText>
 
             {/* <UserInfoText>{nickname}</UserInfoText>
             <UserInfoText>{age}세</UserInfoText>
             <UserInfoText>{introduce || "안녕하세요. 반갑습니다."}</UserInfoText> */}
           </UserInfo>
         </UserProfileContainer>
-        }
-      
+      )}
     </>
   );
 };
@@ -83,7 +83,6 @@ const UserProfileContainer = styled.div`
   transition: background-color 0.3s;
   cursor: pointer;
   border-radius: 10%;
-
 `;
 
 const ProfilePicture = styled.img`
@@ -102,7 +101,7 @@ const Name = styled.h3`
 
 const UserInfo = styled.div`
   display: flex;
-  flex-direciton: column;
+  flex-direction: column;
   align-items: flex-start;
   position: absolute;
   top: 60%;
@@ -125,7 +124,7 @@ const UserInfoText = styled.p`
 
 const UserNicknameAgeTextDiv = styled.div`
   display: flex;
-`
+`;
 
 const LoverProfileContainer = styled.div`
   flex-direction: column;
@@ -135,26 +134,26 @@ const LoverProfileContainer = styled.div`
   width: 80%;
   position: relative;
   border-radius: 100%;
-`
+`;
 
 const LoverProfilePicture = styled.img`
   width: 120%;
   height: 70%;
-  border: 4px dashed #F7CBD0;
+  border: 4px dashed #f7cbd0;
   border-radius: 100%;
   cursor: pointer;
   transition: all 0.3s ease; // Transition effect
 
   &:hover {
-    border: 4px solid #FECDE4;
+    border: 4px solid #fecde4;
     transform: scale(1.02);
     opacity: 0.5; // Image will darken on hover
   }
 
   @media (max-width: ${TABLET_BREAK_POINT}) {
-    border: 3px dashed #F7CBD0;
+    border: 3px dashed #f7cbd0;
   }
-`
+`;
 
 const LoverProfileNickname = styled.p`
   font-size: 0.9rem;
@@ -162,7 +161,7 @@ const LoverProfileNickname = styled.p`
   @media (max-width: ${TABLET_BREAK_POINT}) {
     font-size: 0.7rem;
   }
-`
+`;
 
 const HoverText = styled.p`
   position: absolute;
@@ -181,4 +180,4 @@ const HoverText = styled.p`
   @media (max-width: ${TABLET_BREAK_POINT}) {
     font-size: 0.4rem;
   }
-`
+`;
