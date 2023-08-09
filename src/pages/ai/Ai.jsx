@@ -5,13 +5,13 @@ import {
   MOBILE_BREAK_POINT,
   TABLET_BREAK_POINT,
 } from "../../components/layout/breakpoint";
-
+import spring from "../../assets/spring.jpeg";
 const Ai = () => {
   const [result, setResult] = useState("");
   const [base64, setBase64] = useState("");
   const [clickpc, setClickPC] = useState(false);
   const [clickbg, setClickBG] = useState(false);
-  const [selectedFile, setSelectedFile] = useState("phto.png");
+  const [selectedFile, setSelectedFile] = useState("/phto.png");
   const [previewURL, setPreviewURL] = useState("/phto.png");
 
   const handleFileChange = (e) => {
@@ -26,6 +26,7 @@ const Ai = () => {
     };
     reader.readAsDataURL(file);
     setClickBG(false);
+    setClickPC(false);
   };
 
   const handlePersonalColor = async () => {
@@ -122,7 +123,7 @@ const Ai = () => {
                   </>
                 )}
                 {clickbg && !base64 && selectedFile !== "phto.png" && (
-                  <UploadedImage src="src/assets/loading.png" />
+                  <UploadedImage src="src/assets/wait.jpeg" />
                 )}
               </RightSection>
             )}
@@ -133,10 +134,22 @@ const Ai = () => {
                 <UploadedImage src={previewURL} alt="Uploaded" />
               </UploadedImageContainer>
             )}
-            <div>{result ? <p>분석 결과: {result}</p> : null}</div>
+            {result === "spring" && (
+              <UploadedImage src={spring} alt="봄 웜톤" />
+            )}
+            {result === "summer" && (
+              <UploadedImage src="src/assets/summer.jpeg" alt="여름 쿨톤" />
+            )}
+            {result === "fall" && (
+              <UploadedImage src="src/assets/fall.jpeg" alt="가을 웜톤" />
+            )}
+            {result === "winter" && (
+              <UploadedImage src="src/assets/winter.jpeg" alt="겨울 쿨톤" />
+            )}
+
             <div>
-              {clickpc && !result && selectedFile !== "phto.png" && (
-                <UploadedImage src="src/assets/loading.png" />
+              {clickpc && !result && selectedFile !== "/phto.png" && (
+                <UploadedImage src="src/assets/wait.jpeg" />
               )}
             </div>
           </ResultSection>
