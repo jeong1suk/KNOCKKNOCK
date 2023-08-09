@@ -1,51 +1,113 @@
 import React from "react";
 import styled from "styled-components";
+import { getImageSrc } from "../../util/imageCheck";
+
+
+
+const UserProfile = ({ user, onClick, isLoverUser }) => {
+  const {
+    nickname,
+    gender,
+    birthday,
+    age,
+    job,
+    region,
+    mbti,
+    height,
+    introduce,
+  } = user;
+
+  const handleMouseEnter = () => {
+    document.getElementById(`userInfo-${user.userId}`).style.opacity = 1;
+  };
+
+  const handleMouseLeave = () => {
+    document.getElementById(`userInfo-${user.userId}`).style.opacity = 0;
+  };
+
+  return (
+    <>
+
+      {isLoverUser == "Lover" ? 
+      <LoverProfileContainer>
+        <LoverProfilePicture
+        src={getImageSrc(user.UserFiles?.[0]?.File?.url)}
+        alt="프로필 사진"
+        onClick={onClick}
+        />
+        <HoverText>프로필 정보 보기</HoverText>
+        <LoverProfileNickname>{user.nickname}</LoverProfileNickname>      
+      </LoverProfileContainer>
+        
+      :
+        <UserProfileContainer
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onClick={onClick}
+        >
+          <ProfilePicture
+            src={getImageSrc(user.UserFiles[0]?.File?.url)}
+            alt="프로필 사진"
+          />
+
+          <UserInfo id={`userInfo-${user.userId}`}>
+
+            <UserInfoText>{nickname}</UserInfoText>
+            <UserInfoText>{age}</UserInfoText>
+            <UserInfoText>{introduce || "안녕하세요. 반갑습니다."}</UserInfoText>
+
+
+            {/* <UserInfoText>{nickname}</UserInfoText>
+            <UserInfoText>{age}세</UserInfoText>
+            <UserInfoText>{introduce || "안녕하세요. 반갑습니다."}</UserInfoText> */}
+          </UserInfo>
+        </UserProfileContainer>
+        }
+      
+    </>
+  );
+};
+
+export default UserProfile;
 
 const UserProfileContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 21rem;
-  height: 21rem;
-  background-color: #fff;
+  justify-content: flex-start;
+  align-items: flex-end;
+  width: 100%;
+  height: 70%;
   overflow: hidden;
   position: relative;
   transition: background-color 0.3s;
   cursor: pointer;
-  border: 7px solid #f0f0f0;
-  border-radius: 5px;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-`;
+  border-radius: 10%;
 
-const BackgroundImage = styled.div`
-  width: 100%;
-  height: 100%;
-  background-image: url("https://previews.123rf.com/images/sudakasi/sudakasi1405/sudakasi140500174/28673467-%EC%95%84%EB%A6%84%EB%8B%A4%EC%9A%B4-%EC%9E%90%EC%97%B0-%EB%B0%B0%EA%B2%BD.jpg");
-  background-size: cover;
-  background-position: center;
 `;
 
 const ProfilePicture = styled.img`
-  width: 8.5rem;
-  height: 8.5rem;
-  border: 3px solid #e9e9e9;
-  border-radius: 100%;
-  margin-top: -13rem;
+  width: 100%;
+  height: 100%;
+
   position: relative;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10%;
 `;
 
 const Name = styled.h3`
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  color: #666666;
 `;
 
 const UserInfo = styled.div`
+  display: flex;
+  flex-direciton: column;
+  align-items: flex-start;
   position: absolute;
-  top: 0;
+  top: 60%;
   left: 0;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, black);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -59,50 +121,50 @@ const UserInfoText = styled.p`
   margin: 5px;
 `;
 
-const UserProfile = ({ user }) => {
-  const {
-    username,
-    profile_image,
-    mbti,
-    height,
-    region,
-    age,
-    gender,
-    introduce,
-  } = user;
+const UserNicknameAgeTextDiv = styled.div`
+  display: flex;
+`
 
-  const handleMouseEnter = () => {
-    document.getElementById(`userInfo-${user.user_id}`).style.opacity = 1;
-  };
+const LoverProfileContainer = styled.div`
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  position: relative;
+  border-radius: 100%;
+`
 
-  const handleMouseLeave = () => {
-    document.getElementById(`userInfo-${user.user_id}`).style.opacity = 0;
-  };
+const LoverProfilePicture = styled.img`
+  width: 120%;
+  height: 60%;
+  border: 4px solid #F7CBD0;
+  border-radius: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease; // Transition effect
 
-  return (
-    <>
-      <UserProfileContainer
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <BackgroundImage />
-        <ProfilePicture
-          src="https://www.futurekorea.co.kr/news/photo/201907/119520_120439_3313.jpg"
-          alt="프로필 사진"
-        />
+  &:hover {
+    border: 4px solid #FECDE4;
+    transform: scale(1.02);
+    opacity: 0.5; // Image will darken on hover
+  }
+`
 
-        <UserInfo id={`userInfo-${user.user_id}`}>
-          <UserInfoText>{mbti}</UserInfoText>
-          <UserInfoText>{height || "비공개"}</UserInfoText>
-          <UserInfoText>{region || "비공개"}</UserInfoText>
-          <UserInfoText>{age}세</UserInfoText>
-          <UserInfoText>{gender}</UserInfoText>
-          <UserInfoText>{introduce || "안녕하세요. 반갑습니다."}</UserInfoText>
-        </UserInfo>
-      </UserProfileContainer>
-      <Name>{username}</Name>
-    </>
-  );
-};
+const LoverProfileNickname = styled.p`
+  font-size: 0.8rem;
+  
+`
 
-export default UserProfile;
+const HoverText = styled.p`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  color: dark; // Change this as needed
+  transition: all 0.3s ease;
+
+  ${LoverProfileContainer}:hover & {
+    opacity: 1;
+  }
+`

@@ -2,12 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as Api from "../../api";
 
-import { hobbyList } from "../../constants/HobbyListConstant";
-import { mbtiList } from "../../constants/MbtiListConstants";
-import { personalityList } from "../../constants/PersonalityListConstants";
-import { idealList } from "../../constants/idealListConstants";
+import {
+  mbtiList,
+  idealList,
+  hobbyList,
+  personalityList,
+} from "../../constants/registerConstants";
 
 import { useImageUpload } from "../../components/hooks/UseImageUpload";
+
 
 import {
   validateEmail,
@@ -22,11 +25,18 @@ import Toggle from "../../components/modal/Toggle";
 import styled, { css } from "styled-components";
 import { DispatchContext } from "../../App";
 
+
 function RegisterForm() {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
   const today = new Date().toISOString().split("T")[0];
-
+  // const [form, setForm] = React.useState({
+  //   name: "",
+  //   nickname: "",
+  //   email: "",
+  //   password: "",
+  //   confirmPassword: "",
+  // })
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
@@ -331,25 +341,19 @@ function RegisterForm() {
               <p>2개 이상 선택하세요</p>
               <ModalListDiv>
                 {hobbyList.map((element, index) => (
-                  <button
+                  <StyledElementButton
                     key={index}
-                    style={{
-                      backgroundColor: hobby.includes(element)
-                        ? "#61dafbaa"
-                        : "white",
-                      padding: "10px",
-                      margin: "5px",
-                      borderRadius: "5px",
-                      border: "1px solid black",
-                      cursor: "pointer",
-                    }}
+                    selected={hobby.includes(element)}
                     onClick={() => handleHobbyClick(element)}
                   >
                     {element}
-                  </button>
+                  </StyledElementButton>
                 ))}
               </ModalListDiv>
-              <button onClick={handleConfirmHobby}>확인</button>
+              <div style={{display: "flex", justifyContent: "center", marginRight: "5px"}}>
+                <ConfirmButton onClick={handleConfirmHobby}>확인</ConfirmButton>
+                <ConfirmButton onClick={() => setIsHobbyModalOpen(false)}>닫기</ConfirmButton>
+              </div>
             </Modal>
           )}
 
@@ -358,7 +362,7 @@ function RegisterForm() {
               <h2>MBTI는?</h2>
               <ModalMbtiListDiv>
                 {mbtiList.map((element, index) => (
-                  <button
+                  <StyledElementButton
                     key={index}
                     style={{
                       backgroundColor: mbti.includes(element)
@@ -372,10 +376,13 @@ function RegisterForm() {
                     onClick={() => handleMbtiClick(element)}
                   >
                     {element}
-                  </button>
+                  </StyledElementButton>
                 ))}
               </ModalMbtiListDiv>
-              <button onClick={handleConfirmMbti}>확인</button>
+              <div style={{display: "flex", justifyContent: "center", marginRight: "5px"}}>
+                <ConfirmButton onClick={handleConfirmMbti}>확인</ConfirmButton>
+                <ConfirmButton onClick={() => setIsMbtiModalOpen(false)}>닫기</ConfirmButton>
+              </div>
             </Modal>
           )}
 
@@ -385,7 +392,7 @@ function RegisterForm() {
               <p>2개 이상 선택하세요</p>
               <ModalListDiv>
                 {personalityList.map((element, index) => (
-                  <button
+                  <StyledElementButton
                     key={index}
                     style={{
                       backgroundColor: personality.includes(element)
@@ -400,10 +407,14 @@ function RegisterForm() {
                     onClick={() => handlePersonalityClick(element)}
                   >
                     {element}
-                  </button>
+                  </StyledElementButton>
                 ))}
               </ModalListDiv>
-              <button onClick={handleConfirmPersonality}>확인</button>
+              <div style={{display: "flex", justifyContent: "center", marginRight: "5px"}}>
+                <ConfirmButton onClick={handleConfirmPersonality}>확인</ConfirmButton>
+                <ConfirmButton onClick={() => setIsPersonalityModalOpen(false)}>닫기</ConfirmButton>
+              </div>
+              
             </Modal>
           )}
 
@@ -413,7 +424,7 @@ function RegisterForm() {
               <p>2개 이상 선택하세요</p>
               <ModalListDiv>
                 {idealList.map((element, index) => (
-                  <button
+                  <StyledElementButton
                     key={index}
                     style={{
                       backgroundColor: ideal.includes(element)
@@ -428,10 +439,13 @@ function RegisterForm() {
                     onClick={() => handleIdealClick(element)}
                   >
                     {element}
-                  </button>
+                  </StyledElementButton>
                 ))}
               </ModalListDiv>
-              <button onClick={handleComfirmIdeal}>확인</button>
+              <div style={{display: "flex", justifyContent: "center", marginRight: "5px"}}>
+                <ConfirmButton onClick={handleComfirmIdeal}>확인</ConfirmButton>
+                <ConfirmButton onClick={() => setIsIdealModalOpen(false)}>닫기</ConfirmButton>
+              </div>
             </Modal>
           )}
 
@@ -572,5 +586,34 @@ const ModalMbtiListDiv = styled.div`
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
+  }
+`;
+
+const StyledElementButton = styled.button`
+  background-color: ${({ selected }) => (selected ? "#61dafbaa" : "white")};
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid black;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  
+  &:hover {
+    background-color: ${({ selected }) => (selected ? "#61dafbaa" : "#f0f0f0")};
+  }
+`;
+
+const ConfirmButton = styled.button`
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #61dafb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  
+  &:hover {
+    background-color: #4ecdc4;
   }
 `;

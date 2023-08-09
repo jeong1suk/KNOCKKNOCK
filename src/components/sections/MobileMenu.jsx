@@ -2,84 +2,68 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { ROUTE } from "../../routes/routes";
-const MobileMenu = ({ isLogin, user, logout }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
-
+import { getImageSrc } from "../../util/imageCheck";
+const MobileMenu = ({ isLogin, user, logout, opened, onOpen, onClose }) => {
   return (
     <>
-      <HamburgerButton onClick={toggleMenu}>
-        <HamburgerIcon className={isOpen ? "open" : "false"} />
+      <HamburgerButton onClick={onOpen}>
+        {isLogin ? (
+          <ProfilePicture
+            src={getImageSrc(user.profileImage)}
+            className={opened ? "open" : "false"}
+          />
+        ) : (
+          <HamburgerIcon className={opened ? "open" : "false"} />
+        )}
       </HamburgerButton>
-      {isLogin ? (
-        isOpen ? (
-          <DropdownMenu>
-            <MenuItem to={ROUTE.Mypage.link} onClick={closeMenu}>
-              마이페이지
-            </MenuItem>
-            <MenuItem to={ROUTE.MAIN.link} onClick={closeMenu}>
-              메인페이지
-            </MenuItem>
-            <MenuItem to={ROUTE.AI.link} onClick={closeMenu}>
-              인공지능
-            </MenuItem>
-            <MenuItem to={ROUTE.TodayKnock.link} onClick={closeMenu}>
-              오늘의 낙낙
-            </MenuItem>
-            <MenuItem to={ROUTE.Play.link} onClick={closeMenu}>
-              같이 놀자
-            </MenuItem>
-            <MenuItem to={ROUTE.MAIN.link} onClick={logout}>
-              로그아웃
-            </MenuItem>
-          </DropdownMenu>
-        ) : null
-      ) : isOpen ? (
+
+      {opened ? (
         <DropdownMenu>
-          <MenuItem to={ROUTE.Mypage.link} onClick={closeMenu}>
-            마이페이지
-          </MenuItem>
-          <MenuItem to={ROUTE.MAIN.link} onClick={closeMenu}>
-            메인페이지
-          </MenuItem>
-          <MenuItem to={ROUTE.AI.link} onClick={closeMenu}>
-            인공지능
-          </MenuItem>
-          <MenuItem to={ROUTE.TodayKnock.link} onClick={closeMenu}>
-            오늘의 낙낙
-          </MenuItem>
-          <MenuItem to={ROUTE.Play.link} onClick={closeMenu}>
-            같이 놀자
-          </MenuItem>
-          <MenuItem to={ROUTE.LOGIN.link} onClick={closeMenu}>
-            로그인
-          </MenuItem>
-          <MenuItem to={ROUTE.REGISTER.link} onClick={closeMenu}>
-            회원가입
-          </MenuItem>
+          <MenuItem to={ROUTE.AI.link} onClick={onClose}>
+            뷰티톡톡
+          </MenuItem>{" "}
+          {isLogin ? (
+            <>
+              <MenuItem to={ROUTE.TodayKnock.link} onClick={onClose}>
+                오늘의 낙낙
+              </MenuItem>
+              <MenuItem to={ROUTE.Play.link} onClick={onClose}>
+                히히낙낙
+              </MenuItem>
+              <MenuItem to={ROUTE.Mypage.link} onClick={onClose}>
+                마이페이지
+              </MenuItem>
+              <MenuItem to={ROUTE.MAIN.link} onClick={logout}>
+                로그아웃
+              </MenuItem>
+            </>
+          ) : (
+            <>
+              <MenuItem to={ROUTE.LOGIN.link} onClick={onClose}>
+                로그인
+              </MenuItem>
+              <MenuItem to={ROUTE.REGISTER.link} onClick={onClose}>
+                회원가입
+              </MenuItem>
+            </>
+          )}
         </DropdownMenu>
       ) : null}
     </>
   );
 };
-const HamburgerButton = styled.button`
-  flex: 0 0 auto;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  padding: 0.5rem;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: 3rem;
+const ProfilePicture = styled.img`
+  width: 2.5rem;
+  height: 2.5rem;
+  border-color: #f2f2f2e2;
+  border-width: 4px;
+  border-style: solid;
+  border-radius: 100%;
+  margin-top: 0.2rem;
+  /* margin-right: 50rem; */
+  margin-left: 9rem;
+  z-index: 1;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 const HamburgerIcon = styled.div`
   width: 24px;
@@ -87,7 +71,10 @@ const HamburgerIcon = styled.div`
   background-color: #111;
   position: relative;
   transition: transform 0.3s ease;
-
+  /* margin-top: 0.2rem; */
+  margin-left: 0.5rem;
+  z-index: 1;
+  right: 1;
   &::before,
   &::after {
     content: "";
@@ -121,10 +108,24 @@ const HamburgerIcon = styled.div`
     }
   }
 `;
+const HamburgerButton = styled.button`
+  flex: 0 0 auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  padding: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+`;
+
 const DropdownMenu = styled.div`
   position: absolute;
   top: 3.5rem;
-  /* right: 0; */
+  /* right: 0.5; */
+  margin-left: 2rem;
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   border-radius: 4px;

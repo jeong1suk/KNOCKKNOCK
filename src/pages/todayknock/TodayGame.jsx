@@ -1,41 +1,196 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
+import { keyframes } from 'styled-components';
 import UserProfile from "./UserProfile";
+import * as Api from "../../api";
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+import { UserStateContext } from "../../context/user/UserProvider";
+
+import Typewriter from 'typewriter-effect';
+
+const limit = 3;
+const randomId = Math.floor(Math.random() * 10) + 21;
+
+const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
+
+
+  const userState = useContext(UserStateContext);
+
+  const [showIntro, setShowIntro] = useState(true);
+
+
+  const cardsGetRequest = async () => {
+    try {
+      const res = await Api.get(`/cards?limit=${limit}`);
+      onCardSelect(res.data.card);
+    } catch (err) {
+      if (err.response.data.message) {
+        // alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
+
+
+  const cardsPostRequset = async (cardId) => {
+    try {
+      await Api.post(`/cards?cardId=${cardId}`);
+      cardsGetRequest();
+
+    } catch (err) {
+      if (err.response.data.message) {
+        // alert(err.response.data.message);
+      } else {
+        alert('라우팅 경로가 잘못되었습니다.');
+      }
+    }
+  }
+
+  const handleCardClick = (cardId) => {
+    // Start the animations
+    const cards = document.querySelectorAll('.image-container');
+    cards.forEach(card => card.classList.add('animate'));
+  
+    setTimeout(() => {
+      cardsPostRequset(cardId);
+    }, 1000); // Wait for the animations to finish
+  };
+
+  const Intro = () => (
+    <IntroContainer>
+      <IntroImage src={"./gameExplain.png"} />
+      <Typewriter
+        options={{
+          strings: ['연애운을 미리 알아보아요!'],
+          autoStart: true,
+          loop: false,
+          delay: 50 // this means 50ms delay between each character, adjust according to your needs
+        }}
+      />
+    </IntroContainer>
+  );
+  
+  useEffect(() => {
+    if (showIntro) {
+      setTimeout(() => {
+        setShowIntro(false);
+      }, 5000); // 5초 후에 사라짐
+    }
+  }, [showIntro]);
+
+  console.log(showIntro);
+
+  useEffect(() => {
+    cardsGetRequest();
+  }, [])
+  return (
+    <>
+
+{showIntro ? <Intro /> : (
+      selectedCard ?
+              <>
+                <CardDiv>
+                  <CardImageContainer>
+                    <CardImage src={selectedCard.CardFile?.File?.url} />
+                    <CardContent>
+                      <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[0]}</p>
+                      <p><Nickname>{userState.user.nickname}</Nickname>{selectedCard.content[1]}</p>
+                    </CardContent>
+                  </CardImageContainer>
+                </CardDiv>
+                <ExitBox>
+                <ExitButton onClick={onExit}>Exit</ExitButton>
+                </ExitBox>
+                </>
+              :
+              <>
+              <Container>
+                <ImageContainer className="image-container">
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"011.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+                <ImageContainer className="image-container">
+                  <Image src={"012.png"} onClick={() => handleCardClick(randomId)}/>
+                </ImageContainer>
+              </Container>
+              <ExitBox>
+                <ExitButton onClick={onExit}>Exit</ExitButton>
+              </ExitBox>
+              </>
+              )}
+              
+
+
+      
+    </>
+  );
+};
+
+export default TodayGame;
+const moveToCenter = keyframes`
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(50% - 50px)); } /* 50px should be half of card width */
+`;
+
+// Fade out
+const fadeOut = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
+`;
+
+// Fade in
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const CardDiv = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-center: center;
   align-items: center;
-  z-index: 9999;
-`;
-
-const ModalContent = styled.div`
-  width: 25%;
-  height: 25%;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-`;
+  height: 90%;
+  // border: 3px solid yellow;
+  background-image: url(/cardblack.jpg);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+`
 
 const ExitBox = styled.div`
   display: flex;
   justify-content: center;
+
+  animation: ${fadeIn} 2s;
 `;
 
 const ExitButton = styled.button`
-  margin-top: 1rem;
+  margin-top: 2rem;
   height: 2rem;
   background-color: #9ea7d6;
   color: #fff;
@@ -52,69 +207,94 @@ const ExitButton = styled.button`
   }
 `;
 
-const RankUser = styled.div`
+const Container = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  animation: ${fadeIn} 2s;
 `;
 
-const TodayGame = ({ onExit }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [leftButtonClickCount, setLeftButtonClickCount] = useState(0);
-  const [rightButtonClickCount, setRightButtonClickCount] = useState(0);
+const ImageContainer = styled.div`
+  flex: 0 0 20%; /* 초기 크기를 20%로 설정 (5장씩 나열) */
+  min-width: 75px; /* 카드의 최소 크기 설정을 75px로 변경 */
+  height: 70%; /* 높이를 절반으로 줄임 */
+  background-color: #FFFFFF;
+  text-align: center;
+  line-height: 50px; /* line-height를 절반으로 줄임 */
+  transition: width 1s, height 1s;
 
-  const handleButtonClick = (side) => {
-    if (leftButtonClickCount + rightButtonClickCount < 5) {
-      if (side === "left") {
-        setLeftButtonClickCount(leftButtonClickCount + 1);
-      } else if (side === "right") {
-        setRightButtonClickCount(rightButtonClickCount + 1);
-      }
-    }
-  };
+  /* 화면 크기에 따라 카드 수 변경 */
+  @media (max-width: 1200px) {
+    flex: 0 0 25%; /* 초기 크기를 30%로 설정 (4장씩 나열) */
+  }
 
-  const handleExitModal = () => {
-    setShowModal(false);
-    setLeftButtonClickCount(0);
-    setRightButtonClickCount(0);
-  };
+  @media (max-width: 800px) {
+    flex: 0 0 33.33%; /* 초기 크기를 33.33%로 설정 (3장씩 나열) */
+  }
 
-  return (
-    <>
-      {!showModal ? (
-        <>
-          {leftButtonClickCount + rightButtonClickCount < 5 ? (
-            <ButtonGroup>
-              <button onClick={() => handleButtonClick("left")}>Left</button>
-              <button onClick={() => handleButtonClick("right")}>Right</button>
-            </ButtonGroup>
-          ) : (
-            <>
-              <p style={{ fontSize: 30 }}>Top3</p>
-              <RankUser>
-                <UserProfile />
-                <UserProfile />
-                <UserProfile />
-              </RankUser>
-            </>
-          )}
-        </>
-      ) : (
-        <ModalOverlay>
-          <ModalContent>
-            <div>End</div>
-            <ExitButton onClick={handleExitModal}>Exit</ExitButton>
-          </ModalContent>
-        </ModalOverlay>
-      )}
-      {leftButtonClickCount + rightButtonClickCount >= 5 && (
-        <ExitBox>
-          <ExitButton onClick={onExit}>Exit</ExitButton>
-        </ExitBox>
-      )}
-    </>
-  );
-};
+  &.animate {
+    animation: ${moveToCenter} 1s forwards, ${fadeOut} 1s 1s forwards;
+  }
+`;
 
-export default TodayGame;
+
+const Image = styled.img`
+  width: 50%; /* 너비를 절반으로 줄임 */
+  height: 50%; /* 높이를 절반으로 줄임 */
+  object-fit: cover;
+  transition: width 1s, height 1s;
+
+  ${ImageContainer}:hover & {
+    width: 100px; /* hover 시 너비를 100px로 설정 */
+    height: 150px; /* hover 시 높이를 150px로 설정 */
+  }
+`;
+
+const CardImage = styled.img`
+  margin-top: 30px;
+  // border: 1px solid blue;
+  border-radius: 10px;
+  width: 25%;
+  // height: 30%;
+`
+
+const CardImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: ${fadeIn} 3s;
+  // border: 1px solid red;
+  height: 90%;
+  width: 70%;
+  margin-top: 50px;
+`
+const CardContent = styled.div`
+  margin: 20px 20px;
+  padding: 5px;
+  color: #fff;
+  width: 45%;
+`
+const Nickname = styled.span`
+  font-weight: bold;
+  color: #FFC4C4;
+`
+
+const IntroContainer = styled.div`
+position: absolute;
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 70vw;
+height: 90vw;
+font-size: 2rem;
+font-family: 'SEBANG_Gothic_Bold';
+animation: ${fadeIn} 2s, ${fadeOut} 2s 3s forwards; /* fade in 애니메이션은 2초 동안, 그리고 3초 후에 fade out 애니메이션을 2초 동안 적용 */
+`;
+
+const IntroImage = styled.img`
+width: 40%;
+height: 40%;
+`;
+
