@@ -49,6 +49,9 @@ function PostCard({post})  {
         <Category>{post.type}</Category>
         <Title>
           {post.title.length > MAX_TITLE_LENGTH ? `${post.title.substring(0, MAX_TITLE_LENGTH)}...` : post.title}
+          <RecruitmentStatusBox isCompleted={post.isCompleted}>
+            {post.isCompleted ? "모집완료" : "모집중"}
+          </RecruitmentStatusBox>
         </Title>
         <DetailBox>
           {/* <DetailItem></DetailItem> */}
@@ -76,7 +79,7 @@ const Card = styled.div`
   margin: 20px 0 20px 0;
   padding: 20px;
   font-family: 'Pretendard-Regular';  
-  width: 25vw;
+  width: 80%;
 
   // transition: transform 0.2s ease-in-out;
   // height: 60vh;
@@ -201,3 +204,12 @@ const InfoContainer = styled.div`
 `
 
 
+const RecruitmentStatusBox = styled.div`
+  background-color: ${props => props.isCompleted ? "#F08080" : "#32CD32"};
+  border-radius: 8px;
+  font-size: 0.8rem;
+  margin-left: 8px;
+  padding: 3px 7px;
+  display: inline-block;
+  color: white;
+`;
