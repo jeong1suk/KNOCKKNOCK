@@ -7,6 +7,7 @@ import summer from "../../assets/summer1.webp";
 import fall from "../../assets/fall1.webp";
 import winter from "../../assets/winter1.webp";
 import wait from "../../assets/wait.jpeg";
+import { showAlert } from "../../assets/alert";
 const Ai = () => {
   const [result, setResult] = useState("");
   const [base64, setBase64] = useState("");
@@ -16,69 +17,79 @@ const Ai = () => {
   const [previewURL, setPreviewURL] = useState("/phto.png");
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-
-    setSelectedFile(file);
-    // Create a FileReader to read the file and generate the preview URL
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      // reader.result contains the Base64 encoded image data
-      setPreviewURL(reader.result);
-    };
-    reader.readAsDataURL(file);
     setClickBG(false);
     setClickPC(false);
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewURL(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setSelectedFile("/phto.png");
+      setPreviewURL("/phto.png");
+    }
   };
 
   const handlePersonalColor = async () => {
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-    console.log(formData);
-    try {
-      setClickPC(true);
-      const response = await axios.post(
-        "http://34.64.223.226:5002/analyze",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+    if (selectedFile === "/phto.png") {
+      showAlert("사진이 없습니다.");
+    } else {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      console.log(formData);
+      try {
+        setClickPC(true);
+        const response = await axios.post(
+          "http://34.64.223.226:5002/analyze",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
-      console.log(response.data);
-      // 서버에서 받은 결과(response.data)를 사용하여 처리
-      setResult(response.data.result);
-      // setClick(false);
-      // setClickPC(false);
-    } catch (err) {
-      console.log(err);
+        console.log(response.data);
+        // 서버에서 받은 결과(response.data)를 사용하여 처리
+        setResult(response.data.result);
+        // setClick(false);
+        // setClickPC(false);
+      } catch (err) {
+        showAlert("다른 사진으로 다시 시도해보시겠어요?");
+      }
     }
   };
 
   const handleMakeupClick = async () => {
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-    console.log(formData);
-    // 메이크업 버튼이 클릭되었을 때 처리할 로직을 추가할 수 있습니다.
-    // console.log("메이크업 받기 버튼이 클릭되었습니다.");
-    try {
-      setClickBG(true);
-      const res = await axios.post(
-        "http://34.64.223.226:5002/makeup",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      // console.log(res);
-      // console.log(res.data.base64_image);
-      setBase64(res.data.base64_image);
-      // setClick(false);
-    } catch (err) {
-      console.log(err);
+    if (selectedFile === "/phto.png") {
+      showAlert("사진이 없습니다.");
+    } else {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      console.log(formData);
+
+      // 메이크업 버튼이 클릭되었을 때 처리할 로직을 추가할 수 있습니다.
+      // console.log("메이크업 받기 버튼이 클릭되었습니다.");
+      try {
+        setClickBG(true);
+        const res = await axios.post(
+          "http://34.64.223.226:5002/makeup",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setBase64(res.data.base64_image);
+        // setClick(false);
+      } catch (err) {
+        showAlert("다른 사진으로 다시 시도해보시겠어요?");
+      }
     }
   };
   useEffect(() => {
@@ -90,13 +101,15 @@ const Ai = () => {
     <>
       <Container>
         <ButtonSection>
-          <Button>
+          <Button style={{ cursor: "auto" }}>
             <ImageUploadInput
               id="file-upload"
               type="file"
               onChange={handleFileChange}
             />
-            <label htmlFor="file-upload">파일 선택</label>
+            <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
+              파일 선택
+            </label>
           </Button>
           <Button onClick={handlePersonalColor}>퍼스널컬러</Button>
           <Button onClick={handleMakeupClick}>beautyGAN</Button>
@@ -116,22 +129,20 @@ const Ai = () => {
             {clickbg && (
               <RightSection>
                 {/* <br /> */}
-                {selectedFile === "phto.png" && clickbg && (
+                {/* {selectedFile === "phto.png" && clickbg && (
                   <UploadedImageContainer>
                     <UploadedImage src={previewURL} alt="Uploaded" />
                   </UploadedImageContainer>
-                )}
+                )} */}
                 {base64 && (
-                  <>
-                    <UploadedImageContainer>
-                      <UploadedImage
-                        src={`data:image/png;base64,${base64}`}
-                        alt="Result"
-                      />
-                    </UploadedImageContainer>
-                  </>
+                  <UploadedImageContainer>
+                    <UploadedImage
+                      src={`data:image/png;base64,${base64}`}
+                      alt="Result"
+                    />
+                  </UploadedImageContainer>
                 )}
-                {clickbg && !base64 && selectedFile !== "phto.png" && (
+                {!base64 && selectedFile !== "/phto.png" && (
                   <UploadedImageContainer style={{ border: "none" }}>
                     <UploadedImage src={wait} />
                     <p>cpu 성능이 안좋아 최대 10초정도 걸립니다.</p>
@@ -146,18 +157,10 @@ const Ai = () => {
                 <UploadedImage src={previewURL} alt="Uploaded" />
               </UploadedImageContainer>
             )}
-            {result === "spring" && (
-              <img src={spring} alt="봄 웜톤" style={{ height: "80%" }} />
-            )}
-            {result === "summer" && (
-              <img src={summer} alt="여름 쿨톤" style={{ height: "80%" }} />
-            )}
-            {result === "fall" && (
-              <img src={fall} alt="가을 웜톤" style={{ height: "80%" }} />
-            )}
-            {result === "winter" && (
-              <img src={winter} alt="겨울 쿨톤" style={{ height: "80%" }} />
-            )}
+            {result === "spring" && <ColorImage src={spring} alt="봄 웜톤" />}
+            {result === "summer" && <ColorImage src={summer} alt="여름 쿨톤" />}
+            {result === "fall" && <ColorImage src={fall} alt="가을 웜톤" />}
+            {result === "winter" && <ColorImage src={winter} alt="겨울 쿨톤" />}
 
             <div>
               {clickpc && !result && selectedFile !== "/phto.png" && (
@@ -182,7 +185,9 @@ const UploadedImageContainer = styled.div`
   width: 100%;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* 태블릿 화면에서 이미지 컨테이너의 너비를 50%로 */
-    width: 90%;
+    width: 50%;
+    left: 50%;
+    transform: translateX(50%);
   }
 `;
 
@@ -211,7 +216,7 @@ const UserProfileBox = styled.div`
 const LeftSection = styled.div`
   margin-right: 2rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%; /* 모바일 화면에서 가로 폭을 100%로 조정 */
     /* margin-top: 0; 모바일 화면에서 위쪽 여백 제거 */
   }
@@ -223,6 +228,7 @@ const RightSectionWrapper = styled.div`
   /* margin-top: 4.4rem; */
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -244,9 +250,9 @@ const ResultSection = styled.div`
   justify-content: center;
   /* margin-top: 4.5rem; */
   margin-bottom: 2rem;
-  margin-left: 2rem;
+  /* margin-left: 2rem; */
   /* border: 1px solid black; */
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%; /* 모바일 화면에서 가로 폭을 100%로 조정 */
     margin-top: 0; /* 모바일 화면에서 위쪽 여백 제거 */
   }
@@ -298,5 +304,15 @@ const ButtonSection = styled.div`
   flex-direction: row;
   /* align-items: center; */
   justify-content: center;
+`;
+
+const ColorImage = styled.img`
+  height: 80%;
+  margin-top: 10px;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 70%; /* 모바일 화면에서 가로 폭을 100%로 조정 */
+    /* margin-top: 0; 모바일 화면에서 위쪽 여백 제거 */
+  }
 `;
 export default Ai;
