@@ -182,31 +182,35 @@ const Banner = styled.div`
     height: 25vh;
   }
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    height: 15vh;
+    height: 20vh;
   }
 `;
 
 const StartButton = styled.button`
+  font-family: "KIMM_Bold";
   margin-top: 1rem;
   margin-right: 1.2rem;
   height: 2rem;
-  background-color: #9ea7d6;
+  background-color: #E883DE;
   color: #fff;
   padding: 10px 20px;
-  border: none;
+  border: 10px double #fff;
   border-radius: 5px;
   font-size: 17px;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.3s;
+  cursor: pointer;
   &:hover {
-    background-color: #7b88b8;
-    cursor: pointer;
+    border: 10px double #3b0b0b;
+    color: #391F41;
+    transform: scale(1.02);
   }
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     height: 1rem;
-    font-size: 13px;
+    font-size: 10px;
     width: 4rem;
     margin-top: 0.5rem;
   }
@@ -249,6 +253,9 @@ const ModalContentUser = styled.div`
 `;
 
 const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 70%;
   height: 70%;
   overflow: auto;
