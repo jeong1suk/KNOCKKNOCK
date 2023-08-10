@@ -7,7 +7,7 @@ export const Content = styled.div`
   width: 460px;
   padding: 100px;
   margin-top: 300px;
-  border: 2px solid red;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
   @media (max-width: 480px) {
     /* viewport 너비가 480px 이하일 경우 */
     width: 100%; /* 컨테이너 너비를 100%로 설정하여 가로 중앙 정렬 */
@@ -35,26 +35,30 @@ export const Header = styled.header`
 `;
 
 export const JoinButton = styled.button`
-  width: 40%;
-  padding: 21px 0 17px;
-  border: 0;
+  font-size: 1.5rem;
+  font-family: "KIMM_Bold";
+  /* padding: 10px 10px; */
+  background-color: #f7cbd0;
+  color: black;
+  border: 10px double #fff;
+  border-radius: 50px;
   cursor: pointer;
-  color: #fff;
-  background-color: #d4baeb;
-  font-size: 20px;
-  font-weight: 400;
-  margin-top: 30px;
-  margin-left: 30px;
+  /* margin: 50px 0 30px 0; */
+  width: 50%;
+  height: 50px;
+  transition: 0.3s;
 
-  /* background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%); */
   &:hover {
-    background: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);
-    background-color: #80b5ea;
+    border: 10px double #3b0b0b;
+    color: #3b0b0b;
+    transform: scale(1.02);
   }
 
-  &:active {
-    position: relative;
-    top: 1px;
+  @media (max-width: 750px) {
+    margin: 20px 0;
+    width: 50%;
+    height: 60px;
+    font-size: 70%;
   }
 `;
 export const Heading = styled.h3`
@@ -215,7 +219,7 @@ export const Modal = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 10;
 `;
-export const Button = styled.button`
+export const Button = styled.div`
   font-size: 100%;
   font-family: "KIMM_Bold";
   /* padding: 10px 10px; */

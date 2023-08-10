@@ -5,7 +5,7 @@ import * as S from "./style";
 import * as Api from "../../api";
 import { DispatchContext } from "../../context/user/UserProvider";
 import { useNavigate } from "react-router-dom";
-import { showAlert } from "../../assets/alert";
+import { showAlert, showSuccess } from "../../assets/alert";
 import ValidationFields from "./ValidationFields";
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ const RegisterPage = () => {
         type: "LOGIN_SUCCESS",
         payload: user,
       });
-
+      showSuccess("회원가입 완료!");
       navigate("/", { replace: true });
       window.location.reload();
     } catch (err) {
@@ -122,7 +122,9 @@ const RegisterPage = () => {
               type="file"
               onChange={handleFileChange}
             />
-            <label htmlFor="file-upload">사진 넣기</label>
+            <label htmlFor="file-upload">
+              <p style={{ textAlign: "center" }}>사진 넣기</p>
+            </label>
           </S.Button>
         </S.ToggleButtonWrapper>
         {previewURL && (
@@ -133,13 +135,13 @@ const RegisterPage = () => {
 
         <OptionalInputs />
         <S.ToggleButtonWrapper>
-          <S.Button
+          <S.JoinButton
             type="submit"
             onSubmit={() => handleRegistration()}
             style={{ width: "70%", height: "80px" }}
           >
             Register
-          </S.Button>
+          </S.JoinButton>
         </S.ToggleButtonWrapper>
       </form>
     </S.Content>

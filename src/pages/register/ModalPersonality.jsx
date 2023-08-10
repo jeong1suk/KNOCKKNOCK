@@ -7,24 +7,40 @@ import { isMaxArrayReached } from "../../util/arrayUtils";
 export const ModalPersonality = ({ formData, handlePersonalityClick }) => {
   const { personality } = formData;
   const { opened, onOpen, onClose } = useToggle();
-  const isMaxPersonalityReached = isMaxArrayReached(personality, 6);
+  const isMaxPersonalityReached = isMaxArrayReached(personality, 5);
 
   return (
     <>
       <S.ToggleButtonWrapper>
-        <S.Button onClick={onOpen}>내가 생각하는 나</S.Button>
+        <S.Button onClick={onOpen}>
+          <p style={{ textAlign: "center" }}>내가 생각하는 나</p>
+        </S.Button>
       </S.ToggleButtonWrapper>
       <S.Box>
         {opened && (
           <S.Modal>
             <h3 style={{ textAlign: "center" }}>내 성격</h3>
-            <p style={{ color: "red" }}>최대 5개까지 선택가능합니다.</p>
+            {isMaxPersonalityReached && (
+              <p style={{ color: "red", textAlign: "center" }}>
+                최대 5개까지 선택가능합니다.
+              </p>
+            )}
             <ButtonContainer>
               {personalityList.map((elements, index) => (
                 <ModalButton
                   key={index}
                   active={personality.includes(elements)}
-                  onClick={() => handlePersonalityClick(elements)}
+                  onClick={() => {
+                    if (
+                      personality.includes(elements) ||
+                      personality.length < 5
+                    ) {
+                      handlePersonalityClick(elements);
+                    }
+                  }}
+                  disabled={
+                    personality.length > 5 && !personality.includes(elements)
+                  }
                 >
                   <div style={{ textAlign: "center" }}>{elements}</div>
                 </ModalButton>

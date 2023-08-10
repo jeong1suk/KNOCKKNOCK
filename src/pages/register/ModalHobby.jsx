@@ -8,24 +8,35 @@ export const ModalHobby = ({ formData, handleHobbyClick }) => {
   const { hobby } = formData;
 
   const { opened, onOpen, onClose } = useToggle();
-  const isMaxHobbyReached = isMaxArrayReached(hobby, 6);
+  const isMaxHobbyReached = isMaxArrayReached(hobby, 5);
 
   return (
     <>
       <S.ToggleButtonWrapper>
-        <S.Button onClick={onOpen}>취미 선택하기</S.Button>
+        <S.Button onClick={onOpen}>
+          <p style={{ textAlign: "center" }}>취미 선택하기</p>
+        </S.Button>
       </S.ToggleButtonWrapper>
       <S.Box>
         {opened && (
           <S.Modal>
             <h3 style={{ textAlign: "center" }}>취미</h3>
-            <p style={{ color: "red" }}>최대 5개까지 선택가능합니다.</p>
+            {isMaxHobbyReached && (
+              <p style={{ color: "red", textAlign: "center" }}>
+                최대 5개까지 선택가능합니다.
+              </p>
+            )}
             <ButtonContainer>
               {hobbyList.map((elements, index) => (
                 <ModalButton
                   key={index}
                   active={hobby.includes(elements)}
-                  onClick={() => handleHobbyClick(elements)}
+                  onClick={() => {
+                    if (hobby.includes(elements) || hobby.length < 5) {
+                      handleHobbyClick(elements);
+                    }
+                  }}
+                  disabled={hobby.length > 5 && !hobby.includes(elements)}
                 >
                   <div style={{ textAlign: "center" }}>{elements}</div>
                 </ModalButton>
