@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { MOBILE_BREAK_POINT } from "../layout/breakpoint";
 
 const FooterWrapper = styled.footer`
   background-color: #fff;
@@ -9,11 +10,12 @@ const FooterWrapper = styled.footer`
   bottom: 0;
   left: 0;
   width: 100%;
+  max-width: 1024px;
   height: 8rem;
   display: flex;
   justify-content: space-between;
   border-top: 1px solid black;
-  @media (max-width: 880px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* 화면 너비가 768px 이하일 때 폰트 크기 조정 */
 
     display: none;
@@ -30,7 +32,6 @@ const FooterContent = styled.div`
 
   & > div {
     flex: 1;
-
   }
 `;
 // const FooterContent = styled.div`
@@ -50,7 +51,7 @@ const MemberContainer = styled.div`
 
 const Member = styled.div`
   margin-top: 5px;
-`
+`;
 
 const FooterText = styled.div`
   display: flex;
@@ -92,7 +93,7 @@ const Footer = () => {
         <FooterText>엘리스랩</FooterText> */}
 
         <FooterText>
-        KnockKnock
+          KnockKnock
           <br />
           <br />
           뷰티톡톡
@@ -105,32 +106,20 @@ const Footer = () => {
         </FooterText>
         <MemberContainer>
           <FooterText>
-            Member  
+            Member
             <br />
             <br />
           </FooterText>
-          <Member>
-            이은석            github @enxxi
-          </Member>
-          <Member>
-            정유진            깃허브
-          </Member>
-          <Member>
-            정원석            깃허브
-          </Member>
+          <Member>이은석 github @enxxi</Member>
+          <Member>정유진 깃허브</Member>
+          <Member>정원석 깃허브</Member>
         </MemberContainer>
         <MemberContainer>
           <br />
           <br />
-          <Member>
-            정재훈            깃허브
-          </Member>
-          <Member>
-            최우현            깃허브
-          </Member>
-          <Member>
-            허창원            깃허브
-          </Member>
+          <Member>정재훈 깃허브</Member>
+          <Member>최우현 깃허브</Member>
+          <Member>허창원 깃허브</Member>
         </MemberContainer>
       </FooterContent>
     </FooterWrapper>
