@@ -17,10 +17,8 @@ const UserProfileEdit = ({ user }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
-    // setErrorMessage("");
     setPreviewURL(URL.createObjectURL(file));
   };
-  // const [imageUrl, handleImageUpload] = useState("");
 
   const [formData, setFormData] = useState({
     name: user.name || "",
@@ -53,17 +51,13 @@ const UserProfileEdit = ({ user }) => {
     introduce,
   } = formData;
   useEffect(() => {
-    // Destructure the hobby, personality, and ideal properties from user
-    // Create a new formData object by spreading the existing formData and
-    // overwriting the hobby, personality, and ideal properties
     setFormData((prev) => ({
       ...prev,
       hobby: user.hobby || [],
       personality: user.personality || [],
       ideal: user.ideal || [],
     }));
-  }, []); //이거 정보가 늦게 받아와짐.
-  // console.log(formData); //onChange 할때마다 렌더링 새로되는듯
+  }, [user]); //이거 정보가 늦게 받아와짐.
   const onChange = (e) => {
     const { name, value } = e.currentTarget;
     setFormData((prev) => ({
@@ -173,12 +167,13 @@ const UserProfileEdit = ({ user }) => {
 
   return (
     <>
-      <S.ToggleButton style={{ textAlign: "center" }} onClick={() => onOpen()}>
+      <S.Button style={{ textAlign: "center" }} onClick={() => onOpen()}>
         정보 수정하기
-      </S.ToggleButton>
+      </S.Button>
       {opened && (
         <ModalOverlay>
           <S.Modal style={{ marginTop: "200px" }}>
+            <h3 style={{ textAlign: "center" }}>정보 수정하기</h3>
             <CloseButton onClick={onClose}>X</CloseButton>
             {/* <ProfilePicture
             src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg"
@@ -273,7 +268,12 @@ const UserProfileEdit = ({ user }) => {
 
             <S.Heading>한줄 자기소개</S.Heading>
             <S.Box>
-              <S.Input name="introduce" value={introduce} onChange={onChange} />
+              <S.Input
+                name="introduce"
+                value={introduce}
+                placeholder={user.introduce}
+                onChange={onChange}
+              />
             </S.Box>
 
             <button onClick={handleSubmit}>정보 수정하기</button>

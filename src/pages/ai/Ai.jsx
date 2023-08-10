@@ -208,7 +208,7 @@ const UserProfileBox = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 150vh;
+  height: 100%;
   background-color: #fff;
   /* border: 2px solid red; */
 `;
