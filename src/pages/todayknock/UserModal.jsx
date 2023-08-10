@@ -29,7 +29,6 @@ function UserProfile({ user, onClose }) {
   const colorPair = getRandomColorPairs(); // 랜덤한 색상 쌍 얻기
   const rightColor = colorPair[0];
   const handleChatButtonClick = async () => {
-    console.log(Api.get("/chats"));
     try {
       const response = await Api.post("/chats", {
         anotherId: user.userId,
@@ -53,7 +52,7 @@ function UserProfile({ user, onClose }) {
       document.body.style.overflow = "unset";
     };
   }, []);
-  console.log(user, "user~~~!!");
+  
   return (
     <Container>
       <UserProfileBox>

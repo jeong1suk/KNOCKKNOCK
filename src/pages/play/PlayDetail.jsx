@@ -572,7 +572,7 @@ function PlayDetail() {
               }}
             />
           </InputBox>
-          <InputBox style={{ justifyContent: "center", width: "100%" }}>
+          <InputBox style={{ justifyContent: "center", width: "100%", fontFamily: 'Pretendard-Regular' }}>
             <span style={{ whiteSpace: "pre-line" }}>{post.content}</span>
           </InputBox>
         </PostDetailFirstBox>
@@ -627,7 +627,7 @@ function PlayDetail() {
                 ) : (
                   <CommentEditDeleteBox>
                     <span
-                      style={{ whiteSpace: "pre-line", marginBottom: "10px" }}
+                      style={{ whiteSpace: "pre-line", marginBottom: "10px", fontFamily: 'Pretendard-Regular' }}
                     >
                       {comment.content}
                     </span>

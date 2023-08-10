@@ -105,7 +105,6 @@ function PlayEdit() {
       showSuccess("수정되었습니다.");
       navigate("/play");
     } catch (err) {
-      console.log(err);
       if (err.response && err.response.data && err.response.data.message) {
         showAlert(err.response.data.message);
       } else {
