@@ -9,7 +9,6 @@ import { showAlert, showSuccess } from "../../assets/alert";
 import { useNavigate } from "react-router-dom";
 import { DispatchContext } from "../../context/user/UserProvider";
 const UserNewPwdandOut = ({ user }) => {
-  console.log(user);
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
   const { opened, onOpen, onClose } = useToggle();
@@ -94,17 +93,17 @@ const UserNewPwdandOut = ({ user }) => {
 
   return (
     <>
-      <S.ToggleButton style={{ textAlign: "center" }} onClick={() => onOpen()}>
+      <S.Button style={{ textAlign: "center" }} onClick={() => onOpen()}>
         비밀번호 변경
-      </S.ToggleButton>
+      </S.Button>
 
       {opened && (
         <ModalOverlay>
           <S.Modal style={{ marginTop: "200px" }}>
             <CloseButton onClick={onClose}>X</CloseButton>
-            <br />
+            <h2 style={{ textAlign: "center" }}>비밀번호 변경</h2>
             <S.Box>
-              <S.Heading>지금 비밀번호</S.Heading>
+              <S.Heading>기존 비밀번호</S.Heading>
               <S.Input
                 type={showCurrentPassword ? "text" : "password"}
                 name="currentPassword"
@@ -126,7 +125,7 @@ const UserNewPwdandOut = ({ user }) => {
               )}
             </S.Box>
             <S.Box>
-              <S.Heading>새로운 비밀번호</S.Heading>
+              <S.Heading>새 비밀번호</S.Heading>
               <S.Input
                 type={showPassword ? "text" : "password"}
                 name="newPassword"
@@ -151,7 +150,7 @@ const UserNewPwdandOut = ({ user }) => {
               <S.ErrorBox>숫자, 문자, 특수문자 포함 8글자 이상</S.ErrorBox>
             )}
             <S.Box>
-              <S.Heading>비밀번호 확인</S.Heading>
+              <S.Heading>새 비밀번호 확인</S.Heading>
               <S.Input
                 type={showConfirmPassword ? "text" : "password"}
                 name="pwdCheck"
@@ -175,10 +174,13 @@ const UserNewPwdandOut = ({ user }) => {
             {!isPasswordSame && isPasswordValid && (
               <S.ErrorBox>비밀번호가 다릅니다.</S.ErrorBox>
             )}
-            <button onClick={handlePwdChangeSubmit}>정보 수정하기</button>
-            <button onClick={onClose}>Close</button>
-
-            <h2 style={{ color: "white" }}>회원탈퇴</h2>
+            <S.ButtonSection>
+              <S.Button onClick={handlePwdChangeSubmit}>정보 수정하기</S.Button>
+              <S.Button onClick={onClose}>Close</S.Button>
+            </S.ButtonSection>
+            <S.Heading style={{ fontSize: "1rem", color: "red" }}>
+              회원탈퇴
+            </S.Heading>
             <S.Heading>이름/탈퇴한다를 입력해주세요.</S.Heading>
             <S.Box>
               <S.Input
@@ -195,7 +197,9 @@ const UserNewPwdandOut = ({ user }) => {
             ) : (
               <S.ErrorBox>이름/탈퇴한다를 입력해주세요.</S.ErrorBox>
             )}
-            <button onClick={handleOutSubmit}>탈퇴하기</button>
+            <S.ButtonSection>
+              <S.Button onClick={handleOutSubmit}>탈퇴하기</S.Button>
+            </S.ButtonSection>
           </S.Modal>
         </ModalOverlay>
       )}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
+import * as S from "./style";
 import * as Api from "../../api";
 // import { UserStateContext } from "../../App";
 import UserProfileEdit from "./UserProfileEdit";
@@ -15,7 +16,7 @@ const UserProfileContainer = styled.div`
   margin-top: -2rem;
   border: 2px solid blue;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 90vw;
+    width: 100%;
     z-index: 2;
   }
 `;
@@ -23,8 +24,8 @@ const UserProfileBox = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin-left: 6rem;
-  margin-right: 3rem;
+  /* margin-left: 3rem; */
+  /* margin-right: 3rem; */
   border: 2px solid red;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     margin-left: 0;
@@ -64,6 +65,17 @@ const UserInformation = styled.div`
   align-items: center;
   flex-direction: column;
 `;
+const UserPersonalInformation = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  border: 3px solid black;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    flex-direction: row;
+    justify-content: center;
+  }
+`;
 const UserLineContainer = styled.div`
   display: flex;
   // width: 10rem;
@@ -73,6 +85,7 @@ const UserLineContainer = styled.div`
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   padding: 1rem;
+  border: 1px solid black;
 `;
 const UserLine = styled.h3`
   margin: 0.3rem;
@@ -125,6 +138,8 @@ const HobbyBoxContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   margin: 1rem;
+  /* width: 20rem; */
+  border: 1px solid green;
 `;
 const ProfilePicture = styled.img`
   width: 8rem;
@@ -138,9 +153,14 @@ const ProfilePicture = styled.img`
   margin-left: 8rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    margin-right: 0;
-    margin-left: 6rem;
-    margin-top: -50rem;
+    position: relative;
+    top: initial;
+    left: initial;
+    transform: initial;
+    margin: 0 auto;
+    display: block;
+    margin-top: -5rem; /* Adjust as needed */
+    margin-bottom: 1rem; /* Adjust as needed */
     z-index: 1000;
   }
 `;
@@ -155,6 +175,25 @@ function shuffleArray(array) {
 const UserProfileLarge = () => {
   const [user, setUser] = useState([]);
   const userState = useContext(UserStateContext);
+  // useEffect(() => {
+  //   Api.get("/users/mypage")
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       setUser(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("API 호출 오류:", error);
+  //     });
+  // }, [userState]);
+  const fetchData = async () => {
+    try {
+      const res = await Api.get("/users/mypage");
+      console.log(res);
+      setUser(res.data);
+    } catch (err) {
+      console.error("API 호출 오류:", err);
+    }
+  };
   useEffect(() => {
     Api.get("/users/mypage")
       .then((response) => {
@@ -173,32 +212,40 @@ const UserProfileLarge = () => {
       <ProfilePicture
         src={getImageSrc(user.profileImage)}
         alt="Profile Picture"
+        style={{ backgroundColor: "#f2f2f2e2" }}
       />
-      <UserProfileEdit user={user} />
-      <UserNewPwdandOut user={user} />
+      <S.ButtonSection>
+        <UserProfileEdit user={user} />
+        <UserNewPwdandOut user={user} />
+      </S.ButtonSection>
       <UserProfileBox>
         <UserInformation>
           <Nickname>{user.nickname}</Nickname>
           <Email>{user.email}</Email>
           <Tagline>{user.introduce}</Tagline>
         </UserInformation>
-        <UserInformation>
+        <UserPersonalInformation>
           <UserLineContainer>
-            <UserLine>Name: {user.name}</UserLine>
+            <UserLine>{user.name}</UserLine>
+          </UserLineContainer>
+          {user.mbti !== "" && (
+            <UserLineContainer>
+              <UserLine>{user.mbti}</UserLine>
+            </UserLineContainer>
+          )}
+
+          {user.height !== 0 && (
+            <UserLineContainer>
+              <UserLine>{user.height + "cm"}</UserLine>
+            </UserLineContainer>
+          )}
+          <UserLineContainer>
+            <UserLine>{user.job}</UserLine>
           </UserLineContainer>
           <UserLineContainer>
-            <UserLine>MBTI: {user.mbti}</UserLine>
+            <UserLine>{user.region}</UserLine>
           </UserLineContainer>
-          <UserLineContainer>
-            <UserLine>Height: {user.height || "비공개"}</UserLine>
-          </UserLineContainer>
-          <UserLineContainer>
-            <UserLine>Job: {user.job}</UserLine>
-          </UserLineContainer>
-          <UserLineContainer>
-            <UserLine>Region: {user.region || "비공개"}</UserLine>
-          </UserLineContainer>
-        </UserInformation>
+        </UserPersonalInformation>
       </UserProfileBox>
       <HobbyBoxContainer>
         {shuffledHobby.map((hobby, index) => (

@@ -10,11 +10,15 @@ export const showAlert = (text) => {
   });
 };
 
-export const showSuccess = (text) => {
+export const showSuccess = (text, redirectURL) => {
   Swal.fire({
     html: text,
     icon: "success",
     showCancelButton: false,
     confirmButtonText: "확인",
+  }).then(() => {
+    if (redirectURL) {
+      window.location.replace(redirectURL);
+    }
   });
 };
