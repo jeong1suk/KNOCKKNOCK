@@ -40,7 +40,6 @@ const Ai = () => {
     } else {
       const formData = new FormData();
       formData.append("file", selectedFile);
-      console.log(formData);
       try {
         setClickPC(true);
         const response = await axios.post(
@@ -53,7 +52,6 @@ const Ai = () => {
           }
         );
 
-        console.log(response.data);
         // 서버에서 받은 결과(response.data)를 사용하여 처리
         setResult(response.data.result);
         // setClick(false);
@@ -73,7 +71,6 @@ const Ai = () => {
       console.log(formData);
 
       // 메이크업 버튼이 클릭되었을 때 처리할 로직을 추가할 수 있습니다.
-      // console.log("메이크업 받기 버튼이 클릭되었습니다.");
       try {
         setClickBG(true);
         const res = await axios.post(
@@ -95,6 +92,7 @@ const Ai = () => {
   useEffect(() => {
     setResult("");
     setBase64("");
+    window.scrollTo(0, 0);
   }, [selectedFile]);
 
   return (

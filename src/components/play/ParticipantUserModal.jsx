@@ -35,20 +35,6 @@ function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
 
 
 
-
-  // const handleChatButtonClick = async () => {
-  //   console.log(Api.get("/chats"));
-  //   try {
-  //     const response = await Api.post("/chats", {
-  //       anotherId: user.userId,
-  //     });
-  //     const chatId = response.data.chatId;
-  //     navigate("/mypage");
-  //   } catch (error) {
-  //     console.error("채팅방 생성에 실패했습니다:", error);
-  //   }
-  // };
-
   const shuffledHobby = shuffleArray(selected?.hobby || []);
   const shuffledIdeal = shuffleArray(selected?.ideal || []);
   const shuffledPersonality = shuffleArray(selected?.personality || []);
@@ -75,7 +61,6 @@ function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
           <Email>{selected?.email}</Email>
           <Tagline>{selected?.introduce}</Tagline>
           <UserInfomationBox>
-            {/* <ChatButton onClick={handleChatButtonClick}>채팅하기</ChatButton> */}
             <UserInformation>
               <UserLineContainer>
                 <UserLine>Name: {selected?.name}</UserLine>
@@ -231,6 +216,10 @@ const UserInfomationBox = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 0 3rem;
+  @media (max-width: 1080px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const UserInformation = styled.div`
@@ -254,7 +243,13 @@ const UserLine = styled.h3`
   color: #8f8f8f;
   font-size: 1rem;
 `;
-const HobbyAllBox = styled.div``;
+const HobbyAllBox = styled.div`
+  @media (max-width: 1080px) {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+  }
+`;
 const HobbyBox = styled.div`
   width: 3.8rem;
   height: 2rem;

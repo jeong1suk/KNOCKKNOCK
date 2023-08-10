@@ -195,8 +195,14 @@ const UserProfileLarge = () => {
     }
   };
   useEffect(() => {
-    fetchData();
-  }, []);
+    Api.get("/users/mypage")
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("API 호출 오류:", error);
+      });
+  }, [userState]);
 
   const shuffledHobby = shuffleArray(user.hobby || []);
   const shuffledIdeal = shuffleArray(user.ideal || []);

@@ -74,12 +74,10 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect }) => {
     }
   }, [showIntro]);
 
-  console.log(showIntro);
 
   useEffect(() => {
     cardsGetRequest();
   }, []);
-  console.log(userState.user);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -209,7 +207,7 @@ const CardDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 90%;
+  height: 100%;
   // border: 3px solid yellow;
   background-image: url(/cardblack.jpg);
   background-size: contain;
@@ -229,20 +227,24 @@ const ExitBox = styled.div`
 `;
 
 const ExitButton = styled.button`
+  font-family: "KIMM_Bold";
   margin-top: 2rem;
   height: 2rem;
-  background-color: #9ea7d6;
+  background-color: #E883DE;
   color: #fff;
   padding: 10px 20px;
-  border: none;
+  border: 10px double #fff;
   border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 17px;
+  transition: 0.3s;
+  cursor: pointer;
   &:hover {
-    background-color: #7b88b8;
-    cursor: pointer;
+    border: 10px double #3b0b0b;
+    color: #391F41;
+    transform: scale(1.02);
   }
 `;
 
@@ -311,11 +313,16 @@ const CardImageContainer = styled.div`
   height: 90%;
   width: 65%;
   margin-top: 50px;
+  
   @media (max-width: 1024px) {
     width: 100%;
   }
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%;
+  }
+  @media (max-height: 700px) {
+    font-size: 0.5rem;
+    width: 70%;
   }
 `;
 const CardContent = styled.div`
@@ -334,21 +341,19 @@ const Nickname = styled.span`
 `;
 
 const IntroContainer = styled.div`
-  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  // margin-top: 20%;
-  width: 70vw;
-  height: 40vw;
+  width: 70%;
+  height: 70%;
   font-size: 2rem;
   font-family: "SEBANG_Gothic_Bold";
   animation: ${fadeIn} 2s, ${fadeOut} 2s 3s forwards; /* fade in 애니메이션은 2초 동안, 그리고 3초 후에 fade out 애니메이션을 2초 동안 적용 */
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     margin-top: 10%;
-    width: 70%;
+    width: 100%;
     font-size: 1rem;
     height: 60%;
   }
@@ -357,9 +362,7 @@ const IntroContainer = styled.div`
 const IntroImage = styled.img`
   width: 80%;
   height: 80%;
-  @media (max-width: 1024px) {
-    // width: 60%;
-  }
+
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 80%;
