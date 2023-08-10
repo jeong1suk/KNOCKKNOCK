@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getImageSrc } from "../../util/imageCheck";
-import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint.js";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint.js";
 
 const UserProfile = ({ user, onClick, isLoverUser }) => {
   const {
@@ -150,7 +150,7 @@ const LoverProfilePicture = styled.img`
     opacity: 0.5; // Image will darken on hover
   }
 
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     border: 3px dashed #f7cbd0;
   }
 `;
@@ -158,7 +158,7 @@ const LoverProfilePicture = styled.img`
 const LoverProfileNickname = styled.p`
   font-size: 0.9rem;
 
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     font-size: 0.7rem;
   }
 `;
@@ -177,7 +177,7 @@ const HoverText = styled.p`
     opacity: 1;
   }
 
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     font-size: 0.4rem;
   }
 `;

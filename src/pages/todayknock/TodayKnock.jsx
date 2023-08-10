@@ -6,7 +6,7 @@ import * as Api from "../../api";
 import UserModal from "./UserModal";
 import { showAlert } from "../../assets/alert";
 import { useNavigate } from "react-router-dom";
-import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint.js";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint.js";
 
 const limit = 3;
 const isLoverUser = ["Lover", "User"];
@@ -181,7 +181,7 @@ const Banner = styled.div`
   @media (max-width: 1024px) {
     height: 25vh;
   }
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     height: 15vh;
   }
 `;
@@ -204,7 +204,7 @@ const StartButton = styled.button`
     cursor: pointer;
   }
 
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     height: 1rem;
     font-size: 13px;
     width: 4rem;
@@ -272,7 +272,7 @@ const UserProfilesContainer = styled.div`
     gap: 5%;
   }
 
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     grid-template-columns: repeat(auto-fit, minmax(25vw, 1fr));
     margin: -7rem 0 0 0;
     gap: 3%;
@@ -301,7 +301,7 @@ const RandomUserExplainDiv = styled.div`
     margin: 0 0 50px 20px;
   }
 
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     p {
       font-size: 18px;
     }

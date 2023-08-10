@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { keyframes } from 'styled-components';
 import UserProfile from "./UserProfile";
 import * as Api from "../../api";
-import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 import { UserStateContext } from "../../context/user/UserProvider";
 
 import Typewriter from 'typewriter-effect';
@@ -84,18 +84,10 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
   useEffect(() => {
     cardsGetRequest();
   }, [])
-
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, []);
-
+  console.log(userState.user);
   return (
     <>
+
 
 {showIntro ? <Intro /> : (
       selectedCard ?
@@ -190,7 +182,7 @@ const CardDiv = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     background-size: cover;
   }
 `
@@ -271,7 +263,7 @@ const CardImage = styled.img`
   width: 30%;
   // height: 30%;
 
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 40%;
   }
 `
@@ -289,7 +281,7 @@ const CardImageContainer = styled.div`
   @media (max-width: 1024px) {
     width: 100%;
   }
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%;
   }
 `
@@ -299,7 +291,7 @@ const CardContent = styled.div`
   color: #fff;
   width: 45%;
 
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 80%;
   }
 `
@@ -321,7 +313,7 @@ font-size: 2rem;
 font-family: 'SEBANG_Gothic_Bold';
 animation: ${fadeIn} 2s, ${fadeOut} 2s 3s forwards; /* fade in 애니메이션은 2초 동안, 그리고 3초 후에 fade out 애니메이션을 2초 동안 적용 */
 
-@media (max-width: ${TABLET_BREAK_POINT}) {
+@media (max-width: ${MOBILE_BREAK_POINT}) {
   margin-top: 10%;
   width: 70%;
   font-size: 1rem;
@@ -337,7 +329,7 @@ height: 80%;
   // width: 60%;
 }
 
-@media (max-width: ${TABLET_BREAK_POINT}) {
+@media (max-width: ${MOBILE_BREAK_POINT}) {
   width: 80%;
   height:100%;
 }
