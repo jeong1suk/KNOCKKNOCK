@@ -116,13 +116,13 @@ const RegisterPage = () => {
         <S.Header style={{ border: 0 }}>선택 입력</S.Header>
 
         <S.ToggleButtonWrapper>
-          <S.Button>
+          <S.Button style={{ cursor: "auto" }}>
             <S.ImageUploadInput
               id="file-upload"
               type="file"
               onChange={handleFileChange}
             />
-            <label htmlFor="file-upload">
+            <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
               <p style={{ textAlign: "center" }}>사진 넣기</p>
             </label>
           </S.Button>
