@@ -25,7 +25,6 @@ const FooterWrapper = styled.footer`
 const LogoImage = styled.img`
   width: 15%;
   height: auto;
-  margin-top: 10px;
   margin-left: 40px;
 `;
 
