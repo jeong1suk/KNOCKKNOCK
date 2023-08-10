@@ -13,7 +13,7 @@ const UserProfileEdit = ({ user }) => {
   const dispatch = useContext(DispatchContext);
   const { opened, onOpen, onClose } = useToggle();
   const [previewURL, setPreviewURL] = useState(null);
-  const [selectedFile, setSelectedFile] = useState("phto.png");
+  const [selectedFile, setSelectedFile] = useState(null);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
@@ -117,8 +117,11 @@ const UserProfileEdit = ({ user }) => {
       if (selectedFile) {
         const formImgData = new FormData();
         formImgData.append("image", selectedFile);
-        response = await Api.post("files", formImgData);
+        const res = await Api.post("files", formImgData);
+        response = res.data;
         console.log(response);
+      } else {
+        response = user.profileImage;
       }
       const requestData = await Api.put("users/mypage", {
         nickname: formData.nickname === "" ? user.nickname : formData.nickname,
@@ -131,19 +134,12 @@ const UserProfileEdit = ({ user }) => {
         ideal: updatedIdeal,
         introduce:
           formData.introduce === "" ? user.introduce : formData.introduce,
-        profileImage: ["profile", response.data],
+        profileImage: ["profile", response],
         backgroundImage: ["background", ""],
       });
       if (requestData.status === 200) {
-        showSuccess("변경된 정보가 저장되었습니다.");
-        const userData = await Api.get("users/mypage");
-
-        dispatch({
-          type: "UPDATE_USER",
-          payload: userData,
-        });
-        onClose();
-        // window.location.replace("/mypage");
+        showSuccess("변경된 정보가 저장되었습니다.", "/mypage");
+        // onClose();
       } else {
         showAlert("정보 변경에 실패했습니다.");
       }
