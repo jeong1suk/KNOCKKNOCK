@@ -95,6 +95,7 @@ const Ai = () => {
   useEffect(() => {
     setResult("");
     setBase64("");
+    window.scrollTo(0, 0);
   }, [selectedFile]);
 
   return (
@@ -208,7 +209,7 @@ const UserProfileBox = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 150vh;
+  height: 100%;
   background-color: #fff;
   /* border: 2px solid red; */
 `;

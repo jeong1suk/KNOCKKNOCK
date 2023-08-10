@@ -66,6 +66,7 @@ export const Heading = styled.h3`
   margin: 19px 0 8px;
   font-size: 14px;
   font-weight: 700;
+  width: 50%;
 `;
 
 export const Box = styled.span`
@@ -119,6 +120,33 @@ export const Modal = styled.div`
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   /* z-index: 10; */
+`;
+export const Button = styled.button`
+  font-size: 100%;
+  font-family: "KIMM_Bold";
+  /* padding: 10px 10px; */
+  background-color: #f7cbd0;
+  color: black;
+  border: 10px double #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  /* margin: 50px 0 30px 0; */
+  width: 40%;
+  height: 50px;
+  transition: 0.3s;
+
+  &:hover {
+    border: 10px double #3b0b0b;
+    color: #3b0b0b;
+    transform: scale(1.02);
+  }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    /* width: 50%; */
+    height: 30%;
+    font-size: 0.5rem;
+    overflow-x: auto;
+  }
 `;
 export const ToggleButton = styled.a`
   box-shadow: inset 0px 1px 0px 0px #dcecfb;

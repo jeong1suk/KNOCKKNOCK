@@ -6,7 +6,6 @@ import { useToggle } from "../../components/hooks/useToggle";
 import { isMaxArrayReached } from "../../util/arrayUtils";
 export const ModalHobby = ({ formData, handleHobbyClick }) => {
   const { hobby } = formData;
-
   const { opened, onOpen, onClose } = useToggle();
   const isMaxHobbyReached = isMaxArrayReached(hobby, 5);
 

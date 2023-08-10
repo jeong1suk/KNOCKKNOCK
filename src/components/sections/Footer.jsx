@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { MOBILE_BREAK_POINT } from "../layout/breakpoint";
 import { Link } from "react-router-dom";
 
 const FooterWrapper = styled.footer`
@@ -10,11 +11,12 @@ const FooterWrapper = styled.footer`
   bottom: 0;
   left: 0;
   width: 100%;
+  max-width: 1024px;
   height: 8rem;
   display: flex;
   justify-content: space-between;
   border-top: 1px solid black;
-  @media (max-width: 880px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* 화면 너비가 768px 이하일 때 폰트 크기 조정 */
 
     display: none;
