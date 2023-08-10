@@ -16,34 +16,43 @@ export const ModalIdeal = ({ formData, handleIdealClick }) => {
           <p style={{ textAlign: "center" }}>나의 이상형은?</p>
         </S.Button>
       </S.ToggleButtonWrapper>
+
+      {opened && (
+        <S.Modal style={{ top: "70%" }}>
+          <S.CloseButton onClick={onClose}>X</S.CloseButton>
+          <h3 style={{ textAlign: "center" }}>이상형</h3>
+          {isMaxIdealReached && (
+            <p style={{ color: "red", textAlign: "center" }}>
+              최대 5개까지 선택가능합니다.
+            </p>
+          )}
+          <ButtonContainer>
+            {idealList.map((elements, index) => (
+              <ModalButton
+                key={index}
+                active={ideal.includes(elements)}
+                onClick={() => {
+                  if (ideal.includes(elements) || ideal.length < 5) {
+                    handleIdealClick(elements);
+                  }
+                }}
+                disabled={ideal.length > 5 && !ideal.includes(elements)}
+              >
+                <div style={{ textAlign: "center" }}>{elements}</div>
+              </ModalButton>
+            ))}
+          </ButtonContainer>
+          <S.ToggleButtonWrapper>
+            <S.Button
+              onClick={onClose}
+              style={{ width: "10%", marginTop: "5px" }}
+            >
+              <p style={{ textAlign: "center" }}>닫기</p>
+            </S.Button>
+          </S.ToggleButtonWrapper>
+        </S.Modal>
+      )}
       <S.Box>
-        {opened && (
-          <S.Modal>
-            <h3 style={{ textAlign: "center" }}>이상형</h3>
-            {isMaxIdealReached && (
-              <p style={{ color: "red", textAlign: "center" }}>
-                최대 5개까지 선택가능합니다.
-              </p>
-            )}
-            <ButtonContainer>
-              {idealList.map((elements, index) => (
-                <ModalButton
-                  key={index}
-                  active={ideal.includes(elements)}
-                  onClick={() => {
-                    if (ideal.includes(elements) || ideal.length < 5) {
-                      handleIdealClick(elements);
-                    }
-                  }}
-                  disabled={ideal.length > 5 && !ideal.includes(elements)}
-                >
-                  <div style={{ textAlign: "center" }}>{elements}</div>
-                </ModalButton>
-              ))}
-            </ButtonContainer>
-            <button onClick={onClose}>Close</button>
-          </S.Modal>
-        )}
         {ideal.length > 0 && (
           <S.HobbyBoxContainer>
             {ideal.map((item, index) => (
