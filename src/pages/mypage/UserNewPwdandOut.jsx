@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as S from "./style";
 import styled from "styled-components";
 import { useToggle } from "../../components/hooks/useToggle";
@@ -7,19 +7,25 @@ import { BiHide, BiShow } from "react-icons/bi";
 import * as Api from "../../api";
 import { showAlert, showSuccess } from "../../assets/alert";
 import { useNavigate } from "react-router-dom";
+import { DispatchContext } from "../../context/user/UserProvider";
 const UserNewPwdandOut = ({ user }) => {
   console.log(user);
   const navigate = useNavigate();
+  const dispatch = useContext(DispatchContext);
   const { opened, onOpen, onClose } = useToggle();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [pwdCheck, setPwdCheck] = useState("");
   const isPasswordValid = validatePassword(newPassword);
   const isPasswordSame = newPassword === pwdCheck;
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isLeaving, setIsLeaving] = useState(false);
+  const toggleCurrentPasswordVisibility = () => {
+    setShowCurrentPassword((prevState) => !prevState);
+  };
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
@@ -44,23 +50,33 @@ const UserNewPwdandOut = ({ user }) => {
     }
   };
 
-  const handleInputChange = (e) => {
-    const inputText = e.target.value;
-    setInputValue(inputText);
-    setIsLeaving(user.name + "/탈퇴한다" === inputText);
-  };
+  // const handleInputChange = (e) => {
+  //   const inputText = e.target.value;
+  //   setInputValue(inputText);
+  //   setIsLeaving(user.name + "/탈퇴한다" === inputText);
+  // };
+
+  useEffect(() => {
+    console.log(inputValue);
+    setIsLeaving(user.name + "/탈퇴한다" === inputValue);
+  }, [inputValue]);
 
   const handleOutSubmit = async () => {
-    try {
-      const res = await Api.del("/users/mypage");
+    if (isLeaving) {
+      try {
+        const res = await Api.del("/users/mypage");
 
-      if (res.status === 200) {
-        localStorage.removeItem("userToken");
-        showSuccess("탈퇴되었습니다.");
-        navigate("/", { reaplace: true });
+        if (res.status === 200) {
+          localStorage.removeItem("userToken");
+          dispatch({ type: "LOGOUT" });
+          showSuccess("탈퇴되었습니다.");
+          navigate("/", { reaplace: true });
+        }
+      } catch (err) {
+        showAlert(err.response.data.message);
       }
-    } catch (err) {
-      showAlert(err.response.data.message);
+    } else {
+      showAlert("이름/탈퇴한다 를 입력하셨나요?");
     }
   };
   return (
@@ -77,15 +93,27 @@ const UserNewPwdandOut = ({ user }) => {
             <S.Box>
               <S.Heading>지금 비밀번호</S.Heading>
               <S.Input
+                type={showCurrentPassword ? "text" : "password"}
                 name="currentPassword"
                 value={currentPassword}
                 onChange={(e) => {
                   setCurrentPassword(e.target.value);
                 }}
               />
+              {showCurrentPassword ? (
+                <BiHide
+                  className="pswdIcon"
+                  onClick={toggleCurrentPasswordVisibility}
+                />
+              ) : (
+                <BiShow
+                  className="pswdIcon"
+                  onClick={toggleCurrentPasswordVisibility}
+                />
+              )}
             </S.Box>
             <S.Box>
-              <S.Heading>바꿀 비밀번호</S.Heading>
+              <S.Heading>새로운 비밀번호</S.Heading>
               <S.Input
                 type={showPassword ? "text" : "password"}
                 name="newPassword"
@@ -144,7 +172,9 @@ const UserNewPwdandOut = ({ user }) => {
                 type="text"
                 name="inputValue"
                 value={inputValue}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                }}
               />
             </S.Box>
             {isLeaving ? (
