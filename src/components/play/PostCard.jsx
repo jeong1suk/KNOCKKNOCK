@@ -20,22 +20,7 @@ const MAX_TITLE_LENGTH = 10;
 function PostCard({post})  {
   const navigate = useNavigate();
 
-  // const [category, setCategory] = useState('술');
-  // const [title, setTitle] = useState('범계에서 오늘 저녁 술먹어요');
-  // const [people, setPeople] = useState(8);
-  // const [male, setMale] = useState('4');
-  // const [female, setFmale] = useState('4');
-  // const [totalM, setTotalM] = useState('8');
-  // const [totalF, setTotalF] = useState('8');
-  // const [place, setPlace] = useState('범계 용용선생');
-  // const [meetingTime, setMeetingTime] = useState('2시간');
-  // const [postImage, setPostImage] = useState('http://placekitten.com/200/200');
-  // const [userImage, setUserImage] = useState('http://placekitten.com/200/200');
-  // const [content, setContent] = useState('재밌게 놀사람 오세요~ ');
-  // const [nickname, setNickname] = useState('억만추');
 
-
-  console.log(post);
   return (
     <Card onClick = {() => navigate(`/playdetail/${post.postId}`)}>
       <ContentBox>
@@ -75,12 +60,11 @@ const Card = styled.div`
   display: flex;
   flex-direction: row;
   border-radius: 10px;
-  border: 3px solid #d3d3d3;
   margin: 20px 0 20px 0;
   padding: 20px;
   font-family: 'Pretendard-Regular';  
   width: 80%;
-
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   // transition: transform 0.2s ease-in-out;
   // height: 60vh;
   

@@ -158,7 +158,6 @@ const UserProfileLarge = () => {
   useEffect(() => {
     Api.get("/users/mypage")
       .then((response) => {
-        console.log(response.data);
         setUser(response.data);
       })
       .catch((error) => {

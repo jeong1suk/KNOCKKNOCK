@@ -129,7 +129,7 @@ function TodayKnock() {
           <RandomUserExplainDiv>
             <p>같은 연애운을 가진 사람을 찾아봐요!</p>
           </RandomUserExplainDiv>
-          <UserProfilesContainer>
+          <LoverProfilesContainer>
             {randomLovers.map((user) => (
               <UserProfile
                 user={user.User}
@@ -138,7 +138,7 @@ function TodayKnock() {
                 isLoverUser={isLoverUser[0]}
               />
             ))}
-          </UserProfilesContainer>
+          </LoverProfilesContainer>
         </>
       )}
       <RandomUserExplainDiv>
@@ -257,7 +257,7 @@ const ModalContent = styled.div`
   flex-direction: column;
   align-items: center;
   width: 70%;
-  height: 70%;
+  height: 80%;
   overflow: auto;
   background-color: #fff;
   padding: 20px;
@@ -267,35 +267,56 @@ const ModalContent = styled.div`
     width: 100%;
 `;
 
-const UserProfilesContainer = styled.div`
+const LoverProfilesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
   gap: 10%;
-  padding: 5%;
-  margin: -10rem 0 -5rem 0;
-  & > :nth-child(n) {
-    margin-top: 5rem;
-  }
+  row-gap: 1%;
+  padding: 0 3%;
+  margin: 0 0;
+  align-items: center;
+  justify-items: center;
 
-  @media (max-width: 1024px) {
+  // @media (max-width: 1024px) {
+  //   grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
+  //   gap: 20%;
+  //   row-gap: 0%;
+  // }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
     gap: 5%;
+  }
+`;
+
+const UserProfilesContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16vw, 1fr));
+  gap: 10%;
+  row-gap: 1%;
+  padding: 5%;
+  margin: 0 0;
+  align-items: center;
+  justify-items: center;
+
+  @media (max-width: 800px) {
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    gap: 5%;
+    row-gap: 0%;
   }
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     grid-template-columns: repeat(auto-fit, minmax(25vw, 1fr));
-    margin: -7rem 0 0 0;
-    gap: 3%;
-    & > :nth-child(n) {
-      margin-top: 3rem;
-    }
+    gap: 5%;
+    padding: 0 5%;
+
   }
 `;
 
 const RandomUserExplainDiv = styled.div`
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 50px;
+  margin: 10px 20px;
   p {
     font-family: "KIMM_Bold";
     font-size: 2rem;
@@ -307,13 +328,10 @@ const RandomUserExplainDiv = styled.div`
     border-radius: 30px;
   }
 
-  @media (max-width: 1024px) {
-    margin: 0 0 50px 20px;
-  }
-
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     p {
-      font-size: 18px;
+      font-size: 16px;
     }
+    margin: 20px 20px 0 20px;
   }
 `;
