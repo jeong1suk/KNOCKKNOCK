@@ -19,10 +19,12 @@ const MessageChat = styled.div`
   padding: 2rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   justify-content: space-between;
+
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 80vw;
     padding: 0rem;
   }
+
 `;
 
 const ChatRoom = styled.div`
@@ -40,6 +42,7 @@ const ChatRoom = styled.div`
     width: 90vw;
     // align-items: normal;
   }
+
 `;
 
 const UserListItem = styled.div`
@@ -54,16 +57,16 @@ const UserListItem = styled.div`
   &:hover {
     background-color: #f2f2f2;
   }
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 100%;
+    align-items: center;
+  }
+
 `;
 const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 100%;
-    align-items: center;
-  }
 `;
 
 const UserList = styled.div`
@@ -219,7 +222,7 @@ function ChatComponent() {
         chatId: chatId,
         content: message.content.trim(),
         senderId: message.senderId,
-        date: new Date(),
+        createdAt: new Date().toISOString(),
       };
       setChatHistory((prevChatHistory) => [...prevChatHistory, newMessage]);
     });
@@ -301,6 +304,7 @@ function ChatComponent() {
       }
     }
   };
+
 
   const handleChatClick = async (chat) => {
     try {
