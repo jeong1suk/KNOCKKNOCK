@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint.js";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint.js";
 export const GradientBackground = styled.div`
   /* Gradient background with two colors: #e6e9f0 and #eef1f5 */
   display: flex;
@@ -8,7 +8,8 @@ export const GradientBackground = styled.div`
   background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
   margin: 70px;
   padding: 40px;
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  min-height: 700px;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* viewport 너비가 767px 이하일 경우 */
     padding: 0;
     margin: 70px auto; /* 컨테이너를 가로 중앙 정렬 */
@@ -25,7 +26,8 @@ export const Container = styled.div`
   width: 70%;
   margin-top: 20px;
   max-width: 500px;
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  min-height: 600px;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* viewport 너비가 767px 이하일 경우 */
     max-width: 450px;
     width: 90%;
@@ -55,6 +57,7 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 70%;
 `;
 
 export const InputBox = styled.div`
@@ -141,7 +144,7 @@ export const SubmitButton = styled.input`
     cursor: not-allowed;
   }
 
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 70%;
   }
 `; // 로그인 버튼 활성화 시 커서 모양 변하는 것 추가

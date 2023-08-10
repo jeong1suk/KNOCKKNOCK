@@ -3,6 +3,7 @@ import styled from "styled-components";
 import io from "socket.io-client";
 import * as API from "../../api";
 import { getImageSrc } from "../../util/imageCheck";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 
 const socket = io.connect("http://localhost:3000", {
   path: "/socket.io",
@@ -18,6 +19,10 @@ const MessageChat = styled.div`
   padding: 2rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   justify-content: space-between;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 80vw;
+    padding: 0rem;
+  }
 `;
 
 const ChatRoom = styled.div`
@@ -31,6 +36,10 @@ const ChatRoom = styled.div`
   height: 10rem;
   margin-top: 2rem;
   width: 37rem;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 90vw;
+    // align-items: normal;
+  }
 `;
 
 const UserListItem = styled.div`
@@ -50,6 +59,11 @@ const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 100%;
+    align-items: center;
+  }
 `;
 
 const UserList = styled.div`
@@ -73,7 +87,16 @@ const Bubble = styled.div`
   padding-right: 1rem;
   padding-left: 1rem;
 `;
+const BubbleWithTime = styled.div`
+  display: flex;
+  flex-direction: ${(props) => (props.isUserMessage ? "row" : "row-reverse")};
+  align-items: flex-end;
+`;
 
+const MessageTime = styled.span`
+  font-size: 0.7rem;
+  color: #999;
+`;
 const MessageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -140,7 +163,22 @@ const SendButton = styled.button`
     background-color: #f2f2f2;
   }
 `;
+function formatMessageTime(createdAt, prevCreatedAt) {
+  const date = new Date(createdAt);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const month = date.toLocaleString("default", { month: "long" });
+  const day = date.getDate();
 
+  if (
+    !prevCreatedAt ||
+    date.toDateString() !== new Date(prevCreatedAt).toDateString()
+  ) {
+    return `${month} ${day}일 ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+  }
+
+  return `${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+}
 function ChatComponent() {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
@@ -151,8 +189,14 @@ function ChatComponent() {
   const [senderId, setSenderId] = useState(null);
   const [recieverId, setRecieverId] = useState("");
   const [notifications, setNotifications] = useState([]);
+  let prevCreatedAt = null;
 
-  const chatRef = useRef(null);
+  const messageRef = useRef(null);
+  const scrollToBottom = () => {
+    if (messageRef.current) {
+      messageRef.current.scrollTop = messageRef.current.scrollHeight;
+    }
+  };
   console.log(senderId);
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -160,11 +204,7 @@ function ChatComponent() {
       handleSendMessage();
     }
   };
-  const scrollToBottom = () => {
-    if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
-  };
+
   useEffect(() => {
     scrollToBottom();
   }, [chatHistory]);
@@ -179,6 +219,7 @@ function ChatComponent() {
         chatId: chatId,
         content: message.content.trim(),
         senderId: message.senderId,
+        date: new Date(),
       };
       setChatHistory((prevChatHistory) => [...prevChatHistory, newMessage]);
     });
@@ -243,12 +284,14 @@ function ChatComponent() {
         chatId: chatId,
         content: message.trim(),
         senderId,
+        createdAt: new Date().toISOString(),
       };
       try {
         socket.emit("sendMessage", {
           content: message,
           recieverId: recieverId,
           senderId,
+          createdAt: newMessage.createdAt,
         });
         const response = await API.post("/messages", newMessage);
         setChatHistory([...chatHistory, newMessage]);
@@ -258,8 +301,6 @@ function ChatComponent() {
       }
     }
   };
-
-  console.log(profileImage);
 
   const handleChatClick = async (chat) => {
     try {
@@ -300,23 +341,34 @@ function ChatComponent() {
     <ChatContainer>
       <MessageChat>
         <UserName>{userName}</UserName>
-        <MessageBox ref={chatRef}>
+        <MessageBox ref={messageRef}>
           {Array.isArray(chatHistory) && chatHistory.length > 0 ? (
-            chatHistory.map((chat) => (
-              <MessageContainer
-                key={chat.messageId}
-                isUserMessage={Number(chat.senderId) === senderId}
-              >
-                {Number(chat.senderId) !== senderId && (
-                  <ProfileImage
-                    src={profileImage || getImageSrc(profileImage)}
-                    alt="프로필사진"
-                  />
-                )}
+            chatHistory.map((chat, index) => {
+              const isUserMessage = Number(chat.senderId) === senderId;
+              const showDate = formatMessageTime(chat.createdAt, prevCreatedAt);
 
-                <Bubble className="message-bubble">{chat.content}</Bubble>
-              </MessageContainer>
-            ))
+              prevCreatedAt = chat.createdAt;
+              return (
+                <MessageContainer
+                  key={chat.messageId}
+                  isUserMessage={isUserMessage}
+                >
+                  {Number(chat.senderId) !== senderId && (
+                    <ProfileImage
+                      src={profileImage || getImageSrc(profileImage)}
+                      alt="프로필사진"
+                    />
+                  )}
+
+                  <BubbleWithTime isUserMessage={isUserMessage}>
+                    {index === 0 || showDate ? (
+                      <MessageTime>{showDate}</MessageTime>
+                    ) : null}
+                    <Bubble className="message-bubble">{chat.content}</Bubble>
+                  </BubbleWithTime>
+                </MessageContainer>
+              );
+            })
           ) : (
             <div></div>
           )}
@@ -332,7 +384,7 @@ function ChatComponent() {
           <SendButton onClick={handleSendMessage}>전송</SendButton>
         </ChatInputContainer>
       </MessageChat>
-      <ChatRoom ref={chatRef}>
+      <ChatRoom>
         <UserList>
           {allChats.length > 0 &&
             allChats

@@ -3,8 +3,18 @@ import styled from "styled-components";
 import { getImageSrc } from "../../util/imageCheck";
 import { useNavigate } from "react-router-dom";
 import * as Api from "../../api";
+function getRandomColorPairs() {
+  const colorPairs = [
+    ["#f0cdd0", "#efe6e6"],
+    ["#eef0cd", "#eeefe6"],
+    ["#cdecf0", "#e6eeef"],
+    ["#ebcdf0", "#eee6ef"],
+    ["#cdf0d4", "#e6efe9"],
+  ];
 
-
+  const randomIndex = Math.floor(Math.random() * colorPairs.length);
+  return colorPairs[randomIndex];
+}
 
 function shuffleArray(array) {
   const shuffledArray = array.slice();
@@ -14,9 +24,10 @@ function shuffleArray(array) {
   }
   return shuffledArray;
 }
-function UserProfile({ user }) {
+function UserProfile({ user, onClose }) {
   const navigate = useNavigate();
-
+  const colorPair = getRandomColorPairs(); // 랜덤한 색상 쌍 얻기
+  const rightColor = colorPair[0];
   const handleChatButtonClick = async () => {
     console.log(Api.get("/chats"));
     try {
@@ -32,21 +43,45 @@ function UserProfile({ user }) {
   const shuffledHobby = shuffleArray(user.hobby || []);
   const shuffledIdeal = shuffleArray(user.ideal || []);
   const shuffledPersonality = shuffleArray(user.personality || []);
+  const handleCloseClick = () => {
+    onClose();
+  };
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
   console.log(user, "user~~~!!");
   return (
     <Container>
       <UserProfileBox>
-        <BackgroundImage />
+        <CloseButton onClick={handleCloseClick}>X</CloseButton>
+        <BackgroundImage
+          style={{
+            background: `linear-gradient(to left, ${colorPair.join(", ")})`,
+          }}
+        />
         <ProfilePicture
           src={getImageSrc(user.profileImage)}
           alt="Profile Picture"
         />
         <UserProfileContainer>
-          <Nickname>{user.nickname}</Nickname>
+          <UserNameAndChat>
+            <Nickname>{user.nickname}</Nickname>
+            <ChatButton
+              style={{ backgroundColor: rightColor }}
+              onClick={handleChatButtonClick}
+            >
+              📩 Chat
+            </ChatButton>
+          </UserNameAndChat>
           <Email>{user.email}</Email>
+
           <Tagline>{user.introduce}</Tagline>
+
           <UserInfomationBox>
-            <ChatButton onClick={handleChatButtonClick}>채팅하기</ChatButton>
             <UserInformation>
               <UserLineContainer>
                 <UserLine>Name: {user.name}</UserLine>
@@ -95,26 +130,69 @@ function UserProfile({ user }) {
 }
 
 export default UserProfile;
-
+const CloseButton = styled.button`
+  background-color: transparent;
+  color: #999898;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+`;
 const ChatButton = styled.button`
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #f0987f;
+  background-color: #ffffff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-
-  &:hover {
-    background-color: #f0795e;
+  height: 2rem;
+  margin-left: 1rem;
+  margin-top: -1rem;
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 0.5rem; /* 아이콘과 텍스트 사이의 간격 설정 */
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
   }
+  @media (max-width: 600px) {
+    font-size: 0.6rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 460px) {
+    font-size: 0.4rem;
+    margin-top: 1rem;
+  }
+  &:hover {
+    background: ${(props) => props.backgroundColor || "#ffffff"};
+  }
+`;
+
+const UserNameAndChat = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-left: 5rem;
 `;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #f7f7f7;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  height: 100%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+  @media (max-width: 768px) {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const UserProfileContainer = styled.div`
@@ -122,20 +200,29 @@ const UserProfileContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: auto;
+  @media (max-width: 768px) {
+  }
 `;
 const UserProfileBox = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
+  height: auto;
+  position: relative;
 `;
 const BackgroundImage = styled.div`
   width: 100%;
   height: 15vh;
-  background: linear-gradient(to left, #f0987f, #f8d6cc);
+  background: ${(props) => props.style.background};
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   background-size: cover;
   background-position: center;
+  @media (max-width: 768px) {
+    height: 13vh;
+  }
+  @media (max-width: 460px) {
+    height: 11vh;
+  }
 `;
 const ProfilePicture = styled.img`
   width: 6rem;
@@ -155,6 +242,17 @@ const Nickname = styled.h2`
   justify-content: flex-start;
   align-items: center;
   color: #4b4a4a;
+  @media (max-width: 768px) {
+    font-size: 1.3rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 460px) {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }
 `;
 
 const Email = styled.h4`
@@ -163,6 +261,9 @@ const Email = styled.h4`
   justify-content: flex-start;
   align-items: center;
   color: #cacaca;
+  @media (max-width: 768px) {
+    font-size: 0.3rem;
+  }
 `;
 
 const Tagline = styled.div`
@@ -175,12 +276,20 @@ const Tagline = styled.div`
   align-items: center;
   color: #676565;
   font-size: 0.9rem;
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+    font-size: 0.4rem;
+  }
 `;
 
 const UserInfomationBox = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 0 3rem;
+  @media (max-width: 1080px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const UserInformation = styled.div`
@@ -188,7 +297,11 @@ const UserInformation = styled.div`
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `;
+
 const UserLineContainer = styled.div`
   display: flex;
   width: 9rem;
@@ -198,13 +311,26 @@ const UserLineContainer = styled.div`
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   padding: 0.5rem;
+  @media (max-width: 768px) {
+    padding: 0.3rem;
+    margin: 0.1rem;
+  }
 `;
 const UserLine = styled.h3`
   margin: 0.3rem;
   color: #8f8f8f;
   font-size: 1rem;
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
-const HobbyAllBox = styled.div``;
+const HobbyAllBox = styled.div`
+  @media (max-width: 1080px) {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+  }
+`;
 const HobbyBox = styled.div`
   width: 3.8rem;
   height: 2rem;
@@ -217,6 +343,18 @@ const HobbyBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    width: 3.3rem;
+    height: 1.8rem;
+    font-size: 0.5rem;
+    margin: 0rem 0.1rem;
+  }
+  @media (max-width: 360px) {
+    width: 2.8rem;
+    height: 1.5rem;
+    font-size: 0.3rem;
+    margin: 0rem 0.1rem;
+  }
 `;
 const IdealBox = styled.div`
   width: 3.8rem;
@@ -230,6 +368,18 @@ const IdealBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    width: 3.3rem;
+    height: 1.8rem;
+    font-size: 0.5rem;
+    margin: 0rem 0.1rem;
+  }
+  @media (max-width: 360px) {
+    width: 2.8rem;
+    height: 1.5rem;
+    font-size: 0.3rem;
+    margin: 0rem 0.1rem;
+  }
 `;
 
 const PersonBox = styled.div`
@@ -244,10 +394,22 @@ const PersonBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    width: 3.3rem;
+    height: 1.8rem;
+    font-size: 0.5rem;
+    margin: 0rem 0.1rem;
+  }
+  @media (max-width: 360px) {
+    width: 2.8rem;
+    height: 1.5rem;
+    font-size: 0.3rem;
+    margin: 0rem 0.1rem;
+  }
 `;
 const HobbyBoxContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 1rem;
+  margin: 0.5rem;
 `;

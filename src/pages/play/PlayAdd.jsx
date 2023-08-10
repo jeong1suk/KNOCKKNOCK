@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { showSuccess } from "../../assets/alert";
 
 import * as Api from '../../api';
 
@@ -8,6 +9,8 @@ import { currentDate, currentTime } from '../../util/currentDateTime';
 
 import { categories } from '../../constants/CategoryConstants';
 import { useImageUpload } from '../../components/hooks/UseImageUpload';
+import DropdownMenu from '../../components/modal/DropdownMenu';
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -34,28 +37,20 @@ function PlayAdd() {
   const [postContent, setPostContent] = useState('');
 
 
-
-
-
   const handleCategoryChange = (e) => {
     setPostType(e.target.value);
   }
-  const errorMessage = validateTotal(totalM, totalF);
-  if (errorMessage) {
-    alert(errorMessage);
-    setTotalM('');
-    setTotalF('');
-    return;
-  }
+
 
   const handlePostSubmit = async e => {
     e.preventDefault();
 
-    if (totalM <= 0 || totalM >= 6 || totalF <= 0 || totalF >= 6) {
-      alert("남자와 여자의 수는 1~5 사이의 값이어야 합니다.");
-      setTotalM('');  
-      setTotalF('');  
-      return;  
+    const errorMessage = validateTotal(totalM, totalF);
+    if (errorMessage) {
+      alert(errorMessage);
+      setTotalM('');
+      setTotalF('');
+      return;
     }
 
 
@@ -90,7 +85,7 @@ function PlayAdd() {
         })
       }
 
-      
+      showSuccess("게시물이 등록되었습니다")
       navigate('/play');
     } catch (err) {
       console.log(err);
@@ -137,20 +132,20 @@ function PlayAdd() {
             />
           </div>
         </InputBox>
-        <InputBox>
+        <InputBox style={{justifyContent: "end"}}>
           {imageUrl && (
-            <div style={{ width: '200px', paddingLeft: "50px" }}>
+            <div style={{ width: '200px' }}>
                 <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} id="preview" alt="Preview" />
             </div>
           )}
         </InputBox>
         <InputBox>
           <StyledLabel>뭐할까?</StyledLabel>
-          <StyledSelect value={postType} onChange={handleCategoryChange} required>
-            {categories.map((category, index) => 
-              <option key={index} value={category}>{category}</option>
-            )}
-          </StyledSelect>
+          <DropdownMenu 
+            options={categories.map(category => ({label: category, value: category}))}
+            selectedOption={postType}
+            handleOptionChange={handleCategoryChange}
+          />
         </InputBox>
         <InputBox>
           <StyledLabel>언제?</StyledLabel>
@@ -222,16 +217,8 @@ const TopBox = styled.div`
     line-height: 1.2;
   }
   
-  @media (max-width: 870px) {
-    height: 80px;
-    // padding: 50px 0 0 80px;
 
-    p {
-      font-size: 1.2rem; 
-    }
-  }
-
-  @media (max-width: 510px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     height: 40px;
     // padding: 50px 0 0 80px;
 
@@ -247,17 +234,15 @@ const PostAddBox = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #FFFFFF;
-  width: 70vw;
+  width: 80%;
   height: 100%;
   margin: 0px 0 50px 0;
-  // padding: 50px 50px 50px 50px;
   border-radius: 15px;
   font-size: 1.2rem; 
   
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  @media (max-width: 750px) {
-    // height: 80px;
-    // padding: 50px 0 0 80px;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+
     width: 90vw;
     font-size: 0.9rem;
   }
@@ -271,21 +256,17 @@ const InputBox = styled.div`
   display: flex;
   align-items: center;
   width: 90%;
+  justify-content: space-between;
 
-  @media (max-width: 1200px) {
-    justify-content: space-between;
-  }
 `
 
 const StyledLabel = styled.label`
   display: flex;
   font-weight: bold;
   margin-right: 10px;
-  width: 15%;
+  width: 50%;
 
-  @media (max-width: 1200px) {
-    width: 50%;
-  }
+
 `
 
 const StyledInput = styled.input`
@@ -340,14 +321,7 @@ const StyledInput = styled.input`
 `;
 
 
-const StyledSelect = styled.select`
-  background-color: #FFFFFF;
-  padding: 10px;
-  margin: 0 10px 0 0;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 30%;
-`;
+
 
 const GenderSelectBox = styled.div`
   display: flex;
@@ -358,6 +332,7 @@ const GenderSelectBox = styled.div`
 `
 
 const StyledTextareaAutosize = styled(TextareaAutosize)`
+  resize: none;
   background-color: #FFFFFF;
   padding: 10px;
   margin-left: 20px;
@@ -376,7 +351,7 @@ const PostButton = styled.button`
   border-radius: 50px;
   cursor: pointer;
   margin: 50px 0 30px 0;
-  width: 20%;
+  width: 25%;
   height: 80px;
   transition: 0.3s;
 
@@ -386,9 +361,9 @@ const PostButton = styled.button`
     transform: scale(1.02);
   }
 
-  @media (max-width: 750px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     margin: 20px 0;
-    width: 50%;
+    width: 40%;
     height: 60px;
     font-size: 70%;
   }

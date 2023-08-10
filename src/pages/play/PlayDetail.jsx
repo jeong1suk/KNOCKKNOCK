@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
 import { FaEllipsisV, FaEdit, FaTrashAlt } from 'react-icons/fa';
-
 import dayjs from "dayjs";
+import { showSuccess, showAlert } from "../../assets/alert";
+
 
 import * as Api from "../../api";
-
 
 import styled from "styled-components";
 import { isWriter } from "../../util/isWriter";
@@ -19,6 +18,7 @@ import Modal from "../../components/modal/Modal";
 import GenderInfo from "../../components/play/GenderInfo";
 import ParticipantList from "../../components/play/ParticipantList";
 import ParticipantUserModal from "../../components/play/ParticipantUserModal";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 
 import { UserStateContext } from "../../context/user/UserProvider";
 
@@ -54,7 +54,6 @@ function PlayDetail() {
   const [isAccepter, setIsAccepter] = useState(false);
   const [menuOpen, setMenuOpen] = useState(null);
 
-
   const [nextCursor, setNextCursor] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isReached, setIsReached] = useState(false);
@@ -72,34 +71,35 @@ function PlayDetail() {
     try {
       const status = dropdownSelection === "신청인원" ? "pending" : "accepted";
       let res;
-      if(status == "pending") {
-        if(genderSelection == "전체"){
-            res = await Api.get(`/participants/${postId}/userlist`);
-        }
-        else{
-            res = await Api.get(`/participants/${postId}/userlist?gender=${genderSelection}`);
+      if (status == "pending") {
+        if (genderSelection == "전체") {
+          res = await Api.get(`/participants/${postId}/userlist`);
+        } else {
+          res = await Api.get(
+            `/participants/${postId}/userlist?gender=${genderSelection}`
+          );
         }
         setParticipantsList(res.data.participantsList);
-        
-      }
-      else if(status == "accepted") {
+      } else if (status == "accepted") {
         res = await Api.get(`/participants/${postId}/acceptedlist`);
         setParticipantsList(res.data.acceptedUsers);
-
       }
     } catch (err) {
-      alert("참여자 정보를 불러오는 데 실패했습니다.");
+      showAlert("참여자 정보를 불러오는 데 실패했습니다.");
     }
   };
-
-
 
   const handleAccept = async (participantId) => {
     try {
       const res = await Api.put(`/participants/${participantId}/allow`);
       fetchParticipantsList();
+      showSuccess("수락하였습니다");
     } catch (err) {
-      alert("수락 처리에 실패했습니다.");
+      if (err.response.data.message) {
+        showAlert(err.response.data.message);
+      } else {
+        alert("라우팅 경로가 잘못되었습니다.");
+      }
     }
   };
 
@@ -107,10 +107,17 @@ function PlayDetail() {
     try {
       await Api.put(`/participants/${participantId}/deny`);
       fetchParticipantsList();
+      showSuccess("거절하였습니다");
     } catch (err) {
-      alert("거절 처리에 실패했습니다.");
+      if (err.response.data.message) {
+        showAlert(err.response.data.message);
+      } else {
+        alert("라우팅 경로가 잘못되었습니다.");
+      }
     }
   };
+
+
 
   const fetchGetDetail = async () => {
     try {
@@ -119,7 +126,7 @@ function PlayDetail() {
       setPost(postData);
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -130,7 +137,6 @@ function PlayDetail() {
     const confirmApplyPost = window.confirm("모임에 참가신청하시겠습니까?");
     if (confirmApplyPost) {
       applyPostRequest(postId);
-      
     }
   };
 
@@ -140,19 +146,18 @@ function PlayDetail() {
     );
     if (confirmApplyPut) {
       applyPutRequest(postId);
-      alert("취소되었습니다");
+      showSuccess("취소되었습니다");
     }
   };
 
   const applyPostRequest = async (postId) => {
     try {
       const res = await Api.post(`/participants/${postId}`);
-      alert("신청되었습니다");
       applyGetRequest();
-      
+      showSuccess("신청되었습니다");
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -165,7 +170,7 @@ function PlayDetail() {
       applyGetRequest();
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -186,15 +191,13 @@ function PlayDetail() {
         alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
-
-
-
+  };
 
   const handlePostDelete = async (postId) => {
     const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmDelete) {
       deletePostRequest(postId);
+      showSuccess("게시글을 하였습니다");
     }
   };
 
@@ -204,26 +207,21 @@ function PlayDetail() {
       navigate(`/play`);
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
+  };
 
-
-
-
-
-  
-const fetchGetComment = useCallback(
-  async cursor => {
-    try {
-      if (cursor === -1) {
-        setIsLoading(false);
-        return;
-      }
-      setIsLoading(true);
+  const fetchGetComment = useCallback(
+    async (cursor) => {
+      try {
+        if (cursor === -1) {
+          setIsLoading(false);
+          return;
+        }
+        setIsLoading(true);
 
         const res = await Api.get(
           `/comments/${postId}?cursor=${cursor}&limit=${limit}`
@@ -272,7 +270,7 @@ const fetchGetComment = useCallback(
     const clientHeight = document.documentElement.clientHeight;
 
     if (scrollTop + clientHeight >= scrollHeight - 1) {
-        setIsReached(true);
+      setIsReached(true);
     }
   }, []);
 
@@ -321,22 +319,24 @@ const fetchGetComment = useCallback(
     }
   };
 
+  const handleProfileModalOpen = (commentUserId) => {
+    setIsProfileModalOpen(true);
+    setSelectedUserId(commentUserId);
+  }
+
+  
   const editComment = (commentId, content) => {
     setIsEditing(commentId);
     setEditedContent(content);
+    setMenuOpen(null);
   };
 
   const saveComment = (commentId) => {
     editCommentRequest(commentId, editedContent);
     setIsEditing(null);
+    setMenuOpen(null);
   };
 
-  const deleteComment = (commentId) => {
-    const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
-    if (confirmDelete) {
-      deleteCommentRequest(commentId);
-    }
-  };
 
   const editCommentRequest = async (commentId, editedContent) => {
     try {
@@ -362,23 +362,35 @@ const fetchGetComment = useCallback(
         },
       };
 
-      setComments((prevComments) => [newComment, ...prevComments.slice(1)]);
+      setComments((prevComments) => 
+        prevComments.map(comment => comment.commentId === commentId ? newComment : comment)
+      );
+
+      
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
     }
   };
 
+  const deleteComment = (commentId) => {
+    const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+    if (confirmDelete) {
+      deleteCommentRequest(commentId);
+      showSuccess("삭제되었습니다");
+    }
+  };
+
   const deleteCommentRequest = async (commentId) => {
     try {
       const res = await Api.del(`/comments/${postId}/${commentId}`);
-      setComments((prevComments) => [...prevComments.slice(1)]);
+      setComments((prevComments) => prevComments.filter(comment => comment.commentId !== commentId));
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -388,19 +400,18 @@ const fetchGetComment = useCallback(
   useEffect(() => {
     fetchGetDetail();
     applyGetRequest();
+    window.scrollTo(0, 0);
   }, []);
-
-
 
   return (
     <>
       <TopBox>
         <TopInnerBox>
           <TopPtagBox>
-            <p>같이 놀자</p>
-            <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+            <p>다양한 단체 미팅 중</p>
+            <p>원하는 미팅에 참여해보세요</p>
           </TopPtagBox>
-          
+
           {isWriter({ userId, post }) ? (
             <TopBoxButton onClick={() => setIsParticipantModalOpen(true)}>
               신청인원 보기
@@ -427,52 +438,55 @@ const fetchGetComment = useCallback(
             </TopBoxButton>
           )}
 
-        {isParticipantModalOpen &&  (
-          <Modal onClose={() => setIsParticipantModalOpen(false)}>
-            <DropdownMenuDiv>
-              <DropdownMenu
-                options={[
-                  { label: "신청인원", value: "신청인원" },
-                  { label: "모집된 인원", value: "모집된 인원" },
-                ]}
-                selectedOption={dropdownSelection}
-                handleOptionChange={(e) => setDropdownSelection(e.target.value)}
-              />
-
-              {dropdownSelection === "신청인원" && (
+          {isParticipantModalOpen && (
+            <Modal onClose={() => setIsParticipantModalOpen(false)}>
+              <DropdownMenuDiv>
                 <DropdownMenu
                   options={[
-                    { label: "전체", value: "전체" },
-                    { label: "남", value: "남" },
-                    { label: "여", value: "여" },
+                    { label: "신청인원", value: "신청인원" },
+                    { label: "모집된 인원", value: "모집된 인원" },
                   ]}
-                  selectedOption={genderSelection}
-                  handleOptionChange={(e) => setGenderSelection(e.target.value)}
+                  selectedOption={dropdownSelection}
+                  handleOptionChange={(e) =>
+                    setDropdownSelection(e.target.value)
+                  }
                 />
-              )}
-            </DropdownMenuDiv>
-            <ParticipantList
-              participantsList={participantsList}
-              handleAccept={handleAccept}
-              handleReject={handleReject}
-              selectedOption={dropdownSelection}
-              setIsProfileModalOpen={setIsProfileModalOpen}
-              setSelectedUserId={setSelectedUserId}
-            />
-          </Modal>
-        )}
 
-        {isProfileModalOpen &&  (
-          <ModalOverlay>
-            <ModalContentUser>
-              <ParticipantUserModal
-                userId={selectedUserId}
+                {dropdownSelection === "신청인원" && (
+                  <DropdownMenu
+                    options={[
+                      { label: "전체", value: "전체" },
+                      { label: "남", value: "남" },
+                      { label: "여", value: "여" },
+                    ]}
+                    selectedOption={genderSelection}
+                    handleOptionChange={(e) =>
+                      setGenderSelection(e.target.value)
+                    }
+                  />
+                )}
+              </DropdownMenuDiv>
+              <ParticipantList
+                participantsList={participantsList}
+                handleAccept={handleAccept}
+                handleReject={handleReject}
+                selectedOption={dropdownSelection}
                 setIsProfileModalOpen={setIsProfileModalOpen}
+                setSelectedUserId={setSelectedUserId}
               />
-            </ModalContentUser>
-          </ModalOverlay>
-        )}
+            </Modal>
+          )}
 
+          {isProfileModalOpen && (
+            <ModalOverlay>
+              <ModalContentUser>
+                <ParticipantUserModal
+                  userId={selectedUserId}
+                  setIsProfileModalOpen={setIsProfileModalOpen}
+                />
+              </ModalContentUser>
+            </ModalOverlay>
+          )}
         </TopInnerBox>
       </TopBox>
       <PostDetailBox>
@@ -507,6 +521,7 @@ const fetchGetComment = useCallback(
             ) : (
               <RecruitAbleBox>모집중</RecruitAbleBox>
             )}
+
             <GenderInfoBox>
               <GenderInfo
                 total={post.totalM}
@@ -520,16 +535,19 @@ const fetchGetComment = useCallback(
               />
             </GenderInfoBox>
           </InputBox>
-          <InputBox>
-            <p style={{ fontSize: "2vw", fontWeight: "bold" }}>{post.title}</p>
-          </InputBox>
+
+
+          <TitleInputBox>
+            <p>{post.title}</p>
+          </TitleInputBox>
+
           <InputBox style={{ flexDirection: "column", alignItems: "start" }}>
             <p style={{ margin: "0px 0px" }}>장소: {post.place}</p>
             <p style={{ margin: "10px 0px" }}>
               만남시간: {formatDate(post.meetingTime)}
             </p>
           </InputBox>
-          <InputBox>
+          <InputBox style={{justifyContent: "center", width: "100%"}}>
             <img
               src={getImageSrc(post.PostFiles?.[0]?.File?.url)}
               alt="postImage"
@@ -546,64 +564,67 @@ const fetchGetComment = useCallback(
           </InputBox>
         </PostDetailFirstBox>
         <CommentBox>
-          {isAccepter ? 
-          <>
-            <p>댓글</p>
-            <CommentInputArea>
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="댓글을 작성해주세요."
-              />
-              <button onClick={() => postComment(postId)}>댓글 등록</button>
-            </CommentInputArea>
-          </>
-          :
-          <p>수락된 참가자만 댓글확인 및 작성 할 수 있습니다.</p>
-          }
-          
+          {isAccepter ? (
+            <>
+              <p>댓글</p>
+              <CommentInputArea>
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="댓글을 작성해주세요."
+                />
+                <button onClick={() => postComment(postId)}>댓글 등록</button>
+              </CommentInputArea>
+            </>
+          ) : (
+            <p>수락된 참가자만 댓글확인 및 작성 할 수 있습니다.</p>
+          )}
+
           {comments.map((comment, commentId) => (
             <CommentDetailBox key={commentId}>
               <CommentImageBox>
                 <img
                   src={getImageSrc(comment.User?.UserFiles?.[0]?.File?.url)}
                   alt="유저 프로필"
-                  style={{
-                    height: "2.5rem",
-                    width: "2.5rem",
-                    borderRadius: "50%",
-                    backgroundColor: "#F9FAFB",
-                    marginRight: "20px",
-                  }}
+                  onClick={() => handleProfileModalOpen(comment.userId)}
                 />
               </CommentImageBox>
               <CommentContentBox>
                 <CommentNicknameBox>
-                  <p style={{fontWeight: "bold"}}>{comment.User.nickname}</p>
-                  <p style={{color: "#555"}}>{timeAgo(dayjs(comment.createdAt).format('YYYY-MM-DD HH:mm'))}</p>
+                  <p style={{ fontWeight: "bold" }}>{comment.User.nickname}</p>
+                  <p style={{ color: "#555" }}>
+                    {timeAgo(
+                      dayjs(comment.createdAt).format("YYYY-MM-DD HH:mm")
+                    )}
+                  </p>
                 </CommentNicknameBox>
-                
+
                 {comment.commentId === isEditing ? (
                   <CommentEditArea>
                     <textarea
                       value={editedContent}
                       onChange={(e) => setEditedContent(e.target.value)}
-                      style={{width: "100%", minHeight: "40px"}}
+                      style={{ width: "100%", minHeight: "40px" }}
                     />
-                    
-                      <button onClick={() => setIsEditing(null)}>취소</button>
-                      <button onClick={() => saveComment(comment.commentId)}>수정</button>
-                    
+
+                    <button onClick={() => setIsEditing(null)}>취소</button>
+                    <button onClick={() => saveComment(comment.commentId)}>
+                      수정
+                    </button>
                   </CommentEditArea>
                 ) : (
                   <CommentEditDeleteBox>
                     <p>{comment.content}</p>
                     {comment.userId === userId && (
-                      <div style={{display: "flex", justifyContent: "flex-end"}}>
+                      <div
+                        style={{ display: "flex", justifyContent: "flex-end" }}
+                      >
                         <IconButton
                           onClick={(e) => {
                             e.stopPropagation();
-                            setMenuOpen((prev) => (prev === commentId ? null : commentId));
+                            setMenuOpen((prev) =>
+                              prev === commentId ? null : commentId
+                            );
                           }}
                         >
                           <FaEllipsisV />
@@ -611,7 +632,9 @@ const fetchGetComment = useCallback(
                         {menuOpen === commentId && (
                           <MenuWrapper>
                             <IconButton
-                              onClick={() => editComment(comment.commentId, comment.content)}
+                              onClick={() =>
+                                editComment(comment.commentId, comment.content)
+                              }
                             >
                               <FaEdit /> 수정
                             </IconButton>
@@ -650,70 +673,87 @@ const IconButton = styled.button`
   }
 `;
 
-const MenuWrapper = styled.div`
-  width: 20%;
-  margin: 0px 0px 0px 0px;
-  position: absolute;
-  top: 0;
-  left: 100%;
-  display: flex;
-  background: #fff;
-
-  z-index: 1;
-`;
-
 const TopBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: end;
   background-color: #fff;
   height: 200px;
-  margin: 100px 0px 0px 0px;
+  margin: 0px 0px 50px 0px;
+  padding-bottom: 0px;
+
+  
 `;
 
 const TopInnerBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20%;
+  gap: 10%;
   width: 75%;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    flex-direction: column;
+    gap: 0;
+    align-items: start;
+  }
 `;
 
 const TopPtagBox = styled.div`
-  font-family: 'KIMM_Bold';
-  font-size: 3rem; 
-  color: #1d1d1f; 
+  font-family: "KIMM_Bold";
+  font-size: 3rem;
+  color: #1d1d1f;
   font-weight: 600;
   line-height: 1.2;
   margin-bottom: 0px;
 
-  p:last-of-type {
-    font-size: 1.5rem; 
-    color: #1d1d1f; 
-    font-weight: 500;
+  p {
+    margin: 0px;
+    font-size: 2rem;
+    color: #1d1d1f;
     line-height: 1.2;
+  }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 40px;
+    // padding: 50px 0 0 80px;
+
+    p {
+      font-size: 0.8rem;
+    }
   }
 `;
 
 const TopBoxButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 100%;
-  font-family: 'KIMM_Bold';
+  font-family: "KIMM_Bold";
   padding: 10px 10px;
-  background-color: #F7CBD0;
+  background-color: #f7cbd0;
   color: black;
   border: 10px double #fff;
   border-radius: 50px;
   cursor: pointer;
   margin: 10px 0;
   width: 30%;
-  height: 30%;
+  height: 100px;
   transition: 0.3s;
   text-overflow: ellipsis;
 
   &:hover {
-    border: 1px solid #3B0B0B;
-    color: #3B0B0B;
+    border: 1px solid #3b0b0b;
+    color: #3b0b0b;
     transform: scale(1.02);
+  }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+      height: 40px;
+      width: 50%;
+      height: 60%;
+      font-size: 0.8rem; 
   }
 `;
 
@@ -723,7 +763,7 @@ const PostDetailBox = styled.div`
   align-items: center;
   background-color: #fff;
   height: 100%;
-  margin: 50px 0 0 0;
+  margin: 0 0 0 0;
   padding: 20px 50px 20px 50px;
 `;
 
@@ -733,31 +773,87 @@ const InputBox = styled.div`
   align-items: center;
   padding: 10px;
   width: 80%;
-  font-family: "San Francisco", Arial, sans-serif;
+  font-family: 'KIMM_Bold'
+  
+  `;
+
+const TitleInputBox = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 10px;
+  width: 80%;
+  font-family: 'KIMM_Bold';
+  font-size: 3rem; 
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    font-size: 1.2rem; 
+  }
 `;
 
 const RecruitAbleBox = styled.div`
-  font-family: 'KIMM_Bold';
-  background-color: #F7CBD0; // Same as the button above
+  font-family: "KIMM_Bold";
+  background-color: #f7cbd0; // Same as the button above
   display: flex;
   justify-content: center;
   align-items: center;
   width: 15%;
   border-radius: 30px;
   padding: 20px 0px 20px 0px;
+  height: 20%;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 30%;
+  }
 `;
-
-
-
 
 const CommentBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 80%;
+  width: 85%;
 
-  @media (max-width: 600px) {    
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%;
+  }
+`;
+
+const CommentInputArea = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  textarea {
+    width: 90%;
+    padding: 10px;
+    margin-right: 10px;
+    resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
+    border: 1px solid #cccccc; // Light gray border
+  }
+
+  button {
+    width: 20%;
+    background-color: #f7cbd0;
+    color: black;
+    padding: 10px 10px;
+    border: 5px double #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-overflow: ellipsis;
+
+    &:hover {
+      border: 5px solid #3b0b0b;
+      color: #3b0b0b;
+      transform: scale(1.02);
+    }
+
+    @media (max-width: ${MOBILE_BREAK_POINT}) {
+      font-size: 0.5rem;
+
+
+
+    }
+  }
 `;
 
 const CommentDetailBox = styled.div`
@@ -782,7 +878,7 @@ const CommentNicknameBox = styled.div`
   p {
     margin: 5px 10px 0px 0px;
   }
-`
+`;
 
 const CommentContentBox = styled.div`
   display: flex;
@@ -792,38 +888,37 @@ const CommentContentBox = styled.div`
 `;
 
 const CommentEditArea = styled.div`
-display: flex;
-justify-content: space-between;
-align-items: center;
-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 
-textarea {
-  width: 90%;
-  padding: 10px;
-  margin: 10px 10px 10px 0px;
-  resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
-  border: 1px solid #cccccc; // Light gray border
-}
-
-button {
-  width: 10%;
-  background-color: #F7CBD0;
-  color: black;
-  padding: 10px;
-  border: 5px double #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-  margin-right: 3%;
-  text-overflow: ellipsis;
-  &:hover {
-    border: 5px solid #3B0B0B;
-    color: #3B0B0B;
-    transform: scale(1.02);
+  textarea {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 10px 10px 0px;
+    resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
+    border: 1px solid #cccccc; // Light gray border
   }
-}
-`
 
+  button {
+    width: 10%;
+    background-color: #f7cbd0;
+    color: black;
+    padding: 10px;
+    border: 5px double #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-right: 3%;
+    text-overflow: ellipsis;
+    &:hover {
+      border: 5px solid #3b0b0b;
+      color: #3b0b0b;
+      transform: scale(1.02);
+    }
+  }
+`;
 
 const CommentEditDeleteBox = styled.div`
   position: relative;
@@ -833,7 +928,24 @@ const CommentEditDeleteBox = styled.div`
   p {
     width: 90%;
   }
-`
+`;
+
+const MenuWrapper = styled.div`
+  width: 20%;
+  margin: 0px 0px 0px 0px;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  display: flex;
+  background: #fff;
+  background-color: rgba(255, 255, 255, 0);
+
+  z-index: 1;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    top: 70%;
+    left: 70%;
+  }
+`;
 
 const DropdownMenuDiv = styled.div`
   display: flex;
@@ -841,64 +953,26 @@ const DropdownMenuDiv = styled.div`
   align-items: center;
 `;
 
-
 const DropModifyDeleteDiv = styled.div`
   position: absolute;
-  top: 100%;  // 아이콘의 바로 아래에 위치하도록 설정
-  right: 0%;   // 아이콘의 왼쪽 끝을 기준으로 설정
+  top: 100%; // 아이콘의 바로 아래에 위치하도록 설정
+  right: 0%; // 아이콘의 왼쪽 끝을 기준으로 설정
   display: flex;
   gap: 20px;
   align-items: center;
 `;
 
-
-
-const CommentInputArea = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-
-  textarea {
-    width: 90%;
-    padding: 10px;
-    margin-right: 10px;
-    resize: none; // 사용자가 textarea 크기를 변경하지 못하게 함
-    border: 1px solid #cccccc; // Light gray border
-  }
-
-  button {
-    width: 20%;
-    background-color: #F7CBD0;
-    color: black;
-    padding: 10px 10px;
-    border: 5px double #fff;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-    text-overflow: ellipsis;
-    
-    &:hover {
-      border: 5px solid #3B0B0B;
-      color: #3B0B0B;
-      transform: scale(1.02);
-    }
-  }
-`;
-
-
-
 const GenderInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
-  margin-top:15px;
+  margin-top: 15px;
   padding: 10px;
   gap: 10px;
 `;
 
 const PostDetailFirstBox = styled.div`
-
+font-family: 'Pretendard-Regular';
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -927,6 +1001,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   z-index: 9999;
 `;
 
@@ -938,4 +1013,9 @@ const ModalContentUser = styled.div`
   padding-top: 2rem;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {    
+    width: 90%;
+    overflow-y: auto;
+  }
 `;

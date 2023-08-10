@@ -6,12 +6,18 @@ import UserProfileEdit from "./UserProfileEdit";
 import UserNewPwdandOut from "./UserNewPwdandOut";
 import { getImageSrc } from "../../util/imageCheck";
 import { UserStateContext } from "../../context/user/UserProvider";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 // import { DndProvider, useDrag, useDrop } from "react-dnd";
 // import { HTML5Backend } from "react-dnd-html5-backend";
 
 const UserProfileContainer = styled.div`
   width: 22rem;
-  margin-top: 2rem;
+  margin-top: -2rem;
+  border: 2px solid blue;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 90vw;
+    z-index: 2;
+  }
 `;
 const UserProfileBox = styled.div`
   display: flex;
@@ -19,6 +25,11 @@ const UserProfileBox = styled.div`
   flex-direction: column;
   margin-left: 6rem;
   margin-right: 3rem;
+  border: 2px solid red;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    margin-left: 0;
+    margin-right: 0;
+  }
 `;
 const Nickname = styled.h2`
   display: flex;
@@ -55,7 +66,7 @@ const UserInformation = styled.div`
 `;
 const UserLineContainer = styled.div`
   display: flex;
-  width: 10rem;
+  // width: 10rem;
   margin-bottom: 0.3rem;
   justify-content: space-around;
   border: 1px solid #e0e0e0;
@@ -125,8 +136,13 @@ const ProfilePicture = styled.img`
   margin-top: -5.5rem;
   margin-right: 50rem;
   margin-left: 8rem;
-  z-index: 1;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    margin-right: 0;
+    margin-left: 6rem;
+    margin-top: -50rem;
+    z-index: 1000;
+  }
 `;
 function shuffleArray(array) {
   const shuffledArray = array.slice();

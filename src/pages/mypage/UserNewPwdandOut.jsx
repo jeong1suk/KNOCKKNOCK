@@ -72,6 +72,8 @@ const UserNewPwdandOut = ({ user }) => {
       {opened && (
         <ModalOverlay>
           <S.Modal style={{ marginTop: "200px" }}>
+            <CloseButton onClick={onClose}>X</CloseButton>
+            <br />
             <S.Box>
               <S.Heading>지금 비밀번호</S.Heading>
               <S.Input
@@ -170,4 +172,15 @@ const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin-bottom: 10px;
 `;

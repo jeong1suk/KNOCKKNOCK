@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {
-  MOBILE_BREAK_POINT,
-  TABLET_BREAK_POINT,
-} from "../../components/layout/breakpoint";
-import spring from "../../assets/spring.jpeg";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
+import spring from "../../assets/spring3.webp";
+import summer from "../../assets/summer1.webp";
+import fall from "../../assets/fall1.webp";
+import winter from "../../assets/winter1.webp";
+import wait from "../../assets/wait.jpeg";
 const Ai = () => {
   const [result, setResult] = useState("");
   const [base64, setBase64] = useState("");
@@ -36,7 +37,7 @@ const Ai = () => {
     try {
       setClickPC(true);
       const response = await axios.post(
-        "http://127.0.0.1:5002/analyze",
+        "http://34.64.223.226:5002/analyze",
         formData,
         {
           headers: {
@@ -63,12 +64,15 @@ const Ai = () => {
     // console.log("메이크업 받기 버튼이 클릭되었습니다.");
     try {
       setClickBG(true);
-      setClickPC(false);
-      const res = await axios.post("http://127.0.0.1:5002/makeup", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await axios.post(
+        "http://34.64.223.226:5002/makeup",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       // console.log(res);
       // console.log(res.data.base64_image);
       setBase64(res.data.base64_image);
@@ -86,9 +90,17 @@ const Ai = () => {
     <>
       <Container>
         <ButtonSection>
+          <Button>
+            <ImageUploadInput
+              id="file-upload"
+              type="file"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="file-upload">파일 선택</label>
+          </Button>
           <Button onClick={handlePersonalColor}>퍼스널컬러</Button>
           <Button onClick={handleMakeupClick}>beautyGAN</Button>
-          <Button>StyleGAN(유료/미구현)</Button>
+          {/* <Button>StyleGAN(유료/미구현)</Button> */}
         </ButtonSection>
 
         <UserProfileBox>
@@ -99,9 +111,6 @@ const Ai = () => {
                   <UploadedImage src={previewURL} alt="Uploaded" />
                 </UploadedImageContainer>
               )}
-              <UploadImageButton htmlFor="image-upload">
-                <input type="file" onChange={handleFileChange} />
-              </UploadImageButton>
             </LeftSection>
 
             {clickbg && (
@@ -123,7 +132,10 @@ const Ai = () => {
                   </>
                 )}
                 {clickbg && !base64 && selectedFile !== "phto.png" && (
-                  <UploadedImage src="src/assets/wait.jpeg" />
+                  <UploadedImageContainer style={{ border: "none" }}>
+                    <UploadedImage src={wait} />
+                    <p>cpu 성능이 안좋아 최대 10초정도 걸립니다.</p>
+                  </UploadedImageContainer>
                 )}
               </RightSection>
             )}
@@ -135,21 +147,21 @@ const Ai = () => {
               </UploadedImageContainer>
             )}
             {result === "spring" && (
-              <UploadedImage src={spring} alt="봄 웜톤" />
+              <img src={spring} alt="봄 웜톤" style={{ height: "80%" }} />
             )}
             {result === "summer" && (
-              <UploadedImage src="src/assets/summer.jpeg" alt="여름 쿨톤" />
+              <img src={summer} alt="여름 쿨톤" style={{ height: "80%" }} />
             )}
             {result === "fall" && (
-              <UploadedImage src="src/assets/fall.jpeg" alt="가을 웜톤" />
+              <img src={fall} alt="가을 웜톤" style={{ height: "80%" }} />
             )}
             {result === "winter" && (
-              <UploadedImage src="src/assets/winter.jpeg" alt="겨울 쿨톤" />
+              <img src={winter} alt="겨울 쿨톤" style={{ height: "80%" }} />
             )}
 
             <div>
               {clickpc && !result && selectedFile !== "/phto.png" && (
-                <UploadedImage src="src/assets/wait.jpeg" />
+                <UploadedImage src={wait} />
               )}
             </div>
           </ResultSection>
@@ -158,26 +170,6 @@ const Ai = () => {
     </>
   );
 };
-
-const UploadImageButton = styled.label`
-  display: inline-block;
-  background-color: #f0f0f0;
-  color: #333;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    /* 모바일 화면에서 버튼의 패딩을 작게 조절 */
-    padding: 5px 10px;
-  }
-
-  @media (max-width: ${TABLET_BREAK_POINT}) {
-    /* 태블릿 화면에서 버튼의 폰트 크기를 더 작게 조절 */
-    font-size: 14px;
-  }
-`;
-
 const ImageUploadInput = styled.input`
   display: none;
 `;
@@ -189,10 +181,6 @@ const UploadedImageContainer = styled.div`
   margin-top: 20px;
   width: 100%;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    /* 모바일 화면에서 이미지 컨테이너의 너비를 100%로 */
-    width: 100%;
-  }
-  @media (max-width: ${TABLET_BREAK_POINT}) {
     /* 태블릿 화면에서 이미지 컨테이너의 너비를 50%로 */
     width: 90%;
   }
@@ -233,7 +221,7 @@ const RightSectionWrapper = styled.div`
   display: flex;
   flex-direction: row;
   /* margin-top: 4.4rem; */
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     flex-direction: column;
   }
 `;
@@ -271,12 +259,8 @@ const Section = styled.div`
   margin-bottom: 2rem;
   border: 1px solid black;
   max-width: 300px;
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 50%;
-    height: 5rem;
-  }
 
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 70%;
     height: 7rem;
   }
