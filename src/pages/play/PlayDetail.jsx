@@ -93,6 +93,8 @@ function PlayDetail() {
     try {
       const res = await Api.put(`/participants/${participantId}/allow`);
       fetchParticipantsList();
+      fetchGetDetail(); // post 정보 업데이트
+
       showSuccess("수락하였습니다");
     } catch (err) {
       if (err.response.data.message) {
