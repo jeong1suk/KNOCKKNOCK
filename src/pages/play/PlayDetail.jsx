@@ -491,7 +491,28 @@ function PlayDetail() {
       </TopBox>
       <PostDetailBox>
         <PostDetailFirstBox>
-          <EditDeleteButtonBox>
+          <FirstInputBox>
+            <div style={{display: "flex", width: "100%", alignItems: "center"}}>
+              {post.isCompleted ? (
+                <RecruitAbleBox>모집완료</RecruitAbleBox>
+              ) : (
+                <RecruitAbleBox>모집중</RecruitAbleBox>
+              )}
+
+              <GenderInfoBox>
+                <GenderInfo
+                  total={post.totalM}
+                  filled={post.recruitedM}
+                  color="#819FF7"
+                />
+                <GenderInfo
+                  total={post.totalF}
+                  filled={post.recruitedF}
+                  color="#F78181"
+                />
+              </GenderInfoBox>
+            </div>
+            <EditDeleteButtonBox>
             {isWriter({ userId, post }) && 
               <IconButton
               onClick={(e) => {
@@ -507,35 +528,15 @@ function PlayDetail() {
               <DropModifyDeleteDiv>
                 <IconButton onClick={() => navigate(`/playedit/${postId}`)}>
 
-                  <FaEdit /> 수정하기
+                  <FaEdit /> 수정
                 </IconButton>
                 <IconButton onClick={() => handlePostDelete(postId)}>
-                  <FaTrashAlt />삭제하기
+                  <FaTrashAlt />삭제
                 </IconButton>
               </DropModifyDeleteDiv>
             )}
-          </EditDeleteButtonBox>
-          <InputBox>
-            {post.isCompleted ? (
-              <RecruitAbleBox>모집완료</RecruitAbleBox>
-            ) : (
-              <RecruitAbleBox>모집중</RecruitAbleBox>
-            )}
-
-            <GenderInfoBox>
-              <GenderInfo
-                total={post.totalM}
-                filled={post.recruitedM}
-                color="#819FF7"
-              />
-              <GenderInfo
-                total={post.totalF}
-                filled={post.recruitedF}
-                color="#F78181"
-              />
-            </GenderInfoBox>
-          </InputBox>
-
+            </EditDeleteButtonBox>
+          </FirstInputBox>
 
           <TitleInputBox>
             <p>{post.title}</p>
@@ -767,6 +768,17 @@ const PostDetailBox = styled.div`
   padding: 20px 50px 20px 50px;
 `;
 
+const FirstInputBox = styled.div`
+  display: flex;
+  justify-content: start;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  font-family: 'KIMM_Bold'
+
+  `;
+
 const InputBox = styled.div`
   display: flex;
   justify-content: start;
@@ -865,9 +877,25 @@ const CommentDetailBox = styled.div`
 `;
 
 const CommentImageBox = styled.div`
+
+
   display: flex;
   justify-content: start;
   align-items: start;
+
+  img {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  
+    &:hover {
+      opacity: 0.5;
+    }
+  }
 `
 
 const CommentNicknameBox = styled.div`
