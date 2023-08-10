@@ -1,10 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {
-  MOBILE_BREAK_POINT,
-  TABLET_BREAK_POINT,
-} from "../../components/layout/breakpoint";
+import { TABLET_BREAK_POINT } from "../../components/layout/breakpoint";
 import spring from "../../assets/spring3.webp";
 import summer from "../../assets/summer1.webp";
 import fall from "../../assets/fall1.webp";
@@ -183,10 +180,6 @@ const UploadedImageContainer = styled.div`
   padding: 20px;
   margin-top: 20px;
   width: 100%;
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    /* 모바일 화면에서 이미지 컨테이너의 너비를 100%로 */
-    width: 100%;
-  }
   @media (max-width: ${TABLET_BREAK_POINT}) {
     /* 태블릿 화면에서 이미지 컨테이너의 너비를 50%로 */
     width: 90%;
@@ -266,10 +259,6 @@ const Section = styled.div`
   margin-bottom: 2rem;
   border: 1px solid black;
   max-width: 300px;
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 50%;
-    height: 5rem;
-  }
 
   @media (max-width: ${TABLET_BREAK_POINT}) {
     width: 70%;
