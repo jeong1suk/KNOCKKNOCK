@@ -312,7 +312,7 @@ function PlayDetail() {
       setComment("");
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }

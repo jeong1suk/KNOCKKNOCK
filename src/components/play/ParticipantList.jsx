@@ -13,7 +13,6 @@ const ParticipantList = ({ participantsList, handleAccept, handleReject, selecte
     setSelectedUserId(participantUserId);
   }
 
-  console.log(participantsList);
 
   return (
     <ParticipantModalDiv>
