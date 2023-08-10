@@ -57,23 +57,23 @@ const OptionalInputs = () => {
 
   return (
     <>
-      <S.InputBox>
-        <input
-          id="height"
-          type="text"
+      <S.Box>
+        <S.Select
           name="height"
           value={height}
-          placeholder="키/ 정수만 입력하세요"
           onChange={onChange}
-          onKeyPress={(e) => {
-            const allowedChars = "0123456789";
-            if (!allowedChars.includes(e.key)) {
-              e.preventDefault();
-            }
-          }}
-        />
-        <label htmlFor="height">키</label>
-      </S.InputBox>
+          style={{ border: "none" }}
+        >
+          <option>키</option>
+          {Array.from({ length: 101 }, (_, index) => index + 120).map(
+            (value) => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            )
+          )}
+        </S.Select>
+      </S.Box>
       <S.Box>
         <S.Select
           name="mbti"

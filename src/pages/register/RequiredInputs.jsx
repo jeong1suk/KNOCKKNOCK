@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as S from "./style";
 import styled from "styled-components";
 import ValidationFields from "./ValidationFields";
-
+import { currentDate } from "../../util/currentDateTime";
 import { regions } from "../../constants/registerConstants";
 const RequiredInputs = () => {
   const [formData, setFormData] = useState({
@@ -100,6 +100,7 @@ const RequiredInputs = () => {
           name="birthdate"
           value={birthdate}
           onChange={onChange}
+          max={currentDate}
         />
         <label htmlFor="birthdate" style={{ marginTop: "5px" }}>
           생년월일
