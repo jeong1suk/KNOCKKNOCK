@@ -112,21 +112,35 @@ const RegisterPage = () => {
 
         {/* <S.Header>필수 입력</S.Header> */}
         <RequiredInputs />
-        <S.Heading>사진</S.Heading>
-        <S.Box>
-          <S.FileInput type="file" onChange={handleFileChange} />
-        </S.Box>
+
+        <S.Header style={{ border: 0 }}>선택 입력</S.Header>
+
+        <S.ToggleButtonWrapper>
+          <S.Button>
+            <S.ImageUploadInput
+              id="file-upload"
+              type="file"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="file-upload">사진 넣기</label>
+          </S.Button>
+        </S.ToggleButtonWrapper>
         {previewURL && (
           <S.UploadedImageContainer>
             <S.UploadedImage src={previewURL} alt="Selected Image" />
           </S.UploadedImageContainer>
         )}
-        <S.Header style={{ border: 0 }}>선택 입력</S.Header>
-        <OptionalInputs />
 
-        <S.JoinButton type="submit" onSubmit={() => handleRegistration()}>
-          Register
-        </S.JoinButton>
+        <OptionalInputs />
+        <S.ToggleButtonWrapper>
+          <S.Button
+            type="submit"
+            onSubmit={() => handleRegistration()}
+            style={{ width: "70%", height: "80px" }}
+          >
+            Register
+          </S.Button>
+        </S.ToggleButtonWrapper>
       </form>
     </S.Content>
   );

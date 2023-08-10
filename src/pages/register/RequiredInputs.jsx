@@ -34,7 +34,7 @@ const RequiredInputs = () => {
 
   return (
     <>
-      <S.Input>
+      <S.InputBox>
         <input
           id="name"
           type="text"
@@ -44,9 +44,9 @@ const RequiredInputs = () => {
           onChange={onChange}
         />
         <label htmlFor="name">이름</label>
-      </S.Input>
+      </S.InputBox>
 
-      <S.Input>
+      <S.InputBox>
         <input
           id="nickname"
           type="text"
@@ -56,7 +56,7 @@ const RequiredInputs = () => {
           onChange={onChange}
         />
         <label htmlFor="nickname">닉네임</label>
-      </S.Input>
+      </S.InputBox>
 
       <ValidationFields
         formData={formData}
@@ -64,7 +64,7 @@ const RequiredInputs = () => {
         onChange={onChange}
       />
       <S.RightAlignedBox style={{ marginTop: "20px", border: "none" }}>
-        <S.Input style={{ width: "100%" }}>
+        <S.InputBox style={{ width: "100%" }}>
           <S.Select
             name="gender"
             value={gender}
@@ -75,8 +75,8 @@ const RequiredInputs = () => {
             <option value="남">남자</option>
             <option value="여">여자</option>
           </S.Select>
-        </S.Input>
-        <S.Input style={{ width: "100%" }}>
+        </S.InputBox>
+        <S.InputBox style={{ width: "100%" }}>
           <S.Select
             name="region"
             value={region}
@@ -90,10 +90,10 @@ const RequiredInputs = () => {
               </option>
             ))}
           </S.Select>
-        </S.Input>
+        </S.InputBox>
       </S.RightAlignedBox>
 
-      <S.Input>
+      <S.InputBox>
         <input
           id="birthdate"
           type="date"
@@ -104,9 +104,9 @@ const RequiredInputs = () => {
         <label htmlFor="birthdate" style={{ marginTop: "5px" }}>
           생년월일
         </label>
-      </S.Input>
+      </S.InputBox>
 
-      <S.Input>
+      <S.InputBox>
         <input
           id="job"
           type="text"
@@ -116,7 +116,7 @@ const RequiredInputs = () => {
           onChange={onChange}
         />
         <label htmlFor="job">직업</label>
-      </S.Input>
+      </S.InputBox>
     </>
   );
 };

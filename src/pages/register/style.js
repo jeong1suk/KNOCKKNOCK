@@ -74,7 +74,7 @@ export const Box = styled.span`
   box-sizing: border-box;
   background: #fff;
   position: relative;
-  margin-bottom: 15px;
+  margin: 15px auto;
 `;
 // export const Input = styled.input`
 //   display: block;
@@ -94,15 +94,17 @@ export const FileInput = styled.input`
   background: #fff;
   font-size: 15px;
 `;
-export const Input = styled.div`
+export const InputBox = styled.div`
   position: relative;
   margin: 10px 10px;
+  height: 60px;
+  width: 100%;
 
   input {
     background: transparent;
     border: none;
     border-bottom: solid 1px #ccc;
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
     padding: 20px 0px 5px 0px;
     font-size: 14pt;
     width: 100%;
@@ -111,7 +113,7 @@ export const Input = styled.div`
     &:placeholder-shown + label {
       color: #aaa;
       font-size: 14pt;
-      margin-top: 20px;
+      top: 15px;
     }
 
     &:focus + label {
@@ -129,23 +131,23 @@ export const Input = styled.div`
       opacity: 1;
     }
 
-    &:not(:placeholder-shown) + label,
-    &:focus + label {
+    &:not(:placeholder-shown) + label {
       color: #8aa1a1;
       font-size: 10pt;
       pointer-events: none;
       position: absolute;
       left: 0px;
       top: 0px;
-      /* transition: all 0.2s ease;
+      transition: all 0.2s ease;
       -webkit-transition: all 0.2s ease;
       -moz-transition: all 0.2s ease;
-      -o-transition: all 0.2s ease; */
+      -o-transition: all 0.2s ease;
       transform: translateY(-100%);
       opacity: 1;
     }
 
-    &:focus {
+    &:focus,
+    &:not(:placeholder-shown) {
       border-bottom: solid 1px #8aa1a1;
       outline: none;
     }
@@ -153,6 +155,10 @@ export const Input = styled.div`
 
   label {
     opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    top: 15px;
     transition: all 0.2s ease;
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
@@ -209,12 +215,43 @@ export const Modal = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 10;
 `;
+export const Button = styled.button`
+  font-size: 100%;
+  font-family: "KIMM_Bold";
+  /* padding: 10px 10px; */
+  background-color: #f7cbd0;
+  color: black;
+  border: 10px double #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  /* margin: 50px 0 30px 0; */
+  width: 50%;
+  height: 50px;
+  transition: 0.3s;
+
+  &:hover {
+    border: 10px double #3b0b0b;
+    color: #3b0b0b;
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 750px) {
+    margin: 20px 0;
+    width: 50%;
+    height: 60px;
+    font-size: 70%;
+  }
+`;
+export const ImageUploadInput = styled.input`
+  display: none;
+`;
+
 export const ToggleButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  padding-bottom: 5px;
+  /* padding-bottom: 5px; */
 `;
 export const ToggleButton = styled.a`
   box-shadow: inset 0px 1px 0px 0px #dcecfb;
