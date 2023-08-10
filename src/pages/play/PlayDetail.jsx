@@ -560,7 +560,7 @@ function PlayDetail() {
               }}
             />
           </InputBox>
-          <InputBox>
+          <InputBox style={{justifyContent: "center", width: "100%"}}>
             <span style={{ whiteSpace: "pre-line" }}>
               {post.content}
             </span>
