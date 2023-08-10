@@ -14,7 +14,7 @@ import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 const UserProfileContainer = styled.div`
   width: 22rem;
   margin-top: -2rem;
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%;
     z-index: 2;
@@ -26,21 +26,24 @@ const UserProfileBox = styled.div`
   flex-direction: column;
   /* margin-left: 3rem; */
   /* margin-right: 3rem; */
-  border: 2px solid red;
+  /* border: 2px solid red; */
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     margin-left: 0;
     margin-right: 0;
   }
 `;
-const Nickname = styled.h2`
+const Nickname = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
   color: #4b4a4a;
+  font-size: 2rem;
+  margin: 0.5rem;
 `;
 
-const Email = styled.h4`
-  margin-top: -0.8rem;
+const Email = styled.div`
+  margin: 0.8rem;
+
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -51,7 +54,7 @@ const Tagline = styled.div`
   border: 0.1rem #bcbcbc;
   height: auto;
   border-radius: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -67,10 +70,12 @@ const UserInformation = styled.div`
 `;
 const UserPersonalInformation = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  flex-direction: column;
-  border: 3px solid black;
+  flex-direction: row;
+  margin: 1rem auto;
+
+  /* border: 3px solid black; */
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     flex-direction: row;
     justify-content: center;
@@ -89,7 +94,8 @@ const UserLineContainer = styled.div`
 `;
 const UserLine = styled.h3`
   margin: 0.3rem;
-  color: #8f8f8f;
+  /* color: #8f8f8f; */
+  color: black;
   font-size: 1rem;
 `;
 
@@ -137,7 +143,7 @@ const HobbyBoxContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 1rem;
+  margin: 2rem;
   /* width: 20rem; */
   border: 1px solid green;
 `;
@@ -225,28 +231,31 @@ const UserProfileLarge = () => {
           <Tagline>{user.introduce}</Tagline>
         </UserInformation>
         <UserPersonalInformation>
-          <UserLineContainer>
-            <UserLine>{user.name}</UserLine>
-          </UserLineContainer>
+          {/* <UserLineContainer> */}
+          <UserLine>{user.name}</UserLine>
+          {/* </UserLineContainer> */}
           {user.mbti !== "" && (
-            <UserLineContainer>
-              <UserLine>{user.mbti}</UserLine>
-            </UserLineContainer>
+            // <UserLineContainer>
+            <UserLine>{user.mbti}</UserLine>
+            // </UserLineContainer>
           )}
 
           {user.height !== 0 && (
-            <UserLineContainer>
-              <UserLine>{user.height + "cm"}</UserLine>
-            </UserLineContainer>
+            // <UserLineContainer>
+            <UserLine>{user.height + "cm"}</UserLine>
+            // </UserLineContainer>
           )}
-          <UserLineContainer>
-            <UserLine>{user.job}</UserLine>
-          </UserLineContainer>
-          <UserLineContainer>
-            <UserLine>{user.region}</UserLine>
-          </UserLineContainer>
+          {/* <UserLineContainer> */}
+          <UserLine>{user.job}</UserLine>
+          {/* </UserLineContainer> */}
+          {/* <UserLineContainer> */}
+          <UserLine>{user.region}</UserLine>
+          {/* </UserLineContainer> */}
         </UserPersonalInformation>
       </UserProfileBox>
+      <div style={{ padding: "5px", color: "#fa9393" }}>취미</div>
+      <div style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>성격</div>
+      <div style={{ padding: "5px", color: "#87d5fc" }}>이상형</div>
       <HobbyBoxContainer>
         {shuffledHobby.map((hobby, index) => (
           <HobbyBox key={index} style={{ order: index }}>

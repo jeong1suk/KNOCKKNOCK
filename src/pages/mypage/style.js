@@ -56,7 +56,7 @@ export const Box = styled.span`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 51px;
+  height: 40%;
   border: solid 1px #dadada;
   border-radius: 20px;
   padding: 10px 14px 10px 14px;
@@ -64,7 +64,7 @@ export const Box = styled.span`
   background: #fff;
   position: relative;
   margin: 15px auto;
-  overflow-x: auto;
+
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 80%;
     height: 10%;
@@ -196,10 +196,10 @@ export const Input = styled.input`
   display: block;
   position: relative;
   width: 70%;
-  height: 29px;
+  height: 20px;
   border: none;
   background: #fff;
-  font-size: 15px;
+  font-size: 1rem;
   /* @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 50%;
   } */
@@ -270,7 +270,7 @@ export const Button = styled.button`
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* width: 50%; */
     font-size: 0.5rem;
-    overflow-x: auto;
+    /* overflow-x: auto; */
   }
 `;
 export const ToggleButton = styled.a`
