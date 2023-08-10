@@ -83,7 +83,7 @@ const RegisterPage = () => {
         payload: user,
       });
       showSuccess("회원가입 완료!");
-      navigate("/", { replace: true });
+      navigate("/");
       window.location.reload();
     } catch (err) {
       console.log(err);
