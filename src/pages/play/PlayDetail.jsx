@@ -93,6 +93,8 @@ function PlayDetail() {
     try {
       const res = await Api.put(`/participants/${participantId}/allow`);
       fetchParticipantsList();
+      fetchGetDetail(); // post 정보 업데이트
+
       showSuccess("수락하였습니다");
     } catch (err) {
       if (err.response.data.message) {
@@ -197,7 +199,7 @@ function PlayDetail() {
     const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmDelete) {
       deletePostRequest(postId);
-      showSuccess("게시글을 하였습니다");
+      showSuccess("삭제되었습니다");
     }
   };
 
@@ -312,7 +314,7 @@ function PlayDetail() {
       setComment("");
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -491,7 +493,28 @@ function PlayDetail() {
       </TopBox>
       <PostDetailBox>
         <PostDetailFirstBox>
-          <EditDeleteButtonBox>
+          <FirstInputBox>
+            <div style={{display: "flex", width: "100%", alignItems: "center"}}>
+              {post.isCompleted ? (
+                <RecruitAbleBox>모집완료</RecruitAbleBox>
+              ) : (
+                <RecruitAbleBox>모집중</RecruitAbleBox>
+              )}
+
+              <GenderInfoBox>
+                <GenderInfo
+                  total={post.totalM}
+                  filled={post.recruitedM}
+                  color="#819FF7"
+                />
+                <GenderInfo
+                  total={post.totalF}
+                  filled={post.recruitedF}
+                  color="#F78181"
+                />
+              </GenderInfoBox>
+            </div>
+            <EditDeleteButtonBox>
             {isWriter({ userId, post }) && 
               <IconButton
               onClick={(e) => {
@@ -507,35 +530,15 @@ function PlayDetail() {
               <DropModifyDeleteDiv>
                 <IconButton onClick={() => navigate(`/playedit/${postId}`)}>
 
-                  <FaEdit /> 수정하기
+                  <FaEdit /> 수정
                 </IconButton>
                 <IconButton onClick={() => handlePostDelete(postId)}>
-                  <FaTrashAlt />삭제하기
+                  <FaTrashAlt />삭제
                 </IconButton>
               </DropModifyDeleteDiv>
             )}
-          </EditDeleteButtonBox>
-          <InputBox>
-            {post.isCompleted ? (
-              <RecruitAbleBox>모집완료</RecruitAbleBox>
-            ) : (
-              <RecruitAbleBox>모집중</RecruitAbleBox>
-            )}
-
-            <GenderInfoBox>
-              <GenderInfo
-                total={post.totalM}
-                filled={post.recruitedM}
-                color="#819FF7"
-              />
-              <GenderInfo
-                total={post.totalF}
-                filled={post.recruitedF}
-                color="#F78181"
-              />
-            </GenderInfoBox>
-          </InputBox>
-
+            </EditDeleteButtonBox>
+          </FirstInputBox>
 
           <TitleInputBox>
             <p>{post.title}</p>
@@ -559,8 +562,10 @@ function PlayDetail() {
               }}
             />
           </InputBox>
-          <InputBox>
-            <p>{post.content}</p>
+          <InputBox style={{justifyContent: "center", width: "100%"}}>
+            <span style={{ whiteSpace: "pre-line" }}>
+              {post.content}
+            </span>
           </InputBox>
         </PostDetailFirstBox>
         <CommentBox>
@@ -606,15 +611,17 @@ function PlayDetail() {
                       onChange={(e) => setEditedContent(e.target.value)}
                       style={{ width: "100%", minHeight: "40px" }}
                     />
-
-                    <button onClick={() => setIsEditing(null)}>취소</button>
                     <button onClick={() => saveComment(comment.commentId)}>
                       수정
                     </button>
+                    <button onClick={() => setIsEditing(null)}>취소</button>
+                    
                   </CommentEditArea>
                 ) : (
                   <CommentEditDeleteBox>
-                    <p>{comment.content}</p>
+                    <span style={{ whiteSpace: "pre-line", marginBottom: "10px"}}>
+                      {comment.content}
+                    </span>
                     {comment.userId === userId && (
                       <div
                         style={{ display: "flex", justifyContent: "flex-end" }}
@@ -767,6 +774,17 @@ const PostDetailBox = styled.div`
   padding: 20px 50px 20px 50px;
 `;
 
+const FirstInputBox = styled.div`
+  display: flex;
+  justify-content: start;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  font-family: 'KIMM_Bold'
+
+  `;
+
 const InputBox = styled.div`
   display: flex;
   justify-content: start;
@@ -865,9 +883,25 @@ const CommentDetailBox = styled.div`
 `;
 
 const CommentImageBox = styled.div`
+
+
   display: flex;
   justify-content: start;
   align-items: start;
+
+  img {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  
+    &:hover {
+      opacity: 0.5;
+    }
+  }
 `
 
 const CommentNicknameBox = styled.div`
@@ -926,6 +960,9 @@ const CommentEditDeleteBox = styled.div`
   width: 100%;
 
   p {
+    width: 90%;
+  }
+  span {
     width: 90%;
   }
 `;

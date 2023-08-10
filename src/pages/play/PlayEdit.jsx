@@ -17,7 +17,7 @@ import { handleTotalChange } from "../../util/handleTotalChange";
 import { handleTimeChange } from '../../util/handleTimeChange';
 import { validateTotal } from '../../util/validateTotal';
 
-import { showSuccess } from "../../assets/alert";
+import { showSuccess, showAlert } from "../../assets/alert";
 import styled from "styled-components";
 
 function PlayEdit() {
@@ -52,7 +52,7 @@ function PlayEdit() {
       setPostContent(postData.content);
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -68,7 +68,7 @@ function PlayEdit() {
 
     const errorMessage = validateTotal(totalM, totalF);
     if (errorMessage) {
-      alert(errorMessage);
+      showAlert(errorMessage);
       setTotalM('');
       setTotalF('');
       return;
@@ -107,7 +107,7 @@ function PlayEdit() {
     } catch (err) {
       console.log(err);
       if (err.response && err.response.data && err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -149,7 +149,7 @@ function PlayEdit() {
             />
           </div>
         </InputBox>
-        <InputBox>
+        <InputBox style={{justifyContent: "end"}}>
           {(fetchedImageUrl || imageUrl) && (
             <div style={{ width: '200px', paddingLeft: "50px" }}>
                 <img 
