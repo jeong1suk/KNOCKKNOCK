@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const FooterWrapper = styled.footer`
   background-color: #fff;
@@ -30,7 +31,6 @@ const FooterContent = styled.div`
 
   & > div {
     flex: 1;
-
   }
 `;
 // const FooterContent = styled.div`
@@ -50,7 +50,7 @@ const MemberContainer = styled.div`
 
 const Member = styled.div`
   margin-top: 5px;
-`
+`;
 
 const FooterText = styled.div`
   display: flex;
@@ -85,52 +85,34 @@ const Footer = () => {
         }}
       />
       <FooterContent>
-        {/* <FooterText>KnockKnock</FooterText> */}
-        {/* <FooterText>대표이사 억만추</FooterText>
-        <FooterText>사업자등록번호 999-99-99999</FooterText>
-        <FooterText>통신판매업신고번호 9999-999-999999</FooterText>
-        <FooterText>엘리스랩</FooterText> */}
-
         <FooterText>
-        KnockKnock
+          KnockKnock
           <br />
           <br />
-          뷰티톡톡
+          <Link to="/ai">뷰티톡톡</Link>
           <br />
-          오늘의 낙낙
+          <Link to="/todayknock">오늘의 낙낙</Link>
           <br />
-          히히낙낙
+          <Link to="/play">히히낙낙</Link>
           <br />
           마이페이지
         </FooterText>
         <MemberContainer>
           <FooterText>
-            Member  
+            Member
             <br />
             <br />
           </FooterText>
-          <Member>
-            이은석            github @enxxi
-          </Member>
-          <Member>
-            정유진            깃허브
-          </Member>
-          <Member>
-            정원석            깃허브
-          </Member>
+          <Member>이은석 github @enxxi</Member>
+          <Member>정유진 github @nanyoojinee</Member>
+          <Member>정원석 github @jeong1suk</Member>
         </MemberContainer>
         <MemberContainer>
           <br />
           <br />
-          <Member>
-            정재훈            깃허브
-          </Member>
-          <Member>
-            최우현            깃허브
-          </Member>
-          <Member>
-            허창원            깃허브
-          </Member>
+          <Member>정재훈 github @J-A-Y2</Member>
+          <Member>최우현 github @choiwoohyun123</Member>
+          <Member>허창원 github @wonn23</Member>
         </MemberContainer>
       </FooterContent>
     </FooterWrapper>
