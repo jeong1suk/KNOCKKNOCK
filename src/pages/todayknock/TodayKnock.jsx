@@ -269,14 +269,13 @@ const ModalContent = styled.div`
 
 const LoverProfilesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10vw, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
   gap: 10%;
   row-gap: 1%;
-  padding: 5%;
+  padding: 0 3%;
   margin: 0 0;
   align-items: center;
   justify-items: center;
-
 
   // @media (max-width: 1024px) {
   //   grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
@@ -284,23 +283,21 @@ const LoverProfilesContainer = styled.div`
   //   row-gap: 0%;
   // }
 
-  // @media (max-width: ${MOBILE_BREAK_POINT}) {
-  //   grid-template-columns: repeat(auto-fit, minmax(40vw, 1fr));
-  //   gap: 1%;;
-
-  // }
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    gap: 5%;
+  }
 `;
 
 const UserProfilesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(12vw, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16vw, 1fr));
   gap: 10%;
   row-gap: 1%;
   padding: 5%;
   margin: 0 0;
   align-items: center;
   justify-items: center;
-
 
   @media (max-width: 800px) {
     grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
@@ -310,7 +307,8 @@ const UserProfilesContainer = styled.div`
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     grid-template-columns: repeat(auto-fit, minmax(25vw, 1fr));
-    gap: 5%;;
+    gap: 5%;
+    padding: 0 5%;
 
   }
 `;
@@ -318,7 +316,7 @@ const UserProfilesContainer = styled.div`
 const RandomUserExplainDiv = styled.div`
   display: flex;
   justify-content: flex-start;
-  margin: 50px 0;
+  margin: 10px 20px;
   p {
     font-family: "KIMM_Bold";
     font-size: 2rem;
@@ -330,13 +328,10 @@ const RandomUserExplainDiv = styled.div`
     border-radius: 30px;
   }
 
-  @media (max-width: 1024px) {
-    margin: 0 0 50px 20px;
-  }
-
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     p {
-      font-size: 18px;
+      font-size: 16px;
     }
+    margin: 20px 20px 0 20px;
   }
 `;

@@ -78,18 +78,24 @@ const UserProfileContainer = styled.div`
   align-items: flex-end;
   width: 100%;
   height: 85%;
+  // height: 40vh;
   overflow: hidden;
   position: relative;
   transition: background-color 0.3s;
   cursor: pointer;
   border-radius: 10%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+  // @media (max-width: ${MOBILE_BREAK_POINT}) {
+  //   width: 80%;
+  //   height: 20vh;
+  // }
 `;
 
 const ProfilePicture = styled.img`
   width: 100%;
   height: 100%;
-
+  object-fit: cover;
   position: relative;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
   border-radius: 10%;
@@ -145,7 +151,7 @@ const LoverProfileContainer = styled.div`
 
 const LoverProfilePicture = styled.img`
   width: 120%;
-  height: 70%;
+  height: 80%;
   border: 4px dashed #f7cbd0;
   border-radius: 100%;
   cursor: pointer;
@@ -159,6 +165,8 @@ const LoverProfilePicture = styled.img`
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     border: 3px dashed #f7cbd0;
+    width: 130%;
+    height: 90%;
   }
 `;
 
