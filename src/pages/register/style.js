@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 
 export const Content = styled.div`
   position: absolute;
@@ -6,17 +7,11 @@ export const Content = styled.div`
   transform: translateX(-50%);
   width: 460px;
   padding: 100px;
-  margin-top: 300px;
+  margin-top: 20px;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-  @media (max-width: 480px) {
-    /* viewport 너비가 480px 이하일 경우 */
-    width: 100%; /* 컨테이너 너비를 100%로 설정하여 가로 중앙 정렬 */
-  }
 
-  @media (min-width: 481px) {
-    /* viewport 너비가 481px 이상일 경우 */
-    width: 480px; /* 컨테이너의 너비를 480px로 설정 */
-    margin: 0 auto; /* 컨테이너를 가로 중앙 정렬 */
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 70%;
   }
 `;
 export const HeaderContainer = styled.div`
@@ -35,7 +30,7 @@ export const Header = styled.header`
 `;
 
 export const JoinButton = styled.button`
-  font-size: 1.5rem;
+  font-size: 100%;
   font-family: "KIMM_Bold";
   /* padding: 10px 10px; */
   background-color: #f7cbd0;
@@ -54,11 +49,11 @@ export const JoinButton = styled.button`
     transform: scale(1.02);
   }
 
-  @media (max-width: 750px) {
-    margin: 20px 0;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    /* margin: 20px 0; */
     width: 50%;
     height: 60px;
-    font-size: 70%;
+    /* font-size: 7%; */
   }
 `;
 export const Heading = styled.h3`
@@ -79,6 +74,10 @@ export const Box = styled.span`
   background: #fff;
   position: relative;
   margin: 15px auto;
+  overflow-x: auto;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 100%;
+  }
 `;
 // export const Input = styled.input`
 //   display: block;
@@ -211,13 +210,19 @@ export const UploadedImage = styled.img`
 export const Modal = styled.div`
   position: absolute;
   width: 80%;
-  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 10;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    top: 70%;
+    width: 40%;
+    max-height: 20%;
+    overflow-x: auto;
+  }
 `;
 export const Button = styled.div`
   font-size: 100%;
@@ -229,7 +234,7 @@ export const Button = styled.div`
   border-radius: 50px;
   cursor: pointer;
   /* margin: 50px 0 30px 0; */
-  width: 50%;
+  width: 30%;
   height: 50px;
   transition: 0.3s;
 
@@ -239,11 +244,11 @@ export const Button = styled.div`
     transform: scale(1.02);
   }
 
-  @media (max-width: 750px) {
-    margin: 20px 0;
-    width: 50%;
-    height: 60px;
-    font-size: 70%;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    /* width: 50%; */
+    height: 30%;
+    font-size: 0.5rem;
+    overflow-x: auto;
   }
 `;
 export const ImageUploadInput = styled.input`
@@ -290,4 +295,15 @@ export const HobbyBoxContainer = styled.div`
   justify-content: space-between;
   border: none;
   /* margin: 0.1rem; */
+`;
+
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin-bottom: 10px;
 `;
