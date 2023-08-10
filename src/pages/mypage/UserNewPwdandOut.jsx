@@ -79,6 +79,19 @@ const UserNewPwdandOut = ({ user }) => {
       showAlert("이름/탈퇴한다 를 입력하셨나요?");
     }
   };
+
+  useEffect(() => {
+    if (opened) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [opened]);
+
   return (
     <>
       <S.ToggleButton style={{ textAlign: "center" }} onClick={() => onOpen()}>
