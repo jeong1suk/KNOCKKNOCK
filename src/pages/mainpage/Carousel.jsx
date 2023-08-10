@@ -20,25 +20,23 @@ function Carousel() {
     // arrows: false,
   };
 
-
   return (
     <div>
       <StyledSlider {...settings}>
-        <ImageContainer >
+        <ImageContainer>
           {/* <Link to="/ai"> */}
-            <Image src="/beauty.png" />
+          <Image src="/beauty.png" />
           {/* </Link> */}
-          
         </ImageContainer>
         <ImageContainer>
           {/* <Link to="/todayknock"> */}
-            <Image src="/hihi.png" />
+          <Image src="/hihi.png" />
           {/* </Link> */}
         </ImageContainer>
         {/* <ImageContainer> */}
-          {/* <Link to="/play"> */}
-            {/* <Image src="/hihi.png" /> */}
-          {/* </Link> */}
+        {/* <Link to="/play"> */}
+        {/* <Image src="/hihi.png" /> */}
+        {/* </Link> */}
         {/* </ImageContainer> */}
         <ImageContainer>
           <Image src="/011.png" />
@@ -50,31 +48,35 @@ function Carousel() {
 
 const StyledSlider = styled(Slider)`
   height: 100%;
-  width: 100%;  
+  width: 100%;
   margin: 30px 0 40px 0;
   position: relative;
-  
+
   .slick-dots li button::before {
-    color: #F48FB1
+    color: #f48fb1;
   }
   .slick-slide {
     margin: 30px 0 30px 0;
   }
-  .slick-prev::before, .slick-next::before {
+  .slick-prev::before,
+  .slick-next::before {
     font-size: 20px;
-    color: #F48FB1
+    color: #f48fb1;
     // display: none;
   }
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    .slick-prev::before, .slick-next::before {
+    .slick-prev::before,
+    .slick-next::before {
       display: none;
     }
   }
 `;
 
 const ImageContainer = styled.div`
-  display: row;
-  margin: auto;
+  display: flex;
+  margin-left: 1.6rem;
+  margin-right: 0.3rem;
+  padding-left: 2.5rem;
   z-index: -10;
   justify-content: center;
 `;
@@ -86,7 +88,7 @@ const Image = styled.img`
   height: 25rem;
   max-width: 100%;
   max-height: 100%;
-  background-color: #F7F6F0; 
+  background-color: #f7f6f0;
   z-index: -10;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
