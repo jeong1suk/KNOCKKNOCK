@@ -15,7 +15,7 @@ const OptionalInputs = () => {
     introduce: "",
   });
   const { height, mbti, hobby, personality, ideal, introduce } = formData;
-
+  const [isHeightInt, setIsHeightInt] = useState("");
   const onChange = (e) => {
     const { name, value } = e.currentTarget;
     setFormData((prev) => ({
@@ -63,8 +63,14 @@ const OptionalInputs = () => {
           type="text"
           name="height"
           value={height}
-          placeholder="키"
+          placeholder="키/ 정수만 입력하세요"
           onChange={onChange}
+          onKeyPress={(e) => {
+            const allowedChars = "0123456789";
+            if (!allowedChars.includes(e.key)) {
+              e.preventDefault();
+            }
+          }}
         />
         <label htmlFor="height">키</label>
       </S.InputBox>
