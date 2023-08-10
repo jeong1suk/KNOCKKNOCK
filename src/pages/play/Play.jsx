@@ -26,7 +26,7 @@ function Play() {
       const res = await Api.get(
         `/posts?page=${currentPage}&perPage=${perPage}&type=${postType}`
       );
-      console.log(postType, res);
+      console.log(res.data);
       setPostList(res.data.postList);
       setAllPostCount(res.data.allPostCount);
     } catch (err) {
@@ -38,17 +38,19 @@ function Play() {
   useEffect(() => {
     setCurrentPage(1);
     fetchPosts();
+    window.scrollTo(0, 0);
   }, [postType]);
 
   useEffect(() => {
     fetchPosts();
+    window.scrollTo(0, 0);
   }, [currentPage]);
 
   return (
     <>
       <TopBox>
         <TopPtagBox>
-          <p>같이 놀자 !</p>
+          <p>히히 낙낙 !</p>
           <br></br>
           <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
         </TopPtagBox>
@@ -163,7 +165,7 @@ const TopButtonBox = styled.div`
   width: 20%;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 40%;
+    width: 30%;
   }
 `;
 
@@ -190,8 +192,8 @@ const PostButton = styled.button`
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%;
     white-space: nowrap; // Allow the text to wrap
-    max-width: 1000px;
     margin: 40px 0 0 0;
+    height: 100%;
     font-size: 0.4rem;
   }
 `;

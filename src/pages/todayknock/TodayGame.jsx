@@ -84,10 +84,18 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect}) => {
   useEffect(() => {
     cardsGetRequest();
   }, [])
-  console.log(userState.user);
+
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
   return (
     <>
-
 
 {showIntro ? <Intro /> : (
       selectedCard ?

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
-import { FaEllipsisV, FaEdit, FaTrashAlt } from "react-icons/fa";
-
+import { FaEllipsisV, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import dayjs from "dayjs";
+import { showSuccess, showAlert } from "../../assets/alert";
+
 
 import * as Api from "../../api";
 
@@ -85,7 +85,7 @@ function PlayDetail() {
         setParticipantsList(res.data.acceptedUsers);
       }
     } catch (err) {
-      alert("참여자 정보를 불러오는 데 실패했습니다.");
+      showAlert("참여자 정보를 불러오는 데 실패했습니다.");
     }
   };
 
@@ -93,9 +93,10 @@ function PlayDetail() {
     try {
       const res = await Api.put(`/participants/${participantId}/allow`);
       fetchParticipantsList();
+      showSuccess("수락하였습니다");
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -106,14 +107,17 @@ function PlayDetail() {
     try {
       await Api.put(`/participants/${participantId}/deny`);
       fetchParticipantsList();
+      showSuccess("거절하였습니다");
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
     }
   };
+
+
 
   const fetchGetDetail = async () => {
     try {
@@ -122,7 +126,7 @@ function PlayDetail() {
       setPost(postData);
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -142,18 +146,18 @@ function PlayDetail() {
     );
     if (confirmApplyPut) {
       applyPutRequest(postId);
-      alert("취소되었습니다");
+      showSuccess("취소되었습니다");
     }
   };
 
   const applyPostRequest = async (postId) => {
     try {
       const res = await Api.post(`/participants/${postId}`);
-      alert("신청되었습니다");
       applyGetRequest();
+      showSuccess("신청되었습니다");
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -166,7 +170,7 @@ function PlayDetail() {
       applyGetRequest();
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -193,6 +197,7 @@ function PlayDetail() {
     const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmDelete) {
       deletePostRequest(postId);
+      showSuccess("게시글을 하였습니다");
     }
   };
 
@@ -202,7 +207,7 @@ function PlayDetail() {
       navigate(`/play`);
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -314,6 +319,12 @@ function PlayDetail() {
     }
   };
 
+  const handleProfileModalOpen = (commentUserId) => {
+    setIsProfileModalOpen(true);
+    setSelectedUserId(commentUserId);
+  }
+
+  
   const editComment = (commentId, content) => {
     setIsEditing(commentId);
     setEditedContent(content);
@@ -326,12 +337,6 @@ function PlayDetail() {
     setMenuOpen(null);
   };
 
-  const deleteComment = (commentId) => {
-    const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
-    if (confirmDelete) {
-      deleteCommentRequest(commentId);
-    }
-  };
 
   const editCommentRequest = async (commentId, editedContent) => {
     try {
@@ -357,23 +362,35 @@ function PlayDetail() {
         },
       };
 
-      setComments((prevComments) => [newComment, ...prevComments.slice(1)]);
+      setComments((prevComments) => 
+        prevComments.map(comment => comment.commentId === commentId ? newComment : comment)
+      );
+
+      
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
     }
   };
 
+  const deleteComment = (commentId) => {
+    const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+    if (confirmDelete) {
+      deleteCommentRequest(commentId);
+      showSuccess("삭제되었습니다");
+    }
+  };
+
   const deleteCommentRequest = async (commentId) => {
     try {
       const res = await Api.del(`/comments/${postId}/${commentId}`);
-      setComments((prevComments) => [...prevComments.slice(1)]);
+      setComments((prevComments) => prevComments.filter(comment => comment.commentId !== commentId));
     } catch (err) {
       if (err.response.data.message) {
-        alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
         alert("라우팅 경로가 잘못되었습니다.");
       }
@@ -383,6 +400,7 @@ function PlayDetail() {
   useEffect(() => {
     fetchGetDetail();
     applyGetRequest();
+    window.scrollTo(0, 0);
   }, []);
 
   return (
@@ -390,7 +408,8 @@ function PlayDetail() {
       <TopBox>
         <TopInnerBox>
           <TopPtagBox>
-            <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
+            <p>다양한 단체 미팅 중</p>
+            <p>원하는 미팅에 참여해보세요</p>
           </TopPtagBox>
 
           {isWriter({ userId, post }) ? (
@@ -473,25 +492,25 @@ function PlayDetail() {
       <PostDetailBox>
         <PostDetailFirstBox>
           <EditDeleteButtonBox>
-            {isWriter({ userId, post }) && (
+            {isWriter({ userId, post }) && 
               <IconButton
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setPostMenuOpen((prev) => (prev === postId ? null : postId));
-                }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setPostMenuOpen((prev) => (prev === postId ? null : postId));
+              }}
               >
                 <FaEllipsisV />
               </IconButton>
-            )}
-
+            }
+              
             {postMenuOpen === postId && (
               <DropModifyDeleteDiv>
                 <IconButton onClick={() => navigate(`/playedit/${postId}`)}>
+
                   <FaEdit /> 수정하기
                 </IconButton>
                 <IconButton onClick={() => handlePostDelete(postId)}>
-                  <FaTrashAlt />
-                  삭제하기
+                  <FaTrashAlt />삭제하기
                 </IconButton>
               </DropModifyDeleteDiv>
             )}
@@ -517,9 +536,10 @@ function PlayDetail() {
             </GenderInfoBox>
           </InputBox>
 
-          <InputBox>
-            <p style={{ fontSize: "2vw", fontWeight: "bold" }}>{post.title}</p>
-          </InputBox>
+
+          <TitleInputBox>
+            <p>{post.title}</p>
+          </TitleInputBox>
 
           <InputBox style={{ flexDirection: "column", alignItems: "start" }}>
             <p style={{ margin: "0px 0px" }}>장소: {post.place}</p>
@@ -527,7 +547,7 @@ function PlayDetail() {
               만남시간: {formatDate(post.meetingTime)}
             </p>
           </InputBox>
-          <InputBox>
+          <InputBox style={{justifyContent: "center", width: "100%"}}>
             <img
               src={getImageSrc(post.PostFiles?.[0]?.File?.url)}
               alt="postImage"
@@ -566,13 +586,7 @@ function PlayDetail() {
                 <img
                   src={getImageSrc(comment.User?.UserFiles?.[0]?.File?.url)}
                   alt="유저 프로필"
-                  style={{
-                    height: "2.5rem",
-                    width: "2.5rem",
-                    borderRadius: "50%",
-                    backgroundColor: "#F9FAFB",
-                    marginRight: "20px",
-                  }}
+                  onClick={() => handleProfileModalOpen(comment.userId)}
                 />
               </CommentImageBox>
               <CommentContentBox>
@@ -668,13 +682,15 @@ const TopBox = styled.div`
   height: 200px;
   margin: 0px 0px 50px 0px;
   padding-bottom: 0px;
+
+  
 `;
 
 const TopInnerBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20%;
+  gap: 10%;
   width: 75%;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
@@ -734,9 +750,10 @@ const TopBoxButton = styled.button`
   }
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    height: 40px;
-    width: 50%;
-    font-size: 0.8rem;
+      height: 40px;
+      width: 50%;
+      height: 60%;
+      font-size: 0.8rem; 
   }
 `;
 
@@ -756,10 +773,20 @@ const InputBox = styled.div`
   align-items: center;
   padding: 10px;
   width: 80%;
-  font-family: "KIMM_Bold";
+  font-family: 'KIMM_Bold'
+  
+  `;
 
+const TitleInputBox = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 10px;
+  width: 80%;
+  font-family: 'KIMM_Bold';
+  font-size: 3rem; 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    font-size: 0.8rem;
+    font-size: 1.2rem; 
   }
 `;
 
@@ -772,7 +799,7 @@ const RecruitAbleBox = styled.div`
   width: 15%;
   border-radius: 30px;
   padding: 20px 0px 20px 0px;
-
+  height: 20%;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 30%;
   }
@@ -822,6 +849,9 @@ const CommentInputArea = styled.div`
 
     @media (max-width: ${MOBILE_BREAK_POINT}) {
       font-size: 0.5rem;
+
+
+
     }
   }
 `;
@@ -838,7 +868,7 @@ const CommentImageBox = styled.div`
   display: flex;
   justify-content: start;
   align-items: start;
-`;
+`
 
 const CommentNicknameBox = styled.div`
   display: flex;
@@ -942,6 +972,7 @@ const GenderInfoBox = styled.div`
 `;
 
 const PostDetailFirstBox = styled.div`
+font-family: 'Pretendard-Regular';
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -970,6 +1001,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   z-index: 9999;
 `;
 
@@ -981,4 +1013,9 @@ const ModalContentUser = styled.div`
   padding-top: 2rem;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {    
+    width: 90%;
+    overflow-y: auto;
+  }
 `;
