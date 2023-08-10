@@ -197,7 +197,7 @@ function PlayDetail() {
     const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmDelete) {
       deletePostRequest(postId);
-      showSuccess("게시글을 하였습니다");
+      showSuccess("삭제되었습니다");
     }
   };
 
