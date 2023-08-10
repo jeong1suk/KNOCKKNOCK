@@ -93,7 +93,7 @@ function PlayDetail() {
     try {
       const res = await Api.put(`/participants/${participantId}/allow`);
       fetchParticipantsList();
-      fetchGetDetail(); // post 정보 업데이트
+      fetchGetDetail(); 
 
       showSuccess("수락하였습니다");
     } catch (err) {
@@ -339,7 +339,7 @@ function PlayDetail() {
     setMenuOpen(null);
   };
 
-
+  console.log(userState);
   const editCommentRequest = async (commentId, editedContent) => {
     try {
       const body = {
@@ -356,7 +356,7 @@ function PlayDetail() {
           UserFiles: [
             {
               File: {
-                url: userState.user?.url,
+                url: userState.user.profileImage
               },
             },
           ],
