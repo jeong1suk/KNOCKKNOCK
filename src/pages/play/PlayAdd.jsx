@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { showSuccess } from "../../assets/alert";
+import { showSuccess, showAlert } from "../../assets/alert";
 
 import * as Api from '../../api';
 
@@ -47,7 +47,7 @@ function PlayAdd() {
 
     const errorMessage = validateTotal(totalM, totalF);
     if (errorMessage) {
-      alert(errorMessage);
+      showAlert(errorMessage);
       setTotalM('');
       setTotalF('');
       return;
@@ -90,7 +90,7 @@ function PlayAdd() {
     } catch (err) {
       console.log(err);
       if (err.response && err.response.data && err.response.data.message) {
-          alert(err.response.data.message);
+          showAlert(err.response.data.message);
       } else {
           alert('라우팅 경로가 잘못되었습니다.');
       }

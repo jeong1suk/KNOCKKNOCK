@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { getImageSrc } from '../../util/imageCheck';
+import { checkGender } from '../../util/checkGender';
 
 const ParticipantList = ({ participantsList, handleAccept, handleReject, selectedOption, setIsProfileModalOpen, setSelectedUserId }) => {
+
+
 
   const handleProfileModalOpen = (participantUserId) => {
     setIsProfileModalOpen(true);
     setSelectedUserId(participantUserId);
   }
 
-  console.log(participantsList);
 
   return (
     <ParticipantModalDiv>
@@ -19,7 +21,11 @@ const ParticipantList = ({ participantsList, handleAccept, handleReject, selecte
           <Image src={getImageSrc(participant.User?.UserFiles?.[0]?.File?.url)} alt="profile" onClick={() => handleProfileModalOpen(participant.User.userId)}/>
           <Info>
             <p>{participant.User.nickname}</p>
-            <p>🚻{participant.User.gender}</p>
+            {checkGender(participant.User.gender) ? 
+            <p>🙆🏻‍♂️{participant.User.gender}</p>
+            :
+            <p>🙆🏻‍♀️{participant.User.gender}</p>
+            }
             <p>⏱{participant.User.age}살</p>
             <p>🛄{participant.User.job}</p>
           </Info>
