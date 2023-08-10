@@ -74,6 +74,7 @@ const ProfilePicture = styled.img`
   margin-left: 9rem;
   z-index: 1;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 `;
 const DropdownMenu = styled.div`
   position: absolute;
@@ -107,7 +108,7 @@ const MenuList = styled.li`
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  font-family: 'KIMM_Bold';
+  font-family: "KIMM_Bold";
   font-weight: bold;
   letter-spacing: -0.5px;
   color: #252525;
