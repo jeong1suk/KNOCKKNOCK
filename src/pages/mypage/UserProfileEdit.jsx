@@ -9,6 +9,8 @@ import { ModalIdeal } from "../register/ModalIdeal";
 import * as Api from "../../api";
 import { showAlert, showSuccess } from "../../assets/alert";
 import { DispatchContext } from "../../context/user/UserProvider";
+import { regions } from "../../constants/registerConstants";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 const UserProfileEdit = ({ user }) => {
   const dispatch = useContext(DispatchContext);
   const { opened, onOpen, onClose } = useToggle();
@@ -110,6 +112,7 @@ const UserProfileEdit = ({ user }) => {
       : user.ideal !== undefined
       ? user.ideal
       : [];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -144,8 +147,8 @@ const UserProfileEdit = ({ user }) => {
         showAlert("정보 변경에 실패했습니다.");
       }
     } catch (err) {
-      // showAlert(err.response.data.message);
-      console.log(err.response);
+      showAlert(err.response.data.message);
+      console.log(err);
     }
   };
 
@@ -169,19 +172,8 @@ const UserProfileEdit = ({ user }) => {
       {opened && (
         <ModalOverlay>
           <S.Modal style={{ marginTop: "200px" }}>
-            <h3 style={{ textAlign: "center" }}>정보 수정하기</h3>
+            <h2 style={{ textAlign: "center" }}>정보 수정하기</h2>
             <CloseButton onClick={onClose}>X</CloseButton>
-            {/* <ProfilePicture
-            src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2018/1002/IE002401068_STD.jpg"
-            alt="Profile Picture"
-          /> */}
-            <br />
-            <S.Box>
-              <S.Heading>
-                Name: {"\t"}
-                {user.name}
-              </S.Heading>
-            </S.Box>
             <S.Box>
               <S.Heading>닉네임</S.Heading>
               <S.Input
@@ -189,7 +181,7 @@ const UserProfileEdit = ({ user }) => {
                 value={nickname}
                 placeholder={user.nickname}
                 onChange={onChange}
-              />
+              ></S.Input>
             </S.Box>
 
             <S.Box>
@@ -199,49 +191,76 @@ const UserProfileEdit = ({ user }) => {
                 value={job}
                 placeholder={user.job}
                 onChange={onChange}
-              />
+              ></S.Input>
             </S.Box>
             <S.Box>
-              <S.Heading>지역</S.Heading>
-              <S.Input
+              <S.Select
                 name="region"
                 value={region}
-                placeholder={user.region}
                 onChange={onChange}
-              />
+                style={{ border: "none" }}
+              >
+                <option>{user.region}</option>
+                {regions.map((region) => (
+                  <option key={region} value={region}>
+                    {region}
+                  </option>
+                ))}
+              </S.Select>
             </S.Box>
-            <S.Heading>사진</S.Heading>
-            <S.Box>
+            <S.ToggleButtonWrapper>
+              <S.Button style={{ cursor: "auto" }}>
+                <S.ImageUploadInput
+                  id="file-upload"
+                  type="file"
+                  onChange={handleFileChange}
+                />
+                <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
+                  사진 선택
+                </label>
+              </S.Button>
+            </S.ToggleButtonWrapper>
+            {/* <S.Box>
               <S.Input type="file" onChange={handleFileChange} />
-            </S.Box>
+            </S.Box> */}
             {selectedFile && (
-              <div>
-                <h6>미리보기</h6>
-                <img
+              <S.UploadedImageContainer>
+                <S.UploadedImage
                   src={previewURL}
                   alt="Selected Image"
                   style={{ width: "50%" }}
                 />
-              </div>
+              </S.UploadedImageContainer>
             )}
             <S.Box>
-              <S.Heading>키</S.Heading>
-              <S.Input
+              <S.Select
                 name="height"
                 value={height}
-                placeholder={user.height}
                 onChange={onChange}
-              />
+                style={{ border: "none" }}
+              >
+                <option>{user.height}</option>
+                {Array.from({ length: 101 }, (_, index) => index + 120).map(
+                  (value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  )
+                )}
+              </S.Select>
             </S.Box>
             <S.Box>
-              <S.Heading>mbti</S.Heading>
               <S.Select
                 name="mbti"
                 value={mbti}
-                placeholder={user.mbti}
                 onChange={onChange}
+                style={{ border: "none" }}
               >
-                <option>{user.mbti}</option>
+                {user.mbti !== "" ? (
+                  <option>{user.mbti}</option>
+                ) : (
+                  <option>MBTI</option>
+                )}
                 {mbtiList.map((mbti) => (
                   <option key={mbti} value={mbti}>
                     {mbti}
@@ -249,10 +268,12 @@ const UserProfileEdit = ({ user }) => {
                 ))}
               </S.Select>
             </S.Box>
+
             <ModalHobby
               formData={formData}
               handleHobbyClick={handleHobbyClick}
             />
+
             <ModalPersonality
               formData={formData}
               handlePersonalityClick={handlePersonalityClick}
@@ -271,9 +292,10 @@ const UserProfileEdit = ({ user }) => {
                 onChange={onChange}
               />
             </S.Box>
-
-            <button onClick={handleSubmit}>정보 수정하기</button>
-            <button onClick={onClose}>Close</button>
+            <S.ButtonSection>
+              <S.Button onClick={handleSubmit}>정보 수정하기</S.Button>
+              <S.Button onClick={onClose}>Close</S.Button>
+            </S.ButtonSection>
           </S.Modal>
         </ModalOverlay>
       )}
@@ -285,14 +307,25 @@ export default UserProfileEdit;
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 100px;
+    margin-top: 20px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+
+    width: 70%;
+  }
 `;
 const CloseButton = styled.button`
   position: absolute;

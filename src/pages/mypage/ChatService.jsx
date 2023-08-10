@@ -12,19 +12,19 @@ const socket = io.connect("http://localhost:3000", {
 
 const MessageChat = styled.div`
   display: flex;
-  width: 33rem;
-  height: 80vh;
+  width: 28rem;
+  height: 57vh;
+  border-radius: 20px;
   flex-direction: column;
   background-color: #f5f5f7;
   padding: 2rem;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
   justify-content: space-between;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 80vw;
     padding: 0rem;
   }
-
 `;
 
 const ChatRoom = styled.div`
@@ -33,16 +33,18 @@ const ChatRoom = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   background-color: #f5f5f7;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
   overflow-y: scroll;
-  height: 10rem;
-  margin-top: 2rem;
-  width: 37rem;
+  height: 7rem;
+  /* margin-top: 2rem; */
+  width: 32rem;
+  border-top: 1px solid black;
+  border-radius: 20px;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 90vw;
+    width: 80vw;
     // align-items: normal;
+    margin-top: 0.5px;
   }
-
 `;
 
 const UserListItem = styled.div`
@@ -61,7 +63,6 @@ const UserListItem = styled.div`
     width: 100%;
     align-items: center;
   }
-
 `;
 const ChatContainer = styled.div`
   display: flex;
@@ -73,7 +74,7 @@ const UserList = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
 `;
 const MessageBox = styled.div`
   display: flex;
@@ -304,7 +305,6 @@ function ChatComponent() {
       }
     }
   };
-
 
   const handleChatClick = async (chat) => {
     try {
