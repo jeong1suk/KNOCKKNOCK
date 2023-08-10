@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 
 export const Content = styled.div`
   position: absolute;
@@ -124,7 +125,7 @@ export const ToggleButton = styled.a`
   background: linear-gradient(to bottom, #bddbfa 5%, #80b5ea 100%);
   background-color: #bddbfa;
   border-radius: 6px;
-  border: 1px solid #84bbf3;
+  border: 1px solid #84f3;
   margin-top: 1rem;
   margin-left: 6rem;
   display: inline-block;
@@ -145,6 +146,10 @@ export const ToggleButton = styled.a`
   &:active {
     position: relative;
     top: 1px;
+  }
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    margin-left: 0.9rem;
+    margin-right: 1rem;
   }
 `;
 export const HobbyBoxContainer = styled.div`

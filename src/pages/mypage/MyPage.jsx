@@ -213,6 +213,7 @@ import UserPostAndParticipants from "./UserPostAndParticipants";
 import UserProfileLarge from "./UserProfileLarge";
 import ChatComponent from "./ChatService";
 import * as Api from "../../api";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 const MyPage = () => {
   const [activeSection, setActiveSection] = useState("chat");
   // const res = await Api.get("/users/mypage/posts");
@@ -278,7 +279,12 @@ const UserProfileBox = styled.div`
   align-items: center;
   width: 100%;
   height: 150vh;
+  border: 3px solid black;
   background-color: #f2f2f2e2;
+  z-index: 10;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 100%;
+  }
 `;
 
 const BackgroundImage = styled.div`
@@ -293,6 +299,10 @@ const BackgroundImage = styled.div`
     background: gray;
     cursor: pointer;
   } */
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    z-index: -10;
+  }
 `;
 const ChangeBackgroundButton = styled.button`
   position: absolute;
@@ -323,12 +333,20 @@ const ProfilePicture = styled.img`
 
 const LeftSection = styled.div`
   margin-right: 2rem;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    // flex-direction: column;
+    margin-right: 0;
+  }
 `;
 
 const RightSectionWrapper = styled.div`
   display: flex;
   flex-direction: row;
   margin-top: 4.4rem;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    flex-direction: column;
+  }
 `;
 
 const RightSection = styled.div``;

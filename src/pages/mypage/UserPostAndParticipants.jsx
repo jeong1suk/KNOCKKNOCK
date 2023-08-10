@@ -3,7 +3,7 @@ import styled from "styled-components";
 import * as Api from "../../api";
 import { Link } from "react-router-dom";
 import { getImageSrc } from "../../util/imageCheck";
-
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 const UserPostAndParticipants = () => {
   const [posts, setPosts] = useState([]);
   const [joins, setJoins] = useState([]);
@@ -64,6 +64,10 @@ const Userbox = styled.div`
   overflow: auto;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 33rem;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 82vw;
+  }
 `;
 
 const Postbox = styled.div`
@@ -80,6 +84,7 @@ const Postbox = styled.div`
     text-overflow: ellipsis;
     font-size: 1rem;
   }
+  
 `;
 
 const Content = styled.div`

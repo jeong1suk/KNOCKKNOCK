@@ -3,6 +3,7 @@ import styled from "styled-components";
 import io from "socket.io-client";
 import * as API from "../../api";
 import { getImageSrc } from "../../util/imageCheck";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 
 const socket = io.connect("http://localhost:3000", {
   path: "/socket.io",
@@ -18,6 +19,10 @@ const MessageChat = styled.div`
   padding: 2rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   justify-content: space-between;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 80vw;
+    padding: 0rem;
+  }
 `;
 
 const ChatRoom = styled.div`
@@ -31,6 +36,10 @@ const ChatRoom = styled.div`
   height: 10rem;
   margin-top: 2rem;
   width: 37rem;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 90vw;
+    // align-items: normal;
+  }
 `;
 
 const UserListItem = styled.div`
@@ -50,6 +59,11 @@ const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 100%;
+    align-items: center;
+  }
 `;
 
 const UserList = styled.div`
@@ -205,7 +219,7 @@ function ChatComponent() {
         chatId: chatId,
         content: message.content.trim(),
         senderId: message.senderId,
-        createdAt: new Date().toISOString(),
+        date: new Date(),
       };
       setChatHistory((prevChatHistory) => [...prevChatHistory, newMessage]);
     });
@@ -287,8 +301,6 @@ function ChatComponent() {
       }
     }
   };
-
-  console.log(profileImage);
 
   const handleChatClick = async (chat) => {
     try {
