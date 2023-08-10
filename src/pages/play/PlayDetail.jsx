@@ -302,7 +302,7 @@ function PlayDetail() {
           UserFiles: [
             {
               File: {
-                url: userState.user?.url,
+                url: userState.user.profileImage
               },
             },
           ],
@@ -339,7 +339,7 @@ function PlayDetail() {
     setMenuOpen(null);
   };
 
-  console.log(userState);
+
   const editCommentRequest = async (commentId, editedContent) => {
     try {
       const body = {
