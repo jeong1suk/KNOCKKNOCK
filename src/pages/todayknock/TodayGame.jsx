@@ -208,7 +208,7 @@ const CardDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 90%;
+  height: 100%;
   // border: 3px solid yellow;
   background-image: url(/cardblack.jpg);
   background-size: contain;
@@ -314,11 +314,16 @@ const CardImageContainer = styled.div`
   height: 90%;
   width: 65%;
   margin-top: 50px;
+  
   @media (max-width: 1024px) {
     width: 100%;
   }
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%;
+  }
+  @media (max-height: 700px) {
+    font-size: 0.5rem;
+    width: 70%;
   }
 `;
 const CardContent = styled.div`

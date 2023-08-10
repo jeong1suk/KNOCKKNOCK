@@ -83,6 +83,7 @@ const UserProfileContainer = styled.div`
   transition: background-color 0.3s;
   cursor: pointer;
   border-radius: 10%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 `;
 
 const ProfilePicture = styled.img`
@@ -131,9 +132,15 @@ const LoverProfileContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 100%;
+  height: 85%;
   position: relative;
   border-radius: 100%;
+
+    @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 80%;
+    height: 70%;
+  }
 `;
 
 const LoverProfilePicture = styled.img`
