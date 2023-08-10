@@ -1050,9 +1050,17 @@ const ModalContentUser = styled.div`
   padding-top: 2rem;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
+  overflow-y: auto;
+  @media (max-width: 1080px) {
+    width: 50%;
+    height: 80%;
+  }
+  @media (max-width: 768px) {
+    width: 60%;
+    height: 80%;
+  }
+  @media (max-width: 460px) {
     width: 90%;
-    overflow-y: auto;
+    height: 80%;
   }
 `;
