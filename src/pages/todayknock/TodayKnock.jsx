@@ -191,7 +191,7 @@ const StartButton = styled.button`
   margin-top: 1rem;
   margin-right: 1.2rem;
   height: 2rem;
-  background-color: #E883DE;
+  background-color: #e883de;
   color: #fff;
   padding: 10px 20px;
   border: 10px double #fff;
@@ -204,7 +204,7 @@ const StartButton = styled.button`
   cursor: pointer;
   &:hover {
     border: 10px double #3b0b0b;
-    color: #391F41;
+    color: #391f41;
     transform: scale(1.02);
   }
 
@@ -309,7 +309,6 @@ const UserProfilesContainer = styled.div`
     grid-template-columns: repeat(auto-fit, minmax(25vw, 1fr));
     gap: 5%;
     padding: 0 5%;
-
   }
 `;
 
