@@ -334,21 +334,19 @@ const Nickname = styled.span`
 `;
 
 const IntroContainer = styled.div`
-  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  // margin-top: 20%;
-  width: 70vw;
-  height: 40vw;
+  width: 70%;
+  height: 70%;
   font-size: 2rem;
   font-family: "SEBANG_Gothic_Bold";
   animation: ${fadeIn} 2s, ${fadeOut} 2s 3s forwards; /* fade in 애니메이션은 2초 동안, 그리고 3초 후에 fade out 애니메이션을 2초 동안 적용 */
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     margin-top: 10%;
-    width: 70%;
+    width: 100%;
     font-size: 1rem;
     height: 60%;
   }
@@ -357,9 +355,7 @@ const IntroContainer = styled.div`
 const IntroImage = styled.img`
   width: 80%;
   height: 80%;
-  @media (max-width: 1024px) {
-    // width: 60%;
-  }
+
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 80%;

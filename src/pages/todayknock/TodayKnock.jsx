@@ -249,12 +249,15 @@ const ModalContentUser = styled.div`
 `;
 
 const ModalContent = styled.div`
-  /* width: 70%;
-  height: 90%; */
+  width: 70%;
+  height: 70%;
   overflow: auto;
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 100%;
 `;
 
 const UserProfilesContainer = styled.div`
