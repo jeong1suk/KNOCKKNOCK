@@ -560,8 +560,8 @@ function PlayDetail() {
             <p>수락된 참가자만 댓글확인 및 작성 할 수 있습니다.</p>
           )}
 
-          {comments.map((comment) => (
-            <CommentDetailBox key={comment.commentId}>
+          {comments.map((comment, commentId) => (
+            <CommentDetailBox key={commentId}>
               <CommentImageBox>
                 <img
                   src={getImageSrc(comment.User?.UserFiles?.[0]?.File?.url)}
