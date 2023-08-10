@@ -74,7 +74,6 @@ const TodayGame = ({ onExit, selectedCard, onCardSelect }) => {
     }
   }, [showIntro]);
 
-  console.log(showIntro);
 
   useEffect(() => {
     cardsGetRequest();
@@ -229,20 +228,24 @@ const ExitBox = styled.div`
 `;
 
 const ExitButton = styled.button`
+  font-family: "KIMM_Bold";
   margin-top: 2rem;
   height: 2rem;
-  background-color: #9ea7d6;
+  background-color: #E883DE;
   color: #fff;
   padding: 10px 20px;
-  border: none;
+  border: 10px double #fff;
   border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 17px;
+  transition: 0.3s;
+  cursor: pointer;
   &:hover {
-    background-color: #7b88b8;
-    cursor: pointer;
+    border: 10px double #3b0b0b;
+    color: #391F41;
+    transform: scale(1.02);
   }
 `;
 
