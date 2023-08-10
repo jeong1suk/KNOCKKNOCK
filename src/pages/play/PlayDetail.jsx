@@ -561,7 +561,9 @@ function PlayDetail() {
             />
           </InputBox>
           <InputBox>
-            <p>{post.content}</p>
+            <span style={{ whiteSpace: "pre-line" }}>
+              {post.content}
+            </span>
           </InputBox>
         </PostDetailFirstBox>
         <CommentBox>
@@ -607,15 +609,17 @@ function PlayDetail() {
                       onChange={(e) => setEditedContent(e.target.value)}
                       style={{ width: "100%", minHeight: "40px" }}
                     />
-
-                    <button onClick={() => setIsEditing(null)}>취소</button>
                     <button onClick={() => saveComment(comment.commentId)}>
                       수정
                     </button>
+                    <button onClick={() => setIsEditing(null)}>취소</button>
+                    
                   </CommentEditArea>
                 ) : (
                   <CommentEditDeleteBox>
-                    <p>{comment.content}</p>
+                    <span style={{ whiteSpace: "pre-line", marginBottom: "10px"}}>
+                      {comment.content}
+                    </span>
                     {comment.userId === userId && (
                       <div
                         style={{ display: "flex", justifyContent: "flex-end" }}
@@ -954,6 +958,9 @@ const CommentEditDeleteBox = styled.div`
   width: 100%;
 
   p {
+    width: 90%;
+  }
+  span {
     width: 90%;
   }
 `;

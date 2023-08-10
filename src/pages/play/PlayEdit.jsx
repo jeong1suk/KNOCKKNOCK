@@ -149,7 +149,7 @@ function PlayEdit() {
             />
           </div>
         </InputBox>
-        <InputBox>
+        <InputBox style={{justifyContent: "end"}}>
           {(fetchedImageUrl || imageUrl) && (
             <div style={{ width: '200px', paddingLeft: "50px" }}>
                 <img 
