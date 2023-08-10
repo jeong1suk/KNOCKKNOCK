@@ -6,6 +6,10 @@ import {
   TABLET_BREAK_POINT,
 } from "../../components/layout/breakpoint";
 import spring from "../../assets/spring3.webp";
+import summer from "../../assets/summer1.webp";
+import fall from "../../assets/fall1.webp";
+import winter from "../../assets/winter1.webp";
+import wait from "../../assets/wait.jpeg";
 const Ai = () => {
   const [result, setResult] = useState("");
   const [base64, setBase64] = useState("");
@@ -131,7 +135,10 @@ const Ai = () => {
                   </>
                 )}
                 {clickbg && !base64 && selectedFile !== "phto.png" && (
-                  <UploadedImage src="src/assets/wait.jpeg" />
+                  <UploadedImageContainer style={{ border: "none" }}>
+                    <UploadedImage src={wait} />
+                    <p>cpu 성능이 안좋아 최대 10초정도 걸립니다.</p>
+                  </UploadedImageContainer>
                 )}
               </RightSection>
             )}
@@ -146,18 +153,18 @@ const Ai = () => {
               <img src={spring} alt="봄 웜톤" style={{ height: "80%" }} />
             )}
             {result === "summer" && (
-              <UploadedImage src="src/assets/summer1.jpeg" alt="여름 쿨톤" />
+              <img src={summer} alt="여름 쿨톤" style={{ height: "80%" }} />
             )}
             {result === "fall" && (
-              <UploadedImage src="src/assets/fall1.jpeg" alt="가을 웜톤" />
+              <img src={fall} alt="가을 웜톤" style={{ height: "80%" }} />
             )}
             {result === "winter" && (
-              <UploadedImage src="src/assets/winter1.jpeg" alt="겨울 쿨톤" />
+              <img src={winter} alt="겨울 쿨톤" style={{ height: "80%" }} />
             )}
 
             <div>
               {clickpc && !result && selectedFile !== "/phto.png" && (
-                <UploadedImage src="src/assets/wait.jpeg" />
+                <UploadedImage src={wait} />
               )}
             </div>
           </ResultSection>
