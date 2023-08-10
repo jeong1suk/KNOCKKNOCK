@@ -74,9 +74,10 @@ export const Box = styled.span`
   background: #fff;
   position: relative;
   margin: 15px auto;
-  overflow-x: auto;
+
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     height: 10%;
+    overflow-x: auto;
   }
 `;
 // export const Input = styled.input`

@@ -13,12 +13,14 @@ const socket = io.connect("http://localhost:3000", {
 const MessageChat = styled.div`
   display: flex;
   width: 28rem;
-  height: 57vh;
+  height: 46vh;
+  margin-top: -1rem;
   border-radius: 20px;
   flex-direction: column;
   background-color: #f5f5f7;
   padding: 2rem;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
+  border: 0.2px solid black;
+  /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 1); */
   justify-content: space-between;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
@@ -33,12 +35,13 @@ const ChatRoom = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   background-color: #f5f5f7;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
+
+  /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 1); */
   overflow-y: scroll;
   height: 7rem;
   /* margin-top: 2rem; */
   width: 32rem;
-  border-top: 1px solid black;
+  border: 0.5px solid black;
   border-radius: 20px;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 80vw;
