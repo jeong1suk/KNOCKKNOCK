@@ -35,13 +35,13 @@ function PostCard({post})  {
   // const [nickname, setNickname] = useState('억만추');
 
 
-
+  console.log(post);
   return (
     <Card onClick = {() => navigate(`/playdetail/${post.postId}`)}>
       <ContentBox>
         <ProfileBox>
-          <ProfileImage src={getImageSrc(post.User.UserFiles?.[0]?.File?.url)} alt="유저 프로필" />
-          <Nickname>{post.User.nickname}</Nickname>
+          <ProfileImage src={getImageSrc(post?.User?.UserFiles?.[0]?.File?.url)} alt="유저 프로필" />
+          <Nickname>{post?.User?.nickname}</Nickname>
         </ProfileBox>
         <ImageBox>
           <Image src={getImageSrc(post.PostFiles?.[0]?.File?.url)} alt="postImage" />
