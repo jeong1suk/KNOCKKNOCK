@@ -95,6 +95,7 @@ const Ai = () => {
   useEffect(() => {
     setResult("");
     setBase64("");
+    window.scrollTo(0, 0);
   }, [selectedFile]);
 
   return (
