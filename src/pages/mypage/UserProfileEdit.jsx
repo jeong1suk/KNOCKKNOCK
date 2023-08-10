@@ -188,10 +188,6 @@ const UserProfileEdit = ({ user }) => {
                 onChange={onChange}
               />
             </S.Box>
-            <S.Box>
-              <S.Heading>비밀번호</S.Heading>
-              <S.Input name="password" value={password} onChange={onChange} />
-            </S.Box>
 
             <S.Box>
               <S.Heading>직업</S.Heading>

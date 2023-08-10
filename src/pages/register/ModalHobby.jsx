@@ -19,9 +19,7 @@ export const ModalHobby = ({ formData, handleHobbyClick }) => {
         {opened && (
           <S.Modal>
             <h3 style={{ textAlign: "center" }}>취미</h3>
-            {isMaxHobbyReached && (
-              <p style={{ color: "red" }}>최대 5개까지 선택가능합니다.</p>
-            )}
+            <p style={{ color: "red" }}>최대 5개까지 선택가능합니다.</p>
             <ButtonContainer>
               {hobbyList.map((elements, index) => (
                 <ModalButton

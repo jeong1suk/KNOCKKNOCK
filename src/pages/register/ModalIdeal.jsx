@@ -18,9 +18,7 @@ export const ModalIdeal = ({ formData, handleIdealClick }) => {
         {opened && (
           <S.Modal>
             <h3 style={{ textAlign: "center" }}>이상형</h3>
-            {isMaxIdealReached && (
-              <p style={{ color: "red" }}>최대 5개까지 선택가능합니다.</p>
-            )}
+            <p style={{ color: "red" }}>최대 5개까지 선택가능합니다.</p>
             <ButtonContainer>
               {idealList.map((elements, index) => (
                 <ModalButton
