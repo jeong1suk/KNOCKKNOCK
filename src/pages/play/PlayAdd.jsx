@@ -104,7 +104,7 @@ function PlayAdd() {
     if (meetingDate && meetingHour) {
       const dateTime = `${meetingDate}T${meetingHour}`;
       const timestamp = new Date(dateTime).getTime();
-      setMeetingTime(dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'));
+      setMeetingTime(timestamp);
     }
   }, [meetingDate, meetingHour]);
 

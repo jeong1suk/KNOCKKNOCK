@@ -171,7 +171,7 @@ const UserProfileEdit = ({ user }) => {
       </S.Button>
       {opened && (
         <ModalOverlay>
-          <S.Modal style={{ marginTop: "200px" }}>
+          <S.Modal>
             <h2 style={{ textAlign: "center", fontFamily: "KIMM_Bold" }}>
               정보 수정하기
             </h2>

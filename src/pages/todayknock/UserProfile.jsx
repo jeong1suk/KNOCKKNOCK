@@ -74,11 +74,13 @@ export default UserProfile;
 
 const UserProfileContainer = styled.div`
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
-  width: 100%;
-  height: 85%;
-  // height: 40vh;
+  justify-content: center;
+  align-items: center;  
+
+  min-width: 300px;
+  min-height: 300px;
+  max-width: 300px;
+  max-height: 300px;
   overflow: hidden;
   position: relative;
   transition: background-color 0.3s;
@@ -86,10 +88,26 @@ const UserProfileContainer = styled.div`
   border-radius: 10%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 
-  // @media (max-width: ${MOBILE_BREAK_POINT}) {
-  //   width: 80%;
-  //   height: 20vh;
-  // }
+  @media (max-width: 1620px) {
+    min-width: 200px;
+    min-height: 200px;
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  @media (max-width: 873px) {
+    min-width: 150px;
+    min-height: 150px;
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  @media (max-width: 527px) {
+    min-width: 100px;
+    min-height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+  }
 `;
 
 const ProfilePicture = styled.img`
@@ -150,8 +168,12 @@ const LoverProfileContainer = styled.div`
 `;
 
 const LoverProfilePicture = styled.img`
-  width: 120%;
-  height: 80%;
+  // width: 120%;
+  // height: 80%;
+  min-width: 300px;
+  min-height: 300px;
+  max-width: 300px;
+  max-height: 300px;
   border: 4px dashed #f7cbd0;
   border-radius: 100%;
   cursor: pointer;
@@ -163,10 +185,26 @@ const LoverProfilePicture = styled.img`
     opacity: 0.5; // Image will darken on hover
   }
 
+  
+  @media (max-width: 960px) {
+    min-width: 200px;
+    min-height: 200px;
+    max-width: 200px;
+    max-height: 200px;
+  }
+
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    border: 3px dashed #f7cbd0;
-    width: 130%;
-    height: 90%;
+    min-width: 130px;
+    min-height: 130px;
+    max-width: 130px;
+    max-height: 130px;
+  }
+
+  @media (max-width: 500px) {
+    min-width: 100px;
+    min-height: 100px;
+    max-width: 100px;
+    max-height: 100px;
   }
 `;
 

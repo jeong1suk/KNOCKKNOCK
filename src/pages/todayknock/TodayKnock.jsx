@@ -20,6 +20,8 @@ function TodayKnock() {
 
   const [selectedCard, setSelectedCard] = useState();
 
+
+
   const usersGetRequest = async () => {
     try {
       const res = await Api.get(`users/network`);
@@ -107,7 +109,7 @@ function TodayKnock() {
       </Banner>
       <div style={{ height: "3vh" }} />
       {showStartModal && (
-        <ModalOverlay>
+        <ModalOverlay onClick={handleStartModalExit}>
           <ModalContent>
             <TodayGame
               onExit={handleStartModalExit}
@@ -162,7 +164,7 @@ function TodayKnock() {
 export default TodayKnock;
 
 const Container = styled.div`
-  margin-bottom: 6rem;
+  margin-bottom: 10rem;
 `;
 
 const Banner = styled.div`
@@ -271,18 +273,18 @@ const ModalContent = styled.div`
 const LoverProfilesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
-  gap: 10%;
+  gap: 5%;
   row-gap: 1%;
   padding: 0 3%;
   margin: 0 0;
   align-items: center;
   justify-items: center;
 
-  // @media (max-width: 1024px) {
-  //   grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
-  //   gap: 20%;
-  //   row-gap: 0%;
-  // }
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
+    gap: 0%;
+    row-gap: 0%;
+  }
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
@@ -292,9 +294,9 @@ const LoverProfilesContainer = styled.div`
 
 const UserProfilesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16vw, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
   gap: 10%;
-  row-gap: 1%;
+  row-gap: 10%;
   padding: 5%;
   margin: 0 0;
   align-items: center;
@@ -303,7 +305,7 @@ const UserProfilesContainer = styled.div`
   @media (max-width: 800px) {
     grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
     gap: 5%;
-    row-gap: 0%;
+    row-gap: 10%;
   }
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
