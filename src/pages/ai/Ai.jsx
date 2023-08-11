@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
-import spring from "../../assets/spring3.webp";
-import summer from "../../assets/summer1.webp";
-import fall from "../../assets/fall1.webp";
-import winter from "../../assets/winter1.webp";
+import spring from "../../assets/spring.png";
+import summer from "../../assets/summer.png";
+import fall from "../../assets/fall.png";
+import winter from "../../assets/winter.png";
 import wait from "../../assets/wait.jpeg";
 import loading from "../../assets/loading.gif";
 import { showAlert } from "../../assets/alert";
@@ -98,6 +98,12 @@ const Ai = () => {
 
   return (
     <>
+      <TopBox>
+        <TopPtagBox>
+          <p>뷰티 톡톡 !</p>
+          <p>사진을 넣고 퍼스널컬러를 찾고 메이크업을 해보세요</p>
+        </TopPtagBox>
+      </TopBox>
       <Container>
         <ButtonSection>
           <Button style={{ cursor: "auto" }}>
@@ -107,11 +113,15 @@ const Ai = () => {
               onChange={handleFileChange}
             />
             <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
-              파일 선택
+              사진 선택
             </label>
           </Button>
           <Button onClick={handlePersonalColor}>퍼스널컬러</Button>
-          <Button onClick={handleMakeupClick}>beautyGAN</Button>
+          <Button onClick={handleMakeupClick}>
+            beautyGAN
+            <br />
+            (메이크업)
+          </Button>
           {/* <Button>StyleGAN(유료/미구현)</Button> */}
         </ButtonSection>
 
@@ -172,6 +182,59 @@ const Ai = () => {
     </>
   );
 };
+const fadeInAnimation = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const TopBox = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 10%;
+  margin: 50px 0px 60px 0px;
+  gap: 10%;
+  
+  p {
+    font-family: 'KIMM_Bold';
+    font-size: 6rem; 
+    color: #1d1d1f; 
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0px;
+  }
+
+  p:last-of-type {
+    font-size: 2rem; 
+    color: #1d1d1f; 
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  animation: ${fadeInAnimation} 0.5s ease-in-out;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    flex-direction: column;
+    
+    p {
+      font-size: 2rem;
+      margin-bottom: -0.3px;
+    }
+
+    p:last-of-type {
+      font-size: 0.8rem;
+    }
+`;
+
+const TopPtagBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+`;
 const ImageUploadInput = styled.input`
   display: none;
 `;
@@ -199,7 +262,7 @@ const UploadedImage = styled.img`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 100px;
+  /* margin-top: 100px; */
 `;
 
 const UserProfileBox = styled.div`
@@ -239,7 +302,7 @@ const RightSection = styled.div`
   flex-direction: column;
   /* width: 40rem; */
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%; /* 모바일 화면에서 가로 폭을 100%로 조정 */
     margin-top: 0; /* 모바일 화면에서 위쪽 여백 제거 */
   }
@@ -254,20 +317,6 @@ const ResultSection = styled.div`
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%; /* 모바일 화면에서 가로 폭을 100%로 조정 */
     margin-top: 0; /* 모바일 화면에서 위쪽 여백 제거 */
-  }
-`;
-
-const Section = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 6rem;
-  margin-bottom: 2rem;
-  border: 1px solid black;
-  max-width: 300px;
-
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 70%;
-    height: 7rem;
   }
 `;
 
@@ -291,7 +340,7 @@ const Button = styled.button`
     transform: scale(1.02);
   }
 
-  @media (max-width: 750px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     margin: 20px 0;
     width: 50%;
     height: 60px;

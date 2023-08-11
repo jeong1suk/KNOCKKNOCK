@@ -23,6 +23,7 @@ export const Header = styled.header`
   display: flex;
   justify-content: center;
   font-size: 24px;
+  font-family: "KIMM_Bold";
   font-weight: bold;
   border: 2px solid #000;
   border-radius: 5px;
@@ -219,9 +220,9 @@ export const Modal = styled.div`
   z-index: 10;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    top: 70%;
+    /* top: 70%; */
     width: 40%;
-    max-height: 20%;
+    max-height: 30%;
     overflow-x: auto;
   }
 `;
@@ -236,7 +237,7 @@ export const Button = styled.div`
   cursor: pointer;
   /* margin: 50px 0 30px 0; */
   width: 30%;
-  height: 50px;
+  /* height: 20%; */
   transition: 0.3s;
 
   &:hover {
@@ -247,7 +248,7 @@ export const Button = styled.div`
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* width: 50%; */
-    height: 30%;
+    height: 50%;
     font-size: 0.5rem;
     overflow-x: auto;
   }

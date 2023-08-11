@@ -94,6 +94,7 @@ function TodayKnock() {
   useEffect(() => {
     usersGetRequest();
     cardsGetRequest();
+    window.scrollTo(0, 0);
   }, []);
 
   return (
@@ -325,6 +326,10 @@ const RandomUserExplainDiv = styled.div`
     background-color: #fff0f5;
     padding: 5px;
     border-radius: 30px;
+  }
+
+  @media (max-width: 1024px) {
+    margin: 0 0 50px 20px;
   }
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {

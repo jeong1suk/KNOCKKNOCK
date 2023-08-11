@@ -79,7 +79,7 @@ function UserProfile({ user, onClose }) {
           <Email>{user.email}</Email>
 
           <Tagline>{user.introduce}</Tagline>
-
+          
           <UserInfomationBox>
             <UserInformation>
               <UserLineContainer>
@@ -99,6 +99,20 @@ function UserProfile({ user, onClose }) {
               </UserLineContainer>
             </UserInformation>
             <HobbyAllBox>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "1rem",
+                  fontFamily: "KIMM_Bold",
+                  margin: "0 0 20px 0"
+                }}
+                >
+                <span style={{ padding: "5px", color: "#fa9393" }}>취미</span>
+                <span style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>
+                  성격
+                </span>
+                <span style={{ padding: "5px", color: "#87d5fc" }}>이상형</span>
+              </p>
               <HobbyBoxContainer>
                 {shuffledHobby.map((hobby, index) => (
                   <HobbyBox key={index} style={{ order: index }}>

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import RequiredInputs from "./RequiredInputs";
 import OptionalInputs from "./OptionalInputs";
 import * as S from "./style";
@@ -96,6 +96,10 @@ const RegisterPage = () => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
+
   return (
     <S.Content>
       <form
@@ -113,10 +117,12 @@ const RegisterPage = () => {
         {/* <S.Header>필수 입력</S.Header> */}
         <RequiredInputs />
 
-        <S.Header style={{ border: 0 }}>선택 입력</S.Header>
+        <S.Header style={{ border: 0, marginBottom: "5px" }}>
+          선택 입력
+        </S.Header>
 
         <S.ToggleButtonWrapper>
-          <S.Button style={{ cursor: "auto" }}>
+          <S.Button style={{ cursor: "auto", height: "30%" }}>
             <S.ImageUploadInput
               id="file-upload"
               type="file"
