@@ -43,6 +43,7 @@ export const Heading = styled.h3`
   margin: 10px auto;
   font-size: 1rem;
   font-weight: 700;
+  font-family: KIMM_Bold;
   width: 30%;
   text-align: center;
 
@@ -63,7 +64,7 @@ export const Box = styled.span`
   box-sizing: border-box;
   background: #fff;
   position: relative;
-  margin: 15px auto;
+  margin: 10px auto;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 80%;
@@ -205,7 +206,7 @@ export const Input = styled.input`
   } */
 `;
 export const ErrorBox = styled.span`
-  margin-top: 9px;
+  /* margin-top: 9px; */
   font-size: 12px;
   color: red;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
@@ -239,6 +240,7 @@ export const Modal = styled.div`
 export const ButtonSection = styled.div`
   display: flex;
   flex-direction: row;
+  margin-left: 5px;
   /* align-items: center; */
   justify-content: center;
   @media (max-width: ${MOBILE_BREAK_POINT}) {

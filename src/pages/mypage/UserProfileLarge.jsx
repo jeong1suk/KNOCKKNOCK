@@ -38,6 +38,7 @@ const Nickname = styled.div`
   align-items: center;
   color: #4b4a4a;
   font-size: 2rem;
+  font-family: "KIMM_Bold";
   margin: 0.5rem;
 `;
 
@@ -60,6 +61,7 @@ const Tagline = styled.div`
   align-items: center;
   color: #676565;
   font-size: 0.9rem;
+  font-family: "KIMM_Bold";
 `;
 
 const UserInformation = styled.div`
@@ -97,6 +99,7 @@ const UserLine = styled.h3`
   /* color: #8f8f8f; */
   color: black;
   font-size: 1rem;
+  font-family: "KIMM_Bold";
 `;
 
 const HobbyBox = styled.div`
@@ -143,8 +146,11 @@ const HobbyBoxContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  top: 50%;
+  left: 50%;
+  /* transform: translate(20%, 20%); */
   margin: 2rem;
-  /* width: 20rem; */
+  /* width: 15rem; */
   border: 1px solid green;
 `;
 const ProfilePicture = styled.img`
@@ -253,9 +259,20 @@ const UserProfileLarge = () => {
           {/* </UserLineContainer> */}
         </UserPersonalInformation>
       </UserProfileBox>
-      <div style={{ padding: "5px", color: "#fa9393" }}>취미</div>
-      <div style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>성격</div>
-      <div style={{ padding: "5px", color: "#87d5fc" }}>이상형</div>
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "1rem",
+          fontFamily: "KIMM_Bold",
+          margin: "0",
+        }}
+      >
+        <span style={{ padding: "5px", color: "#fa9393" }}>취미</span>
+        <span style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>
+          성격
+        </span>
+        <span style={{ padding: "5px", color: "#87d5fc" }}>이상형</span>
+      </p>
       <HobbyBoxContainer>
         {shuffledHobby.map((hobby, index) => (
           <HobbyBox key={index} style={{ order: index }}>

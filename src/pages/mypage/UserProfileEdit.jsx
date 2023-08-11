@@ -167,12 +167,14 @@ const UserProfileEdit = ({ user }) => {
   return (
     <>
       <S.Button style={{ textAlign: "center" }} onClick={() => onOpen()}>
-        정보 수정하기
+        <span style={{ fontFamily: "KIMM_Bold" }}>정보 수정하기</span>
       </S.Button>
       {opened && (
         <ModalOverlay>
           <S.Modal style={{ marginTop: "200px" }}>
-            <h2 style={{ textAlign: "center" }}>정보 수정하기</h2>
+            <h2 style={{ textAlign: "center", fontFamily: "KIMM_Bold" }}>
+              정보 수정하기
+            </h2>
             <CloseButton onClick={onClose}>X</CloseButton>
             <S.Box>
               <S.Heading>닉네임</S.Heading>

@@ -26,7 +26,7 @@ const UserPostAndParticipants = () => {
   getImageSrc;
   return (
     <Userbox>
-      <div>내가 쓴 게시글</div>
+      <div style={{ fontFamily: "KIMM_Bold" }}>내가 쓴 게시글</div>
 
       <Postbox>
         {posts.map((post) => (
@@ -39,7 +39,7 @@ const UserPostAndParticipants = () => {
         ))}
       </Postbox>
 
-      <div>참가한 게시글</div>
+      <div style={{ fontFamily: "KIMM_Bold" }}>참가한 게시글</div>
       <Postbox>
         {joins.map((join) => (
           <Content>
@@ -57,7 +57,7 @@ const UserPostAndParticipants = () => {
 
 const Userbox = styled.div`
   display: flex;
-  height: 70vh;
+  height: 60vh;
   justify-content: space-between;
   flex-direction: column;
   background-color: #f5f5f7;
