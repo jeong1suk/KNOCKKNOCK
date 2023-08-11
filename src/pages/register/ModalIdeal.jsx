@@ -45,7 +45,7 @@ export const ModalIdeal = ({ formData, handleIdealClick }) => {
           <S.ToggleButtonWrapper>
             <S.Button
               onClick={onClose}
-              style={{ width: "10%", marginTop: "5px" }}
+              style={{ width: "15%", marginTop: "5px" }}
             >
               <p style={{ textAlign: "center" }}>닫기</p>
             </S.Button>
