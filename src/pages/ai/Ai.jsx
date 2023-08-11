@@ -7,6 +7,7 @@ import summer from "../../assets/summer1.webp";
 import fall from "../../assets/fall1.webp";
 import winter from "../../assets/winter1.webp";
 import wait from "../../assets/wait.jpeg";
+import loading from "../../assets/loading.gif";
 import { showAlert } from "../../assets/alert";
 const Ai = () => {
   const [result, setResult] = useState("");
@@ -142,8 +143,8 @@ const Ai = () => {
                 )}
                 {!base64 && selectedFile !== "/phto.png" && (
                   <UploadedImageContainer style={{ border: "none" }}>
-                    <UploadedImage src={wait} />
-                    <p>cpu 성능이 안좋아 최대 10초정도 걸립니다.</p>
+                    <UploadedImage src={loading} />
+                    {/* <p>cpu 성능이 안좋아 최대 10초정도 걸립니다.</p> */}
                   </UploadedImageContainer>
                 )}
               </RightSection>
@@ -162,7 +163,7 @@ const Ai = () => {
 
             <div>
               {clickpc && !result && selectedFile !== "/phto.png" && (
-                <UploadedImage src={wait} />
+                <UploadedImage src={loading} />
               )}
             </div>
           </ResultSection>
