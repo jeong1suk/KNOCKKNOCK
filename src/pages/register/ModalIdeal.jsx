@@ -18,7 +18,7 @@ export const ModalIdeal = ({ formData, handleIdealClick }) => {
       </S.ToggleButtonWrapper>
 
       {opened && (
-        <S.Modal style={{ top: "70%" }}>
+        <S.Modal>
           <S.CloseButton onClick={onClose}>X</S.CloseButton>
           <h3 style={{ textAlign: "center" }}>이상형</h3>
           {isMaxIdealReached && (
