@@ -206,7 +206,7 @@
 
 // export default MyPage;
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { getImageSrc } from "../../util/imageCheck";
 import UserPostAndParticipants from "./UserPostAndParticipants";
@@ -231,10 +231,6 @@ const MyPage = () => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [])
 
   return (
     <Container>
