@@ -20,8 +20,6 @@ function TodayKnock() {
 
   const [selectedCard, setSelectedCard] = useState();
 
-
-
   const usersGetRequest = async () => {
     try {
       const res = await Api.get(`users/network`);
@@ -122,6 +120,7 @@ function TodayKnock() {
       {showUserModal && selectedUser && (
         <ModalOverlay onClick={handleUserModalExit}>
           <ModalContentUser onClick={(e) => e.stopPropagation()}>
+            <CloseModalButton onClick={handleUserModalExit}>X</CloseModalButton>
             <UserModal user={selectedUser} onClose={handleUserModalExit} />
           </ModalContentUser>
         </ModalOverlay>
@@ -233,25 +232,27 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContentUser = styled.div`
-  width: 40%;
-  height: 80%;
-  background-color: #efefef;
-  padding: 1rem;
+  width: 30%;
+  height: 85%;
+  background-color: #ffffff;
+  padding: 2rem;
   padding-top: 1.5rem;
-  padding-bottom: 2rem;
   border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-  @media (max-width: 1080px) {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+  border-radius: 3rem;
+  position: relative;
+
+  @media (max-width: 1200px) {
     width: 50%;
     height: 80%;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     width: 60%;
-    height: 80%;
+    height: 70%;
   }
-  @media (max-width: 460px) {
-    width: 90%;
-    height: 80%;
+  @media (max-width: 630px) {
+    width: 70%;
+    height: 70%;
   }
 `;
 
@@ -268,6 +269,7 @@ const ModalContent = styled.div`
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%;
+  }
 `;
 
 const LoverProfilesContainer = styled.div`
@@ -340,4 +342,21 @@ const RandomUserExplainDiv = styled.div`
     }
     margin: 20px 20px 0 20px;
   }
+`;
+const CloseModalButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: transparent;
+  color: #7b7b7b;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  margin-right: 0.8rem;
 `;
