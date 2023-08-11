@@ -44,6 +44,7 @@ function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
     ProfileGetRequest(userId);
   }, [])
 
+
   return (
     <Container>
       <UserProfileBox>
@@ -64,36 +65,36 @@ function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
           <UserInfomationBox>
             <UserInformation>
               <UserLineContainer>
-                <UserLine>Name: {selected?.name}</UserLine>
+                <UserLine>Age: {selected?.age}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>MBTI: {selected?.mbti}</UserLine>
+                <UserLine>MBTI: {selected?.mbti || "비공개"}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Height: {selected?.height || "비공개"}</UserLine>
+                <UserLine>Height: {selected?.height}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
                 <UserLine>Job: {selected?.job}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Region: {selected?.region || "비공개"}</UserLine>
+                <UserLine>Region: {selected?.region}</UserLine>
               </UserLineContainer>
             </UserInformation>
             <HobbyAllBox>
-            <p
-              style={{
-                textAlign: "center",
-                fontSize: "1rem",
-                fontFamily: "KIMM_Bold",
-                margin: "0 0 20px 0",
-              }}
-            >
-              <span style={{ padding: "5px", color: "#fa9393" }}>취미</span>
-              <span style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>
-                성격
-              </span>
-              <span style={{ padding: "5px", color: "#87d5fc" }}>이상형</span>
-            </p>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "1rem",
+                  fontFamily: "KIMM_Bold",
+                  margin: "0 0 20px 0",
+                }}
+              >
+                <span style={{ padding: "5px", color: "#fa9393" }}>취미</span>
+                <span style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>
+                  성격
+                </span>
+                <span style={{ padding: "5px", color: "#87d5fc" }}>이상형</span>
+              </p>
               <HobbyBoxContainer>
                 {shuffledHobby.map((hobby, index) => (
                   <HobbyBox key={index} style={{ order: index }}>

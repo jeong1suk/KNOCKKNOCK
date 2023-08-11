@@ -83,19 +83,19 @@ function UserProfile({ user, onClose }) {
           <UserInfomationBox>
             <UserInformation>
               <UserLineContainer>
-                <UserLine>Name: {user.name}</UserLine>
+                <UserLine>Age: {user?.age}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>MBTI: {user.mbti}</UserLine>
+                <UserLine>MBTI: {user?.mbti || "비공개"}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Height: {user.height || "비공개"}</UserLine>
+                <UserLine>Height: {user?.height}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Job: {user.job}</UserLine>
+                <UserLine>Job: {user?.job}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Region: {user.region || "비공개"}</UserLine>
+                <UserLine>Region: {user?.region}</UserLine>
               </UserLineContainer>
             </UserInformation>
             <HobbyAllBox>

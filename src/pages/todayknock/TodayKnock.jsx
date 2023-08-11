@@ -110,7 +110,7 @@ function TodayKnock() {
       <div style={{ height: "3vh" }} />
       {showStartModal && (
         <ModalOverlay onClick={handleStartModalExit}>
-          <ModalContent>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
             <TodayGame
               onExit={handleStartModalExit}
               selectedCard={selectedCard}
