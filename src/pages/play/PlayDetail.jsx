@@ -153,7 +153,7 @@ function PlayDetail() {
     try {
       const res = await Api.post(`/participants/${postId}`);
       applyGetRequest();
-      showSuccess("신청되었습니다. 작성자가 수락할 때까지 대기해주세요.");
+      showSuccess("신청되었습니다");
     } catch (err) {
       if (err.response.data.message) {
         showAlert(err.response.data.message);
@@ -440,7 +440,12 @@ function PlayDetail() {
             <TopBoxButton onClick={() => handleApplyPost(postId)}>
               신청하기
             </TopBoxButton>
-          ) : (
+          ) : isAccepter ? (
+            <TopBoxButton>
+              참가성공!
+            </TopBoxButton>
+          ) : 
+          ( 
             <TopBoxButton onClick={() => handleApplyPut(postId)}>
               취소하기
             </TopBoxButton>
