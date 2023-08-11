@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as S from "./style";
 import * as Api from "../../api";
@@ -50,6 +50,10 @@ const LoginForm = () => {
       showAlert(err.response.data.message);
     }
   };
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <S.GradientBackground>
