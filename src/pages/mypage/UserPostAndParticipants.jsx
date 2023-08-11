@@ -39,14 +39,13 @@ const UserPostAndParticipants = () => {
         ))}
       </Postbox>
 
-      <div style={{ fontFamily: "KIMM_Bold" }}>참가한 게시글</div>
+      <div style={{ fontFamily: "KIMM_Bold" }}>수락된 게시글</div>
       <Postbox>
         {joins.map((join) => (
           <Content>
             <Link to={`/playdetail/${join.Post.postId}`}>
               <p>{join.Post.title}</p>
               <img src={getImageSrc(join.Post.PostFiles[0]?.File.url)}></img>
-              <p>{join.status}</p>
             </Link>
           </Content>
         ))}

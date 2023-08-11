@@ -441,7 +441,7 @@ function PlayDetail() {
               신청하기
             </TopBoxButton>
           ) : isAccepter ? (
-            <TopBoxButton>
+            <TopBoxButton onClick={() => handleApplyPut(postId)}>
               참가성공!
             </TopBoxButton>
           ) : 

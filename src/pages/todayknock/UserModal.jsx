@@ -76,9 +76,9 @@ function UserProfile({ user, onClose }) {
               📩 Chat
             </ChatButton>
           </UserNameAndChat>
-          <Email>{user.email}</Email>
+          <Email>{user?.email}</Email>
 
-          <Tagline>{user.introduce}</Tagline>
+          <Tagline>{user?.introduce}</Tagline>
           
           <UserInfomationBox>
             <UserInformation>
