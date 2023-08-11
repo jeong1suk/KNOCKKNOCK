@@ -327,6 +327,10 @@ const RandomUserExplainDiv = styled.div`
     border-radius: 30px;
   }
 
+  @media (max-width: 1024px) {
+    margin: 0 0 50px 20px;
+  }
+
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     p {
       font-size: 16px;
