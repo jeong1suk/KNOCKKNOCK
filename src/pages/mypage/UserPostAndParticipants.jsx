@@ -94,7 +94,7 @@ const Content = styled.div`
   border-radius: 10px;
   margin: 20px 20px 0 0;
   width: 10rem;
-  height: 70%;
+  height: 10rem;
   padding: 1rem;
   cursor: pointer;
 
