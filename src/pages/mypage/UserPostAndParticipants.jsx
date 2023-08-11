@@ -26,7 +26,8 @@ const UserPostAndParticipants = () => {
   getImageSrc;
   return (
     <Userbox>
-      <div>내가 쓴 Post</div>
+      <div style={{ fontFamily: "KIMM_Bold" }}>내가 쓴 게시글</div>
+
       <Postbox>
         {posts.map((post) => (
           <Content>
@@ -38,7 +39,7 @@ const UserPostAndParticipants = () => {
         ))}
       </Postbox>
 
-      <div>참가한 Participants</div>
+      <div style={{ fontFamily: "KIMM_Bold" }}>참가한 게시글</div>
       <Postbox>
         {joins.map((join) => (
           <Content>
@@ -56,17 +57,18 @@ const UserPostAndParticipants = () => {
 
 const Userbox = styled.div`
   display: flex;
-  height: 80vh;
+  height: 60vh;
   justify-content: space-between;
   flex-direction: column;
   background-color: #f5f5f7;
   padding: 2rem;
   overflow: auto;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  width: 33rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
+  width: 28rem;
+  border-radius: 20px;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 82vw;
+    width: 66vw;
   }
 `;
 
@@ -84,7 +86,6 @@ const Postbox = styled.div`
     text-overflow: ellipsis;
     font-size: 1rem;
   }
-  
 `;
 
 const Content = styled.div`

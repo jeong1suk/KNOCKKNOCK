@@ -278,7 +278,7 @@ const UserProfileBox = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 150vh;
+  height: 100%;
   border: 3px solid black;
   background-color: #f2f2f2e2;
   z-index: 10;
@@ -349,7 +349,17 @@ const RightSectionWrapper = styled.div`
   }
 `;
 
-const RightSection = styled.div``;
+const RightSection = styled.div`
+  border: 2px solid gray;
+  border-radius: 20px;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 1);
+  padding: 20px;
+  margin-top: -2rem;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    margin-top: 0.5rem;
+  }
+`;
 
 const MessageChat = styled.div`
   display: flex;
@@ -436,9 +446,12 @@ const SendButton = styled.button`
 `;
 
 const Section = styled.div`
+  top: 0;
+  left: 10;
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
+  /* border: 1px solid black; */
 `;
 
 const SectionButton = styled.button`

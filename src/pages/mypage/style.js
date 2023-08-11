@@ -1,29 +1,6 @@
 import styled from "styled-components";
 import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 
-export const Content = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 460px;
-  padding: 100px;
-  background-image: linear-gradient(
-    45deg,
-    #ff9a9e 0%,
-    #fad0c4 99%,
-    #fad0c4 100%
-  );
-  @media (max-width: 480px) {
-    /* viewport 너비가 480px 이하일 경우 */
-    width: 100%; /* 컨테이너 너비를 100%로 설정하여 가로 중앙 정렬 */
-  }
-
-  @media (min-width: 481px) {
-    /* viewport 너비가 481px 이상일 경우 */
-    width: 480px; /* 컨테이너의 너비를 480px로 설정 */
-    margin: 0 auto; /* 컨테이너를 가로 중앙 정렬 */
-  }
-`;
 export const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -63,51 +40,185 @@ export const JoinButton = styled.button`
   }
 `;
 export const Heading = styled.h3`
-  margin: 19px 0 8px;
-  font-size: 14px;
+  margin: 10px auto;
+  font-size: 1rem;
   font-weight: 700;
-  width: 50%;
+  font-family: KIMM_Bold;
+  width: 30%;
+  text-align: center;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    font-size: 0.8rem;
+    font-weight: 1000;
+  }
 `;
 
 export const Box = styled.span`
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
-  height: 51px;
+  height: 40%;
   border: solid 1px #dadada;
+  border-radius: 20px;
   padding: 10px 14px 10px 14px;
   box-sizing: border-box;
   background: #fff;
   position: relative;
-  margin-bottom: 15px;
+  margin: 10px auto;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 80%;
+    height: 10%;
+  }
 `;
-export const Input = styled.input`
-  display: block;
+export const InputBox = styled.div`
   position: relative;
-  width: 70%;
-  height: 29px;
-  border: none;
-  background: #fff;
-  font-size: 15px;
-`;
-export const ErrorBox = styled.span`
-  margin-top: 9px;
-  font-size: 12px;
-  color: red;
+  margin: 10px 10px;
+  height: 60px;
+  width: 100%;
+
+  input {
+    background: transparent;
+    border: none;
+    border-bottom: solid 1px #ccc;
+    /* margin-bottom: 5px; */
+    padding: 20px 0px 5px 0px;
+    font-size: 14pt;
+    width: 50%;
+    transition: border-bottom 0.2s ease, outline 0.2s ease;
+
+    &:placeholder-shown + label {
+      color: #aaa;
+      font-size: 14pt;
+      top: 15px;
+    }
+
+    &:focus + label {
+      color: #8aa1a1;
+      font-size: 10pt;
+      pointer-events: none;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      transition: all 0.2s ease;
+      -webkit-transition: all 0.2s ease;
+      -moz-transition: all 0.2s ease;
+      -o-transition: all 0.2s ease;
+      transform: translateY(-100%);
+      opacity: 1;
+    }
+
+    &:not(:placeholder-shown) + label {
+      color: #8aa1a1;
+      font-size: 10pt;
+      pointer-events: none;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      transition: all 0.2s ease;
+      -webkit-transition: all 0.2s ease;
+      -moz-transition: all 0.2s ease;
+      -o-transition: all 0.2s ease;
+      transform: translateY(-100%);
+      opacity: 1;
+    }
+
+    &:focus,
+    &:not(:placeholder-shown) {
+      border-bottom: solid 1px #8aa1a1;
+      outline: none;
+    }
+  }
+
+  label {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    top: 15px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+  }
+  .pswdIcon {
+    /* your password icon styles */
+    cursor: pointer;
+    margin-left: 10px;
+    /* right: 0; */
+  }
 `;
 export const Select = styled.select`
   width: 100%;
   height: 29px;
   text-align: center;
-  border: none;
+  border: 1px solid #8aa1a1;
+  border-radius: 20px;
   background: #fff;
   font-size: 15px;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 70%;
+    font-size: 0.5rem;
+  }
 `;
+export const ImageUploadInput = styled.input`
+  display: none;
+`;
+export const UploadedImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    /* 태블릿 화면에서 이미지 컨테이너의 너비를 50%로 */
+    width: 50%;
+    left: 50%;
+    transform: translateX(50%);
+  }
+`;
+
+export const UploadedImage = styled.img`
+  width: 100%;
+  max-height: 300px;
+  margin-top: 10px;
+`;
+export const ToggleButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  /* padding-bottom: 5px; */
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 10%;
+    margin: 0;
+  }
+`;
+export const Input = styled.input`
+  display: block;
+  position: relative;
+  width: 70%;
+  height: 20px;
+  border: none;
+  background: #fff;
+  font-size: 1rem;
+  /* @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 50%;
+  } */
+`;
+export const ErrorBox = styled.span`
+  /* margin-top: 9px; */
+  font-size: 12px;
+  color: red;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    font-size: 0.2rem;
+  }
+`;
+
 export const RightAlignedBox = styled(Box)`
   justify-content: space-between;
   margin-bottom: 15px;
 `;
+
 export const Modal = styled.div`
   position: absolute;
   width: 50%;
@@ -120,6 +231,23 @@ export const Modal = styled.div`
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   /* z-index: 10; */
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 80%;
+    height: 50%;
+  }
+`;
+export const ButtonSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-left: 5px;
+  /* align-items: center; */
+  justify-content: center;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    /* display:  */
+    height: 10%;
+    align-items: center;
+  }
 `;
 export const Button = styled.button`
   font-size: 100%;
@@ -143,9 +271,8 @@ export const Button = styled.button`
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* width: 50%; */
-    height: 30%;
     font-size: 0.5rem;
-    overflow-x: auto;
+    /* overflow-x: auto; */
   }
 `;
 export const ToggleButton = styled.a`
