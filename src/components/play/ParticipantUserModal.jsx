@@ -60,6 +60,7 @@ function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
           <Nickname>{selected?.nickname}</Nickname>
           <Email>{selected?.email}</Email>
           <Tagline>{selected?.introduce}</Tagline>
+        
           <UserInfomationBox>
             <UserInformation>
               <UserLineContainer>
@@ -79,6 +80,20 @@ function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
               </UserLineContainer>
             </UserInformation>
             <HobbyAllBox>
+            <p
+              style={{
+                textAlign: "center",
+                fontSize: "1rem",
+                fontFamily: "KIMM_Bold",
+                margin: "0 0 20px 0",
+              }}
+            >
+              <span style={{ padding: "5px", color: "#fa9393" }}>취미</span>
+              <span style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>
+                성격
+              </span>
+              <span style={{ padding: "5px", color: "#87d5fc" }}>이상형</span>
+            </p>
               <HobbyBoxContainer>
                 {shuffledHobby.map((hobby, index) => (
                   <HobbyBox key={index} style={{ order: index }}>
@@ -190,6 +205,17 @@ const Nickname = styled.h2`
   justify-content: flex-start;
   align-items: center;
   color: #4b4a4a;
+  @media (max-width: 768px) {
+    font-size: 1.3rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 460px) {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }
 `;
 
 const Email = styled.h4`
@@ -198,6 +224,9 @@ const Email = styled.h4`
   justify-content: flex-start;
   align-items: center;
   color: #cacaca;
+  @media (max-width: 768px) {
+    font-size: 0.3rem;
+  }
 `;
 
 const Tagline = styled.div`
@@ -210,6 +239,10 @@ const Tagline = styled.div`
   align-items: center;
   color: #676565;
   font-size: 0.9rem;
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+    font-size: 0.4rem;
+  }
 `;
 
 const UserInfomationBox = styled.div`
@@ -227,6 +260,9 @@ const UserInformation = styled.div`
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `;
 const UserLineContainer = styled.div`
   display: flex;
@@ -237,11 +273,18 @@ const UserLineContainer = styled.div`
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   padding: 0.5rem;
+  @media (max-width: 768px) {
+    padding: 0.3rem;
+    margin: 0.1rem;
+  }
 `;
 const UserLine = styled.h3`
   margin: 0.3rem;
   color: #8f8f8f;
   font-size: 1rem;
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 const HobbyAllBox = styled.div`
   @media (max-width: 1080px) {
@@ -262,6 +305,18 @@ const HobbyBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    width: 3.3rem;
+    height: 1.8rem;
+    font-size: 0.5rem;
+    margin: 0rem 0.1rem;
+  }
+  @media (max-width: 360px) {
+    width: 2.8rem;
+    height: 1.5rem;
+    font-size: 0.3rem;
+    margin: 0rem 0.1rem;
+  }
 `;
 const IdealBox = styled.div`
   width: 3.8rem;
@@ -275,6 +330,18 @@ const IdealBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    width: 3.3rem;
+    height: 1.8rem;
+    font-size: 0.5rem;
+    margin: 0rem 0.1rem;
+  }
+  @media (max-width: 360px) {
+    width: 2.8rem;
+    height: 1.5rem;
+    font-size: 0.3rem;
+    margin: 0rem 0.1rem;
+  }
 `;
 
 const PersonBox = styled.div`
@@ -289,10 +356,22 @@ const PersonBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    width: 3.3rem;
+    height: 1.8rem;
+    font-size: 0.5rem;
+    margin: 0rem 0.1rem;
+  }
+  @media (max-width: 360px) {
+    width: 2.8rem;
+    height: 1.5rem;
+    font-size: 0.3rem;
+    margin: 0rem 0.1rem;
+  }
 `;
 const HobbyBoxContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 1rem;
+  margin: 0.5rem;
 `;
