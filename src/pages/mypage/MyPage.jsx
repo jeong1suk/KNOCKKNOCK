@@ -206,7 +206,7 @@
 
 // export default MyPage;
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { getImageSrc } from "../../util/imageCheck";
 import UserPostAndParticipants from "./UserPostAndParticipants";
@@ -231,6 +231,10 @@ const MyPage = () => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
 
   return (
     <Container>
@@ -354,10 +358,10 @@ const RightSectionWrapper = styled.div`
 const RightSection = styled.div`
   // border: 1px solid gray;
   border-radius: 20px;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.2);
   padding: 20px;
   margin-top: -2rem;
-
+  background-color: #FFFFFF;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     margin-top: 0.5rem;
   }
