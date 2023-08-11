@@ -225,11 +225,12 @@ export const Modal = styled.div`
   top: 30%;
   left: 50%;
   overflow-y: auto; /* Enable vertical scroll */
-  max-height: 80vh;
+  max-height: 80%;
   transform: translate(-50%, -50%);
   background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 14%;
   /* z-index: 10; */
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {

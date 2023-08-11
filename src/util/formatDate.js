@@ -8,7 +8,6 @@ export const formatDate = (data) => {
     minute: "2-digit",
     hour12: true,
   };
-  const koreanTime = new Date(date.getTime() + 9 * 60 * 60 * 1000);
 
-  return koreanTime.toLocaleString("ko-KR", options);
+  return date.toLocaleString("en-US", options);
 };

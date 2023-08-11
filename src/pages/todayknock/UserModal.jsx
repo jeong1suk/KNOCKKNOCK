@@ -299,6 +299,7 @@ const UserInfomationBox = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 0 3rem;
+  gap: 40px;
   @media (max-width: 1080px) {
     display: flex;
     flex-direction: column;
