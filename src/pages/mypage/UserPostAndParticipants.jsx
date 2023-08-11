@@ -60,10 +60,10 @@ const Userbox = styled.div`
   height: 60vh;
   justify-content: space-between;
   flex-direction: column;
-  background-color: #f5f5f7;
+  background-color: #FFFFFF;
   padding: 2rem;
   overflow: auto;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
   width: 28rem;
   border-radius: 20px;
 

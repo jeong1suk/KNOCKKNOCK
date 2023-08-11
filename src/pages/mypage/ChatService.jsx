@@ -211,7 +211,12 @@ function ChatComponent() {
                     {index === 0 || showDate ? (
                       <MessageTime>{showDate}</MessageTime>
                     ) : null}
-                    <Bubble className="message-bubble">{chat.content}</Bubble>
+                    <Bubble 
+                      className="message-bubble"
+                      isUserMessage={isUserMessage}
+                    >
+                      {chat.content}
+                    </Bubble>
                   </BubbleWithTime>
                 </MessageContainer>
               );
@@ -264,6 +269,11 @@ function ChatComponent() {
 
 export default ChatComponent;
 
+const ChatContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
 
 const MessageChat = styled.div`
   display: flex;
@@ -273,15 +283,15 @@ const MessageChat = styled.div`
   margin-bottom: 1rem;
   border-radius: 20px;
   flex-direction: column;
-  background-color: #f5f5f7;
+  background-color: #FFFFFF;
   padding: 2rem;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  // border: 0.2px solid black;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+  // border: 1px solid black;
   /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 1); */
   justify-content: space-between;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 80vw;
+    width: 84vw;
     padding: 0rem;
   }
 `;
@@ -291,8 +301,7 @@ const ChatRoom = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  background-color: #f5f5f7;
-
+  background-color: #FFFFFF;
   /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 1); */
   overflow-x: scroll;
   // height: 6rem;
@@ -305,6 +314,7 @@ const ChatRoom = styled.div`
     width: 80vw;
     // align-items: normal;
     margin-top: 0.5px;
+    padding: 0px 10px;
   }
 `;
 
@@ -325,11 +335,7 @@ const UserListItem = styled.div`
     align-items: center;
   }
 `;
-const ChatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
+
 
 const UserList = styled.div`
   display: flex;
@@ -348,7 +354,8 @@ const MessageBox = styled.div`
 `;
 
 const Bubble = styled.div`
-  background-color: white;
+    background-color: ${(props) =>
+    props.isUserMessage ? "#F7CBD0" : "#FFFFFF"};
   padding: 10px;
   border-radius: 20px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -373,7 +380,7 @@ const MessageContainer = styled.div`
   margin-bottom: 10px;
   justify-content: ${(props) =>
     props.isUserMessage ? "flex-end" : "flex-start"};
-
+    
   &:nth-child() {
     flex-direction: ${(props) => (props.isUserMessage ? "row-reverse" : "row")};
   }
@@ -383,6 +390,10 @@ const MessageContainer = styled.div`
       props.isUserMessage
         ? "margin-left: 10px; margin-right: 10px;"
         : "margin-right: 10px; margin-left: 10px;"}
+  }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    padding: 0px 5px;
   }
 `;
 
@@ -397,6 +408,10 @@ const ProfileImage = styled.img`
 const UserName = styled.div`
   display: flex;
   justify-content: center;
+
+    @media (max-width: ${MOBILE_BREAK_POINT}) {
+    margin: 10px 0px;
+  }
 `;
 
 const ChatInputContainer = styled.div`
