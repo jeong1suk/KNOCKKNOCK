@@ -10,162 +10,6 @@ const socket = io.connect("http://localhost:3000", {
   transports: ["websocket"],
 });
 
-const MessageChat = styled.div`
-  display: flex;
-  width: 33rem;
-  height: 80vh;
-  flex-direction: column;
-  background-color: #f5f5f7;
-  padding: 2rem;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  justify-content: space-between;
-
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 80vw;
-    padding: 0rem;
-  }
-
-`;
-
-const ChatRoom = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  background-color: #f5f5f7;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  overflow-y: scroll;
-  height: 10rem;
-  margin-top: 2rem;
-  width: 37rem;
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 90vw;
-    // align-items: normal;
-  }
-
-`;
-
-const UserListItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 5rem;
-  gap: 0.5rem;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #f2f2f2;
-  }
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 100%;
-    align-items: center;
-  }
-
-`;
-const ChatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const UserList = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  margin-top: 2rem;
-`;
-const MessageBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
-`;
-
-const Bubble = styled.div`
-  background-color: white;
-  padding: 10px;
-  border-radius: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  font-size: 0.8rem;
-  padding-right: 1rem;
-  padding-left: 1rem;
-`;
-const BubbleWithTime = styled.div`
-  display: flex;
-  flex-direction: ${(props) => (props.isUserMessage ? "row" : "row-reverse")};
-  align-items: flex-end;
-`;
-
-const MessageTime = styled.span`
-  font-size: 0.7rem;
-  color: #999;
-`;
-const MessageContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  margin-bottom: 10px;
-  justify-content: ${(props) =>
-    props.isUserMessage ? "flex-end" : "flex-start"};
-
-  &:nth-child() {
-    flex-direction: ${(props) => (props.isUserMessage ? "row-reverse" : "row")};
-  }
-
-  .message-bubble {
-    ${(props) =>
-      props.isUserMessage
-        ? "margin-left: 10px; margin-right: 10px;"
-        : "margin-right: 10px; margin-left: 10px;"}
-  }
-`;
-
-const ProfileImage = styled.img`
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const UserName = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 3rem;
-`;
-
-const ChatInputContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 2rem 1rem 0rem 1rem;
-  margin-top: auto;
-`;
-
-const ChatInput = styled.input`
-  border: none;
-  width: 50rem;
-  height: 1.8rem;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  outline: none;
-`;
-
-const SendButton = styled.button`
-  margin-left: 10px;
-  width: 6rem;
-  height: 3rem;
-  padding: 10px 20px;
-  background-color: #ffffff;
-  color: #b5b5b5;
-  border: 1px solid #e8e8e8;
-  border-radius: 5px;
-  cursor: pointer;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-
-  &:hover {
-    background-color: #f2f2f2;
-  }
-`;
 function formatMessageTime(createdAt, prevCreatedAt) {
   const date = new Date(createdAt);
   const hours = date.getHours();
@@ -305,7 +149,6 @@ function ChatComponent() {
     }
   };
 
-
   const handleChatClick = async (chat) => {
     try {
       setRecieverId(chat.currentUserInfo.reciever);
@@ -368,7 +211,12 @@ function ChatComponent() {
                     {index === 0 || showDate ? (
                       <MessageTime>{showDate}</MessageTime>
                     ) : null}
-                    <Bubble className="message-bubble">{chat.content}</Bubble>
+                    <Bubble
+                      className="message-bubble"
+                      isUserMessage={isUserMessage}
+                    >
+                      {chat.content}
+                    </Bubble>
                   </BubbleWithTime>
                 </MessageContainer>
               );
@@ -405,7 +253,11 @@ function ChatComponent() {
                       src={profileImageUrl || getImageSrc(profileImageUrl)}
                       alt="프로필사진"
                     />
-                    <UserName>{chat.recieverInfo.nickname}</UserName>
+                    <UserName>
+                      {chat.recieverInfo.nickname.length > 5
+                        ? `${chat.recieverInfo.nickname.slice(0, 3)}...`
+                        : chat.recieverInfo.nickname}
+                    </UserName>
                   </UserListItem>
                 );
               })}
@@ -416,3 +268,187 @@ function ChatComponent() {
 }
 
 export default ChatComponent;
+
+const ChatContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const MessageChat = styled.div`
+  display: flex;
+  width: 28rem;
+  height: 46vh;
+  margin-top: -1rem;
+  margin-bottom: 1rem;
+  border-radius: 20px;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 2rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+  // border: 1px solid black;
+  /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 1); */
+  justify-content: space-between;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 84vw;
+    padding: 0rem;
+  }
+`;
+
+const ChatRoom = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #ffffff;
+  /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 1); */
+  overflow-x: scroll;
+  // height: 6rem;
+  /* margin-top: 2rem; */
+  width: 32rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  // border: 0.5px solid black;
+  border-radius: 20px;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 80vw;
+    // align-items: normal;
+    margin-top: 0.5px;
+    padding: 0px 10px;
+  }
+`;
+
+const UserListItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 5rem;
+  gap: 0.5rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 100%;
+    align-items: center;
+  }
+`;
+
+const UserList = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin: 10px 0;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    font-size: 0.7rem;
+  }
+`;
+const MessageBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+`;
+
+const Bubble = styled.div`
+  background-color: ${(props) => (props.isUserMessage ? "#F7CBD0" : "#FFFFFF")};
+  padding: 10px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 0.8rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+`;
+const BubbleWithTime = styled.div`
+  display: flex;
+  flex-direction: ${(props) => (props.isUserMessage ? "row" : "row-reverse")};
+  align-items: flex-end;
+`;
+
+const MessageTime = styled.span`
+  font-size: 0.7rem;
+  color: #999;
+`;
+const MessageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 10px;
+  justify-content: ${(props) =>
+    props.isUserMessage ? "flex-end" : "flex-start"};
+
+  &:nth-child() {
+    flex-direction: ${(props) => (props.isUserMessage ? "row-reverse" : "row")};
+  }
+
+  .message-bubble {
+    ${(props) =>
+      props.isUserMessage
+        ? "margin-left: 10px; margin-right: 10px;"
+        : "margin-right: 10px; margin-left: 10px;"}
+  }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    padding: 0px 5px;
+  }
+`;
+
+const ProfileImage = styled.img`
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: 5px;
+  border-radius: 50%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const UserName = styled.div`
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    margin: 10px 0px;
+  }
+`;
+
+const ChatInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 2rem 1rem 0rem 1rem;
+  margin-top: auto;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    margin-bottom: 20px;
+  }
+`;
+
+const ChatInput = styled.input`
+  border: none;
+  width: 50rem;
+  height: 1.8rem;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  outline: none;
+`;
+
+const SendButton = styled.button`
+  margin-left: 10px;
+  width: 9rem;
+  height: 3rem;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  color: #b5b5b5;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    font-size: 0.7rem;
+  }
+`;
