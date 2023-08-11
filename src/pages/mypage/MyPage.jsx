@@ -279,8 +279,9 @@ const UserProfileBox = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  border: 3px solid black;
-  background-color: #f2f2f2e2;
+  /* border: 3px solid black; */
+  /* background-color: #f2f2f2e2; */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
   z-index: 10;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     height: 100%;

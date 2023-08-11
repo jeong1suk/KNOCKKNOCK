@@ -37,8 +37,8 @@ const ChatRoom = styled.div`
   background-color: #f5f5f7;
 
   /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 1); */
-  overflow-y: scroll;
-  height: 7rem;
+  overflow-x: scroll;
+  height: 5rem;
   /* margin-top: 2rem; */
   width: 32rem;
   border: 0.5px solid black;
@@ -127,6 +127,7 @@ const MessageContainer = styled.div`
 const ProfileImage = styled.img`
   width: 2.5rem;
   height: 2.5rem;
+  margin-top: 5px;
   border-radius: 50%;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
@@ -408,7 +409,11 @@ function ChatComponent() {
                       src={profileImageUrl || getImageSrc(profileImageUrl)}
                       alt="프로필사진"
                     />
-                    <UserName>{chat.recieverInfo.nickname}</UserName>
+                    <UserName>
+                      {chat.recieverInfo.nickname.length > 5
+                        ? `${chat.recieverInfo.nickname.slice(0, 3)}...`
+                        : chat.recieverInfo.nickname}
+                    </UserName>
                   </UserListItem>
                 );
               })}

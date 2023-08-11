@@ -151,7 +151,7 @@ const HobbyBoxContainer = styled.div`
   /* transform: translate(20%, 20%); */
   margin: 2rem;
   /* width: 15rem; */
-  border: 1px solid green;
+  /* border: 1px solid green; */
 `;
 const ProfilePicture = styled.img`
   width: 8rem;
@@ -184,41 +184,25 @@ function shuffleArray(array) {
   }
   return shuffledArray;
 }
+let formattedJob;
 const UserProfileLarge = () => {
   const [user, setUser] = useState([]);
   const userState = useContext(UserStateContext);
-  // useEffect(() => {
-  //   Api.get("/users/mypage")
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       setUser(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("API 호출 오류:", error);
-  //     });
-  // }, [userState]);
-  const fetchData = async () => {
-    try {
-      const res = await Api.get("/users/mypage");
-      console.log(res);
-      setUser(res.data);
-    } catch (err) {
-      console.error("API 호출 오류:", err);
-    }
-  };
+
   useEffect(() => {
     Api.get("/users/mypage")
       .then((response) => {
         setUser(response.data);
+        console.log(userState);
       })
       .catch((error) => {
         console.error("API 호출 오류:", error);
       });
   }, [userState]);
-
   const shuffledHobby = shuffleArray(user.hobby || []);
   const shuffledIdeal = shuffleArray(user.ideal || []);
   const shuffledPersonality = shuffleArray(user.personality || []);
+
   return (
     <UserProfileContainer>
       <ProfilePicture
@@ -237,26 +221,15 @@ const UserProfileLarge = () => {
           <Tagline>{user.introduce}</Tagline>
         </UserInformation>
         <UserPersonalInformation>
-          {/* <UserLineContainer> */}
-          <UserLine>{user.name}</UserLine>
-          {/* </UserLineContainer> */}
-          {user.mbti !== "" && (
-            // <UserLineContainer>
-            <UserLine>{user.mbti}</UserLine>
-            // </UserLineContainer>
-          )}
+          {user.mbti !== "" && <UserLine>{user.mbti}</UserLine>}
 
-          {user.height !== 0 && (
-            // <UserLineContainer>
-            <UserLine>{user.height + "cm"}</UserLine>
-            // </UserLineContainer>
-          )}
-          {/* <UserLineContainer> */}
-          <UserLine>{user.job}</UserLine>
-          {/* </UserLineContainer> */}
-          {/* <UserLineContainer> */}
+          {user.height !== 0 && <UserLine>{user.height + "cm"}</UserLine>}
+          <UserLine>
+            {userState.user.job.length > 3
+              ? `${userState.user.job.slice(0, 3)}...`
+              : userState.user.job}
+          </UserLine>
           <UserLine>{user.region}</UserLine>
-          {/* </UserLineContainer> */}
         </UserPersonalInformation>
       </UserProfileBox>
       <p
