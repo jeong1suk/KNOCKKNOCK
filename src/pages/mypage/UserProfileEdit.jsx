@@ -95,19 +95,19 @@ const UserProfileEdit = ({ user }) => {
     onArrayChange(ideal, element, "ideal", 5);
   };
   const updatedHobby =
-    formData.hobby && formData.hobby.length > 0
+    formData.hobby && formData.hobby.length >= 0
       ? formData.hobby
       : user.hobby !== undefined
       ? user.hobby
       : [];
   const updatedPersonality =
-    formData.personality && formData.personality.length > 0
+    formData.personality && formData.personality.length >= 0
       ? formData.personality
       : user.personality !== undefined
       ? user.personality
       : [];
   const updatedIdeal =
-    formData.ideal && formData.ideal.length > 0
+    formData.ideal && formData.ideal.length >= 0
       ? formData.ideal
       : user.ideal !== undefined
       ? user.ideal

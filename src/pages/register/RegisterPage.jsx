@@ -113,10 +113,12 @@ const RegisterPage = () => {
         {/* <S.Header>필수 입력</S.Header> */}
         <RequiredInputs />
 
-        <S.Header style={{ border: 0 }}>선택 입력</S.Header>
+        <S.Header style={{ border: 0, marginBottom: "5px" }}>
+          선택 입력
+        </S.Header>
 
         <S.ToggleButtonWrapper>
-          <S.Button style={{ cursor: "auto" }}>
+          <S.Button style={{ cursor: "auto", height: "30%" }}>
             <S.ImageUploadInput
               id="file-upload"
               type="file"
