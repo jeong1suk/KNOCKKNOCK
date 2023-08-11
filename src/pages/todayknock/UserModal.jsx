@@ -25,6 +25,7 @@ function shuffleArray(array) {
   return shuffledArray;
 }
 function UserProfile({ user, onClose }) {
+  const [showLargeImage, setShowLargeImage] = useState(false);
   const navigate = useNavigate();
   const colorPair = getRandomColorPairs(); // 랜덤한 색상 쌍 얻기
   const rightColor = colorPair[0];
@@ -52,100 +53,144 @@ function UserProfile({ user, onClose }) {
       document.body.style.overflow = "unset";
     };
   }, []);
-  
-  return (
-    <Container>
-      <UserProfileBox>
-        <CloseButton onClick={handleCloseClick}>X</CloseButton>
-        <BackgroundImage
-          style={{
-            background: `linear-gradient(to left, ${colorPair.join(", ")})`,
-          }}
-        />
-        <ProfilePicture
-          src={getImageSrc(user.profileImage)}
-          alt="Profile Picture"
-        />
-        <UserProfileContainer>
-          <UserNameAndChat>
-            <Nickname>{user.nickname}</Nickname>
-            <ChatButton
-              style={{ backgroundColor: rightColor }}
-              onClick={handleChatButtonClick}
-            >
-              📩 Chat
-            </ChatButton>
-          </UserNameAndChat>
-          <Email>{user?.email}</Email>
+  const handleLargeImageClick = () => {
+    setShowLargeImage(true); // 추가: 얼굴 이모티콘 클릭 시 프로필 사진 크게 보이도록 상태 업데이트
+  };
 
-          <Tagline>{user?.introduce}</Tagline>
-          
-          <UserInfomationBox>
-            <UserInformation>
-              <UserLineContainer>
-                <UserLine>Age: {user?.age}</UserLine>
-              </UserLineContainer>
-              <UserLineContainer>
-                <UserLine>MBTI: {user?.mbti || "비공개"}</UserLine>
-              </UserLineContainer>
-              <UserLineContainer>
-                <UserLine>Height: {user?.height}</UserLine>
-              </UserLineContainer>
-              <UserLineContainer>
-                <UserLine>Job: {user?.job}</UserLine>
-              </UserLineContainer>
-              <UserLineContainer>
-                <UserLine>Region: {user?.region}</UserLine>
-              </UserLineContainer>
-            </UserInformation>
-            <HobbyAllBox>
-              <p
-                style={{
-                  textAlign: "center",
-                  fontSize: "1rem",
-                  fontFamily: "KIMM_Bold",
-                  margin: "0 0 20px 0"
-                }}
+  const handleCloseLargeImage = () => {
+    setShowLargeImage(false); // 추가: 큰 프로필 사진 닫기 버튼 클릭 시 상태 업데이트
+  };
+
+  return (
+    <>
+      <Container>
+        <UserProfileBox>
+          <CloseButton></CloseButton>
+          <BackgroundImage
+            style={{
+              background: `linear-gradient(to left, ${colorPair.join(", ")})`,
+            }}
+          />
+          <ProfilePicture
+            src={getImageSrc(user.profileImage)}
+            alt="Profile Picture"
+          />
+          <UserProfileContainer>
+            <UserNameAndChat>
+              <Nickname>{user.nickname}</Nickname>
+              <ChatButton
+                style={{ backgroundColor: rightColor }}
+                onClick={handleChatButtonClick}
+              >
+                📩 Chat
+              </ChatButton>
+            </UserNameAndChat>
+            <Email>{user.email}</Email>
+
+            <Tagline>{user.introduce}</Tagline>
+
+            <UserInfomationBox>
+              <UserInformation>
+                <UserLineContainer>
+                  <UserLine>Age: {user?.age}</UserLine>
+                </UserLineContainer>
+                <UserLineContainer>
+                  <UserLine>MBTI: {user?.mbti || "비공개"}</UserLine>
+                </UserLineContainer>
+                <UserLineContainer>
+                  <UserLine>Height: {user?.height}</UserLine>
+                </UserLineContainer>
+                <UserLineContainer>
+                  <UserLine>Job: {user?.job}</UserLine>
+                </UserLineContainer>
+                <UserLineContainer>
+                  <UserLine>Region: {user?.region}</UserLine>
+                </UserLineContainer>
+              </UserInformation>
+              <HobbyAllBox>
+                <p
+                  style={{
+                    textAlign: "center",
+                    fontSize: "1rem",
+                    fontFamily: "KIMM_Bold",
+                    margin: "0 0 20px 0",
+                  }}
                 >
-                <span style={{ padding: "5px", color: "#fa9393" }}>취미</span>
-                <span style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>
-                  성격
-                </span>
-                <span style={{ padding: "5px", color: "#87d5fc" }}>이상형</span>
-              </p>
-              <HobbyBoxContainer>
-                {shuffledHobby.map((hobby, index) => (
-                  <HobbyBox key={index} style={{ order: index }}>
-                    {hobby}
-                  </HobbyBox>
-                ))}
-              </HobbyBoxContainer>
-              <HobbyBoxContainer>
-                {shuffledIdeal.map((ideal, index) => (
-                  <IdealBox key={index} style={{ order: index }}>
-                    {ideal}
-                  </IdealBox>
-                ))}
-              </HobbyBoxContainer>
-              <HobbyBoxContainer>
-                {shuffledPersonality.map((personality, index) => (
-                  <PersonBox key={index} style={{ order: index }}>
-                    {personality}
-                  </PersonBox>
-                ))}
-              </HobbyBoxContainer>
-            </HobbyAllBox>
-          </UserInfomationBox>
-        </UserProfileContainer>
-      </UserProfileBox>
-    </Container>
+                  <span style={{ padding: "5px", color: "#fa9393" }}>취미</span>
+                  <span style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>
+                    성격
+                  </span>
+                  <span style={{ padding: "5px", color: "#87d5fc" }}>
+                    이상형
+                  </span>
+                </p>
+                <HobbyBoxContainer>
+                  {shuffledHobby.map((hobby, index) => (
+                    <HobbyBox key={index} style={{ order: index }}>
+                      {hobby}
+                    </HobbyBox>
+                  ))}
+                </HobbyBoxContainer>
+                <HobbyBoxContainer>
+                  {shuffledIdeal.map((ideal, index) => (
+                    <IdealBox key={index} style={{ order: index }}>
+                      {ideal}
+                    </IdealBox>
+                  ))}
+                </HobbyBoxContainer>
+                <HobbyBoxContainer>
+                  {shuffledPersonality.map((personality, index) => (
+                    <PersonBox key={index} style={{ order: index }}>
+                      {personality}
+                    </PersonBox>
+                  ))}
+                </HobbyBoxContainer>
+              </HobbyAllBox>
+            </UserInfomationBox>
+          </UserProfileContainer>
+        </UserProfileBox>
+      </Container>
+      <Icons>
+        <UserIcons>
+          <IconBox>
+            <IconImage onClick={handleCloseClick}>🏠</IconImage>
+          </IconBox>
+          <IconBox>
+            <IconImage onClick={handleLargeImageClick}>🙂</IconImage>
+          </IconBox>
+          <IconBox>
+            <IconImage>⭐</IconImage>
+          </IconBox>
+          <IconBox>
+            <IconImage>🧊</IconImage>
+          </IconBox>
+          <IconBox onClick={handleChatButtonClick}>
+            <IconImage>💬</IconImage>
+          </IconBox>
+        </UserIcons>
+        <StyledBar />
+      </Icons>
+      {showLargeImage && ( // 추가: 프로필 사진 크게 보이는 모달 컴포넌트
+        <LargeImageModal>
+          <LargeImageContent>
+            <LargeProfileImage
+              src={getImageSrc(user.profileImage)}
+              alt="Large Profile Picture"
+            />
+            <LargeCloseButton onClick={handleCloseLargeImage}>
+              닫기
+            </LargeCloseButton>
+          </LargeImageContent>
+        </LargeImageModal>
+      )}
+    </>
   );
 }
 
 export default UserProfile;
 const CloseButton = styled.button`
   background-color: transparent;
-  color: #999898;
+  color: #e5e4e4;
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -170,8 +215,8 @@ const ChatButton = styled.button`
   margin-left: 1rem;
   margin-top: -1rem;
   display: flex;
-  align-items: center; /* 세로 중앙 정렬 */
-  gap: 0.5rem; /* 아이콘과 텍스트 사이의 간격 설정 */
+  align-items: center;
+  gap: 0.5rem;
   @media (max-width: 768px) {
     font-size: 0.8rem;
   }
@@ -199,9 +244,12 @@ const Container = styled.div`
   background-color: #f7f7f7;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
-  height: 100%;
+  margin-top: 2rem;
+  height: 80%;
+  border-radius: 3rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   overflow: auto;
+  position: relative; /* Add this line to make the container relative */
   @media (max-width: 768px) {
     padding-bottom: 0.5rem;
     margin-bottom: 0.5rem;
@@ -221,7 +269,7 @@ const UserProfileBox = styled.div`
   justify-content: center;
   flex-direction: column;
   height: auto;
-  position: relative;
+  /* position: relative; */
 `;
 const BackgroundImage = styled.div`
   width: 100%;
@@ -426,4 +474,96 @@ const HobbyBoxContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   margin: 0.5rem;
+`;
+const IconBox = styled.div`
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  margin: 0 0.5rem;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+
+const IconImage = styled.span`
+  font-size: 1.5rem;
+`;
+
+const UserIcons = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* bottom: 1rem; */
+  left: 0;
+  right: 0;
+  margin: auto;
+`;
+
+const StyledBar = styled.div`
+  width: 60%;
+  height: 0.4rem;
+  background-color: #828282;
+  margin-top: 4rem;
+  border-radius: 1rem;
+`;
+
+const Icons = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+`;
+const LargeImageModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const LargeImageContent = styled.div`
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: rgba(247, 203, 208, 0.3);
+  max-width: 25rem;
+  max-height: 70vh;
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column; /* Added flex-direction */
+  align-items: center; /* Center the content horizontally */
+`;
+
+const LargeProfileImage = styled.img`
+  max-width: 90%;
+  max-height: 90vh;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1rem;
+`;
+
+const LargeCloseButton = styled.button`
+  margin-top: 1rem;
+  padding: 5px 10px;
+  background-color: rgba(247, 203, 208, 0.8);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: auto; /* Push the button to the bottom */
 `;
