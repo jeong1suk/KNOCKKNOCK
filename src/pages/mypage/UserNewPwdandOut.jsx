@@ -101,7 +101,9 @@ const UserNewPwdandOut = ({ user }) => {
         <ModalOverlay>
           <S.Modal style={{ marginTop: "200px" }}>
             <CloseButton onClick={onClose}>X</CloseButton>
-            <h2 style={{ textAlign: "center" }}>비밀번호 변경</h2>
+            <h2 style={{ textAlign: "center", fontFamily: "KIMM_Bold" }}>
+              비밀번호 변경
+            </h2>
             <S.Box>
               <S.Heading>기존 비밀번호</S.Heading>
               <S.Input
@@ -181,7 +183,9 @@ const UserNewPwdandOut = ({ user }) => {
             <S.Heading style={{ fontSize: "1rem", color: "red" }}>
               회원탈퇴
             </S.Heading>
-            <S.Heading>이름/탈퇴한다를 입력해주세요.</S.Heading>
+            <S.Heading style={{ width: "70%" }}>
+              이름/탈퇴한다를 입력해주세요.
+            </S.Heading>
             <S.Box>
               <S.Input
                 type="text"
@@ -192,11 +196,13 @@ const UserNewPwdandOut = ({ user }) => {
                 }}
               />
             </S.Box>
-            {isLeaving ? (
-              <S.ErrorBox>정말 탈퇴하나요?</S.ErrorBox>
-            ) : (
-              <S.ErrorBox>이름/탈퇴한다를 입력해주세요.</S.ErrorBox>
-            )}
+            {inputValue.length > 0 ? (
+              isLeaving ? (
+                <S.ErrorBox>정말 탈퇴하나요?</S.ErrorBox>
+              ) : (
+                <S.ErrorBox>이름/탈퇴한다를 입력해주세요.</S.ErrorBox>
+              )
+            ) : null}
             <S.ButtonSection>
               <S.Button onClick={handleOutSubmit}>탈퇴하기</S.Button>
             </S.ButtonSection>
