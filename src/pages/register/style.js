@@ -7,7 +7,7 @@ export const Content = styled.div`
   transform: translateX(-50%);
   width: 460px;
   padding: 100px;
-  margin-top: 20px;
+  margin-top: -2rem;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
@@ -23,6 +23,7 @@ export const Header = styled.header`
   display: flex;
   justify-content: center;
   font-size: 24px;
+  font-family: "KIMM_Bold";
   font-weight: bold;
   border: 2px solid #000;
   border-radius: 5px;
@@ -74,9 +75,10 @@ export const Box = styled.span`
   background: #fff;
   position: relative;
   margin: 15px auto;
-  overflow-x: auto;
+
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    height: 100%;
+    height: 10%;
+    overflow-x: auto;
   }
 `;
 // export const Input = styled.input`
@@ -218,9 +220,9 @@ export const Modal = styled.div`
   z-index: 10;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    top: 70%;
+    /* top: 70%; */
     width: 40%;
-    max-height: 20%;
+    max-height: 30%;
     overflow-x: auto;
   }
 `;
@@ -235,7 +237,7 @@ export const Button = styled.div`
   cursor: pointer;
   /* margin: 50px 0 30px 0; */
   width: 30%;
-  height: 50px;
+  /* height: 20%; */
   transition: 0.3s;
 
   &:hover {
@@ -246,9 +248,14 @@ export const Button = styled.div`
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* width: 50%; */
-    height: 30%;
+    height: 50%;
     font-size: 0.5rem;
     overflow-x: auto;
+  }
+  p {
+    @media (max-width: ${MOBILE_BREAK_POINT}) {
+      font-size: 0.2rem;
+    }
   }
 `;
 export const ImageUploadInput = styled.input`
@@ -261,6 +268,9 @@ export const ToggleButtonWrapper = styled.div`
   align-items: center;
   height: 100%;
   /* padding-bottom: 5px; */
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 10%;
+  }
 `;
 export const ToggleButton = styled.a`
   box-shadow: inset 0px 1px 0px 0px #dcecfb;

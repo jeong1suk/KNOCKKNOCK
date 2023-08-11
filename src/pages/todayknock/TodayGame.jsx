@@ -9,7 +9,7 @@ import { UserStateContext } from "../../context/user/UserProvider";
 import Typewriter from "typewriter-effect";
 
 const limit = 3;
-const randomId = Math.floor(Math.random() * 10) + 21;
+const randomId = Math.floor(Math.random() * 10) + 1;
 
 const TodayGame = ({ onExit, selectedCard, onCardSelect }) => {
   const userState = useContext(UserStateContext);

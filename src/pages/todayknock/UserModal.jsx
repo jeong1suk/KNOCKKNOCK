@@ -79,26 +79,40 @@ function UserProfile({ user, onClose }) {
           <Email>{user.email}</Email>
 
           <Tagline>{user.introduce}</Tagline>
-
+          
           <UserInfomationBox>
             <UserInformation>
               <UserLineContainer>
-                <UserLine>Name: {user.name}</UserLine>
+                <UserLine>Age: {user?.age}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>MBTI: {user.mbti}</UserLine>
+                <UserLine>MBTI: {user?.mbti || "비공개"}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Height: {user.height || "비공개"}</UserLine>
+                <UserLine>Height: {user?.height}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Job: {user.job}</UserLine>
+                <UserLine>Job: {user?.job}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Region: {user.region || "비공개"}</UserLine>
+                <UserLine>Region: {user?.region}</UserLine>
               </UserLineContainer>
             </UserInformation>
             <HobbyAllBox>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "1rem",
+                  fontFamily: "KIMM_Bold",
+                  margin: "0 0 20px 0"
+                }}
+                >
+                <span style={{ padding: "5px", color: "#fa9393" }}>취미</span>
+                <span style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>
+                  성격
+                </span>
+                <span style={{ padding: "5px", color: "#87d5fc" }}>이상형</span>
+              </p>
               <HobbyBoxContainer>
                 {shuffledHobby.map((hobby, index) => (
                   <HobbyBox key={index} style={{ order: index }}>
@@ -285,6 +299,7 @@ const UserInfomationBox = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 0 3rem;
+  gap: 40px;
   @media (max-width: 1080px) {
     display: flex;
     flex-direction: column;

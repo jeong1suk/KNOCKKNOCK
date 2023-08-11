@@ -206,7 +206,7 @@
 
 // export default MyPage;
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { getImageSrc } from "../../util/imageCheck";
 import UserPostAndParticipants from "./UserPostAndParticipants";
@@ -231,6 +231,10 @@ const MyPage = () => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
 
   return (
     <Container>
@@ -278,9 +282,11 @@ const UserProfileBox = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 150vh;
-  border: 3px solid black;
-  background-color: #f2f2f2e2;
+  height: 100%;
+  /* border: 3px solid black; */
+  /* background-color: #f2f2f2e2; */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  padding-bottom: 40px;
   z-index: 10;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     height: 100%;
@@ -349,7 +355,17 @@ const RightSectionWrapper = styled.div`
   }
 `;
 
-const RightSection = styled.div``;
+const RightSection = styled.div`
+  // border: 1px solid gray;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin-top: -2rem;
+  background-color: #FFFFFF;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    margin-top: 0.5rem;
+  }
+`;
 
 const MessageChat = styled.div`
   display: flex;
@@ -436,9 +452,12 @@ const SendButton = styled.button`
 `;
 
 const Section = styled.div`
+  top: 0;
+  left: 10;
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
+  /* border: 1px solid black; */
 `;
 
 const SectionButton = styled.button`
