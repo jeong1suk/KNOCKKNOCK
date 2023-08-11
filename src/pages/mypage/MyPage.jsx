@@ -281,7 +281,8 @@ const UserProfileBox = styled.div`
   height: 100%;
   /* border: 3px solid black; */
   /* background-color: #f2f2f2e2; */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  padding-bottom: 40px;
   z-index: 10;
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     height: 100%;
@@ -351,9 +352,9 @@ const RightSectionWrapper = styled.div`
 `;
 
 const RightSection = styled.div`
-  border: 2px solid gray;
+  // border: 1px solid gray;
   border-radius: 20px;
-  box-shadow: 0px 10px 10px rgba(0, 0, 0, 1);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   padding: 20px;
   margin-top: -2rem;
 
