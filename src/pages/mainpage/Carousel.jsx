@@ -14,7 +14,7 @@ function Carousel() {
     slidesToShow: 2,
     slidesToScroll: 1,
     // centerMode: true,
-    // autoplay:true,
+    autoplay:true,
     autoplaySpeed: 1500,
     rtl: false,
     // arrows: false,
@@ -24,22 +24,28 @@ function Carousel() {
     <div>
       <StyledSlider {...settings}>
         <ImageContainer>
-          {/* <Link to="/ai"> */}
-          <Image src="/beauty.png" />
-          {/* </Link> */}
+          <Link to="/ai">
+            <Image src="/ai.webp" />
+          </Link>
         </ImageContainer>
         <ImageContainer>
-          {/* <Link to="/todayknock"> */}
-          <Image src="/hihi.png" />
-          {/* </Link> */}
+          <Image src="/002.png" />
         </ImageContainer>
-        {/* <ImageContainer> */}
-        {/* <Link to="/play"> */}
-        {/* <Image src="/hihi.png" /> */}
-        {/* </Link> */}
-        {/* </ImageContainer> */}
         <ImageContainer>
-          <Image src="/011.png" />
+          <Link to="/todayknock"> 
+            <Image src="/todayknock.webp" />
+          </Link>
+        </ImageContainer>
+        <ImageContainer>
+          <Image src="/001.png" />
+        </ImageContainer>
+        <ImageContainer>
+          <Link to="/play">
+            <Image src="/hihi.webp" />
+          </Link> 
+        </ImageContainer> 
+        <ImageContainer>
+          <Image src="/004.png" />
         </ImageContainer>
       </StyledSlider>
     </div>
@@ -49,7 +55,7 @@ function Carousel() {
 const StyledSlider = styled(Slider)`
   height: 100%;
   width: 100%;
-  margin: 30px 0 40px 0;
+  margin: 0px 0 60px 0;
   position: relative;
 
   .slick-dots li button::before {
@@ -88,7 +94,7 @@ const Image = styled.img`
   height: 25rem;
   max-width: 100%;
   max-height: 100%;
-  background-color: #f7f6f0;
+  // background-color: #f7f6f0;
   z-index: -10;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
