@@ -94,6 +94,7 @@ function TodayKnock() {
   useEffect(() => {
     usersGetRequest();
     cardsGetRequest();
+    window.scrollTo(0, 0);
   }, []);
 
   return (
