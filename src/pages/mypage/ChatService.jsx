@@ -176,7 +176,7 @@ function ChatComponent() {
   const [recieverId, setRecieverId] = useState("");
   const [notifications, setNotifications] = useState([]);
   let prevCreatedAt = null;
-
+  const chatRef = useRef(null);
   const messageRef = useRef(null);
   const scrollToBottom = () => {
     if (messageRef.current) {

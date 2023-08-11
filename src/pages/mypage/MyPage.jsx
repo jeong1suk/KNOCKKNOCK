@@ -278,7 +278,7 @@ const UserProfileBox = styled.div`
   align-items: center;
   width: 100%;
   height: 150vh;
-  background-color: #f2f2f2e2;
+  background-color: #f4f4f4df;
 `;
 
 const BackgroundImage = styled.div`
@@ -338,7 +338,7 @@ const MessageChat = styled.div`
   height: 80vh;
   justify-content: space-between;
   flex-direction: column;
-  background-color: #f5f5f7;
+  background-color: #6d6db6;
   padding: 2rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
