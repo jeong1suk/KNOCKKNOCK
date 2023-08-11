@@ -5,10 +5,17 @@ export const GradientBackground = styled.div`
   /* Gradient background with two colors: #e6e9f0 and #eef1f5 */
   display: flex;
   justify-content: center;
-  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
   margin: 70px;
-  padding: 40px;
-  min-height: 700px;
+  padding: 60px;
+  height: 100%;
+  /* min-height: 700px; */
+  /* Gradient background with two colors: red and blue */
+  background-image: linear-gradient(
+    45deg,
+    #ff9a9e 0%,
+    #fad0c4 99%,
+    #fad0c4 100%
+  );
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* viewport 너비가 767px 이하일 경우 */
     padding: 0;
@@ -27,6 +34,7 @@ export const Container = styled.div`
   margin-top: 20px;
   max-width: 500px;
   min-height: 600px;
+  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     /* viewport 너비가 767px 이하일 경우 */
     max-width: 450px;
@@ -34,13 +42,6 @@ export const Container = styled.div`
     margin: 60px auto; /* 컨테이너를 가로 중앙 정렬 */
   }
 
-  /* Gradient background with two colors: red and blue */
-  background-image: linear-gradient(
-    45deg,
-    #ff9a9e 0%,
-    #fad0c4 99%,
-    #fad0c4 100%
-  );
   /* background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%); */
 `;
 
@@ -48,6 +49,7 @@ export const Header = styled.header`
   display: flex;
   justify-content: center;
   font-size: 24px;
+  font-family: "KIMM_Bold";
   font-weight: bold;
   margin-bottom: 20px;
 `;
@@ -138,6 +140,7 @@ export const SubmitButton = styled.input`
   width: 100%;
   height: 35px;
   font-size: 14pt;
+  font-family: "KIMM_Bold";
   margin-top: 20px;
   cursor: pointer;
   &:disabled {
@@ -153,6 +156,7 @@ export const Forgot = styled(Link)`
   width: 100%;
   text-align: right;
   font-size: 12pt;
+  font-family: "KIMM_Bold";
   color: #179972;
   margin: 10px 20px;
 `;
