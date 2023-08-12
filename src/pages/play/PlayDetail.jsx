@@ -11,8 +11,8 @@ import { isWriter } from "../../util/isWriter";
 import { getImageSrc } from "../../util/imageCheck";
 import { formatDate } from "../../util/formatDate";
 import { timeAgo } from "../../util/TimeAgo";
-import { postCardBlurCheck } from "../../util/postCardBlurcheck";
-import { currentDate, currentTime } from '../../util/currentDateTime';
+import { postCardBlurCheck } from "../../util/postCardBlurCheck";
+import { currentDate, currentTime } from "../../util/currentDateTime";
 
 import DropdownMenu from "../../components/modal/DropdownMenu";
 import Modal from "../../components/modal/Modal";
@@ -62,8 +62,10 @@ function PlayDetail() {
   const [isEditing, setIsEditing] = useState(null);
   const [editedContent, setEditedContent] = useState("");
 
-  const isBlur = postCardBlurCheck(`${currentDate} ${currentTime}`, post.meetingTime);
-  
+  const isBlur = postCardBlurCheck(
+    `${currentDate} ${currentTime}`,
+    post.meetingTime
+  );
 
   useEffect(() => {
     if (isParticipantModalOpen) {
@@ -409,12 +411,12 @@ function PlayDetail() {
 
   useEffect(() => {
     if (isParticipantModalOpen) {
-      document.body.style.overflow = 'hidden'; // 배경 스크롤을 막음
+      document.body.style.overflow = "hidden"; // 배경 스크롤을 막음
     } else {
-      document.body.style.overflow = 'auto'; // 배경 스크롤을 허용함
+      document.body.style.overflow = "auto"; // 배경 스크롤을 허용함
     }
   }, [isParticipantModalOpen]);
-  
+
   console.log(post);
   return (
     <>
@@ -449,8 +451,7 @@ function PlayDetail() {
             <TopBoxButton onClick={() => handleApplyPut(postId)}>
               참가성공!
             </TopBoxButton>
-          ) : 
-          ( 
+          ) : (
             <TopBoxButton onClick={() => handleApplyPut(postId)}>
               취소하기
             </TopBoxButton>
@@ -513,9 +514,11 @@ function PlayDetail() {
             <div
               style={{ display: "flex", width: "100%", alignItems: "center" }}
             >
-              { isBlur ? 
-                <RecruitAbleBox style={{backgroundColor: "#C6D1D1"}}>기간 만료</RecruitAbleBox>
-              : post.isCompleted ? (
+              {isBlur ? (
+                <RecruitAbleBox style={{ backgroundColor: "#C6D1D1" }}>
+                  기간 만료
+                </RecruitAbleBox>
+              ) : post.isCompleted ? (
                 <RecruitAbleBox>모집완료</RecruitAbleBox>
               ) : (
                 <RecruitAbleBox>모집중</RecruitAbleBox>
@@ -584,7 +587,13 @@ function PlayDetail() {
               }}
             />
           </InputBox>
-          <InputBox style={{ justifyContent: "center", width: "100%", fontFamily: 'Pretendard-Regular' }}>
+          <InputBox
+            style={{
+              justifyContent: "center",
+              width: "100%",
+              fontFamily: "Pretendard-Regular",
+            }}
+          >
             <span style={{ whiteSpace: "pre-line" }}>{post.content}</span>
           </InputBox>
         </PostDetailFirstBox>
@@ -639,7 +648,11 @@ function PlayDetail() {
                 ) : (
                   <CommentEditDeleteBox>
                     <span
-                      style={{ whiteSpace: "pre-line", marginBottom: "10px", fontFamily: 'Pretendard-Regular' }}
+                      style={{
+                        whiteSpace: "pre-line",
+                        marginBottom: "10px",
+                        fontFamily: "Pretendard-Regular",
+                      }}
                     >
                       {comment.content}
                     </span>
