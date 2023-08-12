@@ -8,6 +8,8 @@ import * as Api from '../../api';
 
 import { timeAgo } from '../../util/TimeAgo';
 import { isWriter } from '../../util/isWriter';
+import { currentDate, currentTime } from '../../util/currentDateTime';
+import { postCardBlurCheck } from '../../util/postCardBlurcheck';
 
 import { getImageSrc } from '../../util/imageCheck';
 
@@ -20,9 +22,14 @@ const MAX_TITLE_LENGTH = 10;
 function PostCard({post})  {
   const navigate = useNavigate();
 
+  const isBlur = postCardBlurCheck(`${currentDate} ${currentTime}`, post.meetingTime);
+
 
   return (
-    <Card onClick = {() => navigate(`/playdetail/${post.postId}`)}>
+    <Card 
+      $isBlur={isBlur}
+      onClick = {() => navigate(`/playdetail/${post.postId}`)}
+    >
       <ContentBox>
         <ProfileBox>
           <ProfileImage src={getImageSrc(post?.User?.UserFiles?.[0]?.File?.url)} alt="유저 프로필" />
@@ -34,7 +41,7 @@ function PostCard({post})  {
         <Category>{post.type}</Category>
         <Title>
           {post.title.length > MAX_TITLE_LENGTH ? `${post.title.substring(0, MAX_TITLE_LENGTH)}...` : post.title}
-          <RecruitmentStatusBox isCompleted={post.isCompleted}>
+          <RecruitmentStatusBox $isCompleted={post.isCompleted}>
             {post.isCompleted ? "모집완료" : "모집중"}
           </RecruitmentStatusBox>
         </Title>
@@ -65,6 +72,7 @@ const Card = styled.div`
   font-family: 'Pretendard-Regular';  
   width: 80%;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  background-color: ${props => props.$isBlur ? "#C6D1D1" : "#FFFFFF"};
   // transition: transform 0.2s ease-in-out;
   // height: 60vh;
   
@@ -109,19 +117,6 @@ const ContentBox = styled.div`
   // padding-left: 20px;
 `;
 
-// const PostContent = styled.p`
-//   margin-left: 10px;
-//   font-size: 12px;
-//   overflow: hidden;
-//   text-overflow: ellipsis;
-//   display: -webkit-box;
-//   -webkit-line-clamp: 3;
-//   -webkit-box-orient: vertical;
-//   // flex: 1;
-//   // color: #333;
-//   // margin-bottom: 10px;
-//   // white-space: pre-wrap;  // 개행이 반영되도록 설정
-// `;
 
 const Category = styled.h2`
   background-color: #F7CBD0;
@@ -189,7 +184,7 @@ const InfoContainer = styled.div`
 
 
 const RecruitmentStatusBox = styled.div`
-  background-color: ${props => props.isCompleted ? "#F08080" : "#32CD32"};
+  background-color: ${props => props.$isCompleted ? "#F08080" : "#32CD32"};
   border-radius: 8px;
   font-size: 0.8rem;
   margin-left: 8px;

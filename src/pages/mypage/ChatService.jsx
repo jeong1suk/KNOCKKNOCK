@@ -27,6 +27,8 @@ function formatMessageTime(createdAt, prevCreatedAt) {
   return `${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
 }
 function ChatComponent() {
+  const [isProfileImageModalOpen, setIsProfileImageModalOpen] = useState(false);
+  const [clickedProfileImageUrl, setClickedProfileImageUrl] = useState("");
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [chatId, setChatId] = useState(null);
@@ -148,6 +150,10 @@ function ChatComponent() {
       }
     }
   };
+  const handleProfileImageClick = (imageUrl) => {
+    setClickedProfileImageUrl(imageUrl);
+    setIsProfileImageModalOpen(true);
+  };
 
   const handleChatClick = async (chat) => {
     try {
@@ -168,7 +174,16 @@ function ChatComponent() {
       console.error("채팅 정보를 가져오는데 실패했습니다:", error);
     }
   };
-
+  const ProfileImageModal = ({ imageUrl, onClose }) => {
+    return (
+      <ModalOverlay>
+        <ModalContent>
+          <LargeProfileImage src={imageUrl} alt="프로필사진" />
+          <CloseButton onClick={onClose}>닫기</CloseButton>
+        </ModalContent>
+      </ModalOverlay>
+    );
+  };
   useEffect(() => {
     if (chatId) {
       API.get(`/messages/${chatId}`)
@@ -204,6 +219,11 @@ function ChatComponent() {
                     <ProfileImage
                       src={profileImage || getImageSrc(profileImage)}
                       alt="프로필사진"
+                      onClick={() =>
+                        handleProfileImageClick(
+                          profileImage || getImageSrc(profileImage)
+                        )
+                      }
                     />
                   )}
 
@@ -225,6 +245,12 @@ function ChatComponent() {
             <div></div>
           )}
         </MessageBox>
+        {isProfileImageModalOpen && (
+          <ProfileImageModal
+            imageUrl={clickedProfileImageUrl}
+            onClose={() => setIsProfileImageModalOpen(false)}
+          />
+        )}
         <ChatInputContainer>
           <ChatInput
             type="text"
@@ -451,4 +477,47 @@ const SendButton = styled.button`
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     font-size: 0.7rem;
   }
+`;
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.div`
+  background-color: rgba(247, 203, 208, 0.3);
+  max-width: 25rem;
+  max-height: 70vh;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const CloseButton = styled.button`
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: rgba(247, 203, 208, 0.8);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+const LargeProfileImage = styled.img`
+  max-width: 80%;
+  max-height: 80vh;
+  margin: auto;
+  display: block;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
 `;
