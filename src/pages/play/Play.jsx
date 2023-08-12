@@ -63,33 +63,19 @@ function Play() {
         </TopButtonBox>
       </TopBox>
       <CategoryButtonBox>
-        <CategoryButton onClick={() => setPostType("")}>🚪전체</CategoryButton>
-        <CategoryButton onClick={() => setPostType("술")}>🍻술</CategoryButton>
-        <CategoryButton onClick={() => setPostType("영화")}>
-          🍿영화
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("식사")}>
-          🍽️식사
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("카페")}>
-          🧋카페
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("산책")}>
-          🧑‍🤝‍🧑산책
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("드라이브")}>
-          🚗드라이브
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("공연관람")}>
-          🎭공연관람
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("기타")}>
-          ⚫기타
-        </CategoryButton>
+        <CategoryButton onClick={() => setPostType("")} $isActive={postType === ""}>🚪전체</CategoryButton>
+        <CategoryButton onClick={() => setPostType("술")} $isActive={postType === "술"}>🍻술</CategoryButton>
+        <CategoryButton onClick={() => setPostType("영화")} $isActive={postType === "영화"}>🍿영화</CategoryButton>
+        <CategoryButton onClick={() => setPostType("식사")} $isActive={postType === "식사"}>🍽️식사</CategoryButton>
+        <CategoryButton onClick={() => setPostType("카페")} $isActive={postType === "카페"}>🧋카페</CategoryButton>
+        <CategoryButton onClick={() => setPostType("산책")} $isActive={postType === "산책"}>🧑‍🤝‍🧑산책</CategoryButton>
+        <CategoryButton onClick={() => setPostType("드라이브")} $isActive={postType === "드라이브"}>🚗드라이브</CategoryButton>
+        <CategoryButton onClick={() => setPostType("공연관람")} $isActive={postType === "공연관람"}>🎭공연관람</CategoryButton>
+        <CategoryButton onClick={() => setPostType("기타")} $isActive={postType === "기타"}>⚫기타</CategoryButton>
       </CategoryButtonBox>
       <PostCardBox>
         {postList.map((post) => (
-          <PostCard key={post.posId} post={post} />
+          <PostCard key={post.postId} post={post} />
         ))}
       </PostCardBox>
 
@@ -216,7 +202,7 @@ const CategoryButtonBox = styled.div`
 const CategoryButton = styled.div`
   font-size: 1.5rem;
   font-family: "Pretendard-Regular";
-  color: #1d1d1f;
+  color: ${props => props.$isActive ? "#f7cbd0" : "#1d1d1f"}; // 선택된 버튼이면 #f7cbd0 색상, 그렇지 않으면 #1d1d1f 색상을 사용
   cursor: pointer;
   text-align: center;
 
@@ -227,8 +213,8 @@ const CategoryButton = styled.div`
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     font-size: 0.7rem;
-    max-width: 100px; // Set the maximum width for the button
-    white-space: normal; // Allow the text to wrap
+    max-width: 100px;
+    white-space: normal;
   }
 `;
 

@@ -97,21 +97,21 @@ function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
               </p>
               <HobbyBoxContainer>
                 {shuffledHobby.map((hobby, index) => (
-                  <HobbyBox key={index} style={{ order: index }}>
+                  <HobbyBox $key={index} style={{ order: index }}>
                     {hobby}
                   </HobbyBox>
                 ))}
               </HobbyBoxContainer>
               <HobbyBoxContainer>
                 {shuffledIdeal.map((ideal, index) => (
-                  <IdealBox key={index} style={{ order: index }}>
+                  <IdealBox $key={index} style={{ order: index }}>
                     {ideal}
                   </IdealBox>
                 ))}
               </HobbyBoxContainer>
               <HobbyBoxContainer>
                 {shuffledPersonality.map((personality, index) => (
-                  <PersonBox key={index} style={{ order: index }}>
+                  <PersonBox $key={index} style={{ order: index }}>
                     {personality}
                   </PersonBox>
                 ))}

@@ -17,7 +17,7 @@ const ParticipantList = ({ participantsList, handleAccept, handleReject, selecte
   return (
     <ParticipantModalDiv>
       {participantsList.map((participant, index) => (
-        <Card key={index}>
+        <Card $key={index}>
           <Image src={getImageSrc(participant.User?.UserFiles?.[0]?.File?.url)} alt="profile" onClick={() => handleProfileModalOpen(participant.User.userId)}/>
           <Info>
             <p>{participant.User.nickname}</p>

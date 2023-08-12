@@ -11,6 +11,8 @@ import { isWriter } from "../../util/isWriter";
 import { getImageSrc } from "../../util/imageCheck";
 import { formatDate } from "../../util/formatDate";
 import { timeAgo } from "../../util/TimeAgo";
+import { postCardBlurCheck } from "../../util/postCardBlurcheck";
+import { currentDate, currentTime } from '../../util/currentDateTime';
 
 import DropdownMenu from "../../components/modal/DropdownMenu";
 import Modal from "../../components/modal/Modal";
@@ -59,6 +61,9 @@ function PlayDetail() {
 
   const [isEditing, setIsEditing] = useState(null);
   const [editedContent, setEditedContent] = useState("");
+
+  const isBlur = postCardBlurCheck(`${currentDate} ${currentTime}`, post.meetingTime);
+  
 
   useEffect(() => {
     if (isParticipantModalOpen) {
@@ -410,7 +415,7 @@ function PlayDetail() {
     }
   }, [isParticipantModalOpen]);
   
-
+  console.log(post);
   return (
     <>
       <TopBox>
@@ -508,7 +513,9 @@ function PlayDetail() {
             <div
               style={{ display: "flex", width: "100%", alignItems: "center" }}
             >
-              {post.isCompleted ? (
+              { isBlur ? 
+                <RecruitAbleBox style={{backgroundColor: "#C6D1D1"}}>기간 만료</RecruitAbleBox>
+              : post.isCompleted ? (
                 <RecruitAbleBox>모집완료</RecruitAbleBox>
               ) : (
                 <RecruitAbleBox>모집중</RecruitAbleBox>
