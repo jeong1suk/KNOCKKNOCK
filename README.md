@@ -127,30 +127,30 @@
 #### 페이지 구성
 
 - ##### **홈페이지**
-  <img src="res/메인페이지.png" alt="mainpage" width="300px" />
+  <img src="res/mainpage.png" alt="mainpage" width="300px" />
   <br />
 - ##### **로그인**
-  <img src="res/로그인.png" alt="login" width="300px" />
+  <img src="res/login.png" alt="login" width="300px" />
 - ##### **회원가입**
   <img src="res/register.png" alt="register" width="600px" />
 - ##### **마이페이지**
-  <img src="res/마이페이지.png" alt="mypage" width="300px" />
-  <img src="res/마이페이지:정보수정.png" alt="edit" width="300px" />
-  <img src="res/마이페이지:비번변경.png" alt="edit" width="300px" />
+  <img src="res/mypage.png" alt="mypage" width="300px" />
+  <img src="res/mypage_edit.png" alt="edit" width="300px" />
+  <img src="res/mypage_editpwd.png" alt="edit" width="300px" />
 - ##### **오늘의 낙낙**
-  <img src="res/오늘의낙낙1.png" alt="TodayKnock" width="300px" />
-  <img src="res/오늘의낙낙2.png" alt="TodayKnock" width="300px" />
-  <img src="res/오늘의낙낙:게시글.png" alt="TodayKnock" width="300px" />
-  <img src="res/오늘의낙낙:게시글add.png" alt="TodayKnock" width="300px" />
-  <img src="res/오늘의낙낙:모집인원.png" alt="TodayKnock" width="300px" />
-  <img src="res/오늘의낙낙:신청인원.png" alt="TodayKnock" width="300px" />
-  <img src="res/오늘의낙낙:유저프로필.png" alt="TodayKnock" width="300px" />
+  <img src="res/todayknock1.png" alt="TodayKnock" width="300px" />
+  <img src="res/todayknock2.png" alt="TodayKnock" width="300px" />
+  <img src="res/todayknock_post.png" alt="TodayKnock" width="300px" />
+  <img src="res/todayknock_addpost.png" alt="TodayKnock" width="300px" />
+  <img src="res/todayknock_list.png" alt="TodayKnock" width="300px" />
+  <img src="res/todayknock_in.png" alt="TodayKnock" width="300px" />
+  <img src="res/todayknock_userprofile.png" alt="TodayKnock" width="300px" />
 - ##### **히히낙낙**
-   <img src="res/히히낙낙1.png" alt="play" width="300px" />
-   <img src="res/히히낙낙2.png" alt="play" width="300px" />
+   <img src="res/play1.png" alt="play" width="300px" />
+   <img src="res/play2.png" alt="play" width="300px" />
 - ##### **뷰티톡톡**
-  <img src="res/뷰티톡톡1.png" alt="ai" width="300px" />
-  <img src="res/뷰티톡톡2.png" alt="ai" width="300px" />
+  <img src="res/beautyAI1.png" alt="ai" width="300px" />
+  <img src="res/beautyAI2.png" alt="ai" width="300px" />
 
 ## 🗂 프로젝트 구조
 
