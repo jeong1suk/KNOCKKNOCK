@@ -12,32 +12,52 @@ export const ModalPersonality = ({ formData, handlePersonalityClick }) => {
   return (
     <>
       <S.ToggleButtonWrapper>
-        <S.ToggleButton onClick={onOpen}>내가 생각하는 나</S.ToggleButton>
+        <S.Button onClick={onOpen}>
+          <p style={{ textAlign: "center" }}>내가 생각하는 나</p>
+        </S.Button>
       </S.ToggleButtonWrapper>
-      <S.Box>
-        {opened && (
-          <S.Modal>
-            <h3 style={{ textAlign: "center" }}>내 성격</h3>
-            {isMaxPersonalityReached && (
-              <p style={{ color: "red" }}>
-                You can only select up to 5 personality.
-              </p>
-            )}
-            <ButtonContainer>
-              {personalityList.map((elements, index) => (
-                <ModalButton
-                  key={index}
-                  active={personality.includes(elements)}
-                  onClick={() => handlePersonalityClick(elements)}
-                >
-                  <div style={{ textAlign: "center" }}>{elements}</div>
-                </ModalButton>
-              ))}
-            </ButtonContainer>
-            <button onClick={onClose}>Close</button>
-          </S.Modal>
-        )}
 
+      {opened && (
+        <S.Modal>
+          <S.CloseButton onClick={onClose}>X</S.CloseButton>
+          <h3 style={{ textAlign: "center" }}>내 성격</h3>
+          {isMaxPersonalityReached && (
+            <p style={{ color: "red", textAlign: "center" }}>
+              최대 5개까지 선택가능합니다.
+            </p>
+          )}
+          <ButtonContainer>
+            {personalityList.map((elements, index) => (
+              <ModalButton
+                key={index}
+                active={personality.includes(elements)}
+                onClick={() => {
+                  if (
+                    personality.includes(elements) ||
+                    personality.length < 5
+                  ) {
+                    handlePersonalityClick(elements);
+                  }
+                }}
+                disabled={
+                  personality.length > 5 && !personality.includes(elements)
+                }
+              >
+                <div style={{ textAlign: "center" }}>{elements}</div>
+              </ModalButton>
+            ))}
+          </ButtonContainer>
+          <S.ToggleButtonWrapper>
+            <S.Button
+              onClick={onClose}
+              style={{ width: "15%", marginTop: "5px" }}
+            >
+              <p style={{ textAlign: "center" }}>닫기</p>
+            </S.Button>
+          </S.ToggleButtonWrapper>
+        </S.Modal>
+      )}
+      <S.Box>
         {personality.length > 0 && (
           <S.HobbyBoxContainer>
             {personality.map((item, index) => (

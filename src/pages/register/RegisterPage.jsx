@@ -1,11 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import RequiredInputs from "./RequiredInputs";
 import OptionalInputs from "./OptionalInputs";
 import * as S from "./style";
 import * as Api from "../../api";
 import { DispatchContext } from "../../context/user/UserProvider";
 import { useNavigate } from "react-router-dom";
-import { showAlert } from "../../assets/alert";
+import { showAlert, showSuccess } from "../../assets/alert";
 import ValidationFields from "./ValidationFields";
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -42,6 +42,7 @@ const RegisterPage = () => {
           height: formData.height,
           hobby: formData.hobby,
           personality: formData.personality,
+          ideal: formData.ideal,
           introduce: formData.introduce || "반가워요!",
           profileImage: ["profile", response.data],
         });
@@ -59,6 +60,7 @@ const RegisterPage = () => {
           height: formData.height,
           hobby: formData.hobby,
           personality: formData.personality,
+          ideal: formData.ideal,
           introduce: formData.introduce || "반가워요!",
           // profileImage: ["profile", "http://placekitten.com/200/200"],
         });
@@ -80,8 +82,8 @@ const RegisterPage = () => {
         type: "LOGIN_SUCCESS",
         payload: user,
       });
-
-      navigate("/", { replace: true });
+      showSuccess("회원가입 완료!");
+      navigate("/");
       window.location.reload();
     } catch (err) {
       console.log(err);
@@ -93,6 +95,10 @@ const RegisterPage = () => {
       }
     }
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
 
   return (
     <S.Content>
@@ -110,21 +116,39 @@ const RegisterPage = () => {
 
         {/* <S.Header>필수 입력</S.Header> */}
         <RequiredInputs />
-        <S.Heading>사진</S.Heading>
-        <S.Box>
-          <S.FileInput type="file" onChange={handleFileChange} />
-        </S.Box>
+
+        <S.Header style={{ border: 0, marginBottom: "5px" }}>
+          선택 입력
+        </S.Header>
+
+        <S.ToggleButtonWrapper>
+          <S.Button style={{ cursor: "auto", height: "30%" }}>
+            <S.ImageUploadInput
+              id="file-upload"
+              type="file"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
+              <p style={{ textAlign: "center" }}>사진 넣기</p>
+            </label>
+          </S.Button>
+        </S.ToggleButtonWrapper>
         {previewURL && (
           <S.UploadedImageContainer>
             <S.UploadedImage src={previewURL} alt="Selected Image" />
           </S.UploadedImageContainer>
         )}
-        <S.Header style={{ border: 0 }}>선택 입력</S.Header>
-        <OptionalInputs />
 
-        <S.JoinButton type="submit" onSubmit={() => handleRegistration()}>
-          Register
-        </S.JoinButton>
+        <OptionalInputs />
+        <S.ToggleButtonWrapper>
+          <S.JoinButton
+            type="submit"
+            onSubmit={() => handleRegistration()}
+            style={{ width: "70%", height: "80px" }}
+          >
+            Register
+          </S.JoinButton>
+        </S.ToggleButtonWrapper>
       </form>
     </S.Content>
   );

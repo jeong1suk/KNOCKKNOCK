@@ -7,10 +7,7 @@ import * as Api from "../../api";
 import PostCard from "../../components/play/PostCard";
 import Pagination from "../../components/commons/Pagenation";
 import { UserStateContext } from "../../context/user/UserProvider";
-import {
-  MOBILE_BREAK_POINT,
-  TABLET_BREAK_POINT,
-} from "../../components/layout/breakpoint";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 import { showAlert } from "../../assets/alert";
 
 function Play() {
@@ -29,7 +26,6 @@ function Play() {
       const res = await Api.get(
         `/posts?page=${currentPage}&perPage=${perPage}&type=${postType}`
       );
-      console.log(postType, res);
       setPostList(res.data.postList);
       setAllPostCount(res.data.allPostCount);
     } catch (err) {
@@ -41,17 +37,19 @@ function Play() {
   useEffect(() => {
     setCurrentPage(1);
     fetchPosts();
+    window.scrollTo(0, 0);
   }, [postType]);
 
   useEffect(() => {
     fetchPosts();
+    window.scrollTo(0, 0);
   }, [currentPage]);
 
   return (
     <>
       <TopBox>
         <TopPtagBox>
-          <p>같이 놀자 !</p>
+          <p>히히 낙낙 !</p>
           <br></br>
           <p>다양한 단체 미팅 중 원하는 미팅에 참여해보세요</p>
         </TopPtagBox>
@@ -65,33 +63,19 @@ function Play() {
         </TopButtonBox>
       </TopBox>
       <CategoryButtonBox>
-        <CategoryButton onClick={() => setPostType("")}>🚪전체</CategoryButton>
-        <CategoryButton onClick={() => setPostType("술")}>🍻술</CategoryButton>
-        <CategoryButton onClick={() => setPostType("영화")}>
-          🍿영화
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("식사")}>
-          🍽️식사
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("카페")}>
-          🧋카페
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("산책")}>
-          🧑‍🤝‍🧑산책
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("드라이브")}>
-          🚗드라이브
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("공연관람")}>
-          🎭공연관람
-        </CategoryButton>
-        <CategoryButton onClick={() => setPostType("기타")}>
-          ⚫기타
-        </CategoryButton>
+        <CategoryButton onClick={() => setPostType("")} $isActive={postType === ""}>🚪전체</CategoryButton>
+        <CategoryButton onClick={() => setPostType("술")} $isActive={postType === "술"}>🍻술</CategoryButton>
+        <CategoryButton onClick={() => setPostType("영화")} $isActive={postType === "영화"}>🍿영화</CategoryButton>
+        <CategoryButton onClick={() => setPostType("식사")} $isActive={postType === "식사"}>🍽️식사</CategoryButton>
+        <CategoryButton onClick={() => setPostType("카페")} $isActive={postType === "카페"}>🧋카페</CategoryButton>
+        <CategoryButton onClick={() => setPostType("산책")} $isActive={postType === "산책"}>🧑‍🤝‍🧑산책</CategoryButton>
+        <CategoryButton onClick={() => setPostType("드라이브")} $isActive={postType === "드라이브"}>🚗드라이브</CategoryButton>
+        <CategoryButton onClick={() => setPostType("공연관람")} $isActive={postType === "공연관람"}>🎭공연관람</CategoryButton>
+        <CategoryButton onClick={() => setPostType("기타")} $isActive={postType === "기타"}>⚫기타</CategoryButton>
       </CategoryButtonBox>
       <PostCardBox>
         {postList.map((post) => (
-          <PostCard key={post.posId} post={post} />
+          <PostCard key={post.postId} post={post} />
         ))}
       </PostCardBox>
 
@@ -141,19 +125,9 @@ const TopBox = styled.div`
   }
 
   animation: ${fadeInAnimation} 0.5s ease-in-out;
-  @media (max-width: 1024px) {
-    padding: 50px 0 0 0;
-
-    p {
-      font-size: 3rem; 
-    }
-
-    p:last-child {
-      font-size: 2rem; 
-    }
-  }
-
-  @media (max-width: 420px) {    
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    flex-direction: column;
+    
     p {
       font-size: 2rem;
       margin-bottom: -0.3px;
@@ -162,6 +136,22 @@ const TopBox = styled.div`
     p:last-of-type {
       font-size: 0.8rem;
     }
+`;
+
+const TopPtagBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+`;
+
+
+const TopButtonBox = styled.div`
+  display: flex;
+  width: 20%;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 30%;
+  }
 `;
 
 const PostButton = styled.button`
@@ -186,40 +176,33 @@ const PostButton = styled.button`
   }
   @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 100%;
-    white-space: nowrap; /* Allow the text to wrap */
-    max-width: 1000px;
+    white-space: nowrap; // Allow the text to wrap
     margin: 40px 0 0 0;
+    height: 100%;
     font-size: 0.4rem;
   }
-  @media (max-width: ${TABLET_BREAK_POINT}) {
-    width: 100%;
-    font-size: 0.4rem; /* Adjust the font size for smaller screens */
-    padding: 10px 15px; /* Adjust the padding for smaller screens */
-    margin: 150px 0 0 0; /* Adjust the margin for smaller screens */
-  }
 `;
+
 const CategoryButtonBox = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 0px -35px 50px -35px;
   background-color: #ffffff;
-  padding: 20px 0;
+  padding: 20px 20px;
   border-top: 1px solid #d2d2d2;
   border-bottom: 1px solid #d2d2d2;
   animation: ${fadeInAnimation} 0.6s ease-in-out;
 
-  @media (min-width: ${TABLET_BREAK_POINT}) {
-    justify-content: space-evenly;
-  }
-  @media (min-width: ${MOBILE_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     margin: 0px;
   }
 `;
 
+
 const CategoryButton = styled.div`
   font-size: 1.5rem;
   font-family: "Pretendard-Regular";
-  color: #1d1d1f;
+  color: ${props => props.$isActive ? "#f7cbd0" : "#1d1d1f"}; // 선택된 버튼이면 #f7cbd0 색상, 그렇지 않으면 #1d1d1f 색상을 사용
   cursor: pointer;
   text-align: center;
 
@@ -228,13 +211,10 @@ const CategoryButton = styled.div`
     color: #f7cbd0;
   }
 
-  @media (min-width: ${MOBILE_BREAK_POINT}) {
-    font-size: 1.5rem;
-  }
-  @media (max-width: ${TABLET_BREAK_POINT}) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     font-size: 0.7rem;
-    max-width: 100px; /* Set the maximum width for the button */
-    white-space: normal; /* Allow the text to wrap */
+    max-width: 100px;
+    white-space: normal;
   }
 `;
 
@@ -245,36 +225,19 @@ const PostBox = styled.div`
   margin: 30px 50px 30px 50px;
 `;
 
-const TopButtonBox = styled.div`
-  display: flex;
-  width: 20%;
-
-  @media (max-width: ${MOBILE_BREAK_POINT}) {
-    width: 10%;
-  }
-`;
 const PostCardBox = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 10px;
   padding: 20px;
-  margin: 0 auto;
+  margin: 0 10px;
   justify-items: center;
   align-items: center;
-  max-width: 90vw;
+  max-width: 100vw;
   animation: ${fadeInAnimation} 0.6s ease-in-out;
 
   @media (max-width: ${MOBILE_BREAK_POINT}) {
-    grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
-    grid-gap: 1px;
-  }
-
-  @media (max-width: ${TABLET_BREAK_POINT}) {
-    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    grid-template-columns: 1fr;
   }
 `;
 
-const TopPtagBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-`;

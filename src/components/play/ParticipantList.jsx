@@ -2,25 +2,30 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { getImageSrc } from '../../util/imageCheck';
+import { checkGender } from '../../util/checkGender';
 
 const ParticipantList = ({ participantsList, handleAccept, handleReject, selectedOption, setIsProfileModalOpen, setSelectedUserId }) => {
 
+
+
   const handleProfileModalOpen = (participantUserId) => {
-    console.log(participantUserId);
     setIsProfileModalOpen(true);
     setSelectedUserId(participantUserId);
   }
 
 
-
   return (
     <ParticipantModalDiv>
       {participantsList.map((participant, index) => (
-        <Card key={index}>
-          <Image src={getImageSrc(participant.User?.UserFiles?.[0]?.File?.url)} alt="profile" onClick={() => handleProfileModalOpen(participant.userId)}/>
+        <Card $key={index}>
+          <Image src={getImageSrc(participant.User?.UserFiles?.[0]?.File?.url)} alt="profile" onClick={() => handleProfileModalOpen(participant.User.userId)}/>
           <Info>
             <p>{participant.User.nickname}</p>
-            <p>🚻{participant.User.gender}</p>
+            {checkGender(participant.User.gender) ? 
+            <p>🙆🏻‍♂️{participant.User.gender}</p>
+            :
+            <p>🙆🏻‍♀️{participant.User.gender}</p>
+            }
             <p>⏱{participant.User.age}살</p>
             <p>🛄{participant.User.job}</p>
           </Info>

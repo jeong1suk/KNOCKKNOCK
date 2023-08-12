@@ -15,6 +15,7 @@ function shuffleArray(array) {
   return shuffledArray;
 }
 function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
+
   const navigate = useNavigate();
   const [selected, setSelectedUser] = useState();
 
@@ -34,20 +35,6 @@ function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
 
 
 
-
-  // const handleChatButtonClick = async () => {
-  //   console.log(Api.get("/chats"));
-  //   try {
-  //     const response = await Api.post("/chats", {
-  //       anotherId: user.userId,
-  //     });
-  //     const chatId = response.data.chatId;
-  //     navigate("/mypage");
-  //   } catch (error) {
-  //     console.error("채팅방 생성에 실패했습니다:", error);
-  //   }
-  // };
-
   const shuffledHobby = shuffleArray(selected?.hobby || []);
   const shuffledIdeal = shuffleArray(selected?.ideal || []);
   const shuffledPersonality = shuffleArray(selected?.personality || []);
@@ -56,6 +43,7 @@ function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
   useEffect(() => {
     ProfileGetRequest(userId);
   }, [])
+
 
   return (
     <Container>
@@ -73,43 +61,57 @@ function ParticipantUserModal({ userId, setIsProfileModalOpen }) {
           <Nickname>{selected?.nickname}</Nickname>
           <Email>{selected?.email}</Email>
           <Tagline>{selected?.introduce}</Tagline>
+        
           <UserInfomationBox>
-            {/* <ChatButton onClick={handleChatButtonClick}>채팅하기</ChatButton> */}
             <UserInformation>
               <UserLineContainer>
-                <UserLine>Name: {selected?.name}</UserLine>
+                <UserLine>Age: {selected?.age}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>MBTI: {selected?.mbti}</UserLine>
+                <UserLine>MBTI: {selected?.mbti || "비공개"}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Height: {selected?.height || "비공개"}</UserLine>
+                <UserLine>Height: {selected?.height}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
                 <UserLine>Job: {selected?.job}</UserLine>
               </UserLineContainer>
               <UserLineContainer>
-                <UserLine>Region: {selected?.region || "비공개"}</UserLine>
+                <UserLine>Region: {selected?.region}</UserLine>
               </UserLineContainer>
             </UserInformation>
             <HobbyAllBox>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "1rem",
+                  fontFamily: "KIMM_Bold",
+                  margin: "0 0 20px 0",
+                }}
+              >
+                <span style={{ padding: "5px", color: "#fa9393" }}>취미</span>
+                <span style={{ padding: "5px", color: "rgb(248, 143, 255)" }}>
+                  성격
+                </span>
+                <span style={{ padding: "5px", color: "#87d5fc" }}>이상형</span>
+              </p>
               <HobbyBoxContainer>
                 {shuffledHobby.map((hobby, index) => (
-                  <HobbyBox key={index} style={{ order: index }}>
+                  <HobbyBox $key={index} style={{ order: index }}>
                     {hobby}
                   </HobbyBox>
                 ))}
               </HobbyBoxContainer>
               <HobbyBoxContainer>
                 {shuffledIdeal.map((ideal, index) => (
-                  <IdealBox key={index} style={{ order: index }}>
+                  <IdealBox $key={index} style={{ order: index }}>
                     {ideal}
                   </IdealBox>
                 ))}
               </HobbyBoxContainer>
               <HobbyBoxContainer>
                 {shuffledPersonality.map((personality, index) => (
-                  <PersonBox key={index} style={{ order: index }}>
+                  <PersonBox $key={index} style={{ order: index }}>
                     {personality}
                   </PersonBox>
                 ))}
@@ -152,6 +154,7 @@ const UserProfileContainer = styled.div`
   align-items: center;
   width: 100%;
   height: auto;
+  margin-top: 20px;
 `;
 const UserProfileBox = styled.div`
   display: flex;
@@ -203,6 +206,17 @@ const Nickname = styled.h2`
   justify-content: flex-start;
   align-items: center;
   color: #4b4a4a;
+  @media (max-width: 768px) {
+    font-size: 1.3rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 460px) {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }
 `;
 
 const Email = styled.h4`
@@ -211,6 +225,9 @@ const Email = styled.h4`
   justify-content: flex-start;
   align-items: center;
   color: #cacaca;
+  @media (max-width: 768px) {
+    font-size: 0.3rem;
+  }
 `;
 
 const Tagline = styled.div`
@@ -223,12 +240,20 @@ const Tagline = styled.div`
   align-items: center;
   color: #676565;
   font-size: 0.9rem;
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+    font-size: 0.4rem;
+  }
 `;
 
 const UserInfomationBox = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 0 3rem;
+  @media (max-width: 1080px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const UserInformation = styled.div`
@@ -236,6 +261,9 @@ const UserInformation = styled.div`
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `;
 const UserLineContainer = styled.div`
   display: flex;
@@ -246,13 +274,26 @@ const UserLineContainer = styled.div`
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   padding: 0.5rem;
+  @media (max-width: 768px) {
+    padding: 0.3rem;
+    margin: 0.1rem;
+  }
 `;
 const UserLine = styled.h3`
   margin: 0.3rem;
   color: #8f8f8f;
   font-size: 1rem;
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
-const HobbyAllBox = styled.div``;
+const HobbyAllBox = styled.div`
+  @media (max-width: 1080px) {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+  }
+`;
 const HobbyBox = styled.div`
   width: 3.8rem;
   height: 2rem;
@@ -265,6 +306,18 @@ const HobbyBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    width: 3.3rem;
+    height: 1.8rem;
+    font-size: 0.5rem;
+    margin: 0rem 0.1rem;
+  }
+  @media (max-width: 360px) {
+    width: 2.8rem;
+    height: 1.5rem;
+    font-size: 0.3rem;
+    margin: 0rem 0.1rem;
+  }
 `;
 const IdealBox = styled.div`
   width: 3.8rem;
@@ -278,6 +331,18 @@ const IdealBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    width: 3.3rem;
+    height: 1.8rem;
+    font-size: 0.5rem;
+    margin: 0rem 0.1rem;
+  }
+  @media (max-width: 360px) {
+    width: 2.8rem;
+    height: 1.5rem;
+    font-size: 0.3rem;
+    margin: 0rem 0.1rem;
+  }
 `;
 
 const PersonBox = styled.div`
@@ -292,10 +357,22 @@ const PersonBox = styled.div`
   color: white;
   font-size: 0.7rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    width: 3.3rem;
+    height: 1.8rem;
+    font-size: 0.5rem;
+    margin: 0rem 0.1rem;
+  }
+  @media (max-width: 360px) {
+    width: 2.8rem;
+    height: 1.5rem;
+    font-size: 0.3rem;
+    margin: 0rem 0.1rem;
+  }
 `;
 const HobbyBoxContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 1rem;
+  margin: 0.5rem;
 `;
