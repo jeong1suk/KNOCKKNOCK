@@ -158,12 +158,6 @@ function UserProfile({ user, onClose }) {
           <IconBox>
             <IconImage onClick={handleLargeImageClick}>🙂</IconImage>
           </IconBox>
-          <IconBox>
-            <IconImage>⭐</IconImage>
-          </IconBox>
-          <IconBox>
-            <IconImage>🧊</IconImage>
-          </IconBox>
           <IconBox onClick={handleChatButtonClick}>
             <IconImage>💬</IconImage>
           </IconBox>
