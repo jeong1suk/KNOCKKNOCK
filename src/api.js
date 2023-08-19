@@ -54,13 +54,9 @@ axios.interceptors.request.use(
 // clinet <---- [ interceptor ] ------ back-end
 axios.interceptors.response.use(
   (res) => {
-    // if (res?.data.isError) {
-    //     return Promise.reject('Response Error');
-    // }
     return res;
   },
   (err) => {
-    // console.log('axios에서 일어나는 모든 response 에러', err);
     return Promise.reject(err);
   }
 );

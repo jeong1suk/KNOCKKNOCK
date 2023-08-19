@@ -23,7 +23,7 @@ function Pagination({ currentPage, setCurrentPage, lastPage }) {
       </PageButton>
 
       {startPage > 0 && 
-        <PageButton onClick={() => setCurrentPage(startPage)}>
+        <PageButton key="ellipsis-start" onClick={() => setCurrentPage(startPage)}>
           <Ellipsis>...</Ellipsis>
         </PageButton>
       }
@@ -31,7 +31,7 @@ function Pagination({ currentPage, setCurrentPage, lastPage }) {
       {visiblePages.map((page) => (
         <PageButton
           key={page}
-          isActive={currentPage === page}
+          $isActive={currentPage === page}
           onClick={() => setCurrentPage(page)}
         >
           {page}
@@ -39,7 +39,7 @@ function Pagination({ currentPage, setCurrentPage, lastPage }) {
       ))}
 
       {startPage + maxPageLimit < lastPage && 
-        <PageButton onClick={() => setCurrentPage(startPage + maxPageLimit + 1)}>
+        <PageButton key="ellipsis-end" onClick={() => setCurrentPage(startPage + maxPageLimit + 1)}>
           <Ellipsis>...</Ellipsis>
         </PageButton>
       }
@@ -66,7 +66,7 @@ const PaginationContainer = styled.div`
 
 const PageButton = styled.button`
   border: none;
-  color: ${props => props.isActive ? '#0070c9' : '#1d1d1f'};
+  color: ${props => props.$isActive ? '#0070c9' : '#1d1d1f'};
   background-color: transparent;
   padding: 10px;
   cursor: pointer;
@@ -86,3 +86,5 @@ const PageButton = styled.button`
 const Ellipsis = styled.span`
   color: #c7c7cc;
 `;
+
+

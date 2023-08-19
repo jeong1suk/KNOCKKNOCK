@@ -164,7 +164,6 @@ function RegisterForm() {
 
       navigate("/", { replace: true });
     } catch (err) {
-      console.log(err);
       if (err.response.data.message) {
         console.log(err.response.data.message);
       } else {

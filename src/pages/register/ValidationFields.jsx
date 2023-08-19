@@ -37,41 +37,56 @@ const ValidationFields = () => {
   // console.log("유효성");
   return (
     <>
-      <S.Heading>이메일</S.Heading>
-      <S.Box>
-        <S.Input name="email" value={email} onChange={onChange} />
-      </S.Box>
+      <S.InputBox>
+        <input
+          id="email"
+          type="text"
+          name="email"
+          value={email}
+          placeholder="이메일"
+          onChange={onChange}
+        />
+        <label htmlFor="email">이메일</label>
+      </S.InputBox>
       {!isEmailValid && email.length > 0 && (
         <S.ErrorBox>올바른 이메일을 입력해주세요.</S.ErrorBox>
       )}
-
-      <S.Heading>비밀번호</S.Heading>
-      <S.Box>
-        <S.Input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          value={password}
-          onChange={onChange}
-        />
-
-        {showPassword ? (
-          <BiHide className="pswdIcon" onClick={togglePasswordVisibility} />
-        ) : (
-          <BiShow className="pswdIcon" onClick={togglePasswordVisibility} />
-        )}
-      </S.Box>
+      <S.RightAlignedBox>
+        <S.InputBox
+          style={{ width: "90%", display: "flex", alignItems: "center" }}
+        >
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={password}
+            placeholder="비밀번호"
+            onChange={onChange}
+          />
+          <label htmlFor="email">비밀번호</label>
+          {showPassword ? (
+            <BiHide className="pswdIcon" onClick={togglePasswordVisibility} />
+          ) : (
+            <BiShow className="pswdIcon" onClick={togglePasswordVisibility} />
+          )}
+        </S.InputBox>
+      </S.RightAlignedBox>
       {!isPasswordValid && password.length > 0 && (
         <S.ErrorBox>숫자, 문자, 특수문자 포함 8글자 이상</S.ErrorBox>
       )}
 
-      <S.Heading>비밀번호 확인</S.Heading>
-      <S.Box>
-        <S.Input
+      <S.InputBox
+        style={{ width: "90%", display: "flex", alignItems: "center" }}
+      >
+        <input
+          id="confirmpwd"
           type={showConfirmPassword ? "text" : "password"}
           name="confirmPwd"
           value={confirmPwd}
+          placeholder="비밀번호 확인"
           onChange={onChange}
         />
+        <label htmlFor="confirmpwd">비밀번호 확인</label>
         {showConfirmPassword ? (
           <BiHide
             className="pswdIcon"
@@ -83,7 +98,7 @@ const ValidationFields = () => {
             onClick={toggleConfirmPasswordVisibility}
           />
         )}
-      </S.Box>
+      </S.InputBox>
       {!isPasswordSame && isPasswordValid && (
         <S.ErrorBox>비밀번호가 다릅니다.</S.ErrorBox>
       )}

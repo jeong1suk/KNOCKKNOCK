@@ -6,41 +6,53 @@ import { useToggle } from "../../components/hooks/useToggle";
 import { isMaxArrayReached } from "../../util/arrayUtils";
 export const ModalHobby = ({ formData, handleHobbyClick }) => {
   const { hobby } = formData;
-
   const { opened, onOpen, onClose } = useToggle();
   const isMaxHobbyReached = isMaxArrayReached(hobby, 5);
 
   return (
     <>
       <S.ToggleButtonWrapper>
-        <S.ToggleButton style={{ textAlign: "center" }} onClick={onOpen}>
-          취미 선택하기
-        </S.ToggleButton>
+        <S.Button onClick={onOpen}>
+          <p style={{ textAlign: "center" }}>취미 선택하기</p>
+        </S.Button>
       </S.ToggleButtonWrapper>
+      {opened && (
+        <S.Modal>
+          <S.CloseButton onClick={onClose}>X</S.CloseButton>
+          <h3 style={{ textAlign: "center" }}>취미</h3>
+          {isMaxHobbyReached && (
+            <p style={{ color: "red", textAlign: "center" }}>
+              최대 5개까지 선택가능합니다.
+            </p>
+          )}
+          <ButtonContainer>
+            {hobbyList.map((elements, index) => (
+              <ModalButton
+                key={index}
+                active={hobby.includes(elements)}
+                onClick={() => {
+                  if (hobby.includes(elements) || hobby.length < 5) {
+                    handleHobbyClick(elements);
+                  }
+                }}
+                disabled={hobby.length > 5 && !hobby.includes(elements)}
+              >
+                <div style={{ textAlign: "center" }}>{elements}</div>
+              </ModalButton>
+            ))}
+          </ButtonContainer>
+          {/* <ModalButton onClick={onClose}>Close</ModalButton> */}
+          <S.ToggleButtonWrapper>
+            <S.Button
+              onClick={onClose}
+              style={{ width: "15%", marginTop: "5px" }}
+            >
+              <p style={{ textAlign: "center" }}>닫기</p>
+            </S.Button>
+          </S.ToggleButtonWrapper>
+        </S.Modal>
+      )}
       <S.Box>
-        {opened && (
-          <S.Modal>
-            <h3 style={{ textAlign: "center" }}>취미</h3>
-            {isMaxHobbyReached && (
-              <p style={{ color: "red" }}>
-                You can only select up to 5 hobbies.
-              </p>
-            )}
-            <ButtonContainer>
-              {hobbyList.map((elements, index) => (
-                <ModalButton
-                  key={index}
-                  active={hobby.includes(elements)}
-                  onClick={() => handleHobbyClick(elements)}
-                >
-                  <div style={{ textAlign: "center" }}>{elements}</div>
-                </ModalButton>
-              ))}
-            </ButtonContainer>
-            {/* <ModalButton onClick={onClose}>Close</ModalButton> */}
-            <button onClick={onClose}>Close</button>
-          </S.Modal>
-        )}
         {hobby.length > 0 && (
           <S.HobbyBoxContainer>
             {hobby.map((item, index) => (

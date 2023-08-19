@@ -1,60 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
+import { showSuccess, showAlert } from "../../assets/alert";
 
-import * as Api from '../../api';
+import * as Api from "../../api";
 
-import { currentDate, currentTime } from '../../util/currentDateTime';
+import { currentDate, currentTime } from "../../util/currentDateTime";
 
-import { categories } from '../../constants/CategoryConstants';
-import { useImageUpload } from '../../components/hooks/UseImageUpload';
+import { categories } from "../../constants/CategoryConstants";
+import { useImageUpload } from "../../components/hooks/UseImageUpload";
+import DropdownMenu from "../../components/modal/DropdownMenu";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 
-import TextareaAutosize from 'react-textarea-autosize';
+import TextareaAutosize from "react-textarea-autosize";
 
-import { handleTotalChange } from '../../util/handleTotalChange';
-import { handleTimeChange } from '../../util/handleTimeChange';
+import { handleTotalChange } from "../../util/handleTotalChange";
+import { handleTimeChange } from "../../util/handleTimeChange";
+import { validateTotal } from "../../util/validateTotal";
 
-import styled from 'styled-components';
-
-
+import styled from "styled-components";
 
 function PlayAdd() {
   const navigate = useNavigate();
 
-  const [postTitle, setPostTitle] = useState('');
-  const [postType, setPostType] = useState('술');
-  const [meetingDate, setMeetingDate] = useState('');
-  const [meetingHour, setMeetingHour] = useState('');
-  const [meetingTime, setMeetingTime] = useState('');
+  const [postTitle, setPostTitle] = useState("");
+  const [postType, setPostType] = useState("술");
+  const [meetingDate, setMeetingDate] = useState("");
+  const [meetingHour, setMeetingHour] = useState("");
+  const [meetingTime, setMeetingTime] = useState("");
   const [imageUrl, handleImageUpload] = useImageUpload();
-  const [totalM, setTotalM] = useState(1);
-  const [totalF, setTotalF] = useState(1);
-  const [place, setPlace] = useState('');
-  const [postContent, setPostContent] = useState('');
-
-
-
-
+  const [totalM, setTotalM] = useState();
+  const [totalF, setTotalF] = useState();
+  const [place, setPlace] = useState("");
+  const [postContent, setPostContent] = useState("");
 
   const handleCategoryChange = (e) => {
     setPostType(e.target.value);
-  }
+  };
 
-
-  const handlePostSubmit = async e => {
+  const handlePostSubmit = async (e) => {
     e.preventDefault();
-  
 
+    const errorMessage = validateTotal(totalM, totalF);
+    if (errorMessage) {
+      showAlert(errorMessage);
+      setTotalM("");
+      setTotalF("");
+      return;
+    }
 
     try {
-
       let res;
       const formData = new FormData();
       if (imageUrl) {
-        formData.append('image', imageUrl);
+        formData.append("image", imageUrl);
         res = await Api.post("files", formData);
 
-        await Api.post('posts', {
+        await Api.post("posts", {
           title: postTitle,
           content: postContent,
           type: postType,
@@ -63,10 +65,9 @@ function PlayAdd() {
           place,
           meetingTime: meetingTime,
           postImage: ["post", res.data],
-        })
-      }
-      else {
-        await Api.post('posts', {
+        });
+      } else {
+        await Api.post("posts", {
           title: postTitle,
           content: postContent,
           type: postType,
@@ -74,32 +75,28 @@ function PlayAdd() {
           totalF: totalF,
           place,
           meetingTime: meetingTime,
-        })
+        });
       }
 
-      
-      navigate('/play');
+      showSuccess("게시물이 등록되었습니다");
+      navigate("/play");
     } catch (err) {
       console.log(err);
       if (err.response && err.response.data && err.response.data.message) {
-          alert(err.response.data.message);
+        showAlert(err.response.data.message);
       } else {
-          alert('라우팅 경로가 잘못되었습니다.');
+        alert("라우팅 경로가 잘못되었습니다.");
       }
     }
-  }
-  
-
-
+  };
 
   useEffect(() => {
     if (meetingDate && meetingHour) {
       const dateTime = `${meetingDate}T${meetingHour}`;
       const timestamp = new Date(dateTime).getTime();
-      setMeetingTime(dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'));
+      setMeetingTime(timestamp);
     }
   }, [meetingDate, meetingHour]);
-
 
   return (
     <Wrapper>
@@ -110,85 +107,121 @@ function PlayAdd() {
       <PostAddBox>
         <InputBox>
           <StyledLabel>제목</StyledLabel>
-          <StyledInput style={{width: "81%"}} type="text" value={postTitle} onChange={e => setPostTitle(e.target.value)} required />
+          <StyledInput
+            style={{ width: "81%" }}
+            type="text"
+            value={postTitle}
+            onChange={(e) => setPostTitle(e.target.value)}
+            required
+          />
         </InputBox>
         <InputBox>
           <StyledLabel>대표사진</StyledLabel>
-          <div style={{display: "flex", flexDirection: "column"}}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <input
-                id="imageUpload"
-                type="file"
-                onChange={e => {
-                    handleImageUpload(e);
-                }}
+              id="imageUpload"
+              type="file"
+              onChange={(e) => {
+                handleImageUpload(e);
+              }}
             />
           </div>
         </InputBox>
-        <InputBox>
+        <InputBox style={{ justifyContent: "end" }}>
           {imageUrl && (
-            <div style={{ width: '200px', paddingLeft: "50px" }}>
-                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} id="preview" alt="Preview" />
+            <div style={{ width: "200px" }}>
+              <img
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                id="preview"
+                alt="Preview"
+              />
             </div>
           )}
         </InputBox>
         <InputBox>
           <StyledLabel>뭐할까?</StyledLabel>
-          <StyledSelect value={postType} onChange={handleCategoryChange} required>
-            {categories.map((category, index) => 
-              <option key={index} value={category}>{category}</option>
-            )}
-          </StyledSelect>
+          <DropdownMenu
+            options={categories.map((category) => ({
+              label: category,
+              value: category,
+            }))}
+            selectedOption={postType}
+            handleOptionChange={handleCategoryChange}
+          />
         </InputBox>
         <InputBox>
           <StyledLabel>언제?</StyledLabel>
           <StyledInput
-            style={{margin: "0 10px 0 25px"}}
+            style={{ margin: "0 10px 0 25px" }}
             type="date"
-            onChange={e => setMeetingDate(e.target.value)}
-            min={currentDate} 
+            onChange={(e) => setMeetingDate(e.target.value)}
+            min={currentDate}
             required
           />
           <StyledInput
             type="time"
             value={meetingHour}
-            onChange={handleTimeChange(meetingDate, currentDate, currentTime, setMeetingHour)}
+            onChange={handleTimeChange(
+              meetingDate,
+              currentDate,
+              currentTime,
+              setMeetingHour
+            )}
             required
           />
         </InputBox>
         <InputBox>
           <StyledLabel>누구랑?</StyledLabel>
           <GenderSelectBox>
-            <span style={{marginRight: "10px"}}>🙆🏻‍♂️남자</span>
-            <StyledInput style={{width: "10%", marginRight: "10px"}} type="text" value={totalM} onChange={handleTotalChange(setTotalM)} required />
-            <span style={{marginRight: "10px"}}>🙆🏻‍♀️여자</span>
-            <StyledInput style={{width: "10%"}} type="text" value={totalF} onChange={handleTotalChange(setTotalF)} required />
+            <span style={{ marginRight: "10px" }}>🙆🏻‍♂️남자</span>
+            <StyledInput
+              style={{ width: "10%", marginRight: "10px" }}
+              type="text"
+              value={totalM}
+              onChange={handleTotalChange(setTotalM)}
+              required
+            />
+            <span style={{ marginRight: "10px" }}>🙆🏻‍♀️여자</span>
+            <StyledInput
+              style={{ width: "10%" }}
+              type="text"
+              value={totalF}
+              onChange={handleTotalChange(setTotalF)}
+              required
+            />
           </GenderSelectBox>
         </InputBox>
         <InputBox>
-        <StyledLabel>어디서?</StyledLabel>
-          <StyledInput style={{width: "80%"}} type="text" value={place} onChange={e => setPlace(e.target.value)} required />
+          <StyledLabel>어디서?</StyledLabel>
+          <StyledInput
+            style={{ width: "80%" }}
+            type="text"
+            value={place}
+            onChange={(e) => setPlace(e.target.value)}
+            required
+          />
         </InputBox>
-        <InputBox style={{alignItems: "flex-start"}}>
+        <InputBox style={{ alignItems: "flex-start" }}>
           <StyledLabel>상세 내용</StyledLabel>
-          <StyledTextareaAutosize minRows={3} value={postContent} onChange={e => setPostContent(e.target.value)} />
+          <StyledTextareaAutosize
+            minRows={3}
+            value={postContent}
+            onChange={(e) => setPostContent(e.target.value)}
+          />
         </InputBox>
         <PostButton onClick={handlePostSubmit}>등록하기</PostButton>
       </PostAddBox>
     </Wrapper>
-  )
+  );
 }
 
 export default PlayAdd;
-
-
-
-
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const TopBox = styled.div`
   display: flex;
@@ -201,56 +234,40 @@ const TopBox = styled.div`
   text-align: left;
   width: 80%;
 
-  
   p {
-    font-size: 2.0rem; 
-    font-family: 'KIMM_Bold';
-    color: #1d1d1f; 
+    font-size: 2rem;
+    font-family: "KIMM_Bold";
+    color: #1d1d1f;
     line-height: 1.2;
   }
-  
-  @media (max-width: 870px) {
-    height: 80px;
-    // padding: 50px 0 0 80px;
 
-    p {
-      font-size: 1.2rem; 
-    }
-  }
-
-  @media (max-width: 510px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     height: 40px;
     // padding: 50px 0 0 80px;
 
     p {
-      font-size: 0.8rem; 
+      font-size: 0.8rem;
     }
   }
-`
-
+`;
 
 const PostAddBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #FFFFFF;
-  width: 70vw;
+  background-color: #ffffff;
+  width: 80%;
   height: 100%;
   margin: 0px 0 50px 0;
-  // padding: 50px 50px 50px 50px;
   border-radius: 15px;
-  font-size: 1.2rem; 
-  
+  font-size: 1.2rem;
+
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  @media (max-width: 750px) {
-    // height: 80px;
-    // padding: 50px 0 0 80px;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     width: 90vw;
     font-size: 0.9rem;
   }
-`
-
-
+`;
 
 const InputBox = styled.div`
   position: relative;
@@ -258,22 +275,15 @@ const InputBox = styled.div`
   display: flex;
   align-items: center;
   width: 90%;
-
-  @media (max-width: 1200px) {
-    justify-content: space-between;
-  }
-`
+  justify-content: space-between;
+`;
 
 const StyledLabel = styled.label`
   display: flex;
   font-weight: bold;
   margin-right: 10px;
-  width: 15%;
-
-  @media (max-width: 1200px) {
-    width: 50%;
-  }
-`
+  width: 50%;
+`;
 
 const StyledInput = styled.input`
   background: transparent;
@@ -326,26 +336,17 @@ const StyledInput = styled.input`
   }
 `;
 
-
-const StyledSelect = styled.select`
-  background-color: #FFFFFF;
-  padding: 10px;
-  margin: 0 10px 0 0;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 30%;
-`;
-
 const GenderSelectBox = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
   margin: 10px 0;
   width: 50%;
-`
+`;
 
 const StyledTextareaAutosize = styled(TextareaAutosize)`
-  background-color: #FFFFFF;
+  resize: none;
+  background-color: #ffffff;
   padding: 10px;
   margin-left: 20px;
   border-radius: 5px;
@@ -355,28 +356,28 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
 
 const PostButton = styled.button`
   font-size: 100%;
-  font-family: 'KIMM_Bold';
+  font-family: "KIMM_Bold";
   padding: 10px 10px;
-  background-color: #F7CBD0;
+  background-color: #f7cbd0;
   color: black;
   border: 10px double #fff;
   border-radius: 50px;
   cursor: pointer;
   margin: 50px 0 30px 0;
-  width: 20%;
+  width: 25%;
   height: 80px;
   transition: 0.3s;
 
   &:hover {
-    border: 10px double #3B0B0B;
-    color: #3B0B0B;
+    border: 10px double #3b0b0b;
+    color: #3b0b0b;
     transform: scale(1.02);
   }
 
-  @media (max-width: 750px) {
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
     margin: 20px 0;
-    width: 50%;
+    width: 40%;
     height: 60px;
     font-size: 70%;
   }
-`
+`;

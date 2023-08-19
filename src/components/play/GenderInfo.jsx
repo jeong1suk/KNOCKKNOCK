@@ -7,7 +7,7 @@ const GenderInfo = ({ total, filled, color, gender }) => {
   let people = [];
 
   for (let i = 0; i < total; i++) {
-    people.push(<Person key={i} filled={i < filled} color={color} />);
+    people.push(<Person key={i} $filled={i < filled} color={color} />);
   }
 
   return <TotalPeople>{gender} {people}</TotalPeople>;
@@ -26,6 +26,6 @@ const Person = styled.div`
   height: 10px;
   width: 10px;
   border-radius: 50%;
-  background-color: ${props => props.filled ? props.color : '#ccc'};
+  background-color: ${props => props.$filled ? props.color : '#ccc'};
   margin-left: 7px;
 `;

@@ -1,17 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import RequiredInputs from "./RequiredInputs";
 import OptionalInputs from "./OptionalInputs";
 import * as S from "./style";
 import * as Api from "../../api";
 import { DispatchContext } from "../../context/user/UserProvider";
 import { useNavigate } from "react-router-dom";
-import { showAlert } from "../../assets/alert";
+import { showAlert, showSuccess } from "../../assets/alert";
 import ValidationFields from "./ValidationFields";
 const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
   const [previewURL, setPreviewURL] = useState(null);
-  const [selectedFile, setSelectedFile] = useState("phto.png");
+  const [selectedFile, setSelectedFile] = useState("/phto.png");
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
@@ -42,6 +42,7 @@ const RegisterPage = () => {
           height: formData.height,
           hobby: formData.hobby,
           personality: formData.personality,
+          ideal: formData.ideal,
           introduce: formData.introduce || "반가워요!",
           profileImage: ["profile", response.data],
         });
@@ -59,6 +60,7 @@ const RegisterPage = () => {
           height: formData.height,
           hobby: formData.hobby,
           personality: formData.personality,
+          ideal: formData.ideal,
           introduce: formData.introduce || "반가워요!",
           // profileImage: ["profile", "http://placekitten.com/200/200"],
         });
@@ -80,8 +82,8 @@ const RegisterPage = () => {
         type: "LOGIN_SUCCESS",
         payload: user,
       });
-
-      navigate("/", { replace: true });
+      showSuccess("회원가입 완료!");
+      navigate("/");
       window.location.reload();
     } catch (err) {
       console.log(err);
@@ -94,29 +96,15 @@ const RegisterPage = () => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
+
   return (
     <S.Content>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          /*
-          const formData = {
-            name: e.target.name.value,
-            nickname: e.target.nickname.value,
-            email: e.target.email.value,
-            password: e.target.password.value,
-            gender: e.target.gender.value,
-            birthdate: e.target.birthdate.value,
-            job: e.target.job.value,
-            region: e.target.region.value,
-            mbti: e.target.mbti.value,
-            height: e.target.height.value,
-            hobby: e.target.hobby.value,
-            personality: e.personality,
-            ideal: e.ideal,
-            introduce: e.introduce,
-          };
-          */
           handleRegistration({
             ...RequiredInputs.getFormData(),
             ...ValidationFields.getFormData(),
@@ -126,26 +114,41 @@ const RegisterPage = () => {
       >
         <S.Header style={{ border: 0 }}>Register</S.Header>
 
-        <S.Header>필수 입력</S.Header>
+        {/* <S.Header>필수 입력</S.Header> */}
         <RequiredInputs />
-        <S.Heading>사진</S.Heading>
-        <S.Box>
-          <S.Input type="file" onChange={handleFileChange} />
-        </S.Box>
-        {selectedFile && (
-          <div>
-            <h6>미리보기</h6>
-            <img
-              src={previewURL}
-              alt="Selected Image"
-              style={{ width: "50%" }}
-            />
-          </div>
-        )}
-        <S.Header>선택 입력</S.Header>
-        <OptionalInputs />
 
-        <S.JoinButton type="submit" onSubmit={() => handleRegistration()}>Register</S.JoinButton>
+        <S.Header style={{ border: 0, marginBottom: "5px" }}>
+          선택 입력
+        </S.Header>
+
+        <S.ToggleButtonWrapper>
+          <S.Button style={{ cursor: "auto", height: "30%" }}>
+            <S.ImageUploadInput
+              id="file-upload"
+              type="file"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
+              <p style={{ textAlign: "center" }}>사진 넣기</p>
+            </label>
+          </S.Button>
+        </S.ToggleButtonWrapper>
+        {previewURL && (
+          <S.UploadedImageContainer>
+            <S.UploadedImage src={previewURL} alt="Selected Image" />
+          </S.UploadedImageContainer>
+        )}
+
+        <OptionalInputs />
+        <S.ToggleButtonWrapper>
+          <S.JoinButton
+            type="submit"
+            onSubmit={() => handleRegistration()}
+            style={{ width: "70%", height: "80px" }}
+          >
+            Register
+          </S.JoinButton>
+        </S.ToggleButtonWrapper>
       </form>
     </S.Content>
   );

@@ -17,6 +17,7 @@ function Modal({ onClose, children }) {
 };
 
 const ModalBackground = styled.div`
+  z-index: 5;
   position: fixed;
   top: 0;
   left: 0;
@@ -29,6 +30,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContent = styled(motion.div)`
+  z-index: 5;
   background-color: white;
   padding: 20px;
   border-radius: 10px;

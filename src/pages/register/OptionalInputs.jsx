@@ -4,6 +4,7 @@ import { mbtiList } from "../../constants/registerConstants";
 import { ModalHobby } from "./ModalHobby";
 import { ModalPersonality } from "./ModalPersonality";
 import { ModalIdeal } from "./ModalIdeal";
+const maxSelect = 6;
 const OptionalInputs = () => {
   const [formData, setFormData] = useState({
     height: "",
@@ -14,7 +15,7 @@ const OptionalInputs = () => {
     introduce: "",
   });
   const { height, mbti, hobby, personality, ideal, introduce } = formData;
-
+  const [isHeightInt, setIsHeightInt] = useState("");
   const onChange = (e) => {
     const { name, value } = e.currentTarget;
     setFormData((prev) => ({
@@ -39,17 +40,17 @@ const OptionalInputs = () => {
   };
 
   const handleHobbyClick = (element) => {
-    onArrayChange(hobby, element, "hobby", 5);
+    onArrayChange(hobby, element, "hobby", maxSelect);
   };
 
   const handlePersonalityClick = (element) => {
-    onArrayChange(personality, element, "personality", 5);
+    onArrayChange(personality, element, "personality", maxSelect);
   };
 
   const handleIdealClick = (element) => {
-    onArrayChange(ideal, element, "ideal", 5);
+    onArrayChange(ideal, element, "ideal", maxSelect);
   };
-  // console.log("옵셔널");
+
   OptionalInputs.getFormData = () => {
     return formData;
   };
@@ -57,21 +58,28 @@ const OptionalInputs = () => {
   return (
     <>
       <S.Box>
-        <S.Heading>키</S.Heading>
-        <S.Input
+        <S.Select
           name="height"
           value={height}
           onChange={onChange}
-          style={{ marginLeft: "30px", textAlign: "right" }}
-        />
+          style={{ border: "none" }}
+        >
+          <option>키</option>
+          {Array.from({ length: 101 }, (_, index) => index + 120).map(
+            (value) => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            )
+          )}
+        </S.Select>
       </S.Box>
       <S.Box>
-        <S.Heading>MBTI</S.Heading>
         <S.Select
           name="mbti"
           value={mbti}
           onChange={onChange}
-          style={{ textAlign: "right" }}
+          style={{ border: "none" }}
         >
           <option>MBTI</option>
           {mbtiList.map((mbti) => (
@@ -88,10 +96,17 @@ const OptionalInputs = () => {
       />
       <ModalIdeal formData={formData} handleIdealClick={handleIdealClick} />
 
-      <S.Heading>한줄 자기소개</S.Heading>
-      <S.Box>
-        <S.Input name="introduce" value={introduce} onChange={onChange} />
-      </S.Box>
+      <S.InputBox style={{ marginTop: "20px" }}>
+        <input
+          id="introduce"
+          type="text"
+          name="introduce"
+          value={introduce}
+          placeholder="자기소개"
+          onChange={onChange}
+        />
+        <label htmlFor="height">자기소개</label>
+      </S.InputBox>
     </>
   );
 };

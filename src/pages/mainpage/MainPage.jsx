@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Carousel from "./Carousel";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
+
+
 
 function MainPage() {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
+
   return (
     <>
       <ImgBox>
@@ -31,13 +39,8 @@ function MainPage() {
           }}
         />
       </ImgBox>
+      <TitleP>KnockKnock의 기능을 소개합니다.</TitleP>
       <Contents>
-        <SmallContents>
-          {/* <TitleP>기능소개</TitleP>
-          <ContentP>기능소개입니다</ContentP>
-          <ContentP>소개소개~</ContentP> */}
-        </SmallContents>
-
         <Carousel></Carousel>
         {/* <LinkButton to="/ai">☞ ToneTeller 바로가기</LinkButton> */}
       </Contents>
@@ -86,6 +89,8 @@ function MainPage() {
 
 const Contents = styled.div`
   margin: 0 9rem 0 9rem;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 1100px) {
     margin: 0 1rem 0 1rem;
@@ -119,12 +124,15 @@ const ImgBox = styled.div`
   }
 `;
 
-const TitleP = styled.p`
-  font-family: "Noto Sans KR", sans-serif;
-  font-size: 3.4rem;
+const TitleP = styled.div`
+  font-size: 2.3rem;
+  justify-content: center;
+  margin: 60px 0 20px 30px;
+  font-family: '양진체';
 
-  @media (max-width: 768px) {
-    font-size: 2.0rem;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    font-size: 1.3rem;
+    margin: 50px 0 20px 20px;
   }
 `;
 

@@ -6,6 +6,7 @@ import * as Api from "../../api";
 import UserModal from "./UserModal";
 import { showAlert } from "../../assets/alert";
 import { useNavigate } from "react-router-dom";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint.js";
 
 const limit = 3;
 const isLoverUser = ["Lover", "User"];
@@ -93,6 +94,7 @@ function TodayKnock() {
   useEffect(() => {
     usersGetRequest();
     cardsGetRequest();
+    window.scrollTo(0, 0);
   }, []);
 
   return (
@@ -103,10 +105,10 @@ function TodayKnock() {
         {/* <ArrowButtonLeft onClick={handlePrevBanner}>{"<"}</ArrowButtonLeft>
         <ArrowButtonRight onClick={handleNextBanner}>{">"}</ArrowButtonRight> */}
       </Banner>
-      <div style={{ height: "10vh" }} />
+      <div style={{ height: "3vh" }} />
       {showStartModal && (
-        <ModalOverlay>
-          <ModalContent>
+        <ModalOverlay onClick={handleStartModalExit}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
             <TodayGame
               onExit={handleStartModalExit}
               selectedCard={selectedCard}
@@ -118,10 +120,8 @@ function TodayKnock() {
       {showUserModal && selectedUser && (
         <ModalOverlay onClick={handleUserModalExit}>
           <ModalContentUser onClick={(e) => e.stopPropagation()}>
-            <UserModal
-              user={selectedUser}
-              // onClose={handleUserModalExit}
-            />
+            <CloseModalButton onClick={handleUserModalExit}>X</CloseModalButton>
+            <UserModal user={selectedUser} onClose={handleUserModalExit} />
           </ModalContentUser>
         </ModalOverlay>
       )}
@@ -131,7 +131,7 @@ function TodayKnock() {
           <RandomUserExplainDiv>
             <p>같은 연애운을 가진 사람을 찾아봐요!</p>
           </RandomUserExplainDiv>
-          <UserProfilesContainer>
+          <LoverProfilesContainer>
             {randomLovers.map((user) => (
               <UserProfile
                 user={user.User}
@@ -140,11 +140,11 @@ function TodayKnock() {
                 isLoverUser={isLoverUser[0]}
               />
             ))}
-          </UserProfilesContainer>
+          </LoverProfilesContainer>
         </>
       )}
       <RandomUserExplainDiv>
-        <p>다양한 사람들을 알아봐요!</p>
+        <p>랜덤으로 다양한 사람들을 만나볼까요?</p>
       </RandomUserExplainDiv>
       <UserProfilesContainer>
         {randomUsers.map((user) => (
@@ -163,7 +163,7 @@ function TodayKnock() {
 export default TodayKnock;
 
 const Container = styled.div`
-  margin-bottom: 20rem;
+  margin-bottom: 10rem;
 `;
 
 const Banner = styled.div`
@@ -179,24 +179,42 @@ const Banner = styled.div`
   background-repeat: no-repeat;
   max-height: 100%;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+
+  @media (max-width: 1024px) {
+    height: 25vh;
+  }
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 20vh;
+  }
 `;
 
 const StartButton = styled.button`
+  font-family: "KIMM_Bold";
   margin-top: 1rem;
   margin-right: 1.2rem;
   height: 2rem;
-  background-color: #9ea7d6;
+  background-color: #e883de;
   color: #fff;
   padding: 10px 20px;
-  border: none;
+  border: 10px double #fff;
   border-radius: 5px;
   font-size: 17px;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.3s;
+  cursor: pointer;
   &:hover {
-    background-color: #7b88b8;
-    cursor: pointer;
+    border: 10px double #3b0b0b;
+    color: #391f41;
+    transform: scale(1.02);
+  }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 1rem;
+    font-size: 10px;
+    width: 4rem;
+    margin-top: 0.5rem;
   }
 `;
 
@@ -214,53 +232,131 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContentUser = styled.div`
-  width: 40%;
-  height: 80%;
-  background-color: #fff;
-  padding: 1rem;
-  padding-top: 2rem;
+  width: 30%;
+  height: 85%;
+  background-color: #ffffff;
+  padding: 2rem;
+  padding-top: 1.5rem;
   border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+  border-radius: 3rem;
+  position: relative;
+
+  @media (max-width: 1200px) {
+    width: 50%;
+    height: 80%;
+  }
+  @media (max-width: 900px) {
+    width: 60%;
+    height: 70%;
+  }
+  @media (max-width: 630px) {
+    width: 70%;
+    height: 70%;
+  }
 `;
 
 const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 70%;
-  height: 90%;
+  height: 80%;
   overflow: auto;
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 100%;
+  }
+`;
+
+const LoverProfilesContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
+  gap: 5%;
+  row-gap: 1%;
+  padding: 0 3%;
+  margin: 0 0;
+  align-items: center;
+  justify-items: center;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
+    gap: 0%;
+    row-gap: 0%;
+  }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    gap: 5%;
+  }
 `;
 
 const UserProfilesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
   gap: 10%;
-  padding: 10%;
-  margin: -10rem 0 -5rem 0 ;
-  & > :nth-child(n) {
-    margin-top: 5rem;
+  row-gap: 10%;
+  padding: 5%;
+  margin: 0 0;
+  align-items: center;
+  justify-items: center;
+
+  @media (max-width: 800px) {
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    gap: 5%;
+    row-gap: 10%;
   }
 
-  @media (max-width: 1100px) {
-    grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
-    grid-gap: 1px;
-  }
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    grid-template-columns: repeat(auto-fit, minmax(25vw, 1fr));
+    gap: 5%;
+    padding: 0 5%;
   }
 `;
 
 const RandomUserExplainDiv = styled.div`
   display: flex;
-  justify-content: center;
-  border: 10px double #f7cbd0;
+  justify-content: flex-start;
+  margin: 10px 20px;
   p {
     font-family: "KIMM_Bold";
-    font-size: 3rem;
+    font-size: 2rem;
     color: #1d1d1f;
     font-weight: 600;
     line-height: 1.2;
+    background-color: #fff0f5;
+    padding: 5px;
+    border-radius: 30px;
   }
+
+  @media (max-width: 1024px) {
+    margin: 0 0 50px 20px;
+  }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    p {
+      font-size: 16px;
+    }
+    margin: 20px 20px 0 20px;
+  }
+`;
+const CloseModalButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: transparent;
+  color: #7b7b7b;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  margin-right: 0.8rem;
 `;

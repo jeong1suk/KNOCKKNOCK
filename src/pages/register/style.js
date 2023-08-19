@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { MOBILE_BREAK_POINT } from "../../components/layout/breakpoint";
 
 export const Content = styled.div`
   position: absolute;
@@ -6,21 +7,11 @@ export const Content = styled.div`
   transform: translateX(-50%);
   width: 460px;
   padding: 100px;
-  background-image: linear-gradient(
-    45deg,
-    #ff9a9e 0%,
-    #fad0c4 99%,
-    #fad0c4 100%
-  );
-  @media (max-width: 480px) {
-    /* viewport 너비가 480px 이하일 경우 */
-    width: 100%; /* 컨테이너 너비를 100%로 설정하여 가로 중앙 정렬 */
-  }
+  margin-top: -2rem;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
 
-  @media (min-width: 481px) {
-    /* viewport 너비가 481px 이상일 경우 */
-    width: 480px; /* 컨테이너의 너비를 480px로 설정 */
-    margin: 0 auto; /* 컨테이너를 가로 중앙 정렬 */
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    width: 70%;
   }
 `;
 export const HeaderContainer = styled.div`
@@ -32,6 +23,7 @@ export const Header = styled.header`
   display: flex;
   justify-content: center;
   font-size: 24px;
+  font-family: "KIMM_Bold";
   font-weight: bold;
   border: 2px solid #000;
   border-radius: 5px;
@@ -39,26 +31,30 @@ export const Header = styled.header`
 `;
 
 export const JoinButton = styled.button`
-  width: 40%;
-  padding: 21px 0 17px;
-  border: 0;
+  font-size: 100%;
+  font-family: "KIMM_Bold";
+  /* padding: 10px 10px; */
+  background-color: #f7cbd0;
+  color: black;
+  border: 10px double #fff;
+  border-radius: 50px;
   cursor: pointer;
-  color: #fff;
-  background-color: #d4baeb;
-  font-size: 20px;
-  font-weight: 400;
-  margin-top: 30px;
-  margin-left: 30px;
+  /* margin: 50px 0 30px 0; */
+  width: 50%;
+  height: 50px;
+  transition: 0.3s;
 
-  /* background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%); */
   &:hover {
-    background: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);
-    background-color: #80b5ea;
+    border: 10px double #3b0b0b;
+    color: #3b0b0b;
+    transform: scale(1.02);
   }
 
-  &:active {
-    position: relative;
-    top: 1px;
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    /* margin: 20px 0; */
+    width: 50%;
+    height: 60px;
+    /* font-size: 7%; */
   }
 `;
 export const Heading = styled.h3`
@@ -73,13 +69,28 @@ export const Box = styled.span`
   width: 100%;
   height: 51px;
   border: solid 1px #dadada;
+  border-radius: 20px;
   padding: 10px 14px 10px 14px;
   box-sizing: border-box;
   background: #fff;
   position: relative;
-  margin-bottom: 15px;
+  margin: 15px auto;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 10%;
+    overflow-x: auto;
+  }
 `;
-export const Input = styled.input`
+// export const Input = styled.input`
+//   display: block;
+//   position: relative;
+//   width: 100%;
+//   height: 29px;
+//   border: none;
+//   background: #fff;
+//   font-size: 15px;
+// `;
+export const FileInput = styled.input`
   display: block;
   position: relative;
   width: 100%;
@@ -88,8 +99,85 @@ export const Input = styled.input`
   background: #fff;
   font-size: 15px;
 `;
+export const InputBox = styled.div`
+  position: relative;
+  margin: 10px 10px;
+  height: 60px;
+  width: 100%;
+
+  input {
+    background: transparent;
+    border: none;
+    border-bottom: solid 1px #ccc;
+    /* margin-bottom: 5px; */
+    padding: 20px 0px 5px 0px;
+    font-size: 14pt;
+    width: 100%;
+    transition: border-bottom 0.2s ease, outline 0.2s ease;
+
+    &:placeholder-shown + label {
+      color: #aaa;
+      font-size: 14pt;
+      top: 15px;
+    }
+
+    &:focus + label {
+      color: #8aa1a1;
+      font-size: 10pt;
+      pointer-events: none;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      transition: all 0.2s ease;
+      -webkit-transition: all 0.2s ease;
+      -moz-transition: all 0.2s ease;
+      -o-transition: all 0.2s ease;
+      transform: translateY(-100%);
+      opacity: 1;
+    }
+
+    &:not(:placeholder-shown) + label {
+      color: #8aa1a1;
+      font-size: 10pt;
+      pointer-events: none;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      transition: all 0.2s ease;
+      -webkit-transition: all 0.2s ease;
+      -moz-transition: all 0.2s ease;
+      -o-transition: all 0.2s ease;
+      transform: translateY(-100%);
+      opacity: 1;
+    }
+
+    &:focus,
+    &:not(:placeholder-shown) {
+      border-bottom: solid 1px #8aa1a1;
+      outline: none;
+    }
+  }
+
+  label {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    top: 15px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+  }
+  .pswdIcon {
+    /* your password icon styles */
+    cursor: pointer;
+    margin-left: 10px;
+    /* right: 0; */
+  }
+`;
 export const ErrorBox = styled.span`
-  margin-top: 9px;
+  /* margin-top: 4px; */
   font-size: 12px;
   color: red;
 `;
@@ -97,31 +185,92 @@ export const Select = styled.select`
   width: 100%;
   height: 29px;
   text-align: center;
-  border: none;
+  border: 1px solid #8aa1a1;
+  border-radius: 20px;
   background: #fff;
   font-size: 15px;
 `;
-export const RightAlignedBox = styled(Box)`
+export const RightAlignedBox = styled.div`
+  /* display: flex; */
+
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 15px;
+`;
+export const UploadedImageContainer = styled.div`
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 80%;
+`;
+export const UploadedImage = styled.img`
+  width: 100%;
+  max-height: 300px;
+  margin: 10px auto;
 `;
 export const Modal = styled.div`
   position: absolute;
   width: 80%;
-  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 10;
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    /* top: 70%; */
+    width: 40%;
+    max-height: 30%;
+    overflow-x: auto;
+  }
 `;
+export const Button = styled.div`
+  font-size: 100%;
+  font-family: "KIMM_Bold";
+  /* padding: 10px 10px; */
+  background-color: #f7cbd0;
+  color: black;
+  border: 10px double #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  /* margin: 50px 0 30px 0; */
+  width: 30%;
+  /* height: 20%; */
+  transition: 0.3s;
+
+  &:hover {
+    border: 10px double #3b0b0b;
+    color: #3b0b0b;
+    transform: scale(1.02);
+  }
+
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    /* width: 50%; */
+    height: 50%;
+    font-size: 0.5rem;
+    overflow-x: auto;
+  }
+  p {
+    @media (max-width: ${MOBILE_BREAK_POINT}) {
+      font-size: 0.2rem;
+    }
+  }
+`;
+export const ImageUploadInput = styled.input`
+  display: none;
+`;
+
 export const ToggleButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  padding-bottom: 5px;
+  /* padding-bottom: 5px; */
+  @media (max-width: ${MOBILE_BREAK_POINT}) {
+    height: 10%;
+  }
 `;
 export const ToggleButton = styled.a`
   box-shadow: inset 0px 1px 0px 0px #dcecfb;
@@ -154,5 +303,17 @@ export const HobbyBoxContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  /* margin: 0.2rem; */
+  border: none;
+  /* margin: 0.1rem; */
+`;
+
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin-bottom: 10px;
 `;
